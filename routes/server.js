@@ -372,7 +372,7 @@ function addOrUpdate(entityToAdd,TABLE_NAME,fieldToCheckOn,callback){
 }
 
 function callScrapeLogic(res, callback){
-    var dirName = __dirname +'/../scrapejob/dir/'; 
+    var dirName = config.LOOKUP_DIR; 
     var ret = filecheck.run(dirName, function(returnJson){
         console.log(' json formatHTML array  '+JSON.stringify(returnJson));
         var objToJson = { };
