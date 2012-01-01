@@ -201,20 +201,20 @@ describe('DAO test layer', function(){
 
 
 
-// // TODO :: UPDATEWID in call extractthis
-  // it('updatewid', function(done){
+// TODO :: UPDATEWID in call extractthis
+  it('updatewid', function(done){
 
-  //   var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
+    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
     
-  //   superagent.put('http://localhost:3000/executethis')
-  //     .send(requestObj)
-  //     .end(function(e, res){
-  //       console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
-  //       expect(typeof res.body).to.eql('object')
-  //       //expect(res.body.msg).to.eql('success')        
-  //       done()
-  //     })
-  // });
+    superagent.put('http://localhost:3000/executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log('UpdateWid  ::: UpdateWid ::: >>>>>>>>> '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object')
+        //expect(res.body.msg).to.eql('success')        
+        done()
+      })
+  });
 
 
 // // TODO :: GETWID in call extractthis
