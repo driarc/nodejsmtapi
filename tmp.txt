@@ -260,3 +260,10 @@ getdata/multiple {multiplewid=test3, multipleexecute=left, multipleparameters=ri
 [21:56:10] Roger Colburn: for every record that comes back, iterate to execute this
 
  
+ git@heroku.com:nodejsmtapi.git
+ 
+ 
+wget http://assets.heroku.com/heroku-client/heroku-client.tgz
+tar xzfv heroku-client.tgz
+cd heroku-client/bin
+PATH=$PATH:$PWD 
