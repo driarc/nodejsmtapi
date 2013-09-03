@@ -77,8 +77,8 @@ app.put('/executethis', function(req, res) {
 
     case 'javascript': case 'dri': case 'multiplemongo':
         var fullURL = req.protocol + "://" + req.get('host') + req.url;
-        if (reservedParameters.has('begininboundparameters')) {
-            var valU = reservedParameters.get('begininboundparameters');
+        if (reservedParameters.has('beginInboundParameters')) {
+            var valU = reservedParameters.get('beginInboundParameters');
             db.collection('colsam').findOne({ "wid": valU }, function(err, result) {
                 if (err) throw err;
                 console.log("dB result : "+JSON.stringify(result));
@@ -88,7 +88,7 @@ app.put('/executethis', function(req, res) {
                     if(key!=="_id")
                     {
                         console.log(key + ":" + value);
-                        leftOverParameters.set(key.toLowerCase(),value);                    
+                        leftOverParameters.set(key,value);                    
                     }
                   });     
             leftOverParamEvalFunc(leftOverParameters,reservedParameters,inboundParameters,fullURL,funcT,function(err,results){

@@ -10,7 +10,8 @@
     "connect-mongoskin": "~0.1.1",
     "hashmap": "~0.9.3",
     "request": "~2.27.0",
-    "sync": "~0.2.2"
+    "sync": "~0.2.2",
+    "synchronize": "~0.5.2"
   },
   "devDependencies": {},
   "scripts": {

@@ -150,6 +150,7 @@ If testa={executwid:getalldata, a:eq:b} , then if "I" wanted to call DRI via you
 
 curl -X PUT -H "content-type: application/json"  http://odesk.phaniram.c9.io/executethis --data '[{"ParameterName":"executeThis","ParameterValue":"DRI"},{"ParameterName":"beginInboundParameters","ParameterValue":"wid1"},{"ParameterName":"ExecuteWid","ParameterValue":"adddatawid"},{"ParameterName":"y","ParameterValue":"2"}, {"ParameterName":"accesstoken","ParameterValue":"111111111"}]'
 
+
  from the original design doc:
 ExecuteThis Pseudo Code
 ExcuteThis(inboundparameters) produces OutboundParameters
@@ -259,11 +260,178 @@ getdata/multiple {multiplewid=test3, multipleexecute=left, multipleparameters=ri
 [21:55:46] Roger Colburn: read from mongo
 [21:56:10] Roger Colburn: for every record that comes back, iterate to execute this
 
- 
- git@heroku.com:nodejsmtapi.git
+ Assumption wid1={x:1, y:2, JS: "value: function (x, y){ return x + y; }"}
+wid3={executethis:dri, a:b, c: d, accesstoken:1111111, beginInboundParameter=wid1}
+wid2={1: wid1, 2: wid3}
+
+If we call /executethis {executethis:multiplewid, a:b, c:  d, multiplewid:wid2, accesstoken:1111111}
+
+Then the code will fish out parameters executethis, accesstoken
+The 'left over' inbound parameters will be {a:b, c:  d, multiplewid:wid1}
+
+The case statement will go to 'MultipleWid'
+It will multiplewid with {a:b, c: d, multiplewid:wid1 accesstoken:1111111}
+it will fish out multiplewid, accesstoken
+it will read wid1 and execute it (see prior example) send a:b c: d to it
+It will return {value: 3}
+The it will read wid3 and execute it send a:b c: d, value:3 to it
+it will return  {r:q, t:s}
+The system returns value:3, r:q, t: s
+
+git@heroku.com:nodejsmtapi.git
  
  
 wget http://assets.heroku.com/heroku-client/heroku-client.tgz
 tar xzfv heroku-client.tgz
 cd heroku-client/bin
 PATH=$PATH:$PWD 
+
+git push heroku master
+
+
+
+npm init
+touch Procfile
+echo 'web: node app.js' >> Procfile
+
+heroku create --stack cedar
+git remote add heroku git@heroku.com:nodejsmtapi.git
+git push heroku master
+
+heroku ps:scale web=1 --app nodejsmtapi
+heroku logs --app nodejsmtapi
+
+http://stackoverflow.com/questions/5832888/is-the-hasownproperty-method-in-javascript-case-sensitive
+
+Assumption 
+wid1={executeThis: javascritp, x:1, y:2, JS: "value: function (x, y){ return x + y; }"}
+wid3={executethis:dri, a:b, c: d, accesstoken:1111111, beginInboundParameter=wid1}
+wid2={1: wid1, 2: wid3}
+
+Call executethis with these parms:
+Executethis=multiplewid multiplewid=wid2
+[22:33:44] Roger Colburn: I will be back to big screen in 10
+[22:49:12] Roger Colburn: -
+[22:49:12] Roger Colburn: I am in front of a big screen again…so this was the 'case' statement to be added to "MultipleMongo"
+
+ExecuteMultiple Pseudo Code
+ExecuteMultiple (inboundParameters) produces OutboundParameters 
+// this code reads a mongo record, then for each item in the record it trys to call excuteThis (recurse)
+accesstoken=get from inboundParameters, remove it from inboundbound parameters
+multipleWid=get from inboundParameters, remove it from inboundbound parameters
+ExecuteList = getFromMongo(wid=<multiplewid>)
+	For each item returned, sort in <left> order: 
+	OutParam = OutParam + ExecuteThis {OutParm + InboundParameters}  // recurse to the main call
+
+so we would call /executeThis {executeThis="MultipleMongo", multipleWid=wid1}
+[22:49:52] Roger Colburn: in this case, executeThis would go to the section called MultipleMongo
+[22:50:03] Roger Colburn: that section would look for a parameter called multipelwid
+[22:50:30] Roger Colburn: it would get from mongo the value pairs inside multiplewid, wid1 in this case
+[22:51:01] Roger Colburn: lets say wid1={1:wid2. 2:wid:3} …so that would be read into the code…then...
+[22:51:54] Roger Colburn: it would sort that object:
+1:wid2
+2:wid:3
+
+and in order read the right side…i.e. get the the values inside wid2
+[22:52:21] Roger Colburn: then with those values it would call /executeThis {parameters that were inside wid2}
+[22:52:22] Roger Colburn: ok?
+
+
+https://odesk-prod-att.s3.amazonaws.com/MC:300955171:1?AWSAccessKeyId=1XVAX3FNQZAFC9GJCFR2&Expires=2147483647&Signature=QsjTMufEmEeqznzOLSfHFG%2BiuG8%3D&response-content-disposition=attachment%3B%20filename*%3DUTF-8%27%27OpenVBXPluginAnalyticsV2.zip
+
+
+_______________________________________________________________________________________________
+
+[20:58:57] Roger Colburn: Multiplemongio.  Then inside look for multiplewid.
+[21:12:02] Roger Colburn: here is pseudo call for how we will be doing in mobile device, we wan the theory / structure to stay similar:
+********GetWid/Execute/ExecuteThis {inboundParameters}
+	Fish out Sync/Asynch  from inboundParameters, delete it from inboundParameters  // inst for daisy?
+	Fish out preExecute  from inboundParameters, delete it from inboundParameters
+	Fish out ExecuteThis from inboundParameters, delete it from inboundParameters
+	Fish out postExecute from inboundParameters, delete it from inboundParameters
+	if preExecute exists then 
+		InboundParameters = executeThis(deserialize value preExecute + InboundParameters)
+	Case of ExecuteThis
+		UpdateWid
+			OutBoundParameters = UpdateWid(InboundParamters)
+		GetWid
+			OutBoundParameters = UpdateWid(InboundParamters)
+		DisplayHTML
+			OutBoundParameters = DisplayHTML(InboundParamters)
+		ExecuteServer
+			OutBoundParameters = ExecuteServer(InboundParamters)
+		ExecuteMultiple
+			OutBoundParameters = UpdateWid(InboundParamters)
+		Variable  
+			OutboundParameters = eval(<variable> + InboundParameters)
+		<other> 
+			OutboundParameters = ExecuteThis(getwid wid)
+	if postExecute exists then 
+		OutboundParameters = executeThis(deserialize value in postExecute + OutboundParameters)
+Return OutboundParameters
+
+********UpdateWid(inboundParameters)
+	if inboundParameters.fromProperty exists then 
+				FromProperty=inboundParameters.FromProperty
+				inboundParameters = get(wid, fromProperty)
+	if inboundParameters.toProperty exists then toProperty=inboundParameters.toProperty , remove from inboundParameter
+	wid = inboundParameters.wid 
+	if wid = "" then 
+		wid = random
+		createwid
+	if inboundParameters.status = 5 then 
+				delete wid
+			else
+				Save (wid,Toproperty) with inboundParameters // save wid to many properties or one	
+	// We could update remapTable (equivalent to watchWid) / We could update PendingRequestsToSeverWid
+Return ParametersToAdd.value['wid']
+
+
+********GetWid(inboundParameters)
+	if inboundParameters.widProperty exists outboundParameters=getdata (wid, property)
+		else outboundParameters=getdata (wid, "")
+return outboundParameters
+
+
+
+curl -X PUT -H "content-type: application/json"  http://odesk.phaniram.c9.io/executethis --data '[{"ParameterName":"executeThis","ParameterValue":"multipleMongo"},{"ParameterName":"multiplewid","ParameterValue":"wid2"},{"ParameterName":"beginInboundParameters","ParameterValue":"wid1"},{"ParameterName":"y","ParameterValue":"2"}, {"ParameterName":"accesstoken","ParameterValue":"111111111"}]'
+
+http://alexeypetrushin.github.io/synchronize/docs/index.html
+http://stackoverflow.com/questions/6048504/synchronous-request-in-nodejs
+https://github.com/0ctave/node-sync
+https://github.com/caolan/async#series
+https://github.com/dhruvbird/http-sync
+
+ {
+    "_id": {
+        "$oid": "51b9e32180c3811304175f4e"
+    },
+    "wid": "wid2",
+    "1": "wid1",
+    "2": "wid3"
+}
+{
+    "_id": {
+        "$oid": "51b9e32180c3811304175f4e"
+    },
+    "wid": "wid1",
+    "executeThis": "javascript",
+    "JS": ""value: function (x, y){ return x + y;}",
+    "x":"1"
+    "y":"2"
+}
+
+{
+    "_id": {
+        "$oid": "51b9e32180c3811304175f4e"
+    },
+    "parametersPublic": true,
+    "message": "This is a test SMS",
+    "age": 100,
+    "wid": "codytestsms",
+    "status": 1,
+    "method": "acctDTO",
+    "style": "blue"
+    "datetime": "18:32:46 27-Jun-2013"
+}
+
