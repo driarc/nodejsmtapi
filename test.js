@@ -100,22 +100,22 @@ describe('express rest api server', function(){
 
         var firstEntry = {"ExecuteThis":"ExtractThis","Wid":"savedObj"};
             
-        dao.addToMongo(firstEntry,'colsam',function(o){
-            console.log("After adding to Mongo - "+ JSON.stringify(o));
+        // dao.addToMongo(firstEntry,'colsam',function(o){
+        //     console.log("After adding to Mongo - "+ JSON.stringify(o));
 
-            // provide wid value for already saved object to second request as value for ExecuteThis
-            var requestObj = {"ExecuteThis":"savedObj","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+        //     // provide wid value for already saved object to second request as value for ExecuteThis
+        //     var requestObj = {"ExecuteThis":"savedObj","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
             
-            superagent.put('http://localhost:3000/executethis')
-              .send(requestObj)
-              .end(function(e, res){
-                console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
-                expect(typeof res.body).to.eql('object')
-                //expect(res.body.msg).to.eql('success')        
-                done()
-              });
-          });
-        });
+        //     superagent.put('http://localhost:3000/executethis')
+        //       .send(requestObj)
+        //       .end(function(e, res){
+        //         console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
+        //         expect(typeof res.body).to.eql('object')
+        //         //expect(res.body.msg).to.eql('success')        
+        //         done()
+        //       });
+        //   });
+        // });
 
     
  
