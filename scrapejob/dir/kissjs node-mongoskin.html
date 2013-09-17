@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)https://github.com/kissjs/node-mongoskin -->
+<html style="" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths no-csspositionsticky filereader eventsource xhr2"><head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# githubog: http://ogp.me/ns/fb/githubog#"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>kissjs/node-mongoskin</title>
+    <link rel="search" type="application/opensearchdescription+xml" href="https://github.com/opensearch.xml" title="GitHub">
+    <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+    <link rel="apple-touch-icon" sizes="57x57" href="https://github.com/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://github.com/apple-touch-icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://github.com/apple-touch-icon-144.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://github.com/apple-touch-icon-144.png">
+    <link rel="logo" type="image/svg" href="https://github-media-downloads.s3.amazonaws.com/github-logo.svg">
+    <meta property="og:image" content="https://github.global.ssl.fastly.net/images/modules/logos_page/Octocat.png">
+    <meta name="hostname" content="github-fe114-cp1-prd.iad.github.net">
+    <meta name="ruby" content="ruby 1.9.3p194-tcs-github-tcmalloc (2012-05-25, TCS patched 2012-05-27, GitHub v1.0.36) [x86_64-linux]">
+    <link rel="assets" href="https://github.global.ssl.fastly.net/">
+    <link rel="xhr-socket" href="https://github.com/_sockets">
+    
+    
+
+
+    <meta name="msapplication-TileImage" content="/windows-tile.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="selected-link" value="repo_source" data-pjax-transient="">
+    <meta content="collector.githubapp.com" name="octolytics-host"><meta content="github" name="octolytics-app-id"><meta content="7AA1340D:12D6:2BCC6BB:5237089A" name="octolytics-dimension-request_id"><meta content="1283920" name="octolytics-actor-id"><meta content="saurshaz" name="octolytics-actor-login"><meta content="03bc0b8a78ba949588f07e5123eab8552e3ecca731409b270bd9cf1071ae7cd2" name="octolytics-actor-hash">
+    
+
+    
+    
+    <link rel="icon" type="image/x-icon" href="https://github.com/favicon.ico">
+
+    <meta content="authenticity_token" name="csrf-param">
+<meta content="PPVHKZ23/HrukXmZFstkKKiYA233Col+gaHX5P4ZJSg=" name="csrf-token">
+
+    <link href="./kissjs node-mongoskin_files/github-1e4633e47f8b05996d0513eaccf94c2ff0a6a243.css" media="all" rel="stylesheet" type="text/css">
+    <link href="./kissjs node-mongoskin_files/github2-a7192edf5255443a92680441f722274ed90a93eb.css" media="all" rel="stylesheet" type="text/css">
+    
+
+    
+
+      <script src="./kissjs node-mongoskin_files/frameworks-f86a2975a82dceee28e5afe598d1ebbfd7109d79.js" type="text/javascript"></script><style type="text/css"></style>
+      <script src="./kissjs node-mongoskin_files/github-15065af1aa90bd5052d5662dc59db098b822916e.js" type="text/javascript"></script><script type="text/javascript" async="" src="./kissjs node-mongoskin_files/ga.js"></script>
+      
+      <meta http-equiv="x-pjax-version" content="150dbead5d79b419ec8e5c73a14151c0">
+
+        <meta property="og:title" content="node-mongoskin">
+  <meta property="og:type" content="githubog:gitrepository">
+  <meta property="og:url" content="https://github.com/kissjs/node-mongoskin">
+  <meta property="og:image" content="https://github.global.ssl.fastly.net/images/gravatars/gravatar-user-420.png">
+  <meta property="og:site_name" content="GitHub">
+  <meta property="og:description" content="node-mongoskin - The future layer for node-mongodb-native.">
+
+  <meta name="description" content="node-mongoskin - The future layer for node-mongodb-native.">
+
+  <meta content="1704864" name="octolytics-dimension-user_id"><meta content="kissjs" name="octolytics-dimension-user_login"><meta content="1540241" name="octolytics-dimension-repository_id"><meta content="kissjs/node-mongoskin" name="octolytics-dimension-repository_nwo"><meta content="true" name="octolytics-dimension-repository_public"><meta content="false" name="octolytics-dimension-repository_is_fork"><meta content="1540241" name="octolytics-dimension-repository_network_root_id"><meta content="kissjs/node-mongoskin" name="octolytics-dimension-repository_network_root_nwo">
+  <link href="https://github.com/kissjs/node-mongoskin/commits/master.atom" rel="alternate" title="Recent Commits to node-mongoskin:master" type="application/atom+xml">
+
+  <script type="text/javascript" async="" src="./kissjs node-mongoskin_files/api.js"></script><style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style></head>
+
+
+  <body class="logged_in  env-production macintosh vis-public" style="">
+    <div class="wrapper">
+      
+      
+      
+
+
+      <div class="header header-logged-in true">
+  <div class="container clearfix">
+
+    <a class="header-logo-invertocat" href="https://github.com/">
+  <span class="mega-octicon octicon-mark-github"></span>
+</a>
+
+    <div class="divider-vertical"></div>
+
+    
+    <a href="https://github.com/notifications" class="notification-indicator tooltipped downwards" data-gotokey="n" original-title="You have no unread notifications">
+        <span class="mail-status all-read"></span>
+</a>    <div class="divider-vertical"></div>
+
+
+      <div class="command-bar js-command-bar  in-repository">
+          <form accept-charset="UTF-8" action="https://github.com/search" class="command-bar-form" id="top_search_form" method="get">
+
+<input type="text" data-hotkey="/ s" name="q" id="js-command-bar-field" placeholder="Search or type a command" tabindex="1" autocapitalize="off" data-username="saurshaz" data-repo="kissjs/node-mongoskin" data-branch="master" data-sha="f37e5dda295985999bb615ea4b349a8572431c57">
+
+    <input type="hidden" name="nwo" value="kissjs/node-mongoskin">
+
+    <div class="select-menu js-menu-container js-select-menu search-context-select-menu">
+      <span class="minibutton select-menu-button js-menu-target">
+        <span class="js-select-button">This repository</span>
+      </span>
+
+      <div class="select-menu-modal-holder js-menu-content js-navigation-container">
+        <div class="select-menu-modal">
+
+          <div class="select-menu-item js-navigation-item js-this-repository-navigation-item selected">
+            <span class="select-menu-item-icon octicon octicon-check"></span>
+            <input type="radio" class="js-search-this-repository" name="search_target" value="repository" checked="checked">
+            <div class="select-menu-item-text js-select-button-text">This repository</div>
+          </div> <!-- /.select-menu-item -->
+
+          <div class="select-menu-item js-navigation-item js-all-repositories-navigation-item">
+            <span class="select-menu-item-icon octicon octicon-check"></span>
+            <input type="radio" name="search_target" value="global">
+            <div class="select-menu-item-text js-select-button-text">All repositories</div>
+          </div> <!-- /.select-menu-item -->
+
+        </div>
+      </div>
+    </div>
+
+  <span class="octicon help tooltipped downwards" original-title="Show command bar help">
+    <span class="octicon octicon-question"></span>
+  </span>
+
+
+  <input type="hidden" name="ref" value="cmdform">
+
+</form>
+        <ul class="top-nav">
+          <li class="explore"><a href="https://github.com/explore">Explore</a></li>
+            <li><a href="https://gist.github.com/">Gist</a></li>
+            <li><a href="https://github.com/blog">Blog</a></li>
+          <li><a href="https://help.github.com/">Help</a></li>
+        </ul>
+      </div>
+
+    
+
+
+  <ul id="user-links">
+    <li>
+      <a href="https://github.com/saurshaz" class="name">
+        <img height="20" src="./kissjs node-mongoskin_files/7f6d93d87aa5b92fb9b680508c616625" width="20"> saurshaz
+      </a>
+    </li>
+
+      <li>
+        <a href="https://github.com/new" id="new_repo" class="tooltipped downwards" aria-label="Create a new repo" original-title="Create a new repo">
+          <span class="octicon octicon-repo-create"></span>
+        </a>
+      </li>
+
+      <li>
+        <a href="https://github.com/settings/profile" id="account_settings" class="tooltipped downwards" aria-label="Account settings " original-title="Account settings ">
+          <span class="octicon octicon-tools"></span>
+        </a>
+      </li>
+      <li>
+        <a class="tooltipped downwards" href="https://github.com/logout" data-method="post" id="logout" aria-label="Sign out" original-title="Sign out">
+          <span class="octicon octicon-log-out"></span>
+        </a>
+      </li>
+
+  </ul>
+
+<div class="js-new-dropdown-contents hidden">
+  
+
+<ul class="dropdown-menu">
+  <li>
+    <a href="https://github.com/new"><span class="octicon octicon-repo-create"></span> New repository</a>
+  </li>
+  <li>
+    <a href="https://github.com/organizations/new"><span class="octicon octicon-organization"></span> New organization</a>
+  </li>
+
+
+
+    <li class="section-title">
+      <span title="kissjs/node-mongoskin">This repository</span>
+    </li>
+    <li>
+      <a href="https://github.com/kissjs/node-mongoskin/issues/new"><span class="octicon octicon-issue-opened"></span> New issue</a>
+    </li>
+</ul>
+
+</div>
+
+
+    
+  </div>
+</div>
+
+      
+
+      
+
+
+
+
+          <div class="site" itemscope="" itemtype="http://schema.org/WebPage">
+    
+    <div class="pagehead repohead instapaper_ignore readability-menu">
+      <div class="container">
+        
+
+<ul class="pagehead-actions">
+
+    <li class="subscription">
+      <form accept-charset="UTF-8" action="https://github.com/notifications/subscribe" class="js-social-container" data-autosubmit="true" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="authenticity_token" type="hidden" value="PPVHKZ23/HrukXmZFstkKKiYA233Col+gaHX5P4ZJSg="></div>  <input id="repository_id" name="repository_id" type="hidden" value="1540241">
+
+    <div class="select-menu js-menu-container js-select-menu">
+        <a class="social-count js-social-count" href="https://github.com/kissjs/node-mongoskin/watchers">
+          48
+        </a>
+      <span class="minibutton select-menu-button with-count js-menu-target" role="button" tabindex="0">
+        <span class="js-select-button">
+          <span class="octicon octicon-eye-watch"></span>
+          Watch
+        </span>
+      </span>
+
+      <div class="select-menu-modal-holder">
+        <div class="select-menu-modal subscription-menu-modal js-menu-content">
+          <div class="select-menu-header">
+            <span class="select-menu-title">Notification status</span>
+            <span class="octicon octicon-remove-close js-menu-close"></span>
+          </div> <!-- /.select-menu-header -->
+
+          <div class="select-menu-list js-navigation-container" role="menu">
+
+            <div class="select-menu-item js-navigation-item selected" role="menuitem" tabindex="0">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <div class="select-menu-item-text">
+                <input checked="checked" id="do_included" name="do" type="radio" value="included">
+                <h4>Not watching</h4>
+                <span class="description">You only receive notifications for discussions in which you participate or are @mentioned.</span>
+                <span class="js-select-button-text hidden-select-button-text">
+                  <span class="octicon octicon-eye-watch"></span>
+                  Watch
+                </span>
+              </div>
+            </div> <!-- /.select-menu-item -->
+
+            <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+              <span class="select-menu-item-icon octicon octicon octicon-check"></span>
+              <div class="select-menu-item-text">
+                <input id="do_subscribed" name="do" type="radio" value="subscribed">
+                <h4>Watching</h4>
+                <span class="description">You receive notifications for all discussions in this repository.</span>
+                <span class="js-select-button-text hidden-select-button-text">
+                  <span class="octicon octicon-eye-unwatch"></span>
+                  Unwatch
+                </span>
+              </div>
+            </div> <!-- /.select-menu-item -->
+
+            <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <div class="select-menu-item-text">
+                <input id="do_ignore" name="do" type="radio" value="ignore">
+                <h4>Ignoring</h4>
+                <span class="description">You do not receive any notifications for discussions in this repository.</span>
+                <span class="js-select-button-text hidden-select-button-text">
+                  <span class="octicon octicon-mute"></span>
+                  Stop ignoring
+                </span>
+              </div>
+            </div> <!-- /.select-menu-item -->
+
+          </div> <!-- /.select-menu-list -->
+
+        </div> <!-- /.select-menu-modal -->
+      </div> <!-- /.select-menu-modal-holder -->
+    </div> <!-- /.select-menu -->
+
+</form>
+    </li>
+
+  <li>
+  
+<div class="js-toggler-container js-social-container starring-container ">
+  <a href="https://github.com/kissjs/node-mongoskin/unstar" class="minibutton with-count js-toggler-target star-button starred upwards" title="Unstar this repo" data-remote="true" data-method="post" rel="nofollow">
+    <span class="octicon octicon-star-delete"></span><span class="text">Unstar</span>
+  </a>
+  <a href="https://github.com/kissjs/node-mongoskin/star" class="minibutton with-count js-toggler-target star-button unstarred upwards" title="Star this repo" data-remote="true" data-method="post" rel="nofollow">
+    <span class="octicon octicon-star"></span><span class="text">Star</span>
+  </a>
+  <a class="social-count js-social-count" href="https://github.com/kissjs/node-mongoskin/stargazers">658</a>
+</div>
+
+  </li>
+
+
+        <li>
+          <a href="https://github.com/kissjs/node-mongoskin/fork" class="minibutton with-count js-toggler-target fork-button lighter upwards" title="Fork this repo" rel="nofollow" data-method="post">
+            <span class="octicon octicon-git-branch-create"></span><span class="text">Fork</span>
+          </a>
+          <a href="https://github.com/kissjs/node-mongoskin/network" class="social-count">82</a>
+        </li>
+
+
+</ul>
+
+        <h1 itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb" class="entry-title public">
+          <span class="repo-label"><span>public</span></span>
+          <span class="mega-octicon octicon-repo"></span>
+          <span class="author">
+            <a href="https://github.com/kissjs" class="url fn" itemprop="url" rel="author"><span itemprop="title">kissjs</span></a></span><span class="repohead-name-divider">/</span><strong><a href="./kissjs node-mongoskin_files/kissjs node-mongoskin.html" class="js-current-repository js-repo-home-link">node-mongoskin</a></strong>
+
+          <span class="page-context-loader">
+            <img alt="Octocat-spinner-32" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+          </span>
+
+        </h1>
+      </div><!-- /.container -->
+    </div><!-- /.repohead -->
+
+    <div class="container">
+
+      <div class="repository-with-sidebar repo-container with-full-navigation">
+
+        <div class="repository-sidebar">
+            
+
+<div class="repo-nav repo-nav-full js-repository-container-pjax js-octicon-loaders">
+  <div class="repo-nav-contents">
+    <ul class="repo-menu">
+      <li class="tooltipped leftwards" original-title="Code">
+        <a href="./kissjs node-mongoskin_files/kissjs node-mongoskin.html" aria-label="Code" class="js-selected-navigation-item selected" data-gotokey="c" data-pjax="true" data-selected-links="repo_source repo_downloads repo_commits repo_tags repo_branches /kissjs/node-mongoskin">
+          <span class="octicon octicon-code"></span> <span class="full-word">Code</span>
+          <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>      </li>
+
+        <li class="tooltipped leftwards" original-title="Issues">
+          <a href="https://github.com/kissjs/node-mongoskin/issues" aria-label="Issues" class="js-selected-navigation-item js-disable-pjax" data-gotokey="i" data-selected-links="repo_issues /kissjs/node-mongoskin/issues">
+            <span class="octicon octicon-issue-opened"></span> <span class="full-word">Issues</span>
+            <span class="counter">33</span>
+            <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>        </li>
+
+      <li class="tooltipped leftwards" original-title="Pull Requests"><a href="https://github.com/kissjs/node-mongoskin/pulls" aria-label="Pull Requests" class="js-selected-navigation-item js-disable-pjax" data-gotokey="p" data-selected-links="repo_pulls /kissjs/node-mongoskin/pulls">
+            <span class="octicon octicon-git-pull-request"></span> <span class="full-word">Pull Requests</span>
+            <span class="counter">4</span>
+            <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>      </li>
+
+
+        <li class="tooltipped leftwards" original-title="Wiki">
+          <a href="https://github.com/kissjs/node-mongoskin/wiki" aria-label="Wiki" class="js-selected-navigation-item" data-pjax="true" data-selected-links="repo_wiki /kissjs/node-mongoskin/wiki">
+            <span class="octicon octicon-book"></span> <span class="full-word">Wiki</span>
+            <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>        </li>
+    </ul>
+    <div class="repo-menu-separator"></div>
+    <ul class="repo-menu">
+
+      <li class="tooltipped leftwards" original-title="Pulse">
+        <a href="https://github.com/kissjs/node-mongoskin/pulse" aria-label="Pulse" class="js-selected-navigation-item" data-pjax="true" data-selected-links="pulse /kissjs/node-mongoskin/pulse">
+          <span class="octicon octicon-pulse"></span> <span class="full-word">Pulse</span>
+          <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>      </li>
+
+      <li class="tooltipped leftwards" original-title="Graphs">
+        <a href="https://github.com/kissjs/node-mongoskin/graphs" aria-label="Graphs" class="js-selected-navigation-item" data-pjax="true" data-selected-links="repo_graphs repo_contributors /kissjs/node-mongoskin/graphs">
+          <span class="octicon octicon-graph"></span> <span class="full-word">Graphs</span>
+          <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>      </li>
+
+      <li class="tooltipped leftwards" original-title="Network">
+        <a href="https://github.com/kissjs/node-mongoskin/network" aria-label="Network" class="js-selected-navigation-item js-disable-pjax" data-selected-links="repo_network /kissjs/node-mongoskin/network">
+          <span class="octicon octicon-git-branch"></span> <span class="full-word">Network</span>
+          <img alt="Octocat-spinner-32" class="mini-loader" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+</a>      </li>
+    </ul>
+
+
+  </div>
+</div>
+
+            <div class="only-with-full-nav">
+              
+
+  
+
+<div class="clone-url open" data-protocol-type="http" data-url="/users/set_protocol?protocol_selector=http&amp;protocol_type=clone">
+  <h3><strong>HTTPS</strong> clone URL</h3>
+  <div class="clone-url-box">
+    <input type="text" class="clone js-url-field" value="https://github.com/kissjs/node-mongoskin.git" readonly="readonly">
+
+    <span class="js-zeroclipboard url-box-clippy minibutton zeroclipboard-button" data-clipboard-text="https://github.com/kissjs/node-mongoskin.git" data-copied-hint="copied!" title="copy to clipboard"><span class="octicon octicon-clippy"></span></span>
+  </div>
+</div>
+
+  
+
+<div class="clone-url " data-protocol-type="ssh" data-url="/users/set_protocol?protocol_selector=ssh&amp;protocol_type=clone">
+  <h3><strong>SSH</strong> clone URL</h3>
+  <div class="clone-url-box">
+    <input type="text" class="clone js-url-field" value="git@github.com:kissjs/node-mongoskin.git" readonly="readonly">
+
+    <span class="js-zeroclipboard url-box-clippy minibutton zeroclipboard-button" data-clipboard-text="git@github.com:kissjs/node-mongoskin.git" data-copied-hint="copied!" title="copy to clipboard"><span class="octicon octicon-clippy"></span></span>
+  </div>
+</div>
+
+  
+
+<div class="clone-url " data-protocol-type="subversion" data-url="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=clone">
+  <h3><strong>Subversion</strong> checkout URL</h3>
+  <div class="clone-url-box">
+    <input type="text" class="clone js-url-field" value="https://github.com/kissjs/node-mongoskin" readonly="readonly">
+
+    <span class="js-zeroclipboard url-box-clippy minibutton zeroclipboard-button" data-clipboard-text="https://github.com/kissjs/node-mongoskin" data-copied-hint="copied!" title="copy to clipboard"><span class="octicon octicon-clippy"></span></span>
+  </div>
+</div>
+
+
+<p class="clone-options">You can clone with
+      <a href="https://github.com/kissjs/node-mongoskin#" class="js-clone-selector" data-protocol="http">HTTPS</a>,
+      <a href="https://github.com/kissjs/node-mongoskin#" class="js-clone-selector" data-protocol="ssh">SSH</a>,
+      or <a href="https://github.com/kissjs/node-mongoskin#" class="js-clone-selector" data-protocol="subversion">Subversion</a>.
+  <span class="octicon help tooltipped upwards" original-title="Get help on which URL is right for you.">
+    <a href="https://help.github.com/articles/which-remote-url-should-i-use">
+    <span class="octicon octicon-question"></span>
+    </a>
+  </span>
+</p>
+
+  <a href="http://mac.github.com/" class="minibutton sidebar-button">
+    <span class="octicon octicon-device-desktop"></span>
+    Clone in Desktop
+  </a>
+
+
+                <a href="https://github.com/kissjs/node-mongoskin/archive/master.zip" class="minibutton sidebar-button" title="Download this repository as a zip file" rel="nofollow">
+                  <span class="octicon octicon-cloud-download"></span>
+                  Download ZIP
+                </a>
+            </div>
+        </div><!-- /.repository-sidebar -->
+
+        <div id="js-repo-pjax-container" class="repository-content context-loader-container" data-pjax-container="">
+          
+<div class="js-info-carrier" data-show-full-navigation="yes"></div>
+
+<div class="repository-meta js-details-container ">
+    <div class="repository-description js-details-show">
+      <p>The future layer for node-mongodb-native.</p>
+    </div>
+
+
+
+</div>
+
+<div class="capped-box overall-summary ">
+
+  <div class="stats-switcher-viewport js-stats-switcher-viewport">
+
+    <ul class="numbers-summary">
+      <li class="commits">
+        <a data-pjax="" href="https://github.com/kissjs/node-mongoskin/commits/master">
+          <span class="num">
+            <span class="octicon octicon-history"></span>
+            158
+          </span>
+          commits
+        </a>
+      </li>
+      <li>
+        <a data-pjax="" href="https://github.com/kissjs/node-mongoskin/branches">
+          <span class="num">
+            <span class="octicon octicon-git-branch"></span>
+            2
+          </span>
+          branches
+        </a>
+      </li>
+
+      <li>
+        <a data-pjax="" href="https://github.com/kissjs/node-mongoskin/releases">
+          <span class="num">
+            <span class="octicon octicon-tag"></span>
+            20
+          </span>
+          releases
+        </a>
+      </li>
+
+      <li>
+        <a href="https://github.com/kissjs/node-mongoskin/contributors">
+          <span class="num">
+            <span class="octicon octicon-organization"></span>
+            18
+          </span>
+          contributors
+        </a>
+      </li>
+    </ul>
+
+      <div class="repository-lang-stats">
+        <ol class="repository-lang-stats-numbers">
+          <li>
+              <a href="https://github.com/kissjs/node-mongoskin/search?l=javascript">
+                <span class="color-block language-color" style="background-color:#f15501;"></span>
+                <span class="lang">JavaScript</span>
+                <span class="percent">100%</span>
+              </a>
+          </li>
+        </ol>
+      </div>
+  </div>
+
+</div>
+
+  <a href="https://github.com/kissjs/node-mongoskin#" class="repository-lang-stats-graph js-toggle-lang-stats tooltipped downwards" style="background-color:#f15501" original-title="Show language statistics">
+  <span class="language-color" style="width:100%; background-color:#f15501;" itemprop="keywords">JavaScript</span>
+  </a>
+
+
+
+
+
+<div class="file-navigation in-mid-page">
+    <a href="https://github.com/kissjs/node-mongoskin/compare" aria-label="Compare, review, create a pull request" class="minibutton compact primary tooltipped downwards" data-pjax="" original-title="Compare &amp; review">
+      <span class="octicon octicon-git-compare"></span>
+    </a>
+
+  
+
+
+<div class="select-menu js-menu-container js-select-menu">
+  <span class="minibutton select-menu-button js-menu-target" data-hotkey="w" data-master-branch="master" data-ref="master" role="button" aria-label="Switch branches or tags" tabindex="0">
+    <span class="octicon octicon-git-branch"></span>
+    <i>branch:</i>
+    <span class="js-select-button">master</span>
+  </span>
+
+  <div class="select-menu-modal-holder js-menu-content js-navigation-container" data-pjax="">
+
+    <div class="select-menu-modal">
+      <div class="select-menu-header">
+        <span class="select-menu-title">Switch branches/tags</span>
+        <span class="octicon octicon-remove-close js-menu-close"></span>
+      </div> <!-- /.select-menu-header -->
+
+      <div class="select-menu-filters">
+        <div class="select-menu-text-filter">
+          <input type="text" aria-label="Filter branches/tags" id="context-commitish-filter-field" class="js-filterable-field js-navigation-enable" placeholder="Filter branches/tags">
+        </div>
+        <div class="select-menu-tabs">
+          <ul>
+            <li class="select-menu-tab">
+              <a href="https://github.com/kissjs/node-mongoskin#" data-tab-filter="branches" class="js-select-menu-tab">Branches</a>
+            </li>
+            <li class="select-menu-tab">
+              <a href="https://github.com/kissjs/node-mongoskin#" data-tab-filter="tags" class="js-select-menu-tab">Tags</a>
+            </li>
+          </ul>
+        </div><!-- /.select-menu-tabs -->
+      </div><!-- /.select-menu-filters -->
+
+      <div class="select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket" data-tab-filter="branches">
+
+        <div data-filterable-for="context-commitish-filter-field" data-filterable-type="substring">
+
+
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/gh-pages" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="gh-pages" data-skip-pjax="true" rel="nofollow" title="gh-pages">gh-pages</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item selected">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/master" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="master" data-skip-pjax="true" rel="nofollow" title="master">master</a>
+            </div> <!-- /.select-menu-item -->
+        </div>
+
+          <div class="select-menu-no-results">Nothing to show</div>
+      </div> <!-- /.select-menu-list -->
+
+      <div class="select-menu-list select-menu-tab-bucket js-select-menu-tab-bucket" data-tab-filter="tags">
+        <div data-filterable-for="context-commitish-filter-field" data-filterable-type="substring">
+
+
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/v0.4.4" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="v0.4.4" data-skip-pjax="true" rel="nofollow" title="v0.4.4">v0.4.4</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/v0.4.3" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="v0.4.3" data-skip-pjax="true" rel="nofollow" title="v0.4.3">v0.4.3</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/v0.4.2" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="v0.4.2" data-skip-pjax="true" rel="nofollow" title="v0.4.2">v0.4.2</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/v0.4.1" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="v0.4.1" data-skip-pjax="true" rel="nofollow" title="v0.4.1">v0.4.1</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/v0.4.0" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="v0.4.0" data-skip-pjax="true" rel="nofollow" title="v0.4.0">v0.4.0</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.6.0" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.6.0" data-skip-pjax="true" rel="nofollow" title="0.6.0">0.6.0</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.5.0" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.5.0" data-skip-pjax="true" rel="nofollow" title="0.5.0">0.5.0</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.3.5" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.3.5" data-skip-pjax="true" rel="nofollow" title="0.3.5">0.3.5</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.3.3" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.3.3" data-skip-pjax="true" rel="nofollow" title="0.3.3">0.3.3</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.3.2" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.3.2" data-skip-pjax="true" rel="nofollow" title="0.3.2">0.3.2</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.3.1" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.3.1" data-skip-pjax="true" rel="nofollow" title="0.3.1">0.3.1</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.3.0" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.3.0" data-skip-pjax="true" rel="nofollow" title="0.3.0">0.3.0</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.2.3" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.2.3" data-skip-pjax="true" rel="nofollow" title="0.2.3">0.2.3</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.2.2" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.2.2" data-skip-pjax="true" rel="nofollow" title="0.2.2">0.2.2</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.2.1" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.2.1" data-skip-pjax="true" rel="nofollow" title="0.2.1">0.2.1</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.2.0" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.2.0" data-skip-pjax="true" rel="nofollow" title="0.2.0">0.2.0</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.1.3" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.1.3" data-skip-pjax="true" rel="nofollow" title="0.1.3">0.1.3</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.1.2" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.1.2" data-skip-pjax="true" rel="nofollow" title="0.1.2">0.1.2</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.1.1" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.1.1" data-skip-pjax="true" rel="nofollow" title="0.1.1">0.1.1</a>
+            </div> <!-- /.select-menu-item -->
+            <div class="select-menu-item js-navigation-item ">
+              <span class="select-menu-item-icon octicon octicon-check"></span>
+              <a href="https://github.com/kissjs/node-mongoskin/tree/0.1.0" class="js-navigation-open select-menu-item-text js-select-button-text css-truncate-target" data-name="0.1.0" data-skip-pjax="true" rel="nofollow" title="0.1.0">0.1.0</a>
+            </div> <!-- /.select-menu-item -->
+        </div>
+
+        <div class="select-menu-no-results">Nothing to show</div>
+      </div> <!-- /.select-menu-list -->
+
+    </div> <!-- /.select-menu-modal -->
+  </div> <!-- /.select-menu-modal-holder -->
+</div> <!-- /.select-menu -->
+
+
+  <div class="breadcrumb"><span class="repo-root js-repo-root"><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="./kissjs node-mongoskin_files/kissjs node-mongoskin.html" data-branch="master" data-direction="back" data-pjax="true" itemscope="url"><span itemprop="title">node-mongoskin</span></a></span></span><span class="separator"> / </span><form action="https://github.com/kissjs/node-mongoskin/new/master" class="js-new-blob-form tooltipped rightwards new-file-link" method="post" original-title="Fork this project and create a new file"><span aria-label="Fork this project and create a new file" class="js-new-blob-submit octicon octicon-file-add" data-test-id="create-new-git-file" role="button"></span></form></div>
+</div>
+
+
+
+<a href="https://github.com/kissjs/node-mongoskin/find/master" data-hotkey="t" style="display:none" data-pjax="">Show File Finder</a>
+<div class="bubble files-bubble">
+  <div class="commit commit-tease js-details-container">
+    <p class="commit-title ">
+        <a href="https://github.com/kissjs/node-mongoskin/commit/01d58ffa46298ff5151e27e4f9a7a86f283b2294" class="message" data-pjax="true" title="Merge pull request #114 from nemtsov/patch-1
+
+fix typo: this.hit -&gt; this.hint">Merge pull request</a> <a href="https://github.com/kissjs/node-mongoskin/pull/114" class="issue-link" title="fix typo: this.hit -&gt; this.hint">#114</a> <a href="https://github.com/kissjs/node-mongoskin/commit/01d58ffa46298ff5151e27e4f9a7a86f283b2294" class="message" data-pjax="true" title="Merge pull request #114 from nemtsov/patch-1
+
+fix typo: this.hit -&gt; this.hint">from nemtsov/patch-1</a>
+        <span class="hidden-text-expander inline"><a href="https://github.com/kissjs/node-mongoskin#" class="js-details-target">…</a></span>
+    </p>
+      <div class="commit-desc"><pre>fix typo: this.hit -&gt; this.hint</pre></div>
+    <div class="commit-meta">
+      <span class="js-zeroclipboard zeroclipboard-link" data-clipboard-text="01d58ffa46298ff5151e27e4f9a7a86f283b2294" data-copied-hint="copied!" title="Copy SHA"><span class="octicon octicon-clippy"></span></span>
+      <a href="https://github.com/kissjs/node-mongoskin/commit/01d58ffa46298ff5151e27e4f9a7a86f283b2294" class="sha-block" data-pjax="">latest commit <span class="sha">01d58ffa46</span></a>
+
+      <div class="authorship">
+        <img class="gravatar" height="20" src="./kissjs node-mongoskin_files/95b9d41231617a05ced5604d242c9670" width="20">
+        <span class="author-name"><a href="https://github.com/fengmk2" data-skip-pjax="true" rel="contributor">fengmk2</a></span>
+        authored <time class="js-relative-date updated" datetime="2013-08-03T19:05:46-07:00" title="2013-08-03 19:05:46">a month ago</time>
+
+      </div>
+    </div>
+  </div><table class="files" data-pjax="">
+    <thead>
+
+        
+  
+
+    </thead>
+
+    
+<tbody class="" data-url="/kissjs/node-mongoskin/file-list/master">
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-directory"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/tree/master/examples" class="js-directory-link" id="bfebe34154a0dfd9fc7b447fc9ed74e9-d7fdde6e49181afadb9ed7d9327af6775984f8d8" title="examples">examples</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/d4143da1b9ff7e805c2937c6896a004b62e2acba" class="message" data-pjax="true" title="MongoDB 1.2.x support">MongoDB 1.2.x support</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-11-29T08:07:00-08:00" title="2012-11-29 08:07:00">10 months ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-directory"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/tree/master/integration" class="js-directory-link" id="776ea3bf11df5829827f7afb43c37174-a261ce8f938b9e1658da2518ca048edf9fcd0038" title="integration">integration</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/c379ba2c9ca974c92c9dd46c452b1087d3e4e40e" class="message" data-pjax="true" title="add a longlive example for test #57">add a longlive example for test</a> <a href="https://github.com/kissjs/node-mongoskin/issues/57" class="issue-link" title="TypeError: Cannot call method &#39;open&#39; of null">#57</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-08-03T20:53:16-07:00" title="2012-08-03 20:53:16">a year ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-directory"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/tree/master/lib" class="js-directory-link" id="e8acc63b1e238f3255c900eed37254b8-ee6b7d63acec40ccc65227f7197e101bccaa418c" title="lib">lib</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/b7443983ffd6a22f6d814ccc7a7c8c156c4189ec" class="message" data-pjax="true" title="fix typo: this.hit -&gt; this.hint">fix typo: this.hit -&gt; this.hint</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2013-08-03T17:43:54-07:00" title="2013-08-03 17:43:54">a month ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-directory"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/tree/master/test" class="js-directory-link" id="098f6bcd4621d373cade4e832627b4f6-eb12b91fccc078af9297d89dfbde945b6320fadc" title="test">test</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/82dd0a03e72da52912719360ae5eed5fc155e011" class="message" data-pjax="true" title="fixed unsafe mode warnning log">fixed unsafe mode warnning log</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-12-28T22:32:41-08:00" title="2012-12-28 22:32:41">9 months ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/.gitignore" class="js-directory-link" id="a084b794bc0759e7a6b77810e01874f2-fea845857e4e08c49a08a365f385434471418dab" title=".gitignore">.gitignore</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/0ce29306910ad27a6cd99e769a6de56bc39f7754" class="message" data-pjax="true" title="add replicaset test cases. Invoke it by $ make test-replicaset">add replicaset test cases. Invoke it by $ make test-replicaset</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-08-13T03:33:25-07:00" title="2012-08-13 03:33:25">a year ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/.jshintrc" class="js-directory-link" id="4d5aa81bf4f18104bb6ea53a8b5d1f43-bbe0a3e8a0567299f2cc4e1280fc6c2696917303" title=".jshintrc">.jshintrc</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/80129b89ff883382dac8a1b942ef57e5866ebe4b" class="message" data-pjax="true" title="fixed #54 let coverage up to 89%">fixed</a> <a href="https://github.com/kissjs/node-mongoskin/issues/54" class="issue-link" title="add unit test and jscoverage">#54</a> <a href="https://github.com/kissjs/node-mongoskin/commit/80129b89ff883382dac8a1b942ef57e5866ebe4b" class="message" data-pjax="true" title="fixed #54 let coverage up to 89%">let coverage up to 89%</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-06-23T09:37:47-07:00" title="2012-06-23 09:37:47">a year ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/.npmignore" class="js-directory-link" id="0fd4ef892d9d4990033701887c2f9bcc-cbd931a5c0438c674480fdb88900be57d8d5171d" title=".npmignore">.npmignore</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/cacdfb30844502acc037d0175c44e4ac30634524" class="message" data-pjax="true" title="add authors list and .npmignore; bump version to 0.4.1">add authors list and .npmignore; bump version to 0.4.1</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-08-13T10:33:37-07:00" title="2012-08-13 10:33:37">a year ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/.travis.yml" class="js-directory-link" id="354f30a63fb0907d4ad57269548329e3-f0afa7e837630fd6b2effc4e461773ca1d51819d" title=".travis.yml">.travis.yml</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/60d6c238a81c92f788bad584cee80db7e8a58357" class="message" data-pjax="true" title="add 0.9 version test">add 0.9 version test</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-12-28T22:49:53-08:00" title="2012-12-28 22:49:53">9 months ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/AUTHORS" class="js-directory-link" id="3d350169560e75d0cf9fc8e3574a3639-99e04c19eb9d4e8b70b21716f509e76c50453e86" title="AUTHORS">AUTHORS</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/c99b69ee64d5f4a866a45afd54de32ef16d3c953" class="message" data-pjax="true" title="create AUTHORS by https://github.com/fengmk2/node-authors: $ node ./node...
+
+...-authors -f text &gt; authors.new &amp;&amp; mv authors.new AUTHORS">create AUTHORS by</a> <a href="https://github.com/fengmk2/node-authors:">https://github.com/fengmk2/node-authors:</a> <a href="https://github.com/kissjs/node-mongoskin/commit/c99b69ee64d5f4a866a45afd54de32ef16d3c953" class="message" data-pjax="true" title="create AUTHORS by https://github.com/fengmk2/node-authors: $ node ./node...
+
+...-authors -f text &gt; authors.new &amp;&amp; mv authors.new AUTHORS">$ node ./n…</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-08-13T12:04:02-07:00" title="2012-08-13 12:04:02">a year ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/History.md" class="js-directory-link" id="e1bbd4f15e3b63427b4261e05b948ea8-9895bbb8650001a2630d70d4096a91dc70dc2945" title="History.md">History.md</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/af876fcb9cff80a32478c490788ef0687cc74dbf" class="message" data-pjax="true" title="Release 0.6.0">Release 0.6.0</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2013-07-16T06:01:29-07:00" title="2013-07-16 06:01:29">2 months ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/LICENSE" class="js-directory-link" id="9879d6db96fd29134fc802214163b95a-e91ac035ea167ed6aef68f268b189053d727501b" title="LICENSE">LICENSE</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/73bedc244fe386c9aae465fec5e7068b8d09317d" class="message" data-pjax="true" title="add MIT license; add `IGNORE_NAMES` for no bind methods list.">add MIT license; add `IGNORE_NAMES` for no bind methods list.</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-05-27T22:26:31-07:00" title="2012-05-27 22:26:31">a year ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/Makefile" class="js-directory-link" id="b67911656ef5d18c4ae36cb6741b7965-94d697ebfc6feaa5b0d0ba6b0b26731f51b712c4" title="Makefile">Makefile</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/1051c038ecaa5f76d1a7aa02fe69390d289ce4e6" class="message" data-pjax="true" title="Release 0.5.0">Release 0.5.0</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-12-28T22:43:29-08:00" title="2012-12-28 22:43:29">9 months ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/Readme.md" class="js-directory-link" id="1e290ac8433d555bce009b162cb869d0-b43199425cac8f84db3552be7c4eed52de90fac7" title="Readme.md">Readme.md</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/6d9d7d12fecd732c603701ae405a5eaa67b94eb1" class="message" data-pjax="true" title="Upgraded the mongo db version to 1.3.x. Mixing mongodb 1.2.x which mongo...
+
+...skin 0.5.0 depends on and
+
+latest mongodb 1.3.x causes Mongodb connection timeout problems in replication environment.">Upgraded the mongo db version to 1.3.x. Mixing mongodb 1.2.x which mo…</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2013-05-17T15:03:12-07:00" title="2013-05-17 15:03:12">4 months ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/index.js" class="js-directory-link" id="168726dbe96b3ce427e7fedce31bb0bc-dd996affa9591e51ca24aef7e3353498e6a3c1f2" title="index.js">index.js</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/2a4779b3d63fb2503aecc1784fa7f8cf6860c686" class="message" data-pjax="true" title="fixed #56 error: Argument passed in must be a single String of 12 bytes ...
+
+...or a string of 24 hex characters; add more test case for conllection.js; add test coverage;">fixed</a> <a href="https://github.com/kissjs/node-mongoskin/issues/56" class="issue-link" title="Argument passed in must be a single String of 12 bytes or a string of 24 hex characters">#56</a> <a href="https://github.com/kissjs/node-mongoskin/commit/2a4779b3d63fb2503aecc1784fa7f8cf6860c686" class="message" data-pjax="true" title="fixed #56 error: Argument passed in must be a single String of 12 bytes ...
+
+...or a string of 24 hex characters; add more test case for conllection.js; add test coverage;">error: Argument passed in must be a single String of 12 byt…</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-06-23T02:55:14-07:00" title="2012-06-23 02:55:14">a year ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/logo.png" class="js-directory-link" id="1bb87d41d15fe27b500a4bfcde01bb0e-c8de074af0534fb9064bf534586732c69e2d0eb7" title="logo.png">logo.png</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/82dd0a03e72da52912719360ae5eed5fc155e011" class="message" data-pjax="true" title="fixed unsafe mode warnning log">fixed unsafe mode warnning log</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-12-28T22:32:41-08:00" title="2012-12-28 22:32:41">9 months ago</time></span></td>
+    </tr>
+    <tr class="">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/package.json" class="js-directory-link" id="b9cfc7f2cdf78a7f4b91a753d10865a2-235d22fa54be7a2cbf6b2c67b833c2c5c617fcca" title="package.json">package.json</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/713690259873859ae119a361fed901b56953cf69" class="message" data-pjax="true" title="changed version in package.json to 1.3.x for mongodb">changed version in package.json to 1.3.x for mongodb</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2013-05-17T15:22:15-07:00" title="2013-05-17 15:22:15">4 months ago</time></span></td>
+    </tr>
+    <tr class="alt">
+      <td class="icon">
+        <span class="octicon octicon-file-text"></span>
+        <img alt="Octocat-spinner-32" class="spinner" height="16" src="./kissjs node-mongoskin_files/octocat-spinner-32.gif" width="16">
+      </td>
+      <td class="content">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/blob/master/test_results.md" class="js-directory-link" id="d3e2f690faebb89afcab6d55a638e9c6-93e9a25571bc7a386138840c2eaae4afabcf6993" title="test_results.md">test_results.md</a></span>
+      </td>
+      <td class="message">
+        <span class="css-truncate css-truncate-target"><a href="https://github.com/kissjs/node-mongoskin/commit/1051c038ecaa5f76d1a7aa02fe69390d289ce4e6" class="message" data-pjax="true" title="Release 0.5.0">Release 0.5.0</a></span>
+      </td>
+      <td class="age"><span class="css-truncate css-truncate-target"><time class="js-relative-date" datetime="2012-12-28T22:43:29-08:00" title="2012-12-28 22:43:29">9 months ago</time></span></td>
+    </tr>
+</tbody>
+
+  </table>
+</div>
+
+  <div id="readme" class="clearfix announce instapaper_body md">
+    <span class="name"><span class="octicon octicon-book"></span> Readme.md</span><article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1>
+<a name="mongoskin--" class="anchor" href="https://github.com/kissjs/node-mongoskin#mongoskin--"><span class="octicon octicon-link"></span></a>mongoskin <a href="http://travis-ci.org/kissjs/node-mongoskin"><img src="./kissjs node-mongoskin_files/node-mongoskin.png" alt="Build Status" style="max-width:100%;"></a> <a href="https://david-dm.org/kissjs/node-mongoskin"><img src="./kissjs node-mongoskin_files/node-mongoskin(1).png" alt="Dependencies" style="max-width:100%;"></a>
+</h1>
+
+<p><a href="./kissjs node-mongoskin_files/logo.png" target="_blank"><img src="./kissjs node-mongoskin_files/logo.png" alt="logo" style="max-width:100%;"></a></p>
+
+<p>This project is a wrapper for <a href="https://github.com/mongodb/node-mongodb-native">node-mongodb-native</a>.
+The base API is same at the node-mongodb-native, you may want to familiarise yourself with the <a href="http://mongodb.github.com/node-mongodb-native/">node-mongodb-native documentation</a> first.</p>
+
+<h2>
+<a name="compatible-mongodb-versions" class="anchor" href="https://github.com/kissjs/node-mongoskin#compatible-mongodb-versions"><span class="octicon octicon-link"></span></a>Compatible mongodb versions</h2>
+
+<p>You should use mongodb version 1.3.3. Prior mongodb versions might not work.</p>
+
+<h2>
+<a name="automated-tests" class="anchor" href="https://github.com/kissjs/node-mongoskin#automated-tests"><span class="octicon octicon-link"></span></a>Automated tests</h2>
+
+<p>You can run the automated test by running <strong>make test</strong>. The tests have a coverage of <a href="http://fengmk2.github.com/coverage/mongoskin.html"><strong>89%</strong></a> and you can <a href="https://github.com/kissjs/node-mongoskin/blob/master/test_results.md">browse the results</a>.</p>
+
+<p><a name="index"></a></p>
+
+<h1>
+<a name="mongoskin-documentation" class="anchor" href="https://github.com/kissjs/node-mongoskin#mongoskin-documentation"><span class="octicon octicon-link"></span></a>Mongoskin documentation</h1>
+
+<ul>
+<li><a href="https://github.com/kissjs/node-mongoskin#comparation">Nodejs mongodb driver comparison</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#install">Install</a></li>
+<li>
+<a href="https://github.com/kissjs/node-mongoskin#quickstart">Quick Start</a>
+
+<ul>
+<li><a href="https://github.com/kissjs/node-mongoskin#quickstart-1">Easier to connect</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#quickstart-2">Server options and BSON options</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#quickstart-3">Similar API to node-mongodb-native</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#quickstart-4">Easier cursor</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#quickstart-5">MVC helpers</a></li>
+</ul>
+</li>
+<li>
+<a href="https://github.com/kissjs/node-mongoskin#documentation">API documentation</a>
+
+<ul>
+<li><a href="https://github.com/kissjs/node-mongoskin#module">Module</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#skinserver">SkinServer</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#skindb">SkinDb</a></li>
+<li>
+<a href="https://github.com/kissjs/node-mongoskin#skincollection">SkinCollection</a>
+
+<ul>
+<li><a href="https://github.com/kissjs/node-mongoskin#additional-collection-op">Additional methods</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-collection-op">Collection operation</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-indexes">Indexes</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-query">Querying</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-aggregation">Aggregation</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-inserting">Inserting</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-updating">Updating</a></li>
+<li><a href="https://github.com/kissjs/node-mongoskin#inherit-removing">Removing</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/kissjs/node-mongoskin#skincursor">SkinCursor</a></li>
+</ul>
+</li>
+</ul><p><a name="comparation"></a></p>
+
+<h1>
+<a name="nodejs-mongodb-driver-comparison" class="anchor" href="https://github.com/kissjs/node-mongoskin#nodejs-mongodb-driver-comparison"><span class="octicon octicon-link"></span></a>Nodejs mongodb driver comparison</h1>
+
+<h2>
+<a name="node-mongodb-native" class="anchor" href="https://github.com/kissjs/node-mongoskin#node-mongodb-native"><span class="octicon octicon-link"></span></a>node-mongodb-native</h2>
+
+<p>One of the most powerful Mongo drivers is node-mongodb-native. Most other drivers build
+on top of it, including mongoskin. Unfortunately, it has an awkward interface with too many 
+callbacks. Also, mongoskin provides helper method bindings on Collection instances.</p>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/tree/master/docs">mongodb-native</a></p>
+
+<h2>
+<a name="mongoose" class="anchor" href="https://github.com/kissjs/node-mongoskin#mongoose"><span class="octicon octicon-link"></span></a>mongoose</h2>
+
+<p>Mongoose provides a full blown ORM view of Collections and Models,
+  and you are required to define a schema first. But why does mongodb need a schema?
+  If you're like me, then you prefer to drive your schema from the application layer,
+  and use fields without having had to define them beforehand.</p>
+
+<p>Mongoose also provides a data abstraction layer with validation support. Again, if you're like me, then
+  you would prefer a lighter weight solution and to craft your own validation. I think this is the tao of mongodb.</p>
+
+<h2>
+<a name="mongoskin" class="anchor" href="https://github.com/kissjs/node-mongoskin#mongoskin"><span class="octicon octicon-link"></span></a>mongoskin</h2>
+
+<p>Mongoskin is an easy to use driver of mongodb for nodejs,
+  it is similar with mongo shell, powerful like node-mongodb-native,
+  and supports binding helper methods to Collections.</p>
+
+<p>It provides the full features of <a href="https://github.com/christkv/node-mongodb-native">node-mongodb-native</a>,
+  and makes good use of <a href="http://en.wikipedia.org/wiki/Future_%28programming%29">futures</a>.</p>
+
+<p>For validation you can use <a href="https://github.com/guileen/node-iform">node-iform</a>.</p>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="install"></a></p>
+
+<h1>
+<a name="install" class="anchor" href="https://github.com/kissjs/node-mongoskin#install"><span class="octicon octicon-link"></span></a>Install</h1>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>npm install mongoskin
+</pre></div>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="quickstart"></a></p>
+
+<h1>
+<a name="quick-start" class="anchor" href="https://github.com/kissjs/node-mongoskin#quick-start"><span class="octicon octicon-link"></span></a>Quick start</h1>
+
+<p><strong>Is mongoskin synchronized?</strong></p>
+
+<p>Nope! It is asynchronized, it use the <a href="http://en.wikipedia.org/wiki/Future_%28programming%29">future pattern</a>.
+<strong>Mongoskin</strong> is the future layer above <a href="https://github.com/christkv/node-mongodb-native">node-mongodb-native</a></p>
+
+<p><a name="quickstart-1"></a></p>
+
+<h2>
+<a name="easier-to-connect" class="anchor" href="https://github.com/kissjs/node-mongoskin#easier-to-connect"><span class="octicon octicon-link"></span></a>Easier to connect</h2>
+
+<p>You can connect to mongodb easier now.</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">mongo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mongoskin'</span><span class="p">);</span>
+<span class="nx">mongo</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">'localhost:27017/testdb'</span><span class="p">).</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'blog'</span><span class="p">).</span><span class="nx">find</span><span class="p">().</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">items</span><span class="p">);</span>
+<span class="p">})</span>
+</pre></div>
+
+<p><a name="quickstart-2"></a></p>
+
+<h2>
+<a name="server-options-and-bson-options" class="anchor" href="https://github.com/kissjs/node-mongoskin#server-options-and-bson-options"><span class="octicon octicon-link"></span></a>Server options and BSON options</h2>
+
+<p>You can also set <code>auto_reconnect</code> options querystring.
+And native_parser options will automatically set if native_parser is available.</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">mongo</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mongoskin'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">'localhost:27017/test?auto_reconnect'</span><span class="p">);</span>
+</pre></div>
+
+<p><a name="quickstart-3"></a></p>
+
+<h2>
+<a name="similar-api-to-node-mongodb-native" class="anchor" href="https://github.com/kissjs/node-mongoskin#similar-api-to-node-mongodb-native"><span class="octicon octicon-link"></span></a>Similar API to node-mongodb-native</h2>
+
+<p>You can do everything that node-mongodb-native can do.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">createCollection</span><span class="p">(...);</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'user'</span><span class="p">).</span><span class="nx">ensureIndex</span><span class="p">([[</span><span class="s1">'username'</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="kc">true</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">replies</span><span class="p">)</span> <span class="p">{});</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">).</span><span class="nx">hint</span> <span class="o">=</span> <span class="s1">'slug'</span><span class="p">;</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">).</span><span class="nx">findOne</span><span class="p">({</span><span class="nx">slug</span><span class="o">:</span> <span class="s1">'whats-up'</span><span class="p">},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">post</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">});</span>
+</pre></div>
+
+<p><a name="quickstart-4"></a></p>
+
+<h2>
+<a name="easier-cursor" class="anchor" href="https://github.com/kissjs/node-mongoskin#easier-cursor"><span class="octicon octicon-link"></span></a>Easier cursor</h2>
+
+<div class="highlight highlight-js"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">).</span><span class="nx">find</span><span class="p">().</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">posts</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">});</span>
+</pre></div>
+
+<p><a name="quickstart-5"></a></p>
+
+<h2>
+<a name="mvc-helpers" class="anchor" href="https://github.com/kissjs/node-mongoskin#mvc-helpers"><span class="octicon octicon-link"></span></a>MVC helpers</h2>
+
+<p>You can bind <strong>additional methods</strong> for collection.
+It is very useful if you want to use MVC patterns with nodejs and mongodb.
+You can also invoke collection by properties after bind,
+it could simplfy your <code>require</code>.</p>
+
+<p>To keep your code in line with DRY principles, it's possible to create your own
+data layer by for example, setting up your own validators and/or default values
+inside the MVC methods as shown below in the config example</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">findTop10</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">({},</span> <span class="p">{</span><span class="nx">limit</span><span class="o">:</span><span class="mi">10</span><span class="p">,</span> <span class="nx">sort</span><span class="o">:</span><span class="p">[[</span><span class="s1">'views'</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]}).</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">fn</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="nx">removeTagWith</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">tag</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">this</span><span class="p">.</span><span class="nx">remove</span><span class="p">({</span><span class="nx">tags</span><span class="o">:</span><span class="nx">tag</span><span class="p">},</span><span class="nx">fn</span><span class="p">);</span>
+  <span class="p">}</span>
+ <span class="p">}</span> 
+<span class="p">});</span>
+
+<span class="nx">db</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'settings'</span><span class="p">,</span> <span class="p">{</span>
+
+  <span class="nx">getAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">}).</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">settings</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="c1">// We want to set a default currency from within our app instead of storing it</span>
+      <span class="c1">// for every user</span>
+      <span class="nx">settings</span><span class="p">.</span><span class="nx">currency</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">currency</span> <span class="o">!==</span> <span class="s2">"undefined"</span><span class="p">)</span> <span class="o">?</span> <span class="nx">settings</span><span class="p">.</span><span class="nx">currency</span> <span class="o">:</span> <span class="s1">'USD'</span><span class="p">;</span>
+
+      <span class="nx">fn</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">settings</span><span class="p">);</span>
+
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+
+<span class="nx">db</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'comments'</span><span class="p">);</span>
+
+<span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">).</span><span class="nx">removeTagWith</span><span class="p">(</span><span class="s1">'delete'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">replies</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//do something</span>
+<span class="p">});</span>
+
+<span class="nx">db</span><span class="p">.</span><span class="nx">posts</span><span class="p">.</span><span class="nx">findTop10</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">topPosts</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//do something</span>
+<span class="p">});</span>
+
+<span class="nx">db</span><span class="p">.</span><span class="nx">comments</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">comments</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//do something</span>
+<span class="p">});</span>
+</pre></div>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="documentation"></a></p>
+
+<h1>
+<a name="api-documentation" class="anchor" href="https://github.com/kissjs/node-mongoskin#api-documentation"><span class="octicon octicon-link"></span></a>API documentation</h1>
+
+<p>for more information, see the source.</p>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="module"></a></p>
+
+<h2>
+<a name="module" class="anchor" href="https://github.com/kissjs/node-mongoskin#module"><span class="octicon octicon-link"></span></a>Module</h2>
+
+<h3>
+<a name="mongoskin-url-format" class="anchor" href="https://github.com/kissjs/node-mongoskin#mongoskin-url-format"><span class="octicon octicon-link"></span></a>MongoSkin Url format</h3>
+
+<pre><code>[*://][username:password@]host[:port][/database][?auto_reconnect[=true|false]]`
+</code></pre>
+
+<p>e.g.</p>
+
+<pre><code>localhost/blog
+mongo://admin:pass@127.0.0.1:27017/blog?auto_reconnect
+127.0.0.1?auto_reconnect=false
+</code></pre>
+
+<h3>
+<a name="dbserverurls-dboptions-replicasetoptions" class="anchor" href="https://github.com/kissjs/node-mongoskin#dbserverurls-dboptions-replicasetoptions"><span class="octicon octicon-link"></span></a>db(serverURL[s], dbOptions, replicasetOptions)</h3>
+
+<p>Get or create instance of <a href="https://github.com/kissjs/node-mongoskin#skindb">SkinDb</a>.</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">mongoskin</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">'localhost:27017/testdb?auto_reconnect=true&amp;poolSize=5'</span><span class="p">);</span>
+</pre></div>
+
+<p>for ReplSet server</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">mongoskin</span><span class="p">.</span><span class="nx">db</span><span class="p">([</span>
+  <span class="s1">'192.168.0.1:27017/?auto_reconnect=true'</span><span class="p">,</span>
+  <span class="s1">'192.168.0.2:27017/?auto_reconnect=true'</span><span class="p">,</span>
+  <span class="s1">'192.168.0.3:27017/?auto_reconnect=true'</span>
+<span class="p">],</span> <span class="p">{</span>
+  <span class="nx">database</span><span class="o">:</span> <span class="s1">'testdb'</span><span class="p">,</span>
+  <span class="nx">safe</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">},</span> <span class="p">{</span>
+  <span class="nx">connectArbiter</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">socketOptions</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">timeout</span><span class="o">:</span> <span class="mi">2000</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="routerselect" class="anchor" href="https://github.com/kissjs/node-mongoskin#routerselect"><span class="octicon octicon-link"></span></a>router(select)</h3>
+
+<p>select is <code>function(collectionName)</code> returns a database instance, means router collectionName to that database.</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">router</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">coll_name</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span><span class="p">(</span><span class="nx">coll_name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="s1">'user'</span><span class="o">:</span>
+    <span class="k">case</span> <span class="s1">'message'</span><span class="o">:</span>
+      <span class="k">return</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">'192.168.1.3/auth_db'</span><span class="p">);</span>
+    <span class="k">default</span><span class="o">:</span>
+      <span class="k">return</span> <span class="nx">mongo</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">'192.168.1.2/app_db'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'user'</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./shared-user-methods'</span><span class="p">));</span>
+<span class="kd">var</span> <span class="nx">users</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//auth_db.user</span>
+<span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'message'</span><span class="p">);</span> <span class="c1">// auth_db.message</span>
+<span class="kd">var</span> <span class="nx">products</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="s1">'product'</span><span class="p">);</span> <span class="c1">//app_db.product</span>
+</pre></div>
+
+<h3>
+<a name="classes-extends-frome-node-mongodb-native" class="anchor" href="https://github.com/kissjs/node-mongoskin#classes-extends-frome-node-mongodb-native"><span class="octicon octicon-link"></span></a>classes extends frome node-mongodb-native</h3>
+
+<ul>
+<li>BSONPure</li>
+<li>BSONNative</li>
+<li>BinaryParser</li>
+<li>Binary</li>
+<li>Code</li>
+<li>DBRef</li>
+<li>Double</li>
+<li>MaxKey</li>
+<li>MinKey</li>
+<li>ObjectID</li>
+<li>Symbol</li>
+<li>Timestamp</li>
+<li>Long</li>
+<li>BaseCommand</li>
+<li>DbCommand</li>
+<li>DeleteCommand</li>
+<li>GetMoreCommand</li>
+<li>InsertCommand</li>
+<li>KillCursorCommand</li>
+<li>QueryCommand</li>
+<li>UpdateCommand</li>
+<li>MongoReply</li>
+<li>Admin</li>
+<li>Collection</li>
+<li>Connection</li>
+<li>Server</li>
+<li>ReplSetServers</li>
+<li>Cursor</li>
+<li>Db</li>
+<li>connect</li>
+<li>Grid</li>
+<li>Chunk</li>
+<li>GridStore</li>
+<li>native</li>
+<li>pure</li>
+</ul><p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="skinserver"></a></p>
+
+<h2>
+<a name="skinserver" class="anchor" href="https://github.com/kissjs/node-mongoskin#skinserver"><span class="octicon octicon-link"></span></a>SkinServer</h2>
+
+<h3>
+<a name="skinserverserver" class="anchor" href="https://github.com/kissjs/node-mongoskin#skinserverserver"><span class="octicon octicon-link"></span></a>SkinServer(server)</h3>
+
+<p>Construct SkinServer from native Server instance.</p>
+
+<h3>
+<a name="dbdbname-usernamenull-passwordnull" class="anchor" href="https://github.com/kissjs/node-mongoskin#dbdbname-usernamenull-passwordnull"><span class="octicon octicon-link"></span></a>db(dbname, username=null, password=null)</h3>
+
+<p>Construct <a href="https://github.com/kissjs/node-mongoskin#skindb">SkinDb</a> from SkinServer.</p>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="skindb"></a></p>
+
+<h2>
+<a name="skindb" class="anchor" href="https://github.com/kissjs/node-mongoskin#skindb"><span class="octicon octicon-link"></span></a>SkinDb</h2>
+
+<h3>
+<a name="skindbdb-usernamenull-passwordnull" class="anchor" href="https://github.com/kissjs/node-mongoskin#skindbdb-usernamenull-passwordnull"><span class="octicon octicon-link"></span></a>SkinDb(db, username=null, password=null)</h3>
+
+<p>Construct SkinDb.</p>
+
+<h3>
+<a name="opencallback" class="anchor" href="https://github.com/kissjs/node-mongoskin#opencallback"><span class="octicon octicon-link"></span></a>open(callback)</h3>
+
+<p>Connect to database, retrieval native
+<a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17">Db</a>
+instance, callback is function(err, db).</p>
+
+<h3>
+<a name="collectioncollectionname" class="anchor" href="https://github.com/kissjs/node-mongoskin#collectioncollectionname"><span class="octicon octicon-link"></span></a>collection(collectionName)</h3>
+
+<p>Retrieval <a href="https://github.com/kissjs/node-mongoskin#skincollection">SkinCollection</a> instance of specified collection name.</p>
+
+<p><a name="skindb-bind"></a></p>
+
+<h3>
+<a name="bindcollectionname" class="anchor" href="https://github.com/kissjs/node-mongoskin#bindcollectionname"><span class="octicon octicon-link"></span></a>bind(collectionName)</h3>
+
+<h3>
+<a name="bindcollectionname-skincollection" class="anchor" href="https://github.com/kissjs/node-mongoskin#bindcollectionname-skincollection"><span class="octicon octicon-link"></span></a>bind(collectionName, SkinCollection)</h3>
+
+<h3>
+<a name="bindcollectionname-extendobject1-extendobject2-" class="anchor" href="https://github.com/kissjs/node-mongoskin#bindcollectionname-extendobject1-extendobject2-"><span class="octicon octicon-link"></span></a>bind(collectionName, extendObject1, extendObject2 ...)</h3>
+
+<p>Bind <a href="https://github.com/kissjs/node-mongoskin#skincollection">SkinCollection</a> to db properties as a shortcut to db.collection(name).
+You can also bind additional methods to the SkinCollection, it is useful when
+you want to reuse a complex operation. This will also affect
+db.collection(name) method.</p>
+
+<p>e.g.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">'book'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">firstBook</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">findOne</span><span class="p">(</span><span class="nx">fn</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">firstBook</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">book</span><span class="p">)</span> <span class="p">{});</span>
+</pre></div>
+
+<h3>
+<a name="all-the-methods-from-dbprototype" class="anchor" href="https://github.com/kissjs/node-mongoskin#all-the-methods-from-dbprototype"><span class="octicon octicon-link"></span></a>all the methods from Db.prototype</h3>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/db.js#L17">Db</a> of node-mongodb-native for more information.</p>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="skincollection"></a></p>
+
+<h2>
+<a name="skincollection" class="anchor" href="https://github.com/kissjs/node-mongoskin#skincollection"><span class="octicon octicon-link"></span></a>SkinCollection</h2>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45">Collection</a> of node-mongodb-native for more information.</p>
+
+<p><a name="additional-collection-op"></a></p>
+
+<h3>
+<a name="opencallback-1" class="anchor" href="https://github.com/kissjs/node-mongoskin#opencallback-1"><span class="octicon octicon-link"></span></a>open(callback)</h3>
+
+<p>Retrieval native
+<a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L45">Collection</a>
+instance, callback is function(err, collection).</p>
+
+<h3>
+<a name="idhex" class="anchor" href="https://github.com/kissjs/node-mongoskin#idhex"><span class="octicon octicon-link"></span></a>id(hex)</h3>
+
+<p>Equivalent to</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">db</span><span class="p">.</span><span class="nx">bson_serializer</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">.</span><span class="nx">createFromHexString</span><span class="p">(</span><span class="nx">hex</span><span class="p">);</span>
+</pre></div>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/bson/bson.js#L548">ObjectID.createFromHexString</a></p>
+
+<p><a name="inherit-collection-op"></a></p>
+
+<h3>
+<a name="collection-operation" class="anchor" href="https://github.com/kissjs/node-mongoskin#collection-operation"><span class="octicon octicon-link"></span></a>Collection operation</h3>
+
+<div class="highlight highlight-js"><pre><span class="nx">checkCollectionName</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">)</span>
+<span class="nx">options</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">rename</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span>
+<span class="nx">drop</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+</pre></div>
+
+<p><a name="inherit-indexes"></a></p>
+
+<h3>
+<a name="indexes" class="anchor" href="https://github.com/kissjs/node-mongoskin#indexes"><span class="octicon octicon-link"></span></a>Indexes</h3>
+
+<div class="highlight highlight-js"><pre><span class="nx">createIndex</span><span class="p">(</span><span class="nx">fieldOrSpec</span><span class="p">,</span> <span class="nx">unique</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span>
+<span class="nx">ensureIndex</span><span class="p">(</span><span class="nx">fieldOrSpec</span><span class="p">,</span> <span class="nx">unique</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span>
+<span class="nx">indexInformation</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">dropIndex</span><span class="p">(</span><span class="nx">indexName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span>
+<span class="nx">dropIndexes</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+</pre></div>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/docs/indexes.md">mongodb-native indexes</a></p>
+
+<p><a name="inherit-query"></a></p>
+
+<h3>
+<a name="queries" class="anchor" href="https://github.com/kissjs/node-mongoskin#queries"><span class="octicon octicon-link"></span></a>Queries</h3>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/docs/queries.md">mongodb-native queries</a></p>
+
+<h4>
+<a name="finditems-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#finditems-callback"><span class="octicon octicon-link"></span></a>findItems(..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">(...,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">cursor</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">cursor</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348">Collection.find</a></p>
+
+<h4>
+<a name="findeach-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#findeach-callback"><span class="octicon octicon-link"></span></a>findEach(..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">(...,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">cursor</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">cursor</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348">Collection.find</a></p>
+
+<h4>
+<a name="findbyidid--callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#findbyidid--callback"><span class="octicon octicon-link"></span></a>findById(id, ..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">collection</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span><span class="nx">_id</span><span class="p">,</span> <span class="nx">ObjectID</span><span class="p">.</span><span class="nx">createFromHexString</span><span class="p">(</span><span class="nx">id</span><span class="p">)},</span> <span class="p">...,</span> <span class="nx">callback</span><span class="p">);</span>
+</pre></div>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L417">Collection.findOne</a></p>
+
+<h4>
+<a name="find" class="anchor" href="https://github.com/kissjs/node-mongoskin#find"><span class="octicon octicon-link"></span></a>find(...)</h4>
+
+<p>If the last parameter is function, it is equivalent to native
+<a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/collection.js#L348">Collection.find</a>
+method, else it will return a future <a href="https://github.com/kissjs/node-mongoskin#skincursor">SkinCursor</a>.</p>
+
+<p>e.g.</p>
+
+<div class="highlight highlight-js"><pre><span class="c1">// callback</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">find</span><span class="p">({},</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">cursor</span><span class="p">)</span> <span class="p">{</span><span class="cm">/* do something */</span><span class="p">});</span>
+<span class="c1">// future SkinCursor</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">book</span><span class="p">.</span><span class="nx">find</span><span class="p">().</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">books</span><span class="p">)</span> <span class="p">{</span><span class="cm">/* do something */</span><span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="normalizehintfieldhint" class="anchor" href="https://github.com/kissjs/node-mongoskin#normalizehintfieldhint"><span class="octicon octicon-link"></span></a>normalizeHintField(hint)</h4>
+
+<h4>
+<a name="find-1" class="anchor" href="https://github.com/kissjs/node-mongoskin#find-1"><span class="octicon octicon-link"></span></a>find</h4>
+
+<div class="highlight highlight-js"><pre><span class="cm">/**</span>
+<span class="cm"> * Various argument possibilities</span>
+<span class="cm"> * 1 callback</span>
+<span class="cm"> * 2 selector, callback,</span>
+<span class="cm"> * 2 callback, options  // really?!</span>
+<span class="cm"> * 3 selector, fields, callback</span>
+<span class="cm"> * 3 selector, options, callback</span>
+<span class="cm"> * 4,selector, fields, options, callback</span>
+<span class="cm"> * 5 selector, fields, skip, limit, callback</span>
+<span class="cm"> * 6 selector, fields, skip, limit, timeout, callback</span>
+<span class="cm"> *</span>
+<span class="cm"> * Available options:</span>
+<span class="cm"> * limit, sort, fields, skip, hint, explain, snapshot, timeout, tailable, batchSize</span>
+<span class="cm"> */</span>
+</pre></div>
+
+<h4>
+<a name="findandmodifyquery-sort-update-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#findandmodifyquery-sort-update-options-callback"><span class="octicon octicon-link"></span></a>findAndModify(query, sort, update, options, callback)</h4>
+
+<div class="highlight highlight-js"><pre><span class="cm">/**</span>
+<span class="cm">  Fetch and update a collection</span>
+<span class="cm">  query:        a filter for the query</span>
+<span class="cm">  sort:         if multiple docs match, choose the first one in the specified sort order as the object to manipulate</span>
+<span class="cm">  update:       an object describing the modifications to the documents selected by the query</span>
+<span class="cm">  options:</span>
+<span class="cm">    remove:   set to a true to remove the object before returning</span>
+<span class="cm">    new:      set to true if you want to return the modified object rather than the original. Ignored for remove.</span>
+<span class="cm">    upsert:       true/false (perform upsert operation)</span>
+<span class="cm">**/</span>
+</pre></div>
+
+<h4>
+<a name="findonequeryobject-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#findonequeryobject-options-callback"><span class="octicon octicon-link"></span></a>findOne(queryObject, options, callback)</h4>
+
+<p><a name="inherit-aggregation"></a></p>
+
+<h3>
+<a name="aggregation" class="anchor" href="https://github.com/kissjs/node-mongoskin#aggregation"><span class="octicon octicon-link"></span></a>Aggregation</h3>
+
+<h4>
+<a name="mapreducemap-reduce-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#mapreducemap-reduce-options-callback"><span class="octicon octicon-link"></span></a>mapReduce(map, reduce, options, callback)</h4>
+
+<p>e.g.</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">emit</span><span class="p">(</span><span class="nx">test</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">timestamp</span><span class="p">.</span><span class="nx">getYear</span><span class="p">()),</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">reduce</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="nx">v</span><span class="p">){</span>
+  <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">v</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">count</span> <span class="o">+=</span> <span class="nx">v</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">count</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span><span class="nx">scope</span><span class="o">:</span> <span class="p">{</span><span class="nx">test</span><span class="o">:</span> <span class="k">new</span> <span class="nx">client</span><span class="p">.</span><span class="nx">bson_serializer</span><span class="p">.</span><span class="nx">Code</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">toString</span><span class="p">())}};</span>
+<span class="nx">collection</span><span class="p">.</span><span class="nx">mapReduce</span><span class="p">(</span><span class="nx">map</span><span class="p">,</span> <span class="nx">reduce</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">collection</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">cursor</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cursor</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">test</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">)</span>
+    <span class="nx">finished_test</span><span class="p">({</span><span class="nx">test_map_reduce_functions_scope</span><span class="o">:</span><span class="s1">'ok'</span><span class="p">});</span>            
+  <span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+
+<h4>
+<a name="groupkeys-condition-initial-reduce-command-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#groupkeys-condition-initial-reduce-command-callback"><span class="octicon octicon-link"></span></a>group(keys, condition, initial, reduce, command, callback)</h4>
+
+<p>e.g.  </p>
+
+<div class="highlight highlight-js"><pre><span class="nx">collection</span><span class="p">.</span><span class="nx">group</span><span class="p">([],</span> <span class="p">{},</span> <span class="p">{</span><span class="s2">"count"</span><span class="o">:</span><span class="mi">0</span><span class="p">},</span> <span class="s2">"function (obj, prev) { prev.count++; }"</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">results</span><span class="p">)</span> <span class="p">{});</span>
+</pre></div>
+
+<h4>
+<a name="countquery-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#countquery-callback"><span class="octicon octicon-link"></span></a>count(query, callback)</h4>
+
+<h4>
+<a name="distinctkey-query-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#distinctkey-query-callback"><span class="octicon octicon-link"></span></a>distinct(key, query, callback)</h4>
+
+<p><a name="inherit-inserting"></a></p>
+
+<h3>
+<a name="inserting" class="anchor" href="https://github.com/kissjs/node-mongoskin#inserting"><span class="octicon octicon-link"></span></a>Inserting</h3>
+
+<h4>
+<a name="insertdocs-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#insertdocs-options-callback"><span class="octicon octicon-link"></span></a>insert(docs, options, callback)</h4>
+
+<p><a name="inherit-updating"></a></p>
+
+<h3>
+<a name="updating" class="anchor" href="https://github.com/kissjs/node-mongoskin#updating"><span class="octicon octicon-link"></span></a>Updating</h3>
+
+<h4>
+<a name="savedoc-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#savedoc-options-callback"><span class="octicon octicon-link"></span></a>save(doc, options, callback)</h4>
+
+<div class="highlight highlight-js"><pre><span class="cm">/**</span>
+<span class="cm">  Update a single document in this collection.</span>
+<span class="cm">    spec - a associcated array containing the fields that need to be present in</span>
+<span class="cm">      the document for the update to succeed</span>
+
+<span class="cm">    document - an associated array with the fields to be updated or in the case of</span>
+<span class="cm">      a upsert operation the fields to be inserted.</span>
+
+<span class="cm">  Options:</span>
+<span class="cm">    upsert - true/false (perform upsert operation)</span>
+<span class="cm">    multi - true/false (update all documents matching spec)</span>
+<span class="cm">    strict - true/false (perform check if the operation failed, required extra call to db)</span>
+<span class="cm">  Deprecated Options:</span>
+<span class="cm">    safe - true/false (perform check if the operation failed, required extra call to db)</span>
+<span class="cm">**/</span>
+</pre></div>
+
+<h4>
+<a name="updatespec-document-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#updatespec-document-options-callback"><span class="octicon octicon-link"></span></a>update(spec, document, options, callback)</h4>
+
+<h4>
+<a name="updatebyid_id--callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#updatebyid_id--callback"><span class="octicon octicon-link"></span></a>updateById(_id, ..., callback)</h4>
+
+<p>Equivalent to</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">collection</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="nx">_id</span><span class="p">,</span> <span class="nx">ObjectID</span><span class="p">.</span><span class="nx">createFromHexString</span><span class="p">(</span><span class="nx">id</span><span class="p">)},</span> <span class="p">...,</span> <span class="nx">callback</span><span class="p">);</span>
+</pre></div>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/docs/insert.md">Collection.update</a></p>
+
+<p><a name="inherit-removing"></a></p>
+
+<h3>
+<a name="removing" class="anchor" href="https://github.com/kissjs/node-mongoskin#removing"><span class="octicon octicon-link"></span></a>Removing</h3>
+
+<h4>
+<a name="removeselector-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#removeselector-options-callback"><span class="octicon octicon-link"></span></a>remove(selector, options, callback)</h4>
+
+<h4>
+<a name="removebyid_id-options-callback" class="anchor" href="https://github.com/kissjs/node-mongoskin#removebyid_id-options-callback"><span class="octicon octicon-link"></span></a>removeById(_id, options, callback)</h4>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<p><a name="skincursor"></a></p>
+
+<h2>
+<a name="skincursor" class="anchor" href="https://github.com/kissjs/node-mongoskin#skincursor"><span class="octicon octicon-link"></span></a>SkinCursor</h2>
+
+<p>See <a href="https://github.com/christkv/node-mongodb-native/blob/master/lib/mongodb/cursor.js#L1">Cursor</a>
+of node-mongodb-native for more information.</p>
+
+<p>All these methods will return the SkinCursor itself.</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">sort</span><span class="p">(</span><span class="nx">keyOrList</span><span class="p">,</span> <span class="p">[</span><span class="nx">direction</span><span class="p">],</span> <span class="p">[</span><span class="nx">callback</span><span class="p">])</span>
+<span class="nx">limit</span><span class="p">(</span><span class="nx">limit</span><span class="p">,</span> <span class="p">[</span><span class="nx">callback</span><span class="p">])</span>
+<span class="nx">skip</span><span class="p">(</span><span class="nx">skip</span><span class="p">,</span> <span class="p">[</span><span class="nx">callback</span><span class="p">])</span>
+<span class="nx">batchSize</span><span class="p">(</span><span class="nx">skip</span><span class="p">,</span> <span class="p">[</span><span class="nx">callback</span><span class="p">])</span>
+
+<span class="nx">toArray</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">each</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">count</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">nextObject</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">getMore</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+<span class="nx">explain</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span>
+</pre></div>
+
+<p><a href="https://github.com/kissjs/node-mongoskin#index">Back to index</a></p>
+
+<h2>
+<a name="how-to-validate-input" class="anchor" href="https://github.com/kissjs/node-mongoskin#how-to-validate-input"><span class="octicon octicon-link"></span></a>How to validate input?</h2>
+
+<p>I wrote a middleware to validate post data, <a href="https://github.com/guileen/node-iform">node-iform</a> 
+base on <a href="https://github.com/chriso/node-validator">node-validator</a></p>
+
+<h2>
+<a name="authors" class="anchor" href="https://github.com/kissjs/node-mongoskin#authors"><span class="octicon octicon-link"></span></a>Authors</h2>
+
+<p>Below is the output from <code>git-summary</code>.</p>
+
+<pre><code> project: node-mongoskin
+ commits: 112
+ active : 54 days
+ files  : 39
+ authors: 
+    49  Lin Gui                 43.8%
+    34  guilin 桂林           30.4%
+     9  fengmk2                 8.0%
+     5  guilin                  4.5%
+     2  François de Metz       1.8%
+     2  Paul Gebheim            1.8%
+     2  Gui Lin                 1.8%
+     1  humanchimp              0.9%
+     1  Aneil Mallavarapu       0.9%
+     1  wmertens                0.9%
+     1  Harvey McQueen          0.9%
+     1  Joe Faber               0.9%
+     1  Matt Perpick            0.9%
+     1  Quang Van               0.9%
+     1  Rakshit Menpara         0.9%
+     1  Wout Mertens            0.9%
+</code></pre>
+
+<h2>
+<a name="license" class="anchor" href="https://github.com/kissjs/node-mongoskin#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2011 - 2012 kissjs.org</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></article>
+  </div>
+
+
+        </div>
+
+      </div><!-- /.repo-container -->
+      <div class="modal-backdrop"></div>
+    </div><!-- /.container -->
+  </div><!-- /.site -->
+
+
+    </div><!-- /.wrapper -->
+
+      <div class="container">
+  <div class="site-footer">
+    <ul class="site-footer-links right">
+      <li><a href="https://status.github.com/">Status</a></li>
+      <li><a href="http://developer.github.com/">API</a></li>
+      <li><a href="http://training.github.com/">Training</a></li>
+      <li><a href="http://shop.github.com/">Shop</a></li>
+      <li><a href="https://github.com/blog">Blog</a></li>
+      <li><a href="https://github.com/about">About</a></li>
+
+    </ul>
+
+    <a href="https://github.com/">
+      <span class="mega-octicon octicon-mark-github"></span>
+    </a>
+
+    <ul class="site-footer-links">
+      <li>© 2013 <span title="0.14657s from github-fe114-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+        <li><a href="https://github.com/site/terms">Terms</a></li>
+        <li><a href="https://github.com/site/privacy">Privacy</a></li>
+        <li><a href="https://github.com/security">Security</a></li>
+        <li><a href="https://github.com/contact">Contact</a></li>
+    </ul>
+  </div><!-- /.site-footer -->
+</div><!-- /.container -->
+
+
+    <div class="fullscreen-overlay js-fullscreen-overlay" id="fullscreen_overlay">
+  <div class="fullscreen-container js-fullscreen-container">
+    <div class="textarea-wrap">
+      <textarea name="fullscreen-contents" id="fullscreen-contents" class="js-fullscreen-contents" placeholder="" data-suggester="fullscreen_suggester"></textarea>
+          <div class="suggester-container">
+              <div class="suggester fullscreen-suggester js-navigation-container" id="fullscreen_suggester" data-url="/kissjs/node-mongoskin/suggestions/commit">
+              </div>
+          </div>
+    </div>
+  </div>
+  <div class="fullscreen-sidebar">
+    <a href="https://github.com/kissjs/node-mongoskin#" class="exit-fullscreen js-exit-fullscreen tooltipped leftwards" original-title="Exit Zen Mode">
+      <span class="mega-octicon octicon-screen-normal"></span>
+    </a>
+    <a href="https://github.com/kissjs/node-mongoskin#" class="theme-switcher js-theme-switcher tooltipped leftwards" original-title="Switch themes">
+      <span class="octicon octicon-color-mode"></span>
+    </a>
+  </div>
+</div>
+
+
+
+    <div id="ajax-error-message" class="flash flash-error">
+      <span class="octicon octicon-alert"></span>
+      <a href="https://github.com/kissjs/node-mongoskin#" class="octicon octicon-remove-close close ajax-error-dismiss"></a>
+      Something went wrong with that request. Please try again.
+    </div>
+
+    
+  
+
+
+<div id="global-zeroclipboard-html-bridge" class="global-zeroclipboard-container" data-clipboard-ready="true" style="position: absolute; left: -9999px; top: -9999px; width: 15px; height: 15px; z-index: 9999;" original-title="">      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" width="100%" height="100%">         <param name="movie" value="https://github.global.ssl.fastly.net/flash/ZeroClipboard.swf?nocache=1379338508712">         <param name="allowScriptAccess" value="always">         <param name="scale" value="exactfit">         <param name="loop" value="false">         <param name="menu" value="false">         <param name="quality" value="best">         <param name="bgcolor" value="#ffffff">         <param name="wmode" value="transparent">         <param name="flashvars" value="trustedDomain=github.com">         <embed src="https://github.global.ssl.fastly.net/flash/ZeroClipboard.swf?nocache=1379338508712" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="100%" height="100%" name="global-zeroclipboard-flash-bridge" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="trustedDomain=github.com" scale="exactfit">                </object></div><iframe id="rdbIndicator" width="100%" height="270" border="0" src="./kissjs node-mongoskin_files/indicator.html" style="display: none; border: 0; position: fixed; left: 0; top: 0; z-index: 2147483647"></iframe></body></html>
