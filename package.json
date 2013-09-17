@@ -1,7 +1,7 @@
 {
   "name": "nodejsmtapi",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "nodejsmtapi ===========",
   "main": "server.js",
   "dependencies": {
     "mongoose": "~3.6.17",
@@ -19,5 +19,19 @@
     "start": "node server.js"
   },
   "author": "cypronmaya",
-  "license": "BSD-2-Clause"
+  "license": "BSD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saurshaz/nodejsmtapi.git"
+  },
+  "keywords": [
+    "node.js",
+    "mongoskin",
+    "scraping",
+    "cheerio",
+    "mocha"
+  ],
+  "bugs": {
+    "url": "https://github.com/saurshaz/nodejsmtapi/issues"
+  }
 }
