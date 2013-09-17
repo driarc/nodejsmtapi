@@ -83,24 +83,33 @@ app.put('/executethis', function(req, res) {
     var leftOverParameters = new HashMap();
     var reservedParameters = new HashMap();
 
-    var item = req.body;
-    for(var item in req.body) {
-        // `item` is the next parameter in JSON 
-        var ParameterName = item;
-        var ParameterValue = req.body[item];
+    var item = req.body[0];
 
-        //To lower case
-        var ParameterName = ParameterName.toLowerCase();
-        ParameterName = ParameterName.toLowerCase();
-        inboundParameters.set(ParameterName, ParameterValue);
 
-        if (ParameterName === "executethis" || ParameterName === "begininboundparameters" || ParameterName === "accesstoken" ||
-           ParameterName === "multiplewid" || ParameterName === "preexecute"|| ParameterName === "postexecute" || ParameterName === "getmultiplefrommongo" ) {
-            reservedParameters.set(ParameterName, ParameterValue);
-        }
-        else {
-            leftOverParameters.set(ParameterName, ParameterValue);
-        }
+
+        
+    for(i =0;i< req.body.length;i++) {
+
+        json = req.body[i];
+
+        for(item in json){
+            // `item` is the next parameter in JSON 
+            var ParameterName = item;
+            var ParameterValue = json[item];
+
+            //To lower case
+            var ParameterName = ParameterName.toLowerCase();
+            ParameterName = ParameterName.toLowerCase();
+            inboundParameters.set(ParameterName, ParameterValue);
+
+            if (ParameterName === "executethis" || ParameterName === "begininboundparameters" || ParameterName === "accesstoken" ||
+               ParameterName === "multiplewid" || ParameterName === "preexecute"|| ParameterName === "postexecute" || ParameterName === "getmultiplefrommongo" ) {
+                reservedParameters.set(ParameterName, ParameterValue);
+            }
+            else {
+                leftOverParameters.set(ParameterName, ParameterValue);
+            }
+        } 
     };
     
 
