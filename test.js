@@ -68,15 +68,32 @@ describe('express rest api server', function(){
     superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
       .end(function(e, res){
-        console.log('>>>>>>>>> '+JSON.stringify(res.body));
+        console.log('ADDTOMONGO >>>>>>>>> '+JSON.stringify(res.body));
         expect(typeof res.body).to.eql('object')
         //expect(res.body.msg).to.eql('success')        
         done()
       })
   })
 
+  // the request is for 'Javascript' , with a preexecute and postExecute method each
+  it('javascript', function(done){
+    var requestObj = [{"executeThis":"JavaScript",
+      "beginInboundParameters":"wid1",
+      "y":"2", 
+      "accesstoken":"111111111",
+      "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+    superagent.put('http://localhost:3000/executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object')
+        //expect(res.body.msg).to.eql('success')
+        error()        
+        done()
+      })
+  })    
+
   // the request is for 'the Default Case' , with a preexecute and postExecute method each
-  // TODO :: complete it properly
   it('none', function(done){
 
         var firstEntry = {"ExecuteThis":"ExtractThis","Wid":"savedObj"};
@@ -90,7 +107,7 @@ describe('express rest api server', function(){
             superagent.put('http://localhost:3000/executethis')
               .send(requestObj)
               .end(function(e, res){
-                console.log('>>>>>>>>> '+JSON.stringify(res.body));
+                console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
                 expect(typeof res.body).to.eql('object')
                 //expect(res.body.msg).to.eql('success')        
                 done()

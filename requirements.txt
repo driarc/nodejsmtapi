@@ -124,6 +124,11 @@ Example Part II
 			{"Key":"y","Value":"2"}, 
 			{"ParameterValue":"accesstoken",{"ParameterValue":"111111111"}]
 
+			[{"executeThis":"JavaScript",
+			"beginInboundParameters":"wid1",
+			"y":"2", 
+			"accesstoken":"111111111"}]
+
 			Then the code will fish out parameters executethis, accesstoken, beginInboundParameters from inboundParameters
 			The 'left over' inbound parameters will be y
 
