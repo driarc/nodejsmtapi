@@ -19,12 +19,8 @@ describe('express rest api server', function(){
   // the request is for 'ExtractThis' , witha a preexecute and postExecute method each
   it('extractthis', function(done){
 
-    // var requestObj = {"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
-    var requestObj = [{"ParameterName":"executeThis","ParameterValue":"addToMongo"},
-{"ParameterName":"x","ParameterValue":"1"},
-{"Key":"wid","Value":"wid1"},
-{"ParameterName":"Js","ParameterValue":"function (x, y){ return x + y; }"},
-{"ParameterValue":"accesstoken", "ParameterValue":"111111111"}];
+    var requestObj = {"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+    
     
     superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
@@ -77,21 +73,27 @@ describe('express rest api server', function(){
 
   // the request is for 'Javascript' , with a preexecute and postExecute method each
   it('javascript', function(done){
-    var requestObj = [{"executeThis":"JavaScript",
-      "beginInboundParameters":"wid1",
-      "y":"2", 
-      "accesstoken":"111111111",
-      "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-    superagent.put('http://localhost:3000/executethis')
-      .send(requestObj)
-      .end(function(e, res){
-        console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
-        expect(typeof res.body).to.eql('object')
-        //expect(res.body.msg).to.eql('success')
-        error()        
-        done()
-      })
-  })    
+    
+    // add object to DB 
+    var firstEntry = [{"executeThis":"addToMongo","x":"1","wid":"wid1","Js":"function (x, y){ return x + y; }","accesstoken":"111111111"}];
+    
+    dao.addToMongo(firstEntry,'colsam',function(o){
+      console.log("After adding to Mongo - "+ JSON.stringify(o));
+
+      var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1", "y":"2",  "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+
+      superagent.put('http://localhost:3000/executethis')
+        .send(requestObj)
+        .end(function(e, res){
+          console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
+          expect(typeof res.body).to.eql('object')
+          //expect(res.body.msg).to.eql('success')
+          done()
+        })
+    });
+  });  
+
+    
 
   // the request is for 'the Default Case' , with a preexecute and postExecute method each
   it('none', function(done){
