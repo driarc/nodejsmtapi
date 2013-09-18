@@ -48,7 +48,7 @@ function GetFile(file, targetDiv, beginArea,endArea){
 
 	var returnHtml = '';
 	if(targetDiv){
-		// console.log('queried is '+ targetDiv);
+		console.log('queried is '+ targetDiv);
 		$(targetDiv).each(function(){
 			// console.log($(this).html().toString());
 			returnHtml = $(this).html().toString();
@@ -255,10 +255,9 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 				var links = [];
 			    
 				if(json.ExecuteThis && json.AddThis){
-					
 					execute_this = 'addthis';
 					addThisWid = json.AddThis;
-				}else if(json.AddThis){
+				}else if(json.ExecuteThis){
 					execute_this = json.ExecuteThis;
 				}else{
 					break;
@@ -307,7 +306,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 						 }
 							
 					 	 var file_content = "";
-					 	 console.log(' >>>>>>>>>>>>>>>>> '+beginArea + ' , '+ endArea + ' , '+file_to_search);
+					 	 console.log(' >>>>>>>>>>>>>>>>> '+beginArea + ' , '+ endArea + ' , '+file_to_search);console.log(' >>>>>>>>>>>>>>>>> '+beginArea + ' , '+ endArea + ' , '+file_to_search);
 						 if(beginArea && endArea && fileName){
 							 // file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
 							 file_content += GetFile(file_to_search,wid,beginArea,endArea);
@@ -329,7 +328,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
  						 // "TestParam1":"TestVal1" } -->
  					     //  -->
 						 
-						  
+						  	console.log(' >>>>>>>>>>>>>>>>> processhtml');
 						       
  						 var original_file_content = GetFile(current_file,'#'+wid);
 						 
@@ -343,7 +342,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 							 
 							 
 							 
-						 	 json2["0"] = original_file_content;
+							 json2["Wid"] = wid;
 	 						 json2["JS"] = directory+file_prefix+'.js';
 	 						 json2["CSS"] = directory +file_prefix+'.css';
 	 						 json2["DataForView"] = data_for_view;
