@@ -22,7 +22,7 @@ var moment = require('moment');
 
 var $ = undefined;
 var mapOfFiles = new HashMap();
-function GetFile(file, targetDiv){
+function GetFile(file, targetDiv, beginArea,endArea){
 	//console.log('file is '+file);
 	var html = '';
 	
@@ -44,6 +44,8 @@ function GetFile(file, targetDiv){
 	    xmlMode: false
 	});
 	
+	
+
 	var returnHtml = '';
 	if(targetDiv){
 		// console.log('queried is '+ targetDiv);
@@ -51,6 +53,18 @@ function GetFile(file, targetDiv){
 			// console.log($(this).html().toString());
 			returnHtml = $(this).html().toString();
 		})
+	}else if(beginArea && endArea && file){
+		console.log(file + ' , '+ beginArea + ' , '+ endArea);
+
+		// begin area and end area enclosing content from the file
+		returnHtml = $.html().toString();
+		var regex = '(\<!--{"AreaDefintion": "'+ beginArea +'"} --\>)([ \r\n\t\s\w.,])*(\<!--{"AreaDefintion": "'+ endArea +'"} --\>)';
+		var re = new RegExp(regex, 'gi');
+	 	// replace the content as per the matched processing instruction/ special comment 
+		var array = returnHtml.split(re);
+		// console.log(array);
+		returnHtml = array[0];
+		//returnHtml = returnHtml.replace(/\<!--{"AreaDefintion": "([ \r\n\t\s\w.,])*"} --\>/g,'');
 	}else{
 		returnHtml=mapOfFiles.get(file);
 	}
@@ -237,7 +251,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 				var json = JSON.parse(str);
 				// console.log(json);	
 				
-				var execute_this,wid,div_class,file_content,div_id,file_prefix,create_file,timestamp = '';
+				var execute_this,wid,div_class,file_content,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName = '';
 				var links = [];
 			    
 				if(json.ExecuteThis)
@@ -253,7 +267,16 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 					
 				if(json.DIVID)	
 					div_id = json.DIVID;
+
+				if(json.Filename)	
+					fileName = json.Filename;
+
+				if(json.Begin)	
+					beginArea = json.Begin;
 					
+				if(json.End)	
+					endArea = json.End;
+						
 				if(json.Div)	
 					file_prefix = json.Div;		
 					
@@ -268,7 +291,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 					
 				
 				// to be used in GetFile operation -- file from where content is to be brought	
-				file_to_search = 	directory + wid +'.html';
+				file_to_search = 	directory + fileName +'.html';
 				
 				switch (execute_this.toLowerCase()){
 					
@@ -279,14 +302,11 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 						 }
 							
 					 	 var file_content = "";
-						 if(div_id){
-							 file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
-							 file_content += GetFile(file_to_search,'#'+div_id);
-							 file_content += "</div>";
-						 }else{
-						 	 file_content="<div class='file' data-wid='"+ wid +"'>";
-							 file_content += GetFile(file_to_search,'');
-							 file_content += "</div>";
+					 	 console.log(' >>>>>>>>>>>>>>>>> '+beginArea + ' , '+ endArea + ' , '+file_to_search);
+						 if(beginArea && endArea && fileName){
+							 // file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
+							 file_content += GetFile(file_to_search,wid,beginArea,endArea);
+							 // file_content += "</div>";
 						 }
 						 
 						 // update the file in mapOfFiles
