@@ -64,7 +64,7 @@ function GetFile(file, targetDiv, beginArea,endArea){
 		var array = returnHtml.split(re);
 		// console.log(array);
 		returnHtml = array[0];
-		//returnHtml = returnHtml.replace(/\<!--{"AreaDefintion": "([ \r\n\t\s\w.,])*"} --\>/g,'');
+		returnHtml = returnHtml.replace(/\<!--{"AreaDefintion": "([ \r\n\t\s\w.,])*"} --\>/g,'');
 	}else{
 		returnHtml=mapOfFiles.get(file);
 	}
