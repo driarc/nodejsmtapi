@@ -251,17 +251,22 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 				var json = JSON.parse(str);
 				// console.log(json);	
 				
-				var execute_this,wid,div_class,file_content,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName = '';
+				var execute_this,wid,div_class,file_content,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName,addThisWid = '';
 				var links = [];
 			    
-				if(json.ExecuteThis)
+				if(json.ExecuteThis && json.AddThis){
+					
+					execute_this = 'addthis';
+					addThisWid = json.AddThis;
+				}else if(json.AddThis){
 					execute_this = json.ExecuteThis;
-				else
-					break;	
+				}else{
+					break;
+				}
 					
 				if(json.Wid)
 					wid = json.Wid;
-				
+
 				if(json.DIVCLASS)	
 					div_class = json.DIVCLASS;
 					
@@ -427,26 +432,24 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 				 		
 						case 'addthis':
 							// logic for handling 'AddThis'		
-						    // <!--  
+						    //  
+						    <!-- 
 						    // {
-						    //   "ExecuteThis":"AddThis"
-						    //   "Wid":"test1",
-						    //   "x":"y",
-						    //   "z":"w",
-						    // }
-						    //   -->
+						    // 	"AddThis":"testwidname1",
+							//  "ExecuteThis":"updatewid",
+							//  "z":"w"
+							// } 
+						    --> 
 							// 
 							//	   to this:
-							//
-							//	   "Wid":	"test1"
-							//	   "x":	"y"
+							//	   "ExecuteThis":	"updatewid"
 							//	   "z":	"w"
-						
+
 							var jsonAddThis = {};
-							jsonAddThis['Wid'] = wid;
 							// copy any extra parameters
+							console.log('>>>>>>>>>>>>> processing AddThis '+addThisWid);
 							for(var attr in json) {
-								if(attr !== 'ExecuteThis' && attr !== 'Wid'){
+								if(attr !== 'AddThis'){
 									// clone any extra params to json2 array being constructed
 									jsonAddThis[attr]=json[attr];
 								}
