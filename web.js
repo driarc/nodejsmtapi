@@ -85,11 +85,10 @@ app.put('/executethis', function(req, res) {
 
     var item = req.body[0];
 
-
-
-        
+    //  iterate over the input JSON 
     for(i =0;i< req.body.length;i++) {
 
+        // assign each JSON obj in the array received for operating
         json = req.body[i];
 
         for(item in json){
@@ -197,7 +196,7 @@ helperFunctions.sayPostHello = function(){
     console.log('LOGIC  POST >>>>>>>>> sayPostHello');
 }
 
-
+// logic for generic ExecuteThis functionality
 function handleExecuteThis(reservedParameters, res,leftOverParameters, callback){
     var resObject = {};
     var funcT = reservedParameters.get("executethis");
