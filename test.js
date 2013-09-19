@@ -19,7 +19,7 @@ describe('express rest api server', function(){
   // the request is for 'ExtractThis' , witha a preexecute and postExecute method each
   it('extractthis', function(done){
 
-    var requestObj = {"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+    var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     
     
     superagent.put('http://localhost:3000/executethis')
@@ -51,7 +51,7 @@ describe('express rest api server', function(){
 
   // the request is for 'GetFromMongo' , witha a preexecute and postExecute method each
   it('getfrommongo', function(done){
-    var requestObj = {"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+    var requestObj = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
       .end(function(e, res){
@@ -64,7 +64,7 @@ describe('express rest api server', function(){
 
   // the request is for 'GetMultipleFromMongo' , witha a preexecute and postExecute method each
   it('getmultiplefrommongo', function(done){
-    var requestObj = {"ExecuteThis":"getMultipleFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+    var requestObj = [{"ExecuteThis":"getMultipleFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
       superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
       .end(function(e, res){
@@ -77,7 +77,7 @@ describe('express rest api server', function(){
 
   // the request is for 'AddToMongo' , with a preexecute and postExecute method each
   it('addtomongo', function(done){
-    var requestObj = {"ExecuteThis":"addtomongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+    var requestObj = [{"ExecuteThis":"addtomongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
       .end(function(e, res){
@@ -121,7 +121,7 @@ describe('express rest api server', function(){
             console.log("After adding to Mongo - "+ JSON.stringify(o));
 
             // provide wid value for already saved object to second request as value for ExecuteThis
-            var requestObj = {"ExecuteThis":"savedObj","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };
+            var requestObj = [{"ExecuteThis":"savedObj","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
             
             superagent.put('http://localhost:3000/executethis')
               .send(requestObj)
