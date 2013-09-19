@@ -32,6 +32,23 @@ describe('express rest api server', function(){
       })
   })
 
+  // the request is for 'AddThis' 
+  it('addthis', function(done){
+
+    var requestObj = [{"AddThis":"testwidname1","ExecuteThis":"updatewid","z":"w"}];
+    
+    
+    superagent.put('http://localhost:3000/executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log(' ADDTHIS :: >>>>>>>>> '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object')
+        expect(typeof res.body.addThisJson).to.eql('object')
+        //expect(res.body.msg).to.eql('success')        
+        done()
+      })
+  })
+
   // the request is for 'GetFromMongo' , witha a preexecute and postExecute method each
   it('getfrommongo', function(done){
     var requestObj = {"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" };

@@ -227,6 +227,63 @@ function extractContentToParams(original_file_content,json){
 	}
 }
 
+// logic to handle ADDTHIS command for processing
+exports.handleAddThis =  function run(jsonArr,callback){
+	// Expected Input is an array of JSON objects like
+	//
+	// [{
+	// 	"AddThis":"testwidname1",
+	//  "ExecuteThis":"updatewid",
+	//  "z":"w"
+	// }]
+	var addThisJsonArray = new Array();
+
+	for(var cnt=0;cnt < jsonArr.length; cnt++){
+		var json = jsonArr[cnt];
+
+		// collect values needed 
+		var execute_this,addThisWid = '';
+		    
+		if(json.ExecuteThis && json.AddThis){
+			execute_this = 'addthis';
+			addThisWid = json.AddThis;
+		}else{
+			break;
+		}
+			
+		// add timestamp	
+		timestamp = moment().format('MMMM Do YYYY, h:mm:ss a');
+
+		// logic for handling 'AddThis'		
+	    //  
+	    <!-- 
+	     
+	    --> 
+		// 
+		//	   to this:
+		//	   "ExecuteThis":	"updatewid"
+		//	   "z":	"w"
+
+		var jsonAddThis = {};
+		// copy any extra parameters
+		console.log('>>>>>>>>>>>>> processing AddThis command '+addThisWid);
+		for(var attr in json) {
+			if(attr !== 'AddThis'){
+				// clone any extra params to json2 array being constructed
+				jsonAddThis[attr]=json[attr];
+			}
+	    }
+		addThisJsonArray.push(jsonAddThis);	
+	}
+
+	var retJson = {};
+	retJson['addThisJson']=addThisJsonArray;
+				
+	 
+	callback(retJson);	
+	
+}
+
 // logic to process the special comments (all types - ProcessHTML, GetFile and AddThis)
 function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 	// # match special comments in the file

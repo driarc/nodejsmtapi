@@ -89,8 +89,16 @@ app.put('/executethis', function(req, res) {
         });
     }else if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
         //  TODO ::  handle AddThis as a command :: COmplete this
-        console.log(' AddThis operation. ');
+        console.log(' AddThis operation. ' + JSON.stringify(req.body));
 
+        // START PROCESSING AS PER 'addThis' param of the JSON in the request body received
+        filecheck.handleAddThis(req.body,function(o){
+            console.log('coming back after addthis'+JSON.stringify(o));
+            res.send(o);
+            res.end();
+        });
+        console.log('After addThis logic has been processed');
+        console.log('------------------------------------------------');
 
     }else if (reservedParameters.has("executethis")) {
         console.log(' ExecuteThis operation. ');
@@ -159,6 +167,34 @@ helperFunctions.sayPreHello = function()
 helperFunctions.sayPostHello = function(){
     console.log('LOGIC  POST >>>>>>>>> sayPostHello');
 }
+
+// logic for generic AddThis functionality
+function handleAddThis(reservedParameters, res,leftOverParameters, callback, addThisFlag){
+    console.log(' >>>>>> Process AddThis operation only');
+    var resObject = {};
+    var funcT = reservedParameters.get("AddThis");
+    
+    callScrapeLogic(res, function(nodeObjects){
+        console.log('AddThis :::: After scraping - '+JSON.stringify(nodeObjects));
+        // res.writeHead(200, {"Content-Type": "application/json"});
+
+        if(nodeObjects && nodeObjects['addThisJson'] && nodeObjects['addThisJson'].length == 0){
+            // See what is to be done here
+            // add to mongo DB
+            var entityToAdd = {};
+            leftOverParameters.forEach(function(value, key) {
+                entityToAdd[key] = value;
+            });
+            console.log("AddThis :::: Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+            
+            dao.addToMongo(entityToAdd,'colsam',function(o){
+                console.log("AddThis :::: After adding to post extractThis callback Mongo - "+ JSON.stringify(o));
+            });
+        }
+    });
+    
+}
+        
 
 // logic for generic ExecuteThis functionality
 function handleExecuteThis(reservedParameters, res,leftOverParameters, callback){
