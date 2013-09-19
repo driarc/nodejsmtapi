@@ -93,7 +93,7 @@ app.put('/executethis', function(req, res) {
             res.send(result);
         });
     }else if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
-        //  TODO ::  handle AddThis as a command :: COmplete this
+        //  handle AddThis as a command 
         console.log(' AddThis operation. ' + JSON.stringify(req.body));
 
         // START PROCESSING AS PER 'addThis' param of the JSON in the request body received
