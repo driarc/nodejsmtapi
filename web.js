@@ -39,6 +39,10 @@ app.get('/', function(req, res) {
     res.render('index.html');
 });
 
+app.get('/test', function(req, res) {
+    res.render('testapi.html');
+});
+
 /// logic for executeThis
 app.put('/executethis', function(req, res) {
     var inboundParameters = new HashMap();
@@ -46,6 +50,7 @@ app.put('/executethis', function(req, res) {
     var reservedParameters = new HashMap();
 
     var item = req.body[0];
+    console.log(item);
 
     //  iterate over the input JSON 
     for(i =0;i< req.body.length;i++) {
