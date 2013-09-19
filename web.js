@@ -18,36 +18,16 @@ app.configure(function(){
     app.use("/css", express.static(__dirname + '/views/css'));
     app.use("/js", express.static(__dirname + '/views/js'));
     app.engine('html', require('ejs').renderFile);
-    app.use(logErrors);
-    app.use(clientErrorHandler);
-    app.use(errorHandler);
 });
 
-function logErrors(err, req, res, next) {
-  console.error(err.stack);
-  next(err);
-}
-
-function clientErrorHandler(err, req, res, next) {
-  if (req.xhr) {
-    res.send(500, { error: 'Something blew up!' });
-  } else {
-    next(err);
-  }
-}
-
-function errorHandler(err, req, res, next) {
-  res.status(500);
-  res.render('error', { error: err });
-}
 
 app.configure('development', function(){
     app.use(express.errorHandler());
 });
 
-//// *********************** Logic for the Application follows   *********************** 
+//// *********************** Route Mapping for Application follows   *********************** 
 app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.executethis);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
