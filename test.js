@@ -32,6 +32,21 @@ describe('express rest api server', function(){
       })
   })
 
+  // ADDDATAWID in call extractthis
+  it('adddatawid1', function(done){
+
+    var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
+    
+    superagent.put('http://localhost:3000/executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object')
+        //expect(res.body.msg).to.eql('success')        
+        done()
+      })
+  })
+
   // the request is for 'AddThis' 
   it('addthis', function(done){
 

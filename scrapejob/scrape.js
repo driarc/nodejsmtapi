@@ -90,8 +90,8 @@ function FileChanged(directory,callback){
 
 	walker.on('file', function(root, stat, next) {
 		// add all html files modified in last 15 seconds to the list
-		if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('seconds', 15)))){
-		// if(stat.name.endsWith('.html')){
+		// if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('seconds', 15)))){
+		if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('minutes', 15)))){
 			files.push(root  + stat.name);
 			var targetDiv = undefined;
 			var file = root  + stat.name;
@@ -384,10 +384,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
  						 // "DataForView":[{"j":"k"},{"l":"m"}],
  						 // "TestParam1":"TestVal1" } -->
  					     //  -->
-						 
-						  	console.log(' >>>>>>>>>>>>>>>>> processhtml');
-						       
- 						 var original_file_content = GetFile(current_file,'#'+wid);
+						 var original_file_content = GetFile(current_file,'#'+wid);
 						 
 						 if(original_file_content){
 							 var json2 = {};
@@ -504,13 +501,16 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 							var jsonAddThis = {};
 							// copy any extra parameters
 							console.log('>>>>>>>>>>>>> processing AddThis '+addThisWid);
-							for(var attr in json) {
-								if(attr !== 'AddThis'){
-									// clone any extra params to json2 array being constructed
-									jsonAddThis[attr]=json[attr];
-								}
-						    }
-							addThisJsonArray.push(jsonAddThis);
+
+							if(addThisWid && execute_this){
+								for(var attr in json) {
+									if(attr !== 'AddThis'){
+										// clone any extra params to json2 array being constructed
+										jsonAddThis[attr]=json[attr];
+									}
+							    }
+								addThisJsonArray.push(jsonAddThis);
+							}
 				}
 			}
 		}	

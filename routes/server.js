@@ -60,12 +60,11 @@ exports.executethis = function(req, res) {
             }
         });
 
-        // console.log(JSON.stringify(rec));
-        db.collection(TABLE_NAME).insert(rec, function(err, result) {
-            if (err) throw res.send(err);
+        dao.addToMongo(repAdd,TABLE_NAME,function(o){
+           if (err) throw res.send(err);
             res.send(result);
         });
-        
+
     }else if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
         //  handle AddThis as a command 
         console.log(' AddThis operation. ' + JSON.stringify(req.body));
@@ -188,19 +187,8 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 console.log('After scraping - '+JSON.stringify(nodeObjects));
                 // res.writeHead(200, {"Content-Type": "application/json"});
 
-                if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'].length == 0 && nodeObjects['addThisJson'].length == 0){
-                    // See what is to be done here
-                    // add to mongo DB
-                    var entityToAdd = {};
-                    leftOverParameters.forEach(function(value, key) {
-                        entityToAdd[key] = value;
-                    });
-                    console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
-                    
-                    dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
-                        console.log("After adding to post extractThis callback Mongo - "+ JSON.stringify(o));
-                    });
-                
+                if(nodeObjects){
+                        
                 }else{
                     if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'][0]){
                         // persist the scrape results from processHTML process   
