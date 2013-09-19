@@ -119,6 +119,8 @@ function getInput (options, callback) {
 }
 exports.run =  function run(directory,callback){
 	// reinitialize hashmap
+	mapOfFiles = new HashMap();
+	returnJson =   {'processHtmlJson':[],'addThisJson':[]};
 	
 	// get all html files, process it at once now
 	FileChanged(directory,function(returnJson){
