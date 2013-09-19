@@ -9,6 +9,10 @@ var mongoskin = require('mongoskin')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
   , filecheck = require('../scrapejob/scrape.js');
+
+
+var TABLE_NAME = 'colsam';
+
 /// logic for executeThis
 exports.executethis = function(req, res) {
     var inboundParameters = new HashMap();
@@ -16,7 +20,7 @@ exports.executethis = function(req, res) {
     var reservedParameters = new HashMap();
 
     var item = req.body[0];
-    console.log(item);
+    // console.log(item);
 
     //  iterate over the input JSON 
     for(i =0;i< req.body.length;i++) {
@@ -53,8 +57,8 @@ exports.executethis = function(req, res) {
                 repAdd[key] = value;
             }
         });
-        console.log(JSON.stringify(rec));
-        db.collection('colsam').insert(rec, function(err, result) {
+        // console.log(JSON.stringify(rec));
+        db.collection(TABLE_NAME).insert(rec, function(err, result) {
             if (err) throw res.send(err);
             res.send(result);
         });
@@ -158,7 +162,7 @@ function handleAddThis(reservedParameters, res,leftOverParameters, callback, add
             });
             console.log("AddThis :::: Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
             
-            dao.addToMongo(entityToAdd,'colsam',function(o){
+            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
                 console.log("AddThis :::: After adding to post extractThis callback Mongo - "+ JSON.stringify(o));
             });
         }
@@ -189,7 +193,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                     });
                     console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                     
-                    dao.addToMongo(entityToAdd,'colsam',function(o){
+                    dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
                         console.log("After adding to post extractThis callback Mongo - "+ JSON.stringify(o));
                     });
                 
@@ -201,7 +205,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                             var entityToAdd = nodeObjects['processHtmlJson'][0][i];
                             console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
-                            dao.addToMongo(entityToAdd,'colsam',function(o){
+                            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
                                 console.log("After adding  processHtmlJson node  to Mongo - "+ JSON.stringify(o));
                             });
                         } 
@@ -215,7 +219,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                             var entityToAdd = nodeObjects['addThisJson'][0][i];
                             console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
-                            dao.addToMongo(entityToAdd,'colsam',function(o){
+                            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
                                 console.log("After adding  addThisJson node to Mongo - "+ JSON.stringify(o));
                             });
                         } 
@@ -233,7 +237,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // call get from mongo DB 
             var rec = getJsonFromMap(leftOverParameters);
             console.log("Fetching one record "+JSON.stringify(rec));
-            var schemaToLookup = 'colsam';
+            var schemaToLookup = TABLE_NAME;
             var returnedObject = dao.getFromMongo(rec,schemaToLookup,function(obj){
                 console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                 res.send(obj);
@@ -248,7 +252,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             var objToFind = {};
             var rec = getJsonFromMap(leftOverParameters);
             console.log("Fetching multiple records for -- "+JSON.stringify(rec));
-            var schemaToLookup = 'colsam';
+            var schemaToLookup = TABLE_NAME;
             var returnedObject = dao.getMultipleFromMongo(rec,schemaToLookup,function(obj){
                 console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                 res.send(obj);
@@ -262,7 +266,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // handle ADD TO MONGO logic
             var rec = getJsonFromMap(leftOverParameters);
             console.log("Add to mongo record -- "+JSON.stringify(rec));
-            dao.addToMongo(rec,'colsam',function(o){
+            dao.addToMongo(rec,TABLE_NAME,function(o){
                 console.log("After adding to Mongo - "+ JSON.stringify(o));
                 callback(o);
             });
@@ -275,7 +279,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             var fullURL = req.protocol + "://" + req.get('host') + req.url;
             if (reservedParameters.has('begininboundparameters')) {
                 var valU = reservedParameters.get('begininboundparameters');
-                db.collection('colsam').findOne({
+                db.collection(TABLE_NAME).findOne({
                     "wid": valU
                 }, function(err, result) {
                     if (err) throw err;
@@ -318,7 +322,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
 
             // call get from mongo DB 
             var queryObj = {'Wid':executeThisVal};
-            dao.getFromMongo({"Wid":"savedObj"},'colsam', function(returnedObject){
+            dao.getFromMongo({"Wid":"savedObj"},TABLE_NAME, function(returnedObject){
                 console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
 
                 // check if object is found
