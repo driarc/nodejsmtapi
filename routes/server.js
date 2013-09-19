@@ -8,10 +8,12 @@ var mongoskin = require('mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
+  , config = require('../config.js')
   , filecheck = require('../scrapejob/scrape.js');
 
+var TABLE_NAME = config.TABLE_NAME;
 
-var TABLE_NAME = 'colsam';
+console.log(TABLE_NAME +' is the name of the table !!! ');
 
 /// logic for executeThis
 exports.executethis = function(req, res) {
@@ -57,11 +59,13 @@ exports.executethis = function(req, res) {
                 repAdd[key] = value;
             }
         });
+
         // console.log(JSON.stringify(rec));
         db.collection(TABLE_NAME).insert(rec, function(err, result) {
             if (err) throw res.send(err);
             res.send(result);
         });
+        
     }else if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
         //  handle AddThis as a command 
         console.log(' AddThis operation. ' + JSON.stringify(req.body));

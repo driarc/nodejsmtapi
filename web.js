@@ -1,13 +1,16 @@
 var express = require('express')
   , app = express()
   , request = require('request')
+  , config = require('./config.js')
   , common = require('./routes/common')
   , server = require('./routes/server')
 
 /// TODOs
 // TODO :: get and add from MongoDB needs to be synchronous mongo.js
 // TODO :; FIx the tests to fail if the response JSON has error node
+// TODO :: externalize all configuration in a json file (like DB url, user credentials, port etc)
  
+ //// *********************** Express Application Configuration follows   *********************** 
 app.configure(function(){
     app.set('port', process.env.PORT || 3000);
     app.use(express.logger('dev'));

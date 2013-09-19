@@ -1,9 +1,11 @@
 var mongoose = require('mongoose')
-// var db = require('mongoskin').db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect');
+,config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
-// ,db = mongoskin.db('mongodb://localhost:27017/test', {safe:true});
 ,db = mongoskin.db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect', {safe:true});
+
+
+var TABLE_NAME = config.TABLE_NAME;
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on succesful addition is also specified
