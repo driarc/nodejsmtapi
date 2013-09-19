@@ -48,7 +48,7 @@ function GetFile(file, targetDiv, beginArea,endArea){
 
 	var returnHtml = '';
 	if(targetDiv){
-		console.log('queried is '+ targetDiv);
+		
 		$(targetDiv).each(function(){
 			// console.log($(this).html().toString());
 			returnHtml = $(this).html().toString();
@@ -68,7 +68,8 @@ function GetFile(file, targetDiv, beginArea,endArea){
 	}else{
 		returnHtml=mapOfFiles.get(file);
 	}
-	
+	// console.log('queried is '+ targetDiv + ' ... file content is '+returnHtml);
+
 	return returnHtml;
 }
 
