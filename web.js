@@ -87,14 +87,13 @@ app.put('/executethis', function(req, res) {
             if (err) throw res.send(err);
             res.send(result);
         });
-    }else if (reservedParameters.has("executethis")) {
+    }else if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
         //  TODO ::  handle AddThis as a command :: COmplete this
         console.log(' AddThis operation. ');
 
+
     }else if (reservedParameters.has("executethis")) {
         console.log(' ExecuteThis operation. ');
-
-
 
         // PROCESS PRE-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
         var preExecuteFunctionName = inboundParameters.get("preexecute");
