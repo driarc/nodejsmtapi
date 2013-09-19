@@ -90,8 +90,8 @@ function FileChanged(directory,callback){
 
 	walker.on('file', function(root, stat, next) {
 		// add all html files modified in last 15 seconds to the list
-		// if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('seconds', 15)))){
-		if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('minutes', 15)))){
+		if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('seconds', 15)))){
+		// if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('minutes', 15)))){
 			files.push(root  + stat.name);
 			var targetDiv = undefined;
 			var file = root  + stat.name;
@@ -236,6 +236,7 @@ exports.handleAddThis =  function run(jsonArr,callback){
 	//  "ExecuteThis":"updatewid",
 	//  "z":"w"
 	// }]
+	mapOfFiles = new HashMap();
 	var addThisJsonArray = new Array();
 
 	for(var cnt=0;cnt < jsonArr.length; cnt++){
