@@ -22,6 +22,10 @@ app.configure(function(){
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
+    app.set('html', __dirname + '/html');
+    app.use("/css", express.static(__dirname + '/views/css'));
+    app.use("/js", express.static(__dirname + '/views/js'));
+    app.engine('html', require('ejs').renderFile);
 });
 
 app.configure('development', function(){
@@ -30,6 +34,10 @@ app.configure('development', function(){
 
 
 //// *********************** Logic for the Application follows   *********************** 
+
+app.get('/', function(req, res) {
+    res.render('index.html');
+});
 
 /// logic for executeThis
 app.put('/executethis', function(req, res) {
@@ -55,7 +63,7 @@ app.put('/executethis', function(req, res) {
             ParameterName = ParameterName.toLowerCase();
             inboundParameters.set(ParameterName, ParameterValue);
 
-            if (ParameterName === "executethis" || ParameterName === "begininboundparameters" || ParameterName === "accesstoken" ||
+            if (ParameterName === "addthis" || ParameterName === "executethis" || ParameterName === "begininboundparameters" || ParameterName === "accesstoken" ||
                ParameterName === "multiplewid" || ParameterName === "preexecute"|| ParameterName === "postexecute" || ParameterName === "getmultiplefrommongo" ) {
                 reservedParameters.set(ParameterName, ParameterValue);
             }
@@ -79,8 +87,11 @@ app.put('/executethis', function(req, res) {
             if (err) throw res.send(err);
             res.send(result);
         });
-    }
-    else if (reservedParameters.has("executethis")) {
+    }else if (reservedParameters.has("executethis")) {
+        //  TODO ::  handle AddThis as a command :: COmplete this
+        console.log(' AddThis operation. ');
+
+    }else if (reservedParameters.has("executethis")) {
         console.log(' ExecuteThis operation. ');
 
 
