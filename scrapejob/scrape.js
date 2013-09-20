@@ -23,9 +23,13 @@ var moment = require('moment');
 var $ = undefined;
 var mapOfFiles = new HashMap();
 var returnJson =   {'processHtmlJson':[],'addThisJson':[]};
-function GetFile(file, targetDiv, beginArea,endArea){
+exports.GetFile = function(file, targetDiv, beginArea,endArea){
 	//console.log('file is '+file);
 	var html = '';
+
+	if(!mapOfFiles){
+		mapOfFiles = new HashMap();
+	}
 	
 	if(mapOfFiles.has(file)){
 		// console.log("file already present ... "+file);
