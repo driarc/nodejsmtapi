@@ -165,6 +165,49 @@ describe('DAO test layer', function(){
           });
       
   });
+
+
+ // the request is for 'GetFromMongo' , witha a preexecute and postExecute method each
+  it('updatetomongo', function(done){
+
+
+    var requestObj = [{"AddThis":"test12345","ExecuteThis":"updatewid","x":"y","z":"w"}];
+    
+    // remove the added entry
+    dao.addToMongo(requestObj,TABLE_NAME,function(o1){
+        
+            console.log('Added new entry >>>>>>>>> '+JSON.stringify(o1));
+            expect(typeof o1).to.eql('object');
+           
+            dao.updateToMongo({"AddThis":"test12345"},TABLE_NAME,{"AddThis":"test12345","ExecuteThis":"ExtractServer","l":"m","n":"o"},function(o2){
+          
+              console.log('Updated old entry >>>>>>>>> '+o1);
+              // expect(typeof o2).to.eql('int')
+              expect(o2).to.eql(1);
+
+              // let's look for the earlier object now
+              dao.getFromMongo(o1,TABLE_NAME,function(result){
+                console.log(JSON.stringify(result));  
+                expect(result).to.eql(null);
+              })
+
+              // let's look for the earlier object now
+              dao.getFromMongo({"ExecuteThis":"ExtractServer","l":"m","n":"o"},TABLE_NAME,function(result){
+                console.log(JSON.stringify(result)); 
+                expect(typeof result).to.eql('object') ;
+
+                cleanup(result, function(){
+                  //expect(res.body.msg).to.eql('success')        
+                  done()
+                });
+                
+              })
+
+            });
+
+      })
+  })
+
  
  // // TODO :: ADDDATAWID in call extractthis
   // it('adddatawid1', function(done){

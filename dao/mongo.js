@@ -24,6 +24,23 @@ exports.removeFromMongo = function(objToRemove,schemaToLookup, callback){
 }
 
 
+
+// DAO method to remove an entry from specified colelction
+exports.updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
+	db.collection(schemaToLookup).update(queryObject, {$set: updatedObject}, function(err, result) {
+		if (err) {
+			console.error(err);
+	    	throw err;
+	    }
+	    else{
+		    console.log('Updated! '+ JSON.stringify(result));
+	    	callback(result);
+	    }
+	});
+}
+
+
+
 // the callback function on succesful addition is also specified
 exports.getFromMongo = function(objToFind,schemaToLookup, callback){
 	console.log(' ****** getFromMongo method in dao');
