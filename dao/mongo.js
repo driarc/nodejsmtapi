@@ -2,12 +2,29 @@ var mongoose = require('mongoose')
 ,config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
-,db = mongoskin.db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect', {safe:true});
+// ,db = mongoskin.db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect', {safe:true});
+,db = mongoskin.db('mongodb://localhost:27017/nodejsmtapi?auto_reconnect', {safe:true});
 
 
 var TABLE_NAME = config.TABLE_NAME;
 
-// DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
+
+
+// DAO method to remove an entry from specified colelction
+exports.removeFromMongo = function(objToRemove,schemaToLookup, callback){
+	db.collection(schemaToLookup).remove(objToRemove, function(err) {
+		if (err) {
+			console.error(err);
+	    	throw err;
+	    }
+	    else{
+		    console.log('Removed! '+ JSON.stringify(objToRemove));
+	    	callback(objToRemove);
+	    }
+	});
+}
+
+
 // the callback function on succesful addition is also specified
 exports.getFromMongo = function(objToFind,schemaToLookup, callback){
 	console.log(' ****** getFromMongo method in dao');

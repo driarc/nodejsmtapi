@@ -22,6 +22,7 @@ var moment = require('moment');
 
 var $ = undefined;
 var mapOfFiles = new HashMap();
+var returnJson =   {'processHtmlJson':[],'addThisJson':[]};
 function GetFile(file, targetDiv, beginArea,endArea){
 	//console.log('file is '+file);
 	var html = '';
@@ -73,7 +74,7 @@ function GetFile(file, targetDiv, beginArea,endArea){
 	return returnHtml;
 }
 
-var returnJson =   {'processHtmlJson':[],'addThisJson':[]};
+
 
 exports.returnJson = function(){
 	return returnJson;

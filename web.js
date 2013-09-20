@@ -9,6 +9,8 @@ var express = require('express')
 // TODO :: get and add from MongoDB needs to be synchronous mongo.js
 // TODO :; FIx the tests to fail if the response JSON has error node
 // TODO :: externalize all configuration in a json file (like DB url, user credentials, port etc)
+// TODO :: bug in processHTML file sections not pickd correctly with wid id , sometimes empty json array returned
+// DONE :: fix tests to create test data required and add cleanup at the end of each test
  
  //// *********************** Express Application Configuration follows   *********************** 
 app.configure(function(){

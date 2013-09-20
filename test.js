@@ -1,26 +1,32 @@
 var superagent = require('superagent')
+,config = require('./config.js')
 , dao = require('./dao/mongo.js')
 , expect = require('expect.js');
+
+var TABLE_NAME = config.TABLE_NAME;
+
+
+// cleanup helper method
+function cleanup(o1, callback){
+  // remove the added entry
+  dao.removeFromMongo(o1,TABLE_NAME,function(o){
+    // callback after removing entry
+    console.log('Cleanup done .... removed added entry. '+ JSON.stringify(o));
+    callback();
+  });
+}
  
-describe('express rest api server', function(){
+describe('DAO test layer', function(){
   var id
- 
-  // // test filecheck call
-  // it('retrieves scraping request', function(done){
-  //   superagent.get('http://localhost:3000/filecheck')
-  //     .end(function(e, res){
-  //       console.log(res.body)
-  //       expect(typeof res.body).to.eql('object')
-  //       done()
-  //     })
-  // })
+  
+  // increase timeout set -- default is 2000ms too low for this scenario
+  this.timeout(50000);
 
   // put request for CheckThis --- extractThis URL
   // the request is for 'ExtractThis' , witha a preexecute and postExecute method each
   it('extractthis', function(done){
 
     var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-    
     
     superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
@@ -32,26 +38,12 @@ describe('express rest api server', function(){
       })
   })
 
-  // ADDDATAWID in call extractthis
-  it('adddatawid1', function(done){
-
-    var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
-    
-    superagent.put('http://localhost:3000/executethis')
-      .send(requestObj)
-      .end(function(e, res){
-        console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
-        expect(typeof res.body).to.eql('object')
-        //expect(res.body.msg).to.eql('success')        
-        done()
-      })
-  })
+ 
 
   // the request is for 'AddThis' 
   it('addthis', function(done){
 
     var requestObj = [{"AddThis":"testwidname1","ExecuteThis":"updatewid","z":"w"}];
-    
     
     superagent.put('http://localhost:3000/executethis')
       .send(requestObj)
@@ -66,16 +58,29 @@ describe('express rest api server', function(){
 
   // the request is for 'GetFromMongo' , witha a preexecute and postExecute method each
   it('getfrommongo', function(done){
+
+
     var requestObj = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-    superagent.put('http://localhost:3000/executethis')
-      .send(requestObj)
-      .end(function(e, res){
-        console.log('>>>>>>>>> '+JSON.stringify(res.body));
-        expect(typeof res.body).to.eql('object')
-        //expect(res.body.msg).to.eql('success')        
-        done()
+    
+    // remove the added entry
+    dao.addToMongo(requestObj,TABLE_NAME,function(o){
+        superagent.put('http://localhost:3000/executethis')
+          .send(o)
+          .end(function(e, res){
+            console.log('>>>>>>>>> '+JSON.stringify(res.body));
+            expect(typeof res.body).to.eql('object')
+            
+            cleanup(res.body, function(){
+              //expect(res.body.msg).to.eql('success')        
+              done()
+            });
+
+          })
       })
-  })
+
+      // callback after adding entry
+      console.log('add test obeject before fetching.');
+    });
 
   // the request is for 'GetMultipleFromMongo' , witha a preexecute and postExecute method each
   it('getmultiplefrommongo', function(done){
@@ -97,57 +102,85 @@ describe('express rest api server', function(){
       .send(requestObj)
       .end(function(e, res){
         console.log('ADDTOMONGO >>>>>>>>> '+JSON.stringify(res.body));
+
+
         expect(typeof res.body).to.eql('object')
         //expect(res.body.msg).to.eql('success')        
+        
+
+        // remove the added entry
+        dao.removeFromMongo(res,TABLE_NAME,function(o){
+          // callback after removing entry
+          console.log('Cleanup done .... removed added entry.');
+        });
         done()
-      })
+    })
   })
 
   // the request is for 'Javascript' , with a preexecute and postExecute method each
   it('javascript', function(done){
     
     // add object to DB 
-    var firstEntry = [{"executeThis":"addToMongo","x":"1","wid":"wid1","Js":"function (x, y){ return x + y; }","accesstoken":"111111111"}];
+    var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1","y":"2",  "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     
-    dao.addToMongo(firstEntry,'colsam',function(o){
+    dao.addToMongo(requestObj,TABLE_NAME,function(o){
       console.log("After adding to Mongo - "+ JSON.stringify(o));
-
-      var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1","y":"2",  "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-
-      superagent.put('http://localhost:3000/executethis')
-        .send(requestObj)
+    });
+ 
+    superagent.put('http://localhost:3000/executethis')
+      .send(requestObj)
         .end(function(e, res){
           console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
           expect(typeof res.body).to.eql('object')
-          //expect(res.body.msg).to.eql('success')
-          done()
-        })
-    });
-  });  
+          
+          cleanup(res.body, function(){
+              //expect(res.body.msg).to.eql('success')        
+              done()
+            });
+        });
+    });  
 
     
 
   // the request is for 'the Default Case' , with a preexecute and postExecute method each
   it('none', function(done){
 
-        var firstEntry = {"ExecuteThis":"ExtractThis","Wid":"savedObj"};
-            
-        dao.addToMongo(firstEntry,'colsam',function(o){
+        // provide wid value for already saved object to second request as value for ExecuteThis
+        var requestObj = [{"ExecuteThis":"savedObj","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+        
+        dao.addToMongo(requestObj,TABLE_NAME,function(o){
             console.log("After adding to Mongo - "+ JSON.stringify(o));
-
-            // provide wid value for already saved object to second request as value for ExecuteThis
-            var requestObj = [{"ExecuteThis":"savedObj","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-            
-            superagent.put('http://localhost:3000/executethis')
-              .send(requestObj)
-              .end(function(e, res){
-                console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
-                expect(typeof res.body).to.eql('object')
-                //expect(res.body.msg).to.eql('success')        
-                done()
-              });
-          });
         });
+        
+        superagent.put('http://localhost:3000/executethis')
+          .send(requestObj)
+          .end(function(e, res){
+            console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
+            expect(typeof res.body).to.eql('object')
+    
+            cleanup(res.body, function(){
+              //expect(res.body.msg).to.eql('success')        
+              done()
+            });
+          });
+      
+  });
+ 
+ // ADDDATAWID in call extractthis
+  // it('adddatawid1', function(done){
+
+  //   var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
+    
+  //   superagent.put('http://localhost:3000/executethis')
+  //     .send(requestObj)
+  //     .end(function(e, res){
+  //       console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
+  //       expect(typeof res.body).to.eql('object')
+  //       //expect(res.body.msg).to.eql('success')        
+  //       done()
+  //     })
+  // });
+
 
     
  
