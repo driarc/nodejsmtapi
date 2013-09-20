@@ -2,8 +2,7 @@ var mongoose = require('mongoose')
 ,config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
-// ,db = mongoskin.db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect', {safe:true});
-,db = mongoskin.db('mongodb://localhost:27017/nodejsmtapi?auto_reconnect', {safe:true});
+,db = mongoskin.db(config.MONGODB_URL, {safe:true});
 
 
 var TABLE_NAME = config.TABLE_NAME;

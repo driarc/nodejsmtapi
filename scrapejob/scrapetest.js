@@ -34,10 +34,32 @@ describe('ScrapeJob test layer', function(){
       //   console.log('>>>>>>>>> '+JSON.stringify(res.body));
     expect(typeof response).to.eql('string');  
     expect(response).to.eql('Lorem Ipsume'); 
-    deleteFile(filename); 
+    // deleteFile(filename); 
     done();
   })
 
+
+
+
+  // getAndProcessFile method test --- process files (depends on test-crash.html)
+  it('getandprocessfile', function(done){
+
+    // create temporory file  
+    var filename = __dirname+'/dir/test-crash.html';
+    var divId = "";//Wid value
+
+    var fileContent = filecheck.GetFile(filename);
+
+    console.log('dir '+filename);
+    var response = filecheck.getAndProcessFile(fileContent,filename,filename,__dirname+'/dir');
+      // .end(function(e, res){
+    console.log('>>>>>>>>> '+JSON.stringify(response));
+    expect(typeof response).to.eql('object');  
+    expect(typeof response.processHtmlJson).to.eql('object');  
+    expect(typeof response.addThisJson).to.eql('object');  
+    // deleteFile(filename); 
+    done();
+  })
 })
 
 
