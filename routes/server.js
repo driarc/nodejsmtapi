@@ -183,18 +183,15 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             //  handle extractThis case
             // call the file check codeZ
             callScrapeLogic(res, function(nodeObjects){
-                console.log('After scraping - '+JSON.stringify(nodeObjects));
-                // res.writeHead(200, {"Content-Type": "application/json"});
-
                 if(nodeObjects){
+                    // console.log(' >> nodeObjects >> '+JSON.stringify(nodeObjects));    
                         
-                }else{
                     if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'][0]){
                         // persist the scrape results from processHTML process   
                         for(i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['processHtmlJson'][0][i];
-                            console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+                            // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
                             // call persistence method
                             addOrUpdate(entityToAdd,TABLE_NAME,function(o){
@@ -211,7 +208,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                         for(i=0;i<nodeObjects['addThisJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['addThisJson'][0][i];
-                            console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+                            // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
                              // call persistence method
                             addOrUpdate(entityToAdd,TABLE_NAME,function(o){
@@ -219,8 +216,8 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                             });
                         } 
                     }    
-                }
                 callback(nodeObjects);
+                }
                 
             });
         
@@ -352,8 +349,10 @@ function getJsonFromMap(leftOverParameters){
 }
 
 function addOrUpdate(entityToAdd,TABLE_NAME,fieldToCheckOn,callback){
-                
-    dao.getFromMongo({fieldToCheckOn:entityToAdd["entityToAdd"]},TABLE_NAME,function(returnedObject){
+    
+
+    // TODO :: add condition to matach that wid's first attribute ne null
+    dao.getFromMongo({'_id.wid':{$ne:null}},TABLE_NAME,function(returnedObject){
         console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
         // check if object is found
         if(returnedObject){
@@ -381,3 +380,12 @@ function callScrapeLogic(res, callback){
         callback(returnJson);
     });
 }
+
+
+function get_first_property(ob) {
+    var prop ='';
+    for (var props in ob) {
+        return props;
+    }
+}
+

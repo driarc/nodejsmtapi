@@ -377,17 +377,15 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 						 
 						 if(original_file_content){
 							 var json2 = {};
-						 	 json2["Wid"] = wid;
-
-							 json2[wid] = {};
-						 	 // TODO :: split this content into several params 0,1,2 ... spliting by the matched directive/special comment	
-	 						 json2[wid]["0"] = original_file_content;
+						 	 json2["Wid"] = {};
+							 json2["Wid"][wid] = {};
+						 	 json2["Wid"][wid]["0"] = original_file_content;
 							 
 							 // json2 = extractContentToParams(original_file_content,json2);
-	 						 json2[wid]["JS"] = directory+file_prefix+'.js';
-	 						 json2[wid]["CSS"] = directory +file_prefix+'.css';
-	 						 json2[wid]["DataForView"] = data_for_view;
-							 json2[wid]["timestamp"] = timestamp;
+	 						 json2["Wid"][wid]["JS"] = directory+file_prefix+'.js';
+	 						 json2["Wid"][wid]["CSS"] = directory +file_prefix+'.css';
+	 						 json2["Wid"][wid]["DataForView"] = data_for_view;
+							 json2["Wid"][wid]["timestamp"] = timestamp;
 							 
  						 	// add links values if applicable
 						 
@@ -417,13 +415,13 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
  							}
 							
  							if(links && links.length > 0){
- 								json2[wid]["links"]=links;
+ 								json2["Wid"][wid]["links"]=links;
  							}
 							 // copy any extra parameters
 							 for(var attr in json) {
 								 if(attr !== 'ExecuteThis' && attr !== 'Wid' && attr !== 'Div' && attr !== 'DataForView'){
 									 // clone any extra params to json2 array being constructed
-									 json2[wid][attr]=json[attr];
+									 json2["Wid"][wid][attr]=json[attr];
 								 }
 						     }
 							 
@@ -482,12 +480,20 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 							//	   "z":	"w"
 
 							var jsonAddThis = {};
+
+						 	jsonAddThis["Wid"] = {};
+						 	var wid = 'wid-value'
+							jsonAddThis["Wid"][wid] = {};
+						 	jsonAddThis["Wid"][wid]["0"] = original_file_content;
+							 
+							 // json2 = extractContentToParams(original_file_content,json2);
+
 							// copy any extra parameters
 							if(addThisWid && execute_this){
 								for(var attr in json) {
 									if(attr !== 'AddThis'){
 										// clone any extra params to json2 array being constructed
-										jsonAddThis[attr]=json[attr];
+										jsonAddThis["Wid"][wid][attr]=json[attr];
 									}
 							    }
 								addThisJsonArray.push(jsonAddThis);

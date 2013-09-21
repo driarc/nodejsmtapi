@@ -81,6 +81,7 @@ exports.addToMongo = function(objToAdd,schemaToLookup, callback){
 	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
 	    if (err) 
 			// callback(err);
+			callback({"error":err});
 	    	throw err;
 	    if (result) 
 	    	console.log('Added! '+ JSON.stringify(result));
