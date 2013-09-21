@@ -2,13 +2,12 @@
 var mongoskin = require('mongoskin')
   , mongoose = require('mongoose')
   , HashMap = require('hashmap').HashMap
-// var db = require('mongoskin').db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect');
-  , db = mongoskin.db('mongodb://localhost:27017/test', {safe:true})
+  , config = require('../config.js')
+  , db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
-  , config = require('../config.js')
   , filecheck = require('../scrapejob/scrape.js');
 
 var TABLE_NAME = config.TABLE_NAME;

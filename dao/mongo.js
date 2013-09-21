@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 ,config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
-,db = mongoskin.db(config.MONGODB_URL, {safe:true});
+,db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS);
 
 
 var TABLE_NAME = config.TABLE_NAME;
@@ -34,7 +34,9 @@ exports.updateToMongo = function(queryObject,schemaToLookup, updatedObject, call
 	    }
 	    else{
 		    console.log('Updated! '+ JSON.stringify(result));
-	    	callback(result);
+		    db.collection(schemaToLookup).findOne(updatedObject, function(o){
+		    	callback(result);
+			});
 	    }
 	});
 }

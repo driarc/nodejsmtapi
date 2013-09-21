@@ -20,7 +20,7 @@ describe('DAO test layer', function(){
   var id
   
   // increase timeout set -- default is 2000ms too low for this scenario
-  this.timeout(50000);
+  this.timeout(5000);
 
   // put request for CheckThis --- extractThis URL
   // the request is for 'ExtractThis' , witha a preexecute and postExecute method each
@@ -60,10 +60,10 @@ describe('DAO test layer', function(){
   it('getfrommongo', function(done){
 
 
-    var requestObj = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+    var o = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     
     // remove the added entry
-    dao.addToMongo(requestObj,TABLE_NAME,function(o){
+    dao.addToMongo(o,TABLE_NAME,function(o){
         superagent.put('http://localhost:3000/executethis')
           .send(o)
           .end(function(e, res){
@@ -106,14 +106,7 @@ describe('DAO test layer', function(){
 
         expect(typeof res.body).to.eql('object')
         //expect(res.body.msg).to.eql('success')        
-        
-
-        // remove the added entry
-        dao.removeFromMongo(res,TABLE_NAME,function(o){
-          // callback after removing entry
-          console.log('Cleanup done .... removed added entry.');
-        });
-        done()
+        done();
     })
   })
 
@@ -176,34 +169,16 @@ describe('DAO test layer', function(){
     // remove the added entry
     dao.addToMongo(requestObj,TABLE_NAME,function(o1){
         
-            console.log('Added new entry >>>>>>>>> '+JSON.stringify(o1));
-            expect(typeof o1).to.eql('object');
-           
-            dao.updateToMongo({"AddThis":"test12345"},TABLE_NAME,{"AddThis":"test12345","ExecuteThis":"ExtractServer","l":"m","n":"o"},function(o2){
-          
-              console.log('Updated old entry >>>>>>>>> '+o1);
-              // expect(typeof o2).to.eql('int')
-              expect(o2).to.eql(1);
-
-              // let's look for the earlier object now
-              dao.getFromMongo(o1,TABLE_NAME,function(result){
-                console.log(JSON.stringify(result));  
-                expect(result).to.eql(null);
-              })
-
-              // let's look for the earlier object now
-              dao.getFromMongo({"ExecuteThis":"ExtractServer","l":"m","n":"o"},TABLE_NAME,function(result){
-                console.log(JSON.stringify(result)); 
-                expect(typeof result).to.eql('object') ;
-
-                cleanup(result, function(){
-                  //expect(res.body.msg).to.eql('success')        
-                  done()
-                });
-                
-              })
-
-            });
+          console.log('Added new entry >>>>>>>>> '+JSON.stringify(o1));
+          expect(typeof o1).to.eql('object');
+         
+          dao.updateToMongo({"AddThis":"test12345"},TABLE_NAME,{"AddThis":"test12345","ExecuteThis":"ExtractServer","l":"m","n":"o"},function(o2){
+        
+            console.log('Updated old entry >>>>>>>>> '+JSON.stringify(o1));
+            expect(typeof o1).to.eql('object')
+            done()
+            
+          });
 
       })
   })
