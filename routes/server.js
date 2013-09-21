@@ -196,9 +196,12 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                             var entityToAdd = nodeObjects['processHtmlJson'][0][i];
                             console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
-                            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
-                                console.log("After adding  processHtmlJson node  to Mongo - "+ JSON.stringify(o));
+                            // call persistence method
+                            addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                               console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
                             });
+
+                            
                         } 
                     }
 
@@ -210,8 +213,9 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                             var entityToAdd = nodeObjects['addThisJson'][0][i];
                             console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
-                            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
-                                console.log("After adding  addThisJson node to Mongo - "+ JSON.stringify(o));
+                             // call persistence method
+                            addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                               console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
                             });
                         } 
                     }    
@@ -345,6 +349,27 @@ function getJsonFromMap(leftOverParameters){
         rec[key] = value;
     });
     return rec;
+}
+
+function addOrUpdate(entityToAdd,TABLE_NAME,fieldToCheckOn,callback){
+                
+    dao.getFromMongo({fieldToCheckOn:entityToAdd["entityToAdd"]},TABLE_NAME,function(returnedObject){
+        console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
+        // check if object is found
+        if(returnedObject){
+            dao.updateToMongo(returnedObject,TABLE_NAME,entityToAdd,function(updatedObj){
+                console.log("After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(updatedObj));
+                callback(updatedObj);
+            });
+        }else{
+            dao.addToMongo(entityToAdd,TABLE_NAME,function(addedObj){
+                console.log("After adding  processHtmlJson node  to Mongo - "+ JSON.stringify(addedObj));
+                callback(addedObj);
+            });
+        }
+    })
+
+    
 }
 
 function callScrapeLogic(res, callback){
