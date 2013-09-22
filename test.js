@@ -20,7 +20,7 @@ describe('DAO test layer', function(){
   var id
   
   // increase timeout set -- default is 2000ms too low for this scenario
-  this.timeout(5000);
+  this.timeout(50000);
 
   // put request for CheckThis --- extractThis URL
   // the request is for 'ExtractThis' , witha a preexecute and postExecute method each
