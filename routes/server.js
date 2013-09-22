@@ -2,13 +2,12 @@
 var mongoskin = require('mongoskin')
   , mongoose = require('mongoose')
   , HashMap = require('hashmap').HashMap
-// var db = require('mongoskin').db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect');
-  , db = mongoskin.db('mongodb://localhost:27017/test', {safe:true})
+  , config = require('../config.js')
+  , db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
-  , config = require('../config.js')
   , filecheck = require('../scrapejob/scrape.js');
 
 var TABLE_NAME = config.TABLE_NAME;
@@ -184,22 +183,22 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             //  handle extractThis case
             // call the file check codeZ
             callScrapeLogic(res, function(nodeObjects){
-                console.log('After scraping - '+JSON.stringify(nodeObjects));
-                // res.writeHead(200, {"Content-Type": "application/json"});
-
                 if(nodeObjects){
+                    // console.log(' >> nodeObjects >> '+JSON.stringify(nodeObjects));    
                         
-                }else{
                     if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'][0]){
                         // persist the scrape results from processHTML process   
                         for(i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['processHtmlJson'][0][i];
-                            console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+                            // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
-                            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
-                                console.log("After adding  processHtmlJson node  to Mongo - "+ JSON.stringify(o));
+                            // call persistence method
+                            addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                               console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
                             });
+
+                            
                         } 
                     }
 
@@ -209,15 +208,16 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                         for(i=0;i<nodeObjects['addThisJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['addThisJson'][0][i];
-                            console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+                            // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
-                            dao.addToMongo(entityToAdd,TABLE_NAME,function(o){
-                                console.log("After adding  addThisJson node to Mongo - "+ JSON.stringify(o));
+                             // call persistence method
+                            addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                               console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
                             });
                         } 
                     }    
-                }
                 callback(nodeObjects);
+                }
                 
             });
         
@@ -348,6 +348,29 @@ function getJsonFromMap(leftOverParameters){
     return rec;
 }
 
+function addOrUpdate(entityToAdd,TABLE_NAME,fieldToCheckOn,callback){
+    
+
+    // TODO :: add condition to matach that wid's first attribute ne null
+    dao.getFromMongo({'_id.wid':{$ne:null}},TABLE_NAME,function(returnedObject){
+        console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
+        // check if object is found
+        if(returnedObject){
+            dao.updateToMongo(returnedObject,TABLE_NAME,entityToAdd,function(updatedObj){
+                console.log("After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(updatedObj));
+                callback(updatedObj);
+            });
+        }else{
+            dao.addToMongo(entityToAdd,TABLE_NAME,function(addedObj){
+                console.log("After adding  processHtmlJson node  to Mongo - "+ JSON.stringify(addedObj));
+                callback(addedObj);
+            });
+        }
+    })
+
+    
+}
+
 function callScrapeLogic(res, callback){
     var dirName = __dirname +'/../scrapejob/dir/'; 
     var ret = filecheck.run(dirName, function(returnJson){
@@ -357,3 +380,12 @@ function callScrapeLogic(res, callback){
         callback(returnJson);
     });
 }
+
+
+function get_first_property(ob) {
+    var prop ='';
+    for (var props in ob) {
+        return props;
+    }
+}
+

@@ -23,8 +23,7 @@ var moment = require('moment');
 var $ = undefined;
 var mapOfFiles = new HashMap();
 var returnJson =   {'processHtmlJson':[],'addThisJson':[]};
-exports.GetFile = function(file, targetDiv, beginArea,endArea){
-	//console.log('file is '+file);
+exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 	var html = '';
 
 	if(!mapOfFiles){
@@ -32,11 +31,9 @@ exports.GetFile = function(file, targetDiv, beginArea,endArea){
 	}
 	
 	if(mapOfFiles.has(file)){
-		// console.log("file already present ... "+file);
 		
 	}else{
 		if(file !== "undefinedindex.html"){
-			// console.log("loading ... "+file);
 			// the file is NOT already loaded in the HashMap
 			var body = fs.readFileSync(file).toString();	
 			mapOfFiles.set(file,body);	
@@ -55,26 +52,21 @@ exports.GetFile = function(file, targetDiv, beginArea,endArea){
 	if(targetDiv){
 		
 		$(targetDiv).each(function(){
-			// console.log($(this).html().toString());
 			returnHtml = $(this).html().toString();
 		})
 	}else if(beginArea && endArea && file){
-		console.log(file + ' , '+ beginArea + ' , '+ endArea);
-
+		
 		// begin area and end area enclosing content from the file
 		returnHtml = $.html().toString();
 		var regex = '(\<!--{"AreaDefintion": "'+ beginArea +'"} --\>)([ \r\n\t\s\w.,])*(\<!--{"AreaDefintion": "'+ endArea +'"} --\>)';
 		var re = new RegExp(regex, 'gi');
 	 	// replace the content as per the matched processing instruction/ special comment 
 		var array = returnHtml.split(re);
-		// console.log(array);
 		returnHtml = array[0];
 		returnHtml = returnHtml.replace(/\<!--{"AreaDefintion": "([ \r\n\t\s\w.,])*"} --\>/g,'');
 	}else{
 		returnHtml=mapOfFiles.get(file);
 	}
-	// console.log('queried is '+ targetDiv + ' ... file content is '+returnHtml);
-
 	return returnHtml;
 }
 
@@ -107,8 +99,7 @@ function FileChanged(directory,callback){
 	});
 
 	walker.on('end', function() {
-	    // console.log('JSON at scraping end ------ '+JSON.stringify(returnJson));
-		callback(returnJson);
+	    callback(returnJson);
 	});
 }
 
@@ -130,19 +121,10 @@ exports.run =  function run(directory,callback){
 	
 	// get all html files, process it at once now
 	FileChanged(directory,function(returnJson){
-		// console.log('JSON from run method is ----- '+ JSON.stringify(returnJson));
 		callback(returnJson);	
 	});	
 }
 
-// 
-//now schdule the processing to go on at each 30 mins
-// var j = schedule.scheduleJob(rule, function(){
-//     console.log('Starting files scraping and consequnt replacements required');
-// 
-// 	// get all html files
-// 	var files = FileChanged(PARENT_DIR);
-// });
 
 // logic to process one file completely(All operations)
 function processFile(file,targetDiv, directory){
@@ -164,7 +146,6 @@ function processFile(file,targetDiv, directory){
 function createFiles(fileName, content){
 	// Query the entry
 	
-	// console.log('file check '+fileName)
 	if(!fs.existsSync(fileName)){
 		
 		console.log('creating file '+ fileName);
@@ -225,7 +206,6 @@ function extractContentToParams(original_file_content,json){
 	var matchesInFileArr = original_file_content.split(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g);
 	if(matchesInFileArr){
 		for(j=0;j < matchesInFileArr.length;j++){
-			// console.log(matchesInFileArr[j]);
 			json[j]=matchesInFileArr[j];
 		}
 		return json;
@@ -275,7 +255,6 @@ exports.handleAddThis =  function run(jsonArr,callback){
 
 		var jsonAddThis = {};
 		// copy any extra parameters
-		console.log('>>>>>>>>>>>>> processing AddThis command '+addThisWid);
 		for(var attr in json) {
 			if(attr !== 'AddThis'){
 				// clone any extra params to json2 array being constructed
@@ -294,10 +273,14 @@ exports.handleAddThis =  function run(jsonArr,callback){
 }
 
 // logic to process the special comments (all types - ProcessHTML, GetFile and AddThis)
-function getAndProcessFile(fileContent,current_file,to_search_file,directory){
+exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_file,to_search_file,directory){
 	// # match special comments in the file
 	var matchesInFileArr = fileContent.match(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g);
 	
+	if(!returnJson){
+		returnJson =   {'processHtmlJson':[],'addThisJson':[]};
+	}
+
 	var addThisJsonArray = new Array();
 	var processHtmlJsonArray = new Array();
 	
@@ -305,7 +288,6 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 		for(j=0;j < matchesInFileArr.length;j++){
 			// # process the files associated, this will be recursive call
 			str = matchesInFileArr[j];
-			// console.log('---------'+str);	
 			
 			var specialInstructionTag = str;
 			
@@ -315,7 +297,6 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 				str = str.replace('-->','');
 				
 				var json = JSON.parse(str);
-				// console.log(json);	
 				
 				var execute_this,wid,div_class,file_content,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName,addThisWid = '';
 				var links = [];
@@ -372,8 +353,7 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 						 }
 							
 					 	 var file_content = "";
-					 	 console.log(' >>>>>>>>>>>>>>>>> '+beginArea + ' , '+ endArea + ' , '+file_to_search);console.log(' >>>>>>>>>>>>>>>>> '+beginArea + ' , '+ endArea + ' , '+file_to_search);
-						 if(beginArea && endArea && fileName){
+					 	 if(beginArea && endArea && fileName){
 							 // file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
 							 file_content += GetFile(file_to_search,wid,beginArea,endArea);
 							 // file_content += "</div>";
@@ -393,23 +373,19 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
  						 // "DataForView":[{"j":"k"},{"l":"m"}],
  						 // "TestParam1":"TestVal1" } -->
  					     //  -->
-						 var original_file_content = GetFile(current_file,'#'+wid);
+ 					     var original_file_content = GetFile(current_file,'#'+wid);
 						 
 						 if(original_file_content){
 							 var json2 = {};
-						 
-						 	 // TODO :: split this content into several params 0,1,2 ... spliting by the matched directive/special comment	
-	 						 json2["0"] = original_file_content;
+						 	 json2["Wid"] = {};
+							 json2["Wid"][wid] = {};
+						 	 json2["Wid"][wid]["0"] = original_file_content;
 							 
 							 // json2 = extractContentToParams(original_file_content,json2);
-							 
-							 
-							 
-							 json2["Wid"] = wid;
-	 						 json2["JS"] = directory+file_prefix+'.js';
-	 						 json2["CSS"] = directory +file_prefix+'.css';
-	 						 json2["DataForView"] = data_for_view;
-							 json2["timestamp"] = timestamp;
+	 						 json2["Wid"][wid]["JS"] = directory+file_prefix+'.js';
+	 						 json2["Wid"][wid]["CSS"] = directory +file_prefix+'.css';
+	 						 json2["Wid"][wid]["DataForView"] = data_for_view;
+							 json2["Wid"][wid]["timestamp"] = timestamp;
 							 
  						 	// add links values if applicable
 						 
@@ -439,17 +415,13 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
  							}
 							
  							if(links && links.length > 0){
- 								json2["links"]=links;
+ 								json2["Wid"][wid]["links"]=links;
  							}
-							
-							
- 							//console.log('00000000000000' +JSON.stringify(json2));
-							 
 							 // copy any extra parameters
 							 for(var attr in json) {
 								 if(attr !== 'ExecuteThis' && attr !== 'Wid' && attr !== 'Div' && attr !== 'DataForView'){
 									 // clone any extra params to json2 array being constructed
-									 json2[attr]=json[attr];
+									 json2["Wid"][wid][attr]=json[attr];
 								 }
 						     }
 							 
@@ -508,14 +480,20 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 							//	   "z":	"w"
 
 							var jsonAddThis = {};
-							// copy any extra parameters
-							console.log('>>>>>>>>>>>>> processing AddThis '+addThisWid);
 
+						 	jsonAddThis["Wid"] = {};
+						 	var wid = 'wid-value'
+							jsonAddThis["Wid"][wid] = {};
+						 	jsonAddThis["Wid"][wid]["0"] = original_file_content;
+							 
+							 // json2 = extractContentToParams(original_file_content,json2);
+
+							// copy any extra parameters
 							if(addThisWid && execute_this){
 								for(var attr in json) {
 									if(attr !== 'AddThis'){
 										// clone any extra params to json2 array being constructed
-										jsonAddThis[attr]=json[attr];
+										jsonAddThis["Wid"][wid][attr]=json[attr];
 									}
 							    }
 								addThisJsonArray.push(jsonAddThis);
@@ -531,6 +509,8 @@ function getAndProcessFile(fileContent,current_file,to_search_file,directory){
 	if(addThisJsonArray.length>0){
 		returnJson.addThisJson.push(addThisJsonArray);	
 	}
+
+	return returnJson;
 }
 
 

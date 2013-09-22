@@ -60,10 +60,10 @@ describe('DAO test layer', function(){
   it('getfrommongo', function(done){
 
 
-    var requestObj = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+    var o = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     
     // remove the added entry
-    dao.addToMongo(requestObj,TABLE_NAME,function(o){
+    dao.addToMongo(o,TABLE_NAME,function(o){
         superagent.put('http://localhost:3000/executethis')
           .send(o)
           .end(function(e, res){
@@ -106,14 +106,7 @@ describe('DAO test layer', function(){
 
         expect(typeof res.body).to.eql('object')
         //expect(res.body.msg).to.eql('success')        
-        
-
-        // remove the added entry
-        dao.removeFromMongo(res,TABLE_NAME,function(o){
-          // callback after removing entry
-          console.log('Cleanup done .... removed added entry.');
-        });
-        done()
+        done();
     })
   })
 
@@ -165,6 +158,31 @@ describe('DAO test layer', function(){
           });
       
   });
+
+
+ // the request is for 'GetFromMongo' , witha a preexecute and postExecute method each
+  it('updatetomongo', function(done){
+
+
+    var requestObj = [{"AddThis":"test12345","ExecuteThis":"updatewid","x":"y","z":"w"}];
+    
+    // remove the added entry
+    dao.addToMongo(requestObj,TABLE_NAME,function(o1){
+        
+          console.log('Added new entry >>>>>>>>> '+JSON.stringify(o1));
+          expect(typeof o1).to.eql('object');
+         
+          dao.updateToMongo({"AddThis":"test12345"},TABLE_NAME,{"AddThis":"test12345","ExecuteThis":"ExtractServer","l":"m","n":"o"},function(o2){
+        
+            console.log('Updated old entry >>>>>>>>> '+JSON.stringify(o1));
+            expect(typeof o1).to.eql('object')
+            done()
+            
+          });
+
+      })
+  })
+
  
  // // TODO :: ADDDATAWID in call extractthis
   // it('adddatawid1', function(done){

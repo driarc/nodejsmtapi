@@ -2,8 +2,7 @@ var mongoose = require('mongoose')
 ,config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
-// ,db = mongoskin.db('mongodb://odesk:password@ds041228.mongolab.com:41228/nodejsmtapi?auto_reconnect', {safe:true});
-,db = mongoskin.db('mongodb://localhost:27017/nodejsmtapi?auto_reconnect', {safe:true});
+,db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS);
 
 
 var TABLE_NAME = config.TABLE_NAME;
@@ -23,6 +22,25 @@ exports.removeFromMongo = function(objToRemove,schemaToLookup, callback){
 	    }
 	});
 }
+
+
+
+// DAO method to remove an entry from specified colelction
+exports.updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
+	db.collection(schemaToLookup).update(queryObject, {$set: updatedObject}, function(err, result) {
+		if (err) {
+			console.error(err);
+	    	throw err;
+	    }
+	    else{
+		    console.log('Updated! '+ JSON.stringify(result));
+		    db.collection(schemaToLookup).findOne(updatedObject, function(o){
+		    	callback(result);
+			});
+	    }
+	});
+}
+
 
 
 // the callback function on succesful addition is also specified
@@ -63,6 +81,7 @@ exports.addToMongo = function(objToAdd,schemaToLookup, callback){
 	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
 	    if (err) 
 			// callback(err);
+			callback({"error":err});
 	    	throw err;
 	    if (result) 
 	    	console.log('Added! '+ JSON.stringify(result));
