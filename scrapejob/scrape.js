@@ -253,14 +253,23 @@ exports.handleAddThis =  function run(jsonArr,callback){
 		//	   "z":	"w"
 
 		var jsonAddThis = {};
+
+	 	jsonAddThis["Wid"] = {};
+	 	var wid = addThisWid
+		jsonAddThis["Wid"][wid] = {};
+	 	// jsonAddThis["Wid"][wid]["0"] = original_file_content;
+	 	
 		// copy any extra parameters
-		for(var attr in json) {
-			if(attr !== 'AddThis'){
-				// clone any extra params to json2 array being constructed
-				jsonAddThis[attr]=json[attr];
-			}
-	    }
-		addThisJsonArray.push(jsonAddThis);	
+		if(addThisWid && execute_this){
+			for(var attr in json) {
+				if(attr !== 'AddThis'){
+					// clone any extra params to json2 array being constructed
+					jsonAddThis["Wid"][wid][attr]=json[attr];
+				}
+		    }
+
+			addThisJsonArray.push(jsonAddThis);
+		}
 	}
 
 	var retJson = {};
