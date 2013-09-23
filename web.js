@@ -14,7 +14,7 @@ var express = require('express')
  
  //// *********************** Express Application Configuration follows   *********************** 
 app.configure(function(){
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', process.env.PORT || 3000);  //test
 	app.enable('trust proxy')
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
