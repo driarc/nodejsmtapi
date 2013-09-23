@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <!--
+    Author: Joseph Stants
+    Date: 9/16/2013
+    Note: Test menu for node.js "executeThis" system
+    -->
+    <head>
+        <title>Testing Menu</title>
+        <meta charset="utf-8">
+        <meta name="description" content="Test Menu Index">
+    </head>
+
+    <body>
+
+        <h1>Testing Menu</h1>
+       
+         <h3>ExecuteThis Commands</h3>
+        <ul>
+            <li><a id="executeThisLink1" href="./testpages/getWidTest.html">getWid</a></li>
+            <li><a id="executeThisLink2" href="./testpages/updateWid.html">updateWid</a></li>
+            <li><a id="executeThisLink3" href="./testpages/executeMultiple.html">executeMultiple</a></li>
+            <li><a id="executeThisLink4" href="./testpages/executeServer.html">executeServer</a></li>
+            <li><a id="executeThisLink5" href="./testpages/variable.html">variable</a></li>
+            <li><a id="executeThisLink6" href="./testpages/javascript.html">javascript</a></li>
+            <li><a id="executeThisLink7" href="./testpages/other.html">other</a></li>
+            <li><a id="executeThisLink8" href="./testpages/displayHtml.html">displayHtml</a></li>
+            
+            <!--  
+            {
+                "ExecuteThis":"ProcessHTML",
+                "Links" : 
+                    [
+                        {"id":"executeThisLink1", "targetLink":"href='./testpages/getCodyTestSms.html'", "EventLeftClick":"getCodyTestSms"},
+                        {"id":"executeThisLink2", "targetLink":"href='./testpages/updateCodyTestSms.html'", "EventLeftClick":"updateCodyTestSms"},
+                        {"id":"executeThisLink3", "targetLink":"href='./testpages/executeMultiple.html'", "EventLeftClick":"executeMultiple"},
+                        {"id":"executeThisLink4", "targetLink":"href='./testpages/executeServer.html'", "EventLeftClick":"executeServer"},
+                        {"id":"executeThisLink5", "targetLink":"href='./testpages/variable.html'", "EventLeftClick":"variable"},
+                        {"id":"executeThisLink6", "targetLink":"href='./testpages/javascript.html'", "EventLeftClick":"javascript"},
+                        {"id":"executeThisLink7", "targetLink":"href='./testpages/other.html'", "EventLeftClick":"other"},
+                        {"id":"executeThisLink8", "targetLink":"href='./testpages/displayHtml.html'", "EventLeftClick":"displayHtml"}
+                    ]
+            }
+            -->
+        </ul>
+
+        <h3>Execute/Boot Special Actions</h3>
+
+        <ul>
+            <!-- Execute/Boot Special Actions -->
+            
+            
+            <li><a id="bootLink1" href="./testpages/preExecute.html">preExecute</a></li>
+            <li><a id="bootLink2" href="./testpages/execute.html">execute</a></li>
+            <li><a id="bootLink3" href="./testpages/postExecute.html">postExecute</a></li>
+            <li><a id="bootLink4" href="./testpages/addThisWid.html">addThis</a></li>
+
+            <!--  
+            {
+                "ExecuteThis":"ProcessHTML",
+                "Links" : 
+                    [
+                        {"id":"bootLink1", "targetLink":"href='./testpages/preExecute.html'", "EventLeftClick":"preExecute"},
+                        {"id":"bootLink2", "targetLink":"href='./testpages/execute.html'", "EventLeftClick":"execute"},
+                        {"id":"bootLink3", "targetLink":"href='./testpages/postExecute.html'", "EventLeftClick":"postExecute"},
+                        {"id":"bootLink4", "targetLink":"href='./testpages/addThisWid.html'", "EventLeftClick":"addThisWid"}
+                    ]
+            }
+            -->
+        </ul>
+
+        <h3>Events</h3>
+
+        <!-- System Events -->
+        <ul>
+            <li><h4>System Events</h4></li>
+
+            <li><a id="systemEventlink1" href="./testpages/onDataChange.html">onDataChange</a></li>
+            <li><a id="systemEventlink2" href="./testpages/executeEnd.html">executeEnd</a></li>
+            <li><a id="systemEventlink3" href="./testpages/online.html">online</a></li>
+            <li><a id="systemEventlink4" href="./testpages/incomingWid.html">incomingWid</a></li>
+            <li><a id="systemEventlink5" href="./testpages/timer.html">timer</a></li>
+            <li><a id="systemEventlink6" href="./testpages/onWifi.html">onWifi</a></li>
+            <li><a id="systemEventlink7" href="./testpages/widExpired.html">widExpired</a></li>
+            <li><a id="systemEventlink8" href="./testpages/waitForWid.html">waitForWid</a></li>
+
+            <!--  
+            {
+                "ExecuteThis":"ProcessHTML",
+                "Links" : 
+                    [
+                        {"id":"systemEventlink1", "targetLink":"href='./testpages/onDataChange.html'", "EventLeftClick":"onDataChange"},
+                        {"id":"systemEventlink2", "targetLink":"href='./testpages/executeEnd.html'", "EventLeftClick":"executeEnd"},
+                        {"id":"systemEventlink3", "targetLink":"href='./testpages/online.html'", "EventLeftClick":"online"},
+                        {"id":"systemEventlink4", "targetLink":"href='./testpages/incomingWid.html'", "EventLeftClick":"incomingWid"},
+                        {"id":"systemEventlink5", "targetLink":"href='./testpages/timer.html'", "EventLeftClick":"timer"},
+                        {"id":"systemEventlink6", "targetLink":"href='./testpages/onWifi.html'", "EventLeftClick":"onWifi"},
+                        {"id":"systemEventlink7", "targetLink":"href='./testpages/widExpired.html'", "EventLeftClick":"widExpired"},
+                        {"id":"systemEventlink8", "targetLink":"href='./testpages/waitForWid.html'", "EventLeftClick":"waitForWid"}
+                    ]
+            }
+            -->
+        </ul>
+
+        <!-- Phone Gap Events -->
+        <ul>
+            <li><h4>Phone Gap Events</h4></li>
+            
+            <li><a id="phoneGapEventLink1" href="./testpages/deviceReady.html">deviceReady</a></li>
+            <li><a id="phoneGapEventLink2" href="./testpages/pause.html">pause</a></li>
+            <li><a id="phoneGapEventLink3" href="./testpages/resume.html">resume</a></li>
+            <li><a id="phoneGapEventLink4" href="./testpages/online.html">online</a></li>
+            <li><a id="phoneGapEventLink5" href="./testpages/offline.html">offline</a></li>
+            <li><a id="phoneGapEventLink6" href="./testpages/backButton.html">backButton</a></li>
+            <li><a id="phoneGapEventLink7" href="./testpages/menuButton.html">menuButton</a></li>
+            <li><a id="phoneGapEventLink8" href="./testpages/searchButton.html">searchButton</a></li>
+
+            <!--  
+            {
+                "ExecuteThis":"ProcessHTML",
+                "Links" : [
+                        {"id":"phoneGapEventLink1", "targetLink":"href='./testpages/deviceReady.html'", "EventLeftClick":"deviceReady"},
+                        {"id":"phoneGapEventLink2", "targetLink":"href='./testpages/pause.html'", "EventLeftClick":"pause"},
+                        {"id":"phoneGapEventLink3", "targetLink":"href='./testpages/resume.html'", "EventLeftClick":"resume"},
+                        {"id":"phoneGapEventLink4", "targetLink":"href='./testpages/online.html'", "EventLeftClick":"online"},
+                        {"id":"phoneGapEventLink5", "targetLink":"href='./testpages/offline.html'", "EventLeftClick":"offline"},
+                        {"id":"phoneGapEventLink6", "targetLink":"href='./testpages/backButton.html'", "EventLeftClick":"backButton"},
+                        {"id":"phoneGapEventLink7", "targetLink":"href='./testpages/menuButton.html'", "EventLeftClick":"menuButton"},
+                        {"id":"phoneGapEventLink8", "targetLink":"href='./testpages/searchButton.html'", "EventLeftClick":"searchButton"}
+                    ]
+            }
+            -->
+        </ul>
+
+        <!-- JavaScript Events-->
+        <ul>
+            <li><h4>JavaScript</h4></li>
+
+            <li><a id="javaScriptEventlink1" href="./testpages/onClick.html">onClick</a></li>
+            <li><a id="javaScriptEventlink2" href="./testpages/onLoad.html">onLoad</a></li>
+            <li><a id="javaScriptEventlink3" href="./testpages/onChange.html">onChange</a></li>
+            <li><a id="javaScriptEventlink4" href="./testpages/onBlur.html">onBlur</a></li>
+            <li><a id="javaScriptEventlink5" href="./testpages/onKeyPressed.html">onKeyPressed</a></li>
+            <li><a id="javaScriptEventlink6" href="./testpages/onFocus.html">onFocus</a></li>
+
+            <!--  
+            {
+                "ExecuteThis":"ProcessHTML",
+                "Links" : [
+                        {"id":"javaScriptEventlink1", "targetLink":"href='./testpages/onClick.html'", "EventLeftClick":"onClick"},
+                        {"id":"javaScriptEventlink2", "targetLink":"href='./testpages/onLoad.html'", "EventLeftClick":"onLoad"},
+                        {"id":"javaScriptEventlink3", "targetLink":"href='./testpages/onChange.html'", "EventLeftClick":"onChange"},
+                        {"id":"javaScriptEventlink4", "targetLink":"href='./testpages/onBlur.html'", "EventLeftClick":"onBlur"},
+                        {"id":"javaScriptEventlink5", "targetLink":"href='./testpages/onKeyPressed.html'", "EventLeftClick":"onKeyPressed"},
+                        {"id":"javaScriptEventlink6", "targetLink":"href='./testpages/onFocus.html'", "onFocus":""}
+                        ]
+            }
+            -->
+        </ul>
+    </body>
+</html>

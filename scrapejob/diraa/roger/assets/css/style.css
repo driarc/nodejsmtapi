@@ -1,0 +1,200 @@
+.basebegin:hover
+{
+    background-color:white;
+    opacity:0.8;
+}
+.backgroundbegin:hover
+{
+    background-color:yellow;
+    opacity:0.6;
+}
+.walletbegin:hover
+{
+    background-color:Gray;
+    opacity:0.4;
+}
+.walletbegin2:hover
+{
+    background-color:Fuchsia;
+    opacity:0.4;
+}
+
+html, body { height:100%; }
+body {
+    padding:0;
+    margin:0;
+
+    -webkit-user-select:none;
+    -webkit-text-size-adjust:none;
+    color:#333;
+    font-family:helvetica;
+    font-size:12px;
+    text-align:center;
+}
+
+h1 {
+    font-size:2em;
+    padding:20px 0;
+    margin:0;
+}
+
+#wrapper-1 {
+    height:322px;
+    /*background: rgba(200, 54, 54, 0.5);*/
+    border-radius:10px;
+    color:#ffffff;
+    /*    width:80%;*/
+    background-image:url('../images/iphone-5-press.png');
+    height: 750px;
+    background-repeat: no-repeat;
+    background-position:top center; 
+    background-size: 50% 70%;
+}
+#wrapper {
+    height:287px;
+    background:#92DEEB;
+    border-radius:10px;
+}
+.swipeview-active span{
+
+}
+.navbar{
+    background-color: #BCEBF1 !important;
+    background-image: none;
+}
+#nav {
+    position:absolute;
+    z-index:100;
+    top:8px;
+    width:200px;
+    height:20px;
+    left:50%;
+
+    padding:0;
+    margin:0 0 0 -100px;
+    -webkit-border-radius:10px;
+}
+
+#nav li {
+    display:block;
+    float:left;
+    width:14px;
+    height:14px; line-height:14px;
+    -webkit-border-radius:7px;
+    background:rgba(255,255,255,0.1);
+    overflow:hidden;
+    padding:0;
+    margin:3px 11px 0 0;
+    text-align:center;
+}
+
+#nav li#prev {
+    margin-left:5px;
+    background:transparent;
+}
+
+#nav li#next {
+    margin-right:0;
+    background:transparent;
+}
+
+#nav li.selected {
+    background:rgba(255,255,255,0.4);
+}
+
+#swipeview-slider > div {
+    position:relative;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+    overflow:hidden;
+}
+
+#swipeview-slider span {
+    -webkit-box-sizing:border-box;
+    display:block;
+    text-align:justify;
+    font-size:1.4em;
+}
+#wrapper span{
+    padding: 20px 30px
+}
+#wrapper-1 span{
+    width: 43%;
+    margin: 14% 0 0 29%;
+    line-height: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    font-size:18px;
+    padding: 15px;
+    min-height: 370px;
+
+}
+
+p {
+    padding:20px;
+    margin:0;
+    font-size:1.4em;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{ 
+    #wrapper-1 span{
+        width: 43%;
+        margin: -43% 0 0 0%;}
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) and (max-width: 765px)
+{ 
+    #wrapper-1 span{
+        width: 50%;
+        margin: -43% 0 0 0% !important;}
+    #wrapper-1 {
+        background-size: 60% 70%;
+    }
+}
+
+
+
+@media screen and (-webkit-min-device-pixel-ratio:0) and (min-width: 200px) and (max-width:400px){
+  #wrapper-1 span{
+        width: 73%;
+        margin: -46% 0 0 0% !important;}
+    #wrapper-1 {
+        background-size: 100% 100%;
+    }
+
+}
+
+@media screen and (min-width: 600px) and (max-width: 765px){
+    #wrapper-1 span{
+        margin: 11% 0 0 29%;
+        min-height: 375px;
+    }
+    .iphone-container{
+        margin-top:50px;
+    } 
+}
+@media screen and (min-width: 350px) and (max-width:600px) {
+    #wrapper-1{
+        background-size: 60% 70%;
+        height: 750px;
+    }
+    #wrapper-1 span{
+        margin: 13% 0 0 24%;
+        width: 52%
+    }
+    .iphone-container{
+        margin-top:50px;
+    }
+}
+@media screen and (min-width: 200px) and (max-width:400px){
+    
+    #wrapper-1{
+        background-size: 100% 80% !important;
+        height: 720px;
+    }
+    #wrapper-1 span{
+        width:90%;
+         margin: 28% 0 0 8%;
+    }
+
+}

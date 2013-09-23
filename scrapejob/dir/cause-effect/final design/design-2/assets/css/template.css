@@ -1,0 +1,12 @@
+body {
+	background: #02D9E5;
+}
+.color-blue {
+	margin-top: 20px;
+	background: #73D6DC;
+	border-radius: 3px;
+	-moz-box-shadow: inset 0 0 3px 1px #215F63;
+-webkit-box-shadow: inset 0 0 3px 1px #215F63;
+box-shadow: inset 0 0 3px 1px #215F63;
+}
+

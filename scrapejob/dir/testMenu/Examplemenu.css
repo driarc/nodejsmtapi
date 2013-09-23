@@ -1,0 +1,19 @@
+﻿.div-col1
+{
+    margin-top:75px;
+    border-radius: 5px;
+    border-color:Black;
+    min-width:10%;
+    min-height:250px;
+    border-style:solid;
+}
+
+.div-col2
+{
+    margin-top:75px;
+    border-radius: 5px;
+    border-color:Black;
+    min-width:10%;
+    min-height:250px;
+    border-style:solid;
+}

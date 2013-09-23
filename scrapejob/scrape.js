@@ -92,7 +92,7 @@ function FileChanged(directory,callback){
 		// if(stat.name.endsWith('.html') && (moment().isBefore(moment(stat.mtime).add('minutes', 15)))){
 			files.push(root  + stat.name);
 			var targetDiv = undefined;
-			var file = root  + stat.name;
+			var file = root  + '/' + stat.name;
 			processFile(file,targetDiv, directory);
 		}
 	    next();
@@ -342,7 +342,7 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 					
 				
 				// to be used in GetFile operation -- file from where content is to be brought	
-				file_to_search = 	directory + fileName +'.html';
+				file_to_search = 	directory + '/' + fileName + '.html';
 				
 				switch (execute_this.toLowerCase()){
 					

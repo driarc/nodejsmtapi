@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<!-- place for the favicon icon-->
+		<link rel="shortcut icon" href="">
+
+		<title>Cause Affect Create Event</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="assets/bootstrap-3.0.0/dist/css/bootstrap.css" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="assets/css/template1.css" rel="stylesheet">
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="assets/bootstrap-3.0.0/dist/js/html5shiv.js"></script>
+		<script src="assets/bootstrap-3.0.0/dist/assets/js/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<!-- logo on the top -->
+		<div class="navbar">
+			<img src="assets/images/cause-effect-logo.png" alt="logo" class="img-responsive pull-right"/>
+		</div>
+		<!-- create event images-->
+		<div class="container">
+			<div class="row">
+				<img src="assets/images/create-an-event.png" alt="logo" class="img-responsive"/>
+			</div>
+		</div>
+
+		<!-- container for the form -->
+		<div class="container color-blue">
+     <!--       <div class="btn-group btn-group-justified">
+  <button type="button" class="btn btn-default">Left</button>
+  <button type="button" class="btn btn-default">Middle</button>
+  <button type="button" class="btn btn-default">Right</button>
+</div> -->
+
+			<!-- form starts-->
+			<form class="form-horizontal" style="margin:20px 0;">
+			  <div class="row">
+					<div class="col-sm-8 col-md-8 col-lg-8">
+                       <div id="event-group" class="activeForm">
+						<h3 style="text-decoration:underline;margin-bottom:25px;">Event Detail</h3>
+						<!-- new event section -->
+						<div class="form-group ">
+							<label for="inputeventname" class="col-lg-3 col-md-3 col-sm-3 control-label">New Event Name</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<input type="text" class="form-control" placeholder="New Event Name">
+							</div>
+						</div>
+						<!-- date section -->
+						<div class="form-group">
+							<label for="inputdate" class="col-lg-3 col-md-3 col-sm-3 control-label">Date</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<input type="text" class="form-control" placeholder="Date/Month/Year">
+							</div>
+						</div>
+						<!-- time section -->
+						<div class="form-group">
+							<label for="inputtime" class="col-lg-3 col-md-3 col-sm-3 control-label">Time</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+										<select class="form-control">
+											<option>0:00</option>
+										</select>
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-1 text-center">
+										<label> To </label>
+									</div>
+									<div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+										<select class="form-control">
+											<option>0:00</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+						<div id="organization-group" class="hidden">
+						<h3 style="text-decoration:underline;margin-bottom:25px;">Organization Detail</h3>
+						<!-- select organization section -->
+						<div class="form-group">
+						<label for="inputtime" class="col-lg-3 col-md-3 col-sm-3 control-label"></label>
+							<div class="col-lg-9 col-md-9 col-sm-12">
+								<div class="row">
+									<div class="col-lg-10 col-md-11 col-sm-11 col-xs-10">
+										<select class="form-control" name="organization">
+											<option value="">Choose Existing Organization</option>
+											<option value="">Organization 1</option>
+											<option value="">Organization 2</option>
+										</select>
+									</div>
+								</div>
+							<div class="row">
+								<div class="col-lg-12 col-md-1 col-sm-1 text-center">
+									<h4> Or </h4>
+								</div>
+							</div>
+							</div>
+						</div>
+						<!-- organization name section -->
+						<div class="form-group">
+							<label for="inputorganizationname" class="col-lg-3 col-md-3 col-sm-3 control-label">Organization Name</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Organization Name">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- website url section -->
+						<div class="form-group">
+							<label for="inputwebsiteurl" class="col-lg-3 col-md-3 col-sm-3 control-label">Website URL:</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="" value="www.">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+						<div id="contact-group" class="hidden">
+						<h3 style="text-decoration:underline;margin-bottom:25px;">Contact Detail</h3>
+						<!-- email section -->
+						<div class="form-group">
+							<label for="inputemail" class="col-lg-3 col-md-3 col-sm-3 control-label">Email Address:</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="email" class="form-control" placeholder="Email Address">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- first name section -->
+						<div class="form-group">
+							<label for="inputfirstname" class="col-lg-3 col-md-3 col-sm-3 control-label">Contact First Name</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="First Name">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- last name section -->
+						<div class="form-group">
+							<label for="inputlastname" class="col-lg-3 col-md-3 col-sm-3 control-label">Contact Last Name</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Last Name">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- contact section -->
+						<div class="form-group">
+							<label for="inputtitle" class="col-lg-3 col-md-3 col-sm-3 control-label">Contact Title</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Title">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- address line 1 section -->
+						<div class="form-group">
+							<label for="inputaddress" class="col-lg-3 col-md-3 col-sm-3 control-label">Address</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Address Line 1">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- address line 2 section -->
+						<div class="form-group">
+							<label for="inputaddress2" class="col-lg-3 col-md-3 col-sm-3 control-label">Address 2</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Address Line 2">
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- city section -->
+						<div class="form-group">
+							<label for="city" class="col-lg-3 col-md-3 col-sm-3 control-label">City</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<select class="form-control" name="city">
+											<option value="">Choose City</option>
+											<option value="">City 1</option>
+											<option value="">City 2</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- state section -->
+						<div class="form-group">
+							<label for="state" class="col-lg-3 col-md-3 col-sm-3 control-label">State</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<select class="form-control" name="state">
+											<option value="">Choose State</option>
+											<option value="">State 1</option>
+											<option value="">State 2</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- zip code section -->
+						<div class="form-group">
+							<label for="zip" class="col-lg-3 col-md-3 col-sm-3 control-label">Zip</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Zip Code">
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- contact phone section -->
+						<div class="form-group">
+							<label for="inputcontactphone" class="col-lg-3 col-md-3 col-sm-3 control-label">Contact Phone #</label>
+							<div class="col-lg-9 col-md-9 col-sm-9">
+								<div class="row">
+									<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+										<input type="text" class="form-control" placeholder="Phone">
+									</div>
+									<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+										<input type="checkbox" />
+									</div>
+								</div>
+							</div>
+						</div>
+                       </div>  
+					</div>
+					<!-- input file placeholder -->
+					<div class="col-sm-4 col-md-4 col-lg-4">
+						
+					</div>
+
+				</div>
+				<div class="row">					
+						<div class="col-xs-12 col-sm-3 col-sm-offset-8 col-md-3 col-md-offset-9 col-lg-2 col-lg-offset-10">
+							<div class="form-group">
+							<button type="reset" class="btn btn-default" id="backButton">
+								Back
+							</button>
+							<button type="button" class="btn btn-primary" id="nextButton">
+								Next
+							</button>							
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+      </body>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="http://code.jquery.com/jquery.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="assets/bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+$("#backButton").hide();
+// click the next button 
+$("#nextButton").click(function(){
+ var formDivId = $('div').find('.activeForm').attr('id');
+ if(formDivId == 'event-group'){
+  $("#event-group").hide();
+  $("#event-group").removeClass('activeForm').addClass('hidden');
+  $("#organization-group").removeClass('hidden').addClass('activeForm');
+  $("#organization-group").show();
+  $("#backButton").show();
+ }else if(formDivId == 'organization-group'){
+  $("#organization-group").hide();
+  $("#organization-group").removeClass('activeForm').addClass('hidden');
+  $("#contact-group").removeClass('hidden').addClass('activeForm');
+  $("#contact-group").show();
+ }
+ });
+ // click the back button 
+$("#backButton").click(function(){
+ var formDivId = $('div').find('.activeForm').attr('id');
+ if(formDivId == 'contact-group'){
+  $("#contact-group").hide();
+  $("#contact-group").removeClass('activeForm').addClass('hidden');
+  $("#organization-group").removeClass('hidden').addClass('activeForm');
+  $("#organization-group").show();
+  $("#backButton").show();
+ }else if(formDivId == 'organization-group'){
+  $("#organization-group").hide();
+  $("#organization-group").removeClass('activeForm').addClass('hidden');
+  $("#event-group").removeClass('hidden').addClass('activeForm');
+  $("#event-group").show();
+   $("#backButton").hide();
+ }
+ });
+});
+</script>		
+</html>
