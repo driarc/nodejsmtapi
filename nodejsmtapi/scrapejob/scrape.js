@@ -26,6 +26,8 @@ var returnJson =   {'processHtmlJson':[],'addThisJson':[]};
 exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 	var html = '';
 
+
+
 	if(!mapOfFiles){
 		mapOfFiles = new HashMap();
 	}
@@ -46,30 +48,30 @@ exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 	    xmlMode: false
 	});
 	
-	
-
 	var returnHtml = '';
-	if(targetDiv){
-		
+	if(beginArea && endArea && file){
+		// begin area and end area enclosing content from the file
+		returnHtml = $.html().toString();
+		var regex = '\<!-- {"AreaDefination": "'+ beginArea +'"} --\>([^}]*)\<!-- {"AreaDefination": "'+ endArea +'"} --\>';
+
+		var re = new RegExp(regex, 'gi');
+	 	// replace the content as per the matched processing instruction/ special comment 
+		var array = re.exec(returnHtml);
+		returnHtml = array[1];
+	}else if(targetDiv){
 		$(targetDiv).each(function(){
 			returnHtml = $(this).html().toString();
 		})
-	}else if(beginArea && endArea && file){
-		
-		// begin area and end area enclosing content from the file
-		returnHtml = $.html().toString();
-		var regex = '(\<!--{"AreaDefination": "'+ beginArea +'"} --\>)([ \r\n\t\s\w.,])*(\<!--{"AreaDefination": "'+ endArea +'"} --\>)';
-		var re = new RegExp(regex, 'gi');
-	 	// replace the content as per the matched processing instruction/ special comment 
-		var array = returnHtml.split(re);
-		returnHtml = array[0];
-		returnHtml = returnHtml.replace(/\<!--{"AreaDefination": "([ \r\n\t\s\w.,])*"} --\>/g,'');
 	}else{
 		returnHtml=mapOfFiles.get(file);
 	}
 	return returnHtml;
 }
 
+
+RegExp.escape= function(s) {
+    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+};
 
 
 exports.returnJson = function(){
@@ -163,13 +165,13 @@ function createFiles(fileName, content){
 }
 
 // logic to update the filesCOntent for being processed files
-function updateFileInMap(fileToUpdate,updatedContent,regex){
+function updateFileInMap(fileToUpdate,updatedContent,regex,options){
 	 // update the content of currentFIle from the MAP
 	 var replaced = '';
 	 if(mapOfFiles.has(fileToUpdate)){
 	     fileContent = mapOfFiles.get(fileToUpdate);
-		 regex=regex.replace(/\[/g,'\\\[');
-		 var re = new RegExp(regex, 'gi');
+		 // regex=regex.replace(/\[/g,'\\\[');
+		 var re = new RegExp(RegExp.escape(regex), options);
 	 	 // replace the content as per the matched processing instruction/ special comment 
 		 replaced = fileContent.replace(re, updatedContent);
 	 }else{
@@ -182,9 +184,6 @@ function updateFileInMap(fileToUpdate,updatedContent,regex){
 // logic to iterate the processed file data from the amp and write files to disk
 function writeChangesNow(){
 	mapOfFiles.forEach(function(value, key) {
-		// console.log(' -------------------- ');
-// 		console.log(' File Name --- '+ key);
-// 		console.log(' File Value --- '+ value);
 		writeFileToDisk(key,value);
 
 	});
@@ -356,13 +355,11 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 					 	 if(beginArea && endArea && fileName){
 							 // file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
 							 file_content += GetFile(file_to_search,wid,beginArea,endArea);
-							 // file_content += "</div>";
+							 // file_content += "</div>"; 
 						 }
 						 
 						 // update the file in mapOfFiles
-						 updateFileInMap(current_file,file_content,matchesInFileArr[j]);
-						 
-						 
+						 updateFileInMap(current_file,file_content,matchesInFileArr[j],'i');
  					case 'processhtml':
  						 // added logic for handling 'ProcessHTML'
 						 // expected directive special comment will be like this - 
