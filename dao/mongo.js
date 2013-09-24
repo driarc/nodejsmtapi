@@ -79,12 +79,15 @@ exports.getMultipleFromMongo = function(objToFind,schemaToLookup, callback){
 exports.addToMongo = function(objToAdd,schemaToLookup, callback){
 	console.log(' ****** addToMongo method in dao');
 	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
-	    if (err) 
+	    if (err) {
 			// callback(err);
 			callback({"error":err});
 	    	throw err;
-	    if (result) 
+	    	
+	    }
+	    if (result){
 	    	console.log('Added! '+ JSON.stringify(result));
 	    	callback(result);
+	    } 
 	});
 }
