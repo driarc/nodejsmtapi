@@ -21,7 +21,7 @@ exports.executethis = function(req, res) {
     var reservedParameters = new HashMap();
 
     var item = req.body[0];
-   
+    // console.log(item);
 
     //  iterate over the input JSON 
     for(i =0;i< req.body.length;i++) {
@@ -51,21 +51,21 @@ exports.executethis = function(req, res) {
     
 
     /// HANDLE ADDDATAWID logic :: TODO :: FIGURE OUT WHY THIS EXISTS ?
-    if (inboundParameters.has("adddatawid")) {
-         console.log('---------'+JSON.stringify(inboundParameters));
-        var repAdd = {};
-        inboundParameters.forEach(function(value, key) {
-            if (key !== 'adddatawid') {
-                repAdd[key] = value;
-            }
-        });
+    // if (inboundParameters.has("adddatawid")) {
+    //     var repAdd = {};
+    //     inboundParameters.forEach(function(value, key) {
+    //         if (key !== 'adddatawid') {
+    //             repAdd[key] = value;
+    //         }
+    //     });
 
-        dao.addOrUpdate(repAdd,TABLE_NAME,function(o){
-           if (err) throw res.send(err);
-            res.send(result);
-        });
+    //     dao.addOrUpdate(repAdd,TABLE_NAME,function(o){
+    //        if (err) throw res.send(err);
+    //         res.send(result);
+    //     });
 
-    }else if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
+    // }else 
+    if (reservedParameters.has("addthis") && reservedParameters.has("executethis")) {
         //  handle AddThis as a command 
         console.log(' AddThis operation. ' + JSON.stringify(req.body));
 
@@ -79,29 +79,21 @@ exports.executethis = function(req, res) {
         console.log('------------------------------------------------');
 
     }else if (reservedParameters.has("executethis")) {
-        console.log(' <<<<<<<<<<<<<<< ExecuteThis operation. >>>>>>>>>>>>>>>>>>>> ');
+        console.log(' ExecuteThis operation. ');
 
         // PROCESS PRE-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
-        var preExecuteFunctionName = inboundParameters.get("preexecute");
-        if(inboundParameters.has("preexecute") && preExecuteFunctionName){
-            handlePreExecuteLogic(inboundParameters, res, preExecuteFunctionName);
-            console.log('After pre-execute logic has been checked');
+        var preExecuteValue = inboundParameters.get("preexecute");
+        if(inboundParameters.has("preexecute")){
+            handlePreExecuteLogic(inboundParameters, res, preExecuteValue, function(retrnedParams){
+                console.log('After pre-execute logic has been checked');
+                // inboundParameters = retrnedParams;
+            });
         }else{
             console.log('No pre-execute logic processed');
         }
         console.log('------------------------------------------------');
 
-
-        // START PROCESSING AS PER 'executeThis' param of the JSON in the request body received
-        handleExecuteThis(reservedParameters, res, leftOverParameters,function(o){
-            console.log('coming back '+JSON.stringify(o));
-            res.send(o);
-            res.end();
-        });
-        console.log('After executeThis logic has been processed');
-        console.log('------------------------------------------------');
-
-
+        
         // PROCESS POST-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
         var postExecuteFunctionName = inboundParameters.get("postexecute");
         if(inboundParameters.has("postexecute") && postExecuteFunctionName){
@@ -122,12 +114,46 @@ exports.executethis = function(req, res) {
     // res.end();
 };
 
-// This is a PRE-EXECUTE Logic
-function handlePreExecuteLogic(inboundParameters, res, callback){
-    // console.log('function >>>> '+ callback);
-    helperFunctions[callback]();
-    console.log('FROM :: handlePreExecuteLogic :: Pre-execute logic processed');
+
+// TODO :: comment this , complete the below commented
+function handlePreExecuteLogic(inboundParameters, res,preExecuteValue, callback){
+    callback();
 }
+
+// // This is a PRE-EXECUTE Logic
+// function handlePreExecuteLogic(inboundParameters, res,preExecuteValue, callback){
+//     if(!preExecuteValue){
+//         console.log('FROM :: handlePreExecuteLogic :: NO preexecute task to be performed.');
+//         callback(inboundParameters);
+//     }else if(preExecuteValue.split(" ") > 1){
+//         // String specified more than one words
+//         var preExecuteValueJSON = JSON.parse(preExecuteValue);
+//         if(preExecuteValueJSON){
+//            //valid JSON specified 
+//             console.log('FROM :: handlePreExecuteLogic :: valid JSON specified as task to be performed.');
+            
+//             if(!preExecuteValueJSON.ExecuteThis){
+//                 // if ExecuteThis not part of preExecute JSON, return the same outbound params, noExecuteThis requeired
+//                 callback(inboundParameters);
+//             }else{
+//                 // call ExecuteThis and append the received params to inbound Parameters before returning
+//             }
+            
+//         }else{
+//             // invalid JSON
+//             console.error('FROM :: handlePreExecuteLogic :: invalid JSON, more than single word specified as task to be performed.');
+//             callback(inboundParameters);
+//         }
+//     }
+//     }else if(typeof (preExecuteValue) === 'string'{
+//         // single text specified
+//         console.log('FROM :: handlePreExecuteLogic ::  single text specified task to be performed.');
+//         callback(inboundParameters);
+//     }
+
+//     helperFunctions[callback]();
+//     console.log('FROM :: handlePreExecuteLogic :: Pre-execute logic processed');
+// }
 
 // This is a POST-EXECUTE Logic
 function handlePostExecuteLogic(inboundParameters,res,callback){
@@ -195,7 +221,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                             // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
                             // call persistence method
-                            dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                            addOrUpdate(entityToAdd,TABLE_NAME,function(o){
                                console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
                             });
 
@@ -235,7 +261,50 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 res.send(obj);
                 res.end();
             });
-            break;    
+            break;
+
+
+        case 'getwid':
+            // handle getwid :: 
+            if(leftOverParameters.has("wid")){
+                // call get from mongo DB 
+                var rec = {"wid":leftOverParameters.get("wid")};
+                console.log("getwid ::: Fetching one record "+JSON.stringify(rec));
+                dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
+                    // get JSOn from DB
+                    console.log("getwid ::: Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                    res.send(obj);
+                    res.end();
+                });
+            }else{
+               console.log("getwid ::: No Wid specified, return empty JSON - ");  
+               res.send({});
+               res.end();  
+            }
+    
+            break;     
+
+        case 'updatewid':
+            // handle updatewid
+            if(leftOverParameters.has("wid")){
+                // call get from mongo DB 
+
+                // get JSOn to be saved
+                var entityToAdd = getJsonFromMap(leftOverParameters);
+                console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
+
+                // call persistence method
+                dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                   console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                   res.send(o);
+                   res.end();   
+                });
+            }else{
+               console.log("updatewid ::: No Wid specified, Do Nothing - ");  
+               res.send({});
+               res.end();  
+            }
+            break;            
 
         case 'getmultiplefrommongo':
             // handle get multiple from mongo DB logic
@@ -271,15 +340,17 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 //     ExecuteThis returns {value: 3}
                 //     Result:
                 //     [{"Key":"value","Value":"3"}]
+                console.log('leftOverParameters '+ JSON.stringify(leftOverParameters));
+                console.log('reservedParameters '+ JSON.stringify(reservedParameters));
                 if(reservedParameters.has('begininboundparameters')){
                     var widVal = reservedParameters.get('begininboundparameters');
                     var queryDoc = {"wid":widVal};
-                    var returnedObject = dao.getFromMongo(queryDoc,config.TABLE_NAME,function(obj){
+                    dao.getFromMongo(queryDoc,config.TABLE_NAME,function(obj){
                         console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
-                        if(returnedObject){
+                        if(obj){
                             // value found in DB for wid provided
-                            for(attr in returnedObject){
-                                leftOverParameters.set(attr,returnedObject[attr]);
+                            for(attr in obj){
+                                leftOverParameters.set(attr,obj[attr]);
                             }
                             console.log("Now leftover parameters are :::   - "+ leftOverParameters);
                             // console.log(leftOverParameters);
@@ -293,56 +364,6 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 }
 
                 
-        case 'getwid':
-            // handle getwid :: 
-            if(leftOverParameters.has("wid")){
-                // call get from mongo DB 
-                var widVal = "wid.test1"+leftOverParameters.get("wid");
-                console.log("getwid ::: Fetching one record , with wid "+widVal);
-                getFromMongo({widVal:{$exists:true}},config.TABLE_NAME,function(obj){
-
-                    if(obj){
-                        // get JSOn from DB
-                        console.log("getwid ::: Fetched from Mongo DB  - "+ JSON.stringify(obj));
-                        res.send(obj);
-                        res.end();
-                    }else{
-                        // get JSOn from DB
-                        console.log("getwid ::: No Wid matching value, return empty JSON - ");  
-                       res.send({});
-                       res.end(); 
-                    }
-                });
-            }else{
-               console.log("getwid ::: No Wid specified, return empty JSON - ");  
-               res.send({});
-               res.end();  
-            }
-    
-            break;     
-
-        case 'updatewid':
-            // handle updatewid
-            console.log('>>> updatewid ::: '+leftOverParameters);
-            if(leftOverParameters.has("wid")){
-                // call get from mongo DB 
-
-                // get JSOn to be saved
-                var entityToAdd = getJsonFromMap(leftOverParameters);
-                console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
-
-                // call persistence method
-                dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
-                   console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
-                   res.send(o);
-                   res.end();   
-                });
-            }else{
-               console.log("updatewid ::: No Wid specified, Do Nothing - ");  
-               res.send({});
-               res.end();  
-            }
-            break;            
 
                 
         case 'addtomongo':
@@ -404,8 +425,8 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             console.log('default parameter value for executetThis is >>> '+executeThisVal);
 
             // call get from mongo DB 
-            var queryObj = {'Wid':executeThisVal};
-            dao.getFromMongo({"Wid":"savedObj"},TABLE_NAME, function(returnedObject){
+            var queryObj = {'wid':executeThisVal};
+            dao.getFromMongo(queryObj,TABLE_NAME, function(returnedObject){
                 console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
 
                 // check if object is found
@@ -449,5 +470,13 @@ function callScrapeLogic(res, callback){
         objToJson.res = res;
         callback(returnJson);
     });
+}
+
+
+function get_first_property(ob) {
+    var prop ='';
+    for (var props in ob) {
+        return props;
+    }
 }
 

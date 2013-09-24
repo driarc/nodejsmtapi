@@ -254,9 +254,9 @@ exports.handleAddThis =  function run(jsonArr,callback){
 
 		var jsonAddThis = {};
 
-	 	jsonAddThis["Wid"] = {};
+	 	jsonAddThis["wid"] = {};
 	 	var wid = addThisWid
-		jsonAddThis["Wid"][wid] = {};
+		jsonAddThis["wid"][wid] = {};
 	 	// jsonAddThis["Wid"][wid]["0"] = original_file_content;
 	 	
 		// copy any extra parameters
@@ -264,7 +264,7 @@ exports.handleAddThis =  function run(jsonArr,callback){
 			for(var attr in json) {
 				if(attr !== 'AddThis'){
 					// clone any extra params to json2 array being constructed
-					jsonAddThis["Wid"][wid][attr]=json[attr];
+					jsonAddThis["wid"][wid][attr]=json[attr];
 				}
 		    }
 
@@ -383,15 +383,15 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 						 
 						 if(original_file_content){
 							 var json2 = {};
-						 	 json2["Wid"] = {};
-							 json2["Wid"][wid] = {};
-						 	 json2["Wid"][wid]["0"] = original_file_content;
+						 	 json2["wid"] = {};
+							 json2["wid"][wid] = {};
+						 	 json2["wid"][wid]["0"] = original_file_content;
 							 
 							 // json2 = extractContentToParams(original_file_content,json2);
-	 						 json2["Wid"][wid]["JS"] = directory+file_prefix+'.js';
-	 						 json2["Wid"][wid]["CSS"] = directory +file_prefix+'.css';
-	 						 json2["Wid"][wid]["DataForView"] = data_for_view;
-							 json2["Wid"][wid]["timestamp"] = timestamp;
+	 						 json2["wid"][wid]["JS"] = directory+file_prefix+'.js';
+	 						 json2["wid"][wid]["CSS"] = directory +file_prefix+'.css';
+	 						 json2["wid"][wid]["DataForView"] = data_for_view;
+							 json2["wid"][wid]["timestamp"] = timestamp;
 							 
  						 	// add links values if applicable
 						 
@@ -421,13 +421,13 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
  							}
 							
  							if(links && links.length > 0){
- 								json2["Wid"][wid]["links"]=links;
+ 								json2["wid"][wid]["links"]=links;
  							}
 							 // copy any extra parameters
 							 for(var attr in json) {
-								 if(attr !== 'ExecuteThis' && attr !== 'Wid' && attr !== 'Div' && attr !== 'DataForView'){
+								 if(attr !== 'ExecuteThis' && attr !== 'wid' && attr !== 'Div' && attr !== 'DataForView'){
 									 // clone any extra params to json2 array being constructed
-									 json2["Wid"][wid][attr]=json[attr];
+									 json2["wid"][wid][attr]=json[attr];
 								 }
 						     }
 							 
@@ -487,10 +487,10 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 
 							var jsonAddThis = {};
 
-						 	jsonAddThis["Wid"] = {};
+						 	jsonAddThis["wid"] = {};
 						 	var wid = 'wid-value'
-							jsonAddThis["Wid"][wid] = {};
-						 	jsonAddThis["Wid"][wid]["0"] = original_file_content;
+							jsonAddThis["wid"][wid] = {};
+						 	jsonAddThis["wid"][wid]["0"] = original_file_content;
 							 
 							 // json2 = extractContentToParams(original_file_content,json2);
 
@@ -499,7 +499,7 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 								for(var attr in json) {
 									if(attr !== 'AddThis'){
 										// clone any extra params to json2 array being constructed
-										jsonAddThis["Wid"][wid][attr]=json[attr];
+										jsonAddThis["wid"][wid][attr]=json[attr];
 									}
 							    }
 								addThisJsonArray.push(jsonAddThis);
