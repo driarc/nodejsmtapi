@@ -229,8 +229,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // call get from mongo DB 
             var rec = getJsonFromMap(leftOverParameters);
             console.log("Fetching one record "+JSON.stringify(rec));
-            var schemaToLookup = TABLE_NAME;
-            var returnedObject = dao.getFromMongo(rec,schemaToLookup,function(obj){
+            var returnedObject = dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
                 console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                 res.send(obj);
                 res.end();
@@ -244,8 +243,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             var objToFind = {};
             var rec = getJsonFromMap(leftOverParameters);
             console.log("Fetching multiple records for -- "+JSON.stringify(rec));
-            var schemaToLookup = TABLE_NAME;
-            var returnedObject = dao.getMultipleFromMongo(rec,schemaToLookup,function(obj){
+            var returnedObject = dao.getMultipleFromMongo(rec,config.TABLE_NAME,function(obj){
                 console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                 res.send(obj);
                 res.end();
@@ -253,7 +251,49 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             break;          
 
         case 'javascript':
-        
+                //     Then the code will fish out parameters executethis, accesstoken, beginInboundParameters from inboundParameters
+                //     The 'left over' inbound parameters will be y
+
+                //     Now read what we entered in part I
+                //     Since beginInboundParameters exists, the code will readFromMongo from the value of beginInboundParamters. 
+                //     It will read 'wid1': inbound = inbound + get from mongo (beginInboundParameters).  It receives
+                //     [{""x":"1","wid":"wid1","Js":"function (x, y){ return x + y; }"}]
+
+                //     So now inboundParamters has these values
+                //     y:2, x:1, wid:wid1, x:1, JS: "function (x, y){ return x + y; }"
+
+                //     The case statement will go to 'Javascript'
+                //     It will look for parameter JS
+                //     It will execute "value: function (x, y){ return x + y; }" with parameters wid: wid1, x:1, y:2
+                //     Javascript will evaluate {value: 3}
+
+                //     ExecuteThis returns {value: 3}
+                //     Result:
+                //     [{"Key":"value","Value":"3"}]
+                if(reservedParameters.has('begininboundparameters')){
+                    var widVal = reservedParameters.get('begininboundparameters');
+                    var queryDoc = {"wid":widVal};
+                    var returnedObject = dao.getFromMongo(queryDoc,config.TABLE_NAME,function(obj){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                        if(returnedObject){
+                            // value found in DB for wid provided
+                            for(attr in returnedObject){
+                                leftOverParameters.set(attr,returnedObject[attr]);
+                            }
+                            console.log("Now leftover parameters are :::   - "+ leftOverParameters);
+                            // console.log(leftOverParameters);
+                            function evaluateJs(reservedParameters,leftOverParameters, callback){
+                                console.log('leftOverParameters '+ leftOverParameters);
+                                callback();
+                            };
+
+                        }
+                    });
+                }
+
+                
+
+                
         case 'addtomongo':
             // handle ADD TO MONGO logic
             var rec = getJsonFromMap(leftOverParameters);

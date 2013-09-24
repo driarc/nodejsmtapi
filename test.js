@@ -28,7 +28,7 @@ describe('DAO test layer', function(){
 
     var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     
-    superagent.put('http://localhost:3000/executethis')
+    superagent.put(config.SERVICE_URL+'executethis')
       .send(requestObj)
       .end(function(e, res){
         console.log('>>>>>>>>> '+JSON.stringify(res.body));
@@ -45,7 +45,7 @@ describe('DAO test layer', function(){
 
     var requestObj = [{"AddThis":"testwidname1","ExecuteThis":"updatewid","z":"w"}];
     
-    superagent.put('http://localhost:3000/executethis')
+    superagent.put(config.SERVICE_URL+'executethis')
       .send(requestObj)
       .end(function(e, res){
         console.log(' ADDTHIS :: >>>>>>>>> '+JSON.stringify(res.body));
@@ -64,7 +64,7 @@ describe('DAO test layer', function(){
     
     // remove the added entry
     dao.addToMongo(o,TABLE_NAME,function(o){
-        superagent.put('http://localhost:3000/executethis')
+        superagent.put(config.SERVICE_URL+'executethis')
           .send(o)
           .end(function(e, res){
             console.log('>>>>>>>>> '+JSON.stringify(res.body));
@@ -85,7 +85,7 @@ describe('DAO test layer', function(){
   // the request is for 'GetMultipleFromMongo' , witha a preexecute and postExecute method each
   it('getmultiplefrommongo', function(done){
     var requestObj = [{"ExecuteThis":"getMultipleFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-      superagent.put('http://localhost:3000/executethis')
+      superagent.put(config.SERVICE_URL+'executethis')
       .send(requestObj)
       .end(function(e, res){
         console.log('>>>>>>>>> '+JSON.stringify(res.body));
@@ -98,7 +98,7 @@ describe('DAO test layer', function(){
   // the request is for 'AddToMongo' , with a preexecute and postExecute method each
   it('addtomongo', function(done){
     var requestObj = [{"ExecuteThis":"addtomongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-    superagent.put('http://localhost:3000/executethis')
+    superagent.put(config.SERVICE_URL+'executethis')
       .send(requestObj)
       .end(function(e, res){
         console.log('ADDTOMONGO >>>>>>>>> '+JSON.stringify(res.body));
@@ -110,28 +110,38 @@ describe('DAO test layer', function(){
     })
   })
 
+
+ 
   // the request is for 'Javascript' , with a preexecute and postExecute method each
   it('javascript', function(done){
     
     // add object to DB 
     var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1","y":"2",  "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     
-    dao.addToMongo(requestObj,TABLE_NAME,function(o){
+    var addFirstObj = [{"ExecuteThis":"ExtractThis","Wid":"wid1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+    
+    
+
+    dao.addToMongo(addFirstObj,config.TABLE_NAME,function(o){
       console.log("After adding to Mongo - "+ JSON.stringify(o));
+
+        superagent.put(config.SERVICE_URL+'executethis')
+          .send(requestObj)
+            .end(function(e, res){
+              console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
+              expect(typeof res.body).to.eql('object')
+              
+              cleanup(res.body, function(){
+                  //expect(res.body.msg).to.eql('success')        
+                  done()
+                });
+            });
+
+        });  
+
     });
  
-    superagent.put('http://localhost:3000/executethis')
-      .send(requestObj)
-        .end(function(e, res){
-          console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
-          expect(typeof res.body).to.eql('object')
-          
-          cleanup(res.body, function(){
-              //expect(res.body.msg).to.eql('success')        
-              done()
-            });
-        });
-    });  
+    
 
     
 
@@ -145,7 +155,7 @@ describe('DAO test layer', function(){
             console.log("After adding to Mongo - "+ JSON.stringify(o));
         });
         
-        superagent.put('http://localhost:3000/executethis')
+        superagent.put(config.SERVICE_URL+'executethis')
           .send(requestObj)
           .end(function(e, res){
             console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
@@ -206,7 +216,7 @@ describe('DAO test layer', function(){
 
     var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
     
-    superagent.put('http://localhost:3000/executethis')
+    superagent.put(config.SERVICE_URL+'executethis')
       .send(requestObj)
       .end(function(e, res){
         console.log('UpdateWid  ::: UpdateWid ::: >>>>>>>>> '+JSON.stringify(res.body));
