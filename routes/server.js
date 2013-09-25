@@ -35,7 +35,6 @@ exports.executethis = function(req, res) {
             var ParameterValue = json[item];
 
             //To lower case
-            var ParameterName = ParameterName.toLowerCase();
             ParameterName = ParameterName.toLowerCase();
             inboundParameters.set(ParameterName, ParameterValue);
 
