@@ -10,3 +10,9 @@ exports.index = function(req, res) {
 exports.test = function(req, res) {
     res.render('testapi.html');
 };
+
+
+//test page for testing the updateWidTest API
+exports.updateWidTest = function(req, res) {
+ res.render('updateWidTest.html');
+};
