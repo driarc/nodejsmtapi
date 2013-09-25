@@ -189,7 +189,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                         for(var i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['processHtmlJson'][0][i];
-                            // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+//                            console.log(">>>> :::: extractthis :::: processHtmlJson Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
                             // call persistence method
                             dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
@@ -206,7 +206,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                         for(i=0;i<nodeObjects['addThisJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['addThisJson'][0][i];
-                            // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+//                            console.log(">>>> :::: extractthis :::: addThisJson Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                             
                              // call persistence method
                             dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
@@ -407,7 +407,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 // check if object is found
                 if(returnedObject){
                     // Make another request, matching data found in MongoDB
-                    superagent.put('http://localhost:3000/executethis')
+                    superagent.put(config.SERVICE_URL+'executethis')
                         .send(returnedObject)
                           .end(function(e, res){
                             console.log('>>>>>>>>> Sent another request :: ExtractThis :: PUT request ');

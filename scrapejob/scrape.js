@@ -3,6 +3,7 @@ var fs = require('graceful-fs');
 var HashMap = require('hashmap').HashMap;
 var walk    = require('walk');
 var moment = require('moment');
+var uuid = require("node-uuid");
 
 
 
@@ -61,22 +62,22 @@ exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 	}else if(targetDiv){
 		$(targetDiv).each(function(){
 			returnHtml = $(this).html().toString();
-		})
+		});
 	}else{
 		returnHtml=mapOfFiles.get(file);
 	}
 	return returnHtml;
-}
+};
 
 
 RegExp.escape= function(s) {
-    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 };
 
 
 exports.returnJson = function(){
 	return returnJson;
-}
+};
 
 // returns list of changed files in specified directory
 function FileChanged(directory,callback){
@@ -125,7 +126,7 @@ exports.run =  function run(directory,callback){
 	FileChanged(directory,function(returnJson){
 		callback(returnJson);	
 	});	
-}
+};
 
 
 // logic to process one file completely(All operations)
@@ -204,7 +205,7 @@ function writeFileToDisk(fileName,content){
 function extractContentToParams(original_file_content,json){
 	var matchesInFileArr = original_file_content.split(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g);
 	if(matchesInFileArr){
-		for(j=0;j < matchesInFileArr.length;j++){
+		for(var j=0;j < matchesInFileArr.length;j++){
 			json[j]=matchesInFileArr[j];
 		}
 		return json;
@@ -242,29 +243,29 @@ exports.handleAddThis =  function run(jsonArr,callback){
 		// add timestamp	
 		timestamp = moment().format('MMMM Do YYYY, h:mm:ss a');
 
-		// logic for handling 'AddThis'		
-	    //  
-	    <!-- 
-	     
-	    --> 
-		// 
-		//	   to this:
-		//	   "ExecuteThis":	"updatewid"
-		//	   "z":	"w"
+//		 logic for handling 'AddThis'		
+//	      
+//	    <!-- 
+//	     
+//	    --> 
+//		 
+//			   to this:
+//			   "ExecuteThis":	"updatewid"
+//			   "z":	"w"
 
 		var jsonAddThis = {};
 
-	 	jsonAddThis["wid"] = {};
-	 	var wid = addThisWid
-		jsonAddThis["wid"][wid] = {};
-	 	// jsonAddThis["Wid"][wid]["0"] = original_file_content;
+	 	var wid = addThisWid;
+	 	jsonAddThis["data"] = {};
+		jsonAddThis["wid"] = wid;
+	 	// jsonAddThis["data"]["0"] = original_file_content;
 	 	
 		// copy any extra parameters
 		if(addThisWid && execute_this){
 			for(var attr in json) {
 				if(attr !== 'AddThis'){
 					// clone any extra params to json2 array being constructed
-					jsonAddThis["wid"][wid][attr]=json[attr];
+					jsonAddThis["data"][attr]=json[attr];
 				}
 		    }
 
@@ -278,7 +279,7 @@ exports.handleAddThis =  function run(jsonArr,callback){
 	 
 	callback(retJson);	
 	
-}
+};
 
 // logic to process the special comments (all types - ProcessHTML, GetFile and AddThis)
 exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_file,to_search_file,directory){
@@ -293,11 +294,10 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 	var processHtmlJsonArray = new Array();
 	
 	if(matchesInFileArr){
-		for(j=0;j < matchesInFileArr.length;j++){
+		for(var j=0;j < matchesInFileArr.length;j++){
 			// # process the files associated, this will be recursive call
 			str = matchesInFileArr[j];
 			
-			var specialInstructionTag = str;
 			
 			// # check if valid special comment(should be)
 			if(str && str.indexOf('{')!==-1){
@@ -306,7 +306,8 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 				
 				var json = JSON.parse(str);
 				
-				var execute_this,wid,div_class,file_content,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName,addThisWid = '';
+				var execute_this,wid,div_class,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName,addThisWid = '';
+				
 				var links = [];
 			    
 				if(json.ExecuteThis && json.AddThis){
@@ -369,6 +370,9 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 						 
 						 // update the file in mapOfFiles
 						 updateFileInMap(current_file,file_content,matchesInFileArr[j],'i');
+						 
+						 break;
+						 
  					case 'processhtml':
  						 // added logic for handling 'ProcessHTML'
 						 // expected directive special comment will be like this - 
@@ -383,15 +387,15 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 						 
 						 if(original_file_content){
 							 var json2 = {};
-						 	 json2["wid"] = {};
-							 json2["wid"][wid] = {};
-						 	 json2["wid"][wid]["0"] = original_file_content;
+						 	 json2["wid"] = wid;
+						 	 json2["data"] = {};
+						 	 json2["data"]["0"] = original_file_content;
 							 
 							 // json2 = extractContentToParams(original_file_content,json2);
-	 						 json2["wid"][wid]["JS"] = directory+file_prefix+'.js';
-	 						 json2["wid"][wid]["CSS"] = directory +file_prefix+'.css';
-	 						 json2["wid"][wid]["DataForView"] = data_for_view;
-							 json2["wid"][wid]["timestamp"] = timestamp;
+						 	json2["data"]["JS"] = directory+file_prefix+'.js';
+						 	json2["data"]["CSS"] = directory +file_prefix+'.css';
+						 	json2["data"]["DataForView"] = data_for_view;
+						 	json2["data"]["timestamp"] = timestamp;
 							 
  						 	// add links values if applicable
 						 
@@ -421,13 +425,13 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
  							}
 							
  							if(links && links.length > 0){
- 								json2["wid"][wid]["links"]=links;
+ 								json2["data"]["links"]=links;
  							}
 							 // copy any extra parameters
 							 for(var attr in json) {
 								 if(attr !== 'ExecuteThis' && attr !== 'wid' && attr !== 'Div' && attr !== 'DataForView'){
 									 // clone any extra params to json2 array being constructed
-									 json2["wid"][wid][attr]=json[attr];
+									 json2["data"][attr]=json[attr];
 								 }
 						     }
 							 
@@ -469,17 +473,17 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 							 // update the map files so that changes made are saved when files are writen
 							 // updateFileInMap(current_file,updated_content,matchesInFileArr[j]);
 						 }
-				 		
+				 			break;
 						case 'addthis':
 							// logic for handling 'AddThis'		
 						    //  
-						    <!-- 
+						    // <!-- 
 						    // {
 						    // 	"AddThis":"testwidname1",
 							//  "ExecuteThis":"updatewid",
 							//  "z":"w"
 							// } 
-						    --> 
+						    // --> 
 							// 
 							//	   to this:
 							//	   "ExecuteThis":	"updatewid"
@@ -487,10 +491,14 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 
 							var jsonAddThis = {};
 
-						 	jsonAddThis["wid"] = {};
-						 	var wid = 'wid-value'
-							jsonAddThis["wid"][wid] = {};
-						 	jsonAddThis["wid"][wid]["0"] = original_file_content;
+							// Generate a v1 (time-based) id
+							var wid = uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
+//							var wid = 'wid-value';
+
+							jsonAddThis["wid"] = {};
+							jsonAddThis["data"] = {};
+							jsonAddThis["wid"] = wid;
+						 	jsonAddThis["data"]["0"] = original_file_content;
 							 
 							 // json2 = extractContentToParams(original_file_content,json2);
 
@@ -499,11 +507,12 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 								for(var attr in json) {
 									if(attr !== 'AddThis'){
 										// clone any extra params to json2 array being constructed
-										jsonAddThis["wid"][wid][attr]=json[attr];
+										jsonAddThis["data"][attr]=json[attr];
 									}
 							    }
 								addThisJsonArray.push(jsonAddThis);
 							}
+							break;
 				}
 			}
 		}	
@@ -517,7 +526,7 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 	}
 
 	return returnJson;
-}
+};
 
 
 
@@ -537,6 +546,6 @@ function getFromFile(fileName, selector){
 	var arrayOfElements = new Array();
 	$(selector).each(function(){
 		arrayOfElements.push($(this));
-	})
+	});
 	return arrayOfElements;
 }
