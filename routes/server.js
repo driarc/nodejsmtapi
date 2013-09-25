@@ -24,7 +24,7 @@ exports.executethis = function(req, res) {
    
 
     //  iterate over the input JSON 
-    for(i =0;i< req.body.length;i++) {
+    for(var i =0;i< req.body.length;i++) {
 
         // assign each JSON obj in the array received for operating
         json = req.body[i];
@@ -140,17 +140,16 @@ var helperFunctions = { }; // better would be to have module create an object
 helperFunctions.sayPreHello = function()
 {
    console.log('LOGIC  PRE >>>>>>>>> sayPreHello');
-}
+};
 
 helperFunctions.sayPostHello = function(){
     console.log('LOGIC  POST >>>>>>>>> sayPostHello');
-}
+};
 
 // logic for generic AddThis functionality
 function handleAddThis(reservedParameters, res,leftOverParameters, callback, addThisFlag){
     console.log(' >>>>>> Process AddThis operation only');
-    var resObject = {};
-    var funcT = reservedParameters.get("AddThis");
+   
     
     callScrapeLogic(res, function(nodeObjects){
         console.log('AddThis :::: After scraping - '+JSON.stringify(nodeObjects));
@@ -176,7 +175,6 @@ function handleAddThis(reservedParameters, res,leftOverParameters, callback, add
 
 // logic for generic ExecuteThis functionality
 function handleExecuteThis(reservedParameters, res,leftOverParameters, callback){
-    var resObject = {};
     var funcT = reservedParameters.get("executethis");
     switch (funcT.toLowerCase()) {
 
@@ -189,7 +187,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                         
                     if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'][0]){
                         // persist the scrape results from processHTML process   
-                        for(i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
+                        for(var i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
                             // iterate over objects and make according entries in the DB
                             var entityToAdd = nodeObjects['processHtmlJson'][0][i];
                             // console.log("Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
@@ -228,9 +226,9 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // handle get from mongo DB logic
 
             // call get from mongo DB 
-            var rec = getJsonFromMap(leftOverParameters);
+            var rec = {"wid":leftOverParameters.get("wid")};
             console.log("Fetching one record "+JSON.stringify(rec));
-            var returnedObject = dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
+            dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
                 console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                 res.send(obj);
                 res.end();
@@ -241,10 +239,9 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // handle get multiple from mongo DB logic
 
             // call get from mongo DB 
-            var objToFind = {};
             var rec = getJsonFromMap(leftOverParameters);
             console.log("Fetching multiple records for -- "+JSON.stringify(rec));
-            var returnedObject = dao.getMultipleFromMongo(rec,config.TABLE_NAME,function(obj){
+            dao.getMultipleFromMongo(rec,config.TABLE_NAME,function(obj){
                 console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                 res.send(obj);
                 res.end();
@@ -274,8 +271,8 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 if(reservedParameters.has('begininboundparameters')){
                     var widVal = reservedParameters.get('begininboundparameters');
                     var queryDoc = {"wid":widVal};
-                    var returnedObject = dao.getFromMongo(queryDoc,config.TABLE_NAME,function(obj){
-                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                    dao.getFromMongo(queryDoc,config.TABLE_NAME,function(returnedObject){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(returnedObject));
                         if(returnedObject){
                             // value found in DB for wid provided
                             for(attr in returnedObject){
@@ -297,9 +294,9 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // handle getwid :: 
             if(leftOverParameters.has("wid")){
                 // call get from mongo DB 
-                var widVal = "wid.test1"+leftOverParameters.get("wid");
+                var widVal = leftOverParameters.get("wid");
                 console.log("getwid ::: Fetching one record , with wid "+widVal);
-                getFromMongo({widVal:{$exists:true}},config.TABLE_NAME,function(obj){
+                getFromMongo({"wid":widVal},config.TABLE_NAME,function(obj){
 
                     if(obj){
                         // get JSOn from DB
@@ -404,8 +401,8 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             console.log('default parameter value for executetThis is >>> '+executeThisVal);
 
             // call get from mongo DB 
-            var queryObj = {'Wid':executeThisVal};
-            dao.getFromMongo({"Wid":"savedObj"},TABLE_NAME, function(returnedObject){
+            var queryObj = {'wid':executeThisVal};
+            dao.getFromMongo(queryObj,TABLE_NAME, function(returnedObject){
                 console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
 
                 // check if object is found
@@ -443,7 +440,7 @@ function getJsonFromMap(leftOverParameters){
 
 function callScrapeLogic(res, callback){
     var dirName = config.LOOKUP_DIR; 
-    var ret = filecheck.run(dirName, function(returnJson){
+    filecheck.run(dirName, function(returnJson){
         console.log(' json formatHTML array  '+JSON.stringify(returnJson));
         var objToJson = { };
         objToJson.res = res;

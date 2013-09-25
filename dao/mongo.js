@@ -21,11 +21,11 @@ exports.removeFromMongo = removeFromMongo = function(objToRemove,schemaToLookup,
 	    	callback(objToRemove);
 	    }
 	});
-}
+};
 
 
 
-// DAO method to remove an entry from specified colelction
+// DAO method to remove an entry from specified collection
 exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
 	db.collection(schemaToLookup).update(queryObject, {$set: updatedObject}, function(err, result) {
 		if (err) {
@@ -39,24 +39,25 @@ exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, upd
 			});
 	    }
 	});
-}
+};
 
 
 
 // the callback function on succesful addition is also specified
 exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callback){
-	console.log(' ****** getFromMongo method in dao');
-	db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
-		if (err) {
-			console.error(err);
-	    	throw err;
+	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+	// Check to see if the wid name exists
+    db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
+    	if (!result) {
+			callback(null);
 	    }
 	    else{
 		    console.log('Found! '+ JSON.stringify(result));
 	    	callback(result);
 	    }
-	});
-}
+	 }); 
+	
+};
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
@@ -72,7 +73,7 @@ exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaT
     		callback(result);
         }
 	});
-}
+};
 
 
 
@@ -93,15 +94,14 @@ var addToMongo  = function(objToAdd,schemaToLookup, callback){
 	    } 
 	});
 
-}
+};
 
 
 exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
     
-    var widVal = get_first_property(entityToAdd['wid']);
-    console.log(' >>>> addOrUpdate ::: WidVal is '+ widVal);
-    widVal = 'wid.'+widVal;
-    getFromMongo({widVal:{$exists:true}},schemaToLookup,function(returnedObject){
+    var widVal = (entityToAdd['wid']);
+    console.log('addOrUpdate :::: widVal is >>> '+widVal);
+	getFromMongo({"wid":widVal},schemaToLookup,function(returnedObject){
         console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
         // check if object is found
         if(returnedObject){
@@ -115,14 +115,13 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
                 callback(addedObj);
             });
         }
-    })
+    });
 
     
-}
+};
 
 
 function get_first_property(ob) {
-    var prop ='';
     for (var props in ob) {
         return props;
     }
