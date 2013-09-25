@@ -430,7 +430,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
 function getJsonFromMap(leftOverParameters){
     var rec = {};
     leftOverParameters.forEach(function(value, key) {
-    	if(key != "wid"){
+    	if(key != "Wid"){
     		rec[key] = value;
     	}
     });

@@ -219,7 +219,7 @@ describe('DAO test layer', function(){
 
     var o = {"wid":"test1","data":{"x":"y","z":"w"}};
     
-    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x1":"y1","z1":"w1", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
+    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x2":"y2","z2":"w2", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
@@ -227,8 +227,11 @@ describe('DAO test layer', function(){
             .send(requestObj)
               .end(function(e, res){
                 console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
-                expect(typeof res.body).to.eql('object');
-              
+                	expect(typeof res.body).to.eql('object');
+                	expect(typeof res.body._id).to.eql('string');
+                	expect(typeof res.body.wid).to.eql('string');
+                	expect(typeof res.body.data).to.eql('object');
+                	
                   cleanup(res.body, function(){
                     //expect(res.body.msg).to.eql('success')        
                     done();
@@ -253,6 +256,9 @@ describe('DAO test layer', function(){
               .end(function(e, res){
                 console.log(' ::: GetWid ::: >>>>>>>>> '+JSON.stringify(res.body));
                 expect(typeof res.body).to.eql('object');
+            	expect(typeof res.body._id).to.eql('string');
+            	expect(typeof res.body.wid).to.eql('string');
+            	expect(typeof res.body.data).to.eql('object');
               
                   cleanup(res.body, function(){
                     //expect(res.body.msg).to.eql('success')        

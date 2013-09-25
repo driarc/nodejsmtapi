@@ -9,7 +9,7 @@ var TABLE_NAME = config.TABLE_NAME;
 
 
 
-// DAO method to remove an entry from specified colelction
+// DAO method to remove an entry from specified collection
 exports.removeFromMongo = removeFromMongo = function(objToRemove,schemaToLookup, callback){
 	db.collection(schemaToLookup).remove(objToRemove, function(err) {
 		if (err) {
@@ -28,9 +28,20 @@ exports.removeFromMongo = removeFromMongo = function(objToRemove,schemaToLookup,
 // DAO method to remove an entry from specified collection
 exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
 	
-	db.collection(schemaToLookup).update(queryObject, {$set: updatedObject}, function(err, result) {
-		 
-		
+	delete updatedObject.wid;
+	if(!updatedObject.data){
+		for (var props in queryObject.data) {
+			updatedObject[props]=queryObject.data[props];
+		}  
+	}else{
+		delete updatedObject.data;
+		for (var props in queryObject.data) {
+			updatedObject[props]=queryObject.data[props];
+		}
+	}
+	delete queryObject.wid;
+	
+	db.collection(schemaToLookup).update(queryObject, {$set: {"data":updatedObject}}, function(err, result) {
 		if (err) {
 			console.error(err);
 	    	throw err;
@@ -38,7 +49,9 @@ exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, upd
 	    else{
 		    console.log('Updated! '+ JSON.stringify(result));
 		    db.collection(schemaToLookup).findOne(updatedObject, function(o){
-		    	callback(result);
+		    	getFromMongo({"_id":queryObject._id},schemaToLookup,function(returnedObject){
+		    		callback(returnedObject);
+		    	});
 			});
 	    }
 	});
@@ -109,10 +122,9 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
         // check if object is found
         if(returnedObject){ 
             updateToMongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
-                console.log(" >>>> addOrUpdate ::: After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(returnedObject));
-                getFromMongo(returnedObject,schemaToLookup, function(o){
-                	callback(o);
-                });
+                console.log(" >>>> addOrUpdate ::: After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(updatedObj));
+                callback(updatedObj);
+                
             });
         }else{
             addToMongo(entityToAdd,schemaToLookup,function(addedObj){
