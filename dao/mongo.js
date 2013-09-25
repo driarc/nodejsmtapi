@@ -27,7 +27,10 @@ exports.removeFromMongo = removeFromMongo = function(objToRemove,schemaToLookup,
 
 // DAO method to remove an entry from specified collection
 exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
+	
 	db.collection(schemaToLookup).update(queryObject, {$set: updatedObject}, function(err, result) {
+		 
+		
 		if (err) {
 			console.error(err);
 	    	throw err;
@@ -104,10 +107,12 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
 	getFromMongo({"wid":widVal},schemaToLookup,function(returnedObject){
         console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
         // check if object is found
-        if(returnedObject){
+        if(returnedObject){ 
             updateToMongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
-                console.log(" >>>> addOrUpdate ::: After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(updatedObj));
-                callback(updatedObj);
+                console.log(" >>>> addOrUpdate ::: After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(returnedObject));
+                getFromMongo(returnedObject,schemaToLookup, function(o){
+                	callback(o);
+                });
             });
         }else{
             addToMongo(entityToAdd,schemaToLookup,function(addedObj){

@@ -219,7 +219,7 @@ describe('DAO test layer', function(){
 
     var o = {"wid":"test1","data":{"x":"y","z":"w"}};
     
-    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
+    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x1":"y1","z1":"w1", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
