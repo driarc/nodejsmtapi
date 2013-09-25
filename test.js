@@ -16,13 +16,12 @@ function cleanup(o1, callback){
 }
  
 describe('DAO test layer', function(){
-  var id
   
   // increase timeout set -- default is 2000ms too low for this scenario
   this.timeout(50000);
 
   // put request for CheckThis --- extractThis URL
-  // the request is for 'ExtractThis' , witha a preexecute and postExecute method each
+  // the request is for 'ExtractThis' , with a pre-execute and postExecute method each
   it('extractthis', function(done){
 
     var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
@@ -31,11 +30,11 @@ describe('DAO test layer', function(){
       .send(requestObj)
       .end(function(e, res){
         console.log('>>>>>>>>> '+JSON.stringify(res.body));
-        expect(typeof res.body).to.eql('object')
+        expect(typeof res.body).to.eql('object');
         //expect(res.body.msg).to.eql('success')        
-        done()
-      })
-  })
+        done();
+      });
+  });
 
  
 
@@ -49,19 +48,19 @@ describe('DAO test layer', function(){
       .send(requestObj)
       .end(function(e, res){
         console.log(' ADDTHIS :: >>>>>>>>> '+JSON.stringify(res.body));
-        expect(typeof res.body).to.eql('object')
-        expect(typeof res.body.addThisJson).to.eql('object')
+        expect(typeof res.body).to.eql('object');
+        expect(typeof res.body.addThisJson).to.eql('object');
         //expect(res.body.msg).to.eql('success')        
-        done()
-      })
-  })
+        done();
+      });
+  });
 
   // the request is for 'GetFromMongo' , witha a preexecute and postExecute method each
   it('getfrommongo', function(done){
 
 
-    var requestObj = [{"ExecuteThis":"getFromMongo","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-    var entityToBeAdded = {"wid":{"test21":{"x":"y","z":"w"}}};
+    var requestObj = [{"ExecuteThis":"getFromMongo","Wid":"test21","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+    var entityToBeAdded = {"wid":"test21","data":{"x":"y","z":"w"}};
     // remove the added entry
     dao.addOrUpdate(entityToBeAdded,config.TABLE_NAME,function(entityToBeAdded){
         // callback after adding entry
@@ -71,15 +70,15 @@ describe('DAO test layer', function(){
           .send(requestObj)
           .end(function(e, res){
             console.log(' ::: getfrommongo ::: >>>>>>>>> '+JSON.stringify(res.body));
-            expect(typeof res.body).to.eql('object')
+            expect(typeof res.body).to.eql('object');
             
             cleanup(res.body, function(){
               //expect(res.body.msg).to.eql('success')        
-              done()
+              done();
             });
 
-          })
-      })
+          });
+      });
 
     });
 
@@ -90,26 +89,26 @@ describe('DAO test layer', function(){
       .send(requestObj)
       .end(function(e, res){
         console.log('>>>>>>>>> '+JSON.stringify(res.body));
-        expect(typeof res.body).to.eql('object')
+        expect(typeof res.body).to.eql('object');
         // expect(res.length).to.gt(0);
-        done()
-      })
-  })
+        done();
+      });
+  });
 
   // the request is for 'AddToMongo' , with a preexecute and postExecute method each
   it('addtomongo', function(done){
-    var requestObj = [{"ExecuteThis":"addtomongo","Wid":{"test1":{"x":"y","z":"w"}}, "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
+    var requestObj = [{"ExecuteThis":"addtomongo","Wid":"test1", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
     superagent.put(config.SERVICE_URL+'executethis')
       .send(requestObj)
       .end(function(e, res){
         console.log('ADDTOMONGO >>>>>>>>> '+JSON.stringify(res.body));
 
 
-        expect(typeof res.body).to.eql('object')
+        expect(typeof res.body).to.eql('object');
         //expect(res.body.msg).to.eql('success')        
         done();
-    })
-  })
+    });
+  });
 
 
      //  updateWid :: update wid is save to mongo, but check to make sure record does not exist alread
@@ -121,7 +120,7 @@ describe('DAO test layer', function(){
     // add object to DB 
     var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1","x":"2",  "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" , "JS": "function (x, y){ return x + y; }"}];
     
-    var addFirstObj = {"wid":{"test21":{"x":"y","z":"w"}}};
+    var addFirstObj = {"wid":"test21","data":{"x":"y","z":"w"}};
 
     dao.addOrUpdate(addFirstObj,config.TABLE_NAME,function(o){
       console.log("After adding to Mongo - "+ JSON.stringify(o));
@@ -130,11 +129,11 @@ describe('DAO test layer', function(){
           .send(requestObj)
             .end(function(e, res){
               console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
-              expect(typeof res.body).to.eql('object')
+              expect(typeof res.body).to.eql('object');
               
               cleanup(res.body, function(){
                   //expect(res.body.msg).to.eql('success')        
-                  done()
+                  done();
                 });
             });
 
@@ -150,7 +149,7 @@ describe('DAO test layer', function(){
 
         // provide wid value for already saved object to second request as value for ExecuteThis
         var requestObj = [{"ExecuteThis":"savedObj","Wid":"test12345","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello" }];
-        var addFirstObj = {"wid":{"test12345":{"x":"y","z":"w"}}};
+        var addFirstObj = {"wid":"test12345","data":{"x":"y","z":"w"}};
         
         dao.addOrUpdate(addFirstObj,TABLE_NAME,function(o){
             console.log("After adding to Mongo - "+ JSON.stringify(o));
@@ -178,7 +177,7 @@ describe('DAO test layer', function(){
   it('updatetomongo', function(done){
 
 
-    var requestObj = {"wid":{"test12345":{"x":"y","z":"w"}}};
+    var requestObj = {"wid":"test12345","data":{"x":"y","z":"w"}};
     
     // remove the added entry
     dao.addOrUpdate(requestObj,TABLE_NAME,function(o1){
@@ -189,13 +188,13 @@ describe('DAO test layer', function(){
           dao.updateToMongo({"AddThis":"test12345"},TABLE_NAME,{"AddThis":"test12345","ExecuteThis":"ExtractServer","l":"m","n":"o"},function(o2){
         
             console.log('Updated old entry >>>>>>>>> '+JSON.stringify(o1));
-            expect(typeof o1).to.eql('object')
-            done()
+            expect(typeof o1).to.eql('object');
+            done();
             
           });
 
-      })
-  })
+      });
+  });
 
  
  // // TODO :: ADDDATAWID in call extractthis
@@ -218,9 +217,9 @@ describe('DAO test layer', function(){
   it('updatewid', function(done){
 
 
-    var o = {"wid":{"test1":{"x":"y","z":"w"}}};
+    var o = {"wid":"test1","data":{"x":"y","z":"w"}};
     
-    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
+    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x1":"y1","z1":"w1", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
@@ -228,11 +227,11 @@ describe('DAO test layer', function(){
             .send(requestObj)
               .end(function(e, res){
                 console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
-                expect(typeof res.body).to.eql('object')
+                expect(typeof res.body).to.eql('object');
               
                   cleanup(res.body, function(){
                     //expect(res.body.msg).to.eql('success')        
-                    done()
+                    done();
                 });
             });
         });
@@ -243,7 +242,7 @@ describe('DAO test layer', function(){
   it('getwid', function(done){
 
 
-    var o = {"wid":{"test1":{"x":"y","z":"w"}}};
+    var o = {"wid":"test1","data":{"x":"y","z":"w"}};
     
     var requestObj = [{"ExecuteThis":"GetWid","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
@@ -253,11 +252,11 @@ describe('DAO test layer', function(){
             .send(requestObj)
               .end(function(e, res){
                 console.log(' ::: GetWid ::: >>>>>>>>> '+JSON.stringify(res.body));
-                expect(typeof res.body).to.eql('object')
+                expect(typeof res.body).to.eql('object');
               
                   cleanup(res.body, function(){
                     //expect(res.body.msg).to.eql('success')        
-                    done()
+                    done();
                 });
             });
         });
@@ -317,4 +316,4 @@ describe('DAO test layer', function(){
   // });
       
  
-})
+});
