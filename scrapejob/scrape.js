@@ -39,11 +39,12 @@ exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 		
 	}else{
 		if(file !== "undefinedindex.html"){
-			// the file is NOT already loaded in the HashMap
+	 		// the file is NOT already loaded in the HashMap
+			console.log('file comes as '+fs.readFileSync(file));
 			var body = fs.readFileSync(file).toString();	
 			mapOfFiles.set(file,body);	
 		}
-		
+		  
 	}
 	
 	$ = cheerio.load(mapOfFiles.get(file), {
@@ -137,14 +138,17 @@ function processFile(file,targetDiv, directory){
 	// run without any targetDiv
 	var fileContent = GetFile(file,targetDiv);
 
-	// Step 2 process GetFile ExecuteThis special comments
-	// And
-	// Step 3 process processHTML ExecuteThis special comments
-	getAndProcessFile(fileContent,file,file,directory);
-	
 
-	// Last Step write changed files to disk
-	writeChangesNow();
+	if(fileContent){
+		// Step 2 process GetFile ExecuteThis special comments
+		// And
+		// Step 3 process processHTML ExecuteThis special comments
+		getAndProcessFile(fileContent,file,file,directory);
+		
+
+		// Last Step write changed files to disk
+		writeChangesNow();
+	}
 }
 
 // logic to create new files whenever required
@@ -284,6 +288,7 @@ exports.handleAddThis =  function run(jsonArr,callback){
 // logic to process the special comments (all types - ProcessHTML, GetFile and AddThis)
 exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_file,to_search_file,directory){
 	// # match special comments in the file
+
 	var matchesInFileArr = fileContent.match(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g);
 	
 	if(!returnJson){
