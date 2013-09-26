@@ -1,0 +1,37 @@
+{
+  "name": "nodejsmtapi",
+  "version": "0.0.1",
+  "description": "nodejsmtapi ===========",
+  "main": "server.js",
+  "dependencies": {
+    "mongoose": "~3.6.17",
+    "express": "~3.3.5",
+    "mongoskin": "~0.6.0",
+    "connect-mongoskin": "~0.1.1",
+    "hashmap": "~0.9.3",
+    "request": "~2.27.0",
+    "sync": "~0.2.2",
+    "synchronize": "~0.5.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "cypronmaya",
+  "license": "BSD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saurshaz/nodejsmtapi.git"
+  },
+  "keywords": [
+    "node.js",
+    "mongoskin",
+    "scraping",
+    "cheerio",
+    "mocha"
+  ],
+  "bugs": {
+    "url": "https://github.com/saurshaz/nodejsmtapi/issues"
+  }
+}

@@ -1,0 +1,389 @@
+
+
+// executeThis : extractThis
+// if value not found, get value from mongo
+// for example if executeThis = abc and abc is not found as a case the system is supposed to go get from mongo (abc)…and use the results as parameters to call again - recurse into executeThis
+
+// getFromMongo not working
+
+//  {executeThis: extractThis, prexecute:DoThisBeforeExtractThis, post execute:doThisAfterExtractThis}
+
+// Preexecute, execute, post execute need to be done Synchronously…
+
+// Ques :: we want to have a synch/asynch option for multiple
+
+// One of the other calls does multiple
+// it reads a mongo multiple record (which by the way it can read…means…get from mongo IS partially working)
+
+// then it steps through the multiple record (with some rules) and executes all of them
+
+// for example if xyz={abc:'', abc:''} and we called {executethis:multiple multiplewid=xyz} jt would end up calling extract this twice
+//  we need some changes done to multiple this
+
+// rules for getting data from mongo
+// Ques :: multiple wid call ?
+
+
+
+"executeThis" -- process the inputs and process the passed value for parameterName 'ExecuteThis'
+	---- 
+
+
+"addToMongo" -- executeThis parameter name value could be "addToMongo" -- this will save the passed object and then will return mongo record added
+
+
+
+
+
+
+
+
+
+
+
+
+[9/15/13 4:04:44 PM] Roger Colburn: this is better than nothing :)
+[9/15/13 4:04:46 PM] Roger Colburn: Example Part I
+
+example 1
+"Put"  http://driarc/executethis
+[{"ParameterName":"executeThis","ParameterValue":"addToMongo"},
+{"ParameterName":"x","ParameterValue":"1"},
+{"Key":"wid","Value":"wid1"},
+{"ParameterName":"Js","ParameterValue":"function (x, y){ return x + y; }"},
+{"ParameterValue":"accesstoken",{"ParameterValue":"111111111"}]
+
+example 2
+"Put" http://driarc/executethis
+[{"ParameterName":"executeThis","ParameterValue":"JavaScript"},
+{"ParameterName":"beginInboundParameters","ParameterValue":"wid1"},
+{"Key":"y","Value":"2"}, 
+{"ParameterValue":"accesstoken",{"ParameterValue":"111111111"}]
+
+example 3
+Assumption wid1={x:1, y:2, JS: "function (x, y){ return x + y; }"}
+
+If we call 
+"Put" http://driarc/executethis
+{executethis:dri, 
+a:b, 
+c: d, 
+accesstoken:1111111, 
+beginInboundParameter=wid1}
+
+
+example 4
+Assumption wid1={x:1, y:2, JS: "value: function (x, y){ return x + y; }"}
+wid3={executethis:dri, a:b, c: d, accesstoken:1111111, beginInboundParameter=wid1}
+wid2={1: wid1, 2: wid3}
+
+If we call 
+/executethis 
+{executethis:multiplewid, a:b, c: d, multiplewid:wid2, accesstoken:1111111}
+
+
+
+
+
+example 1
+"Put"  http://driarc/executethis
+[{"ParameterName":"executeThis","ParameterValue":"addToMongo"},
+{"ParameterName":"x","ParameterValue":"1"},
+{"Key":"wid","Value":"wid1"},
+{"ParameterName":"Js","ParameterValue":"function (x, y){ return x + y; }"},
+{"ParameterValue":"accesstoken",{"ParameterValue":"111111111"}]
+
+[{"executeThis":"addToMongo",
+"x":"1", 
+"wid":"Value":"wid1",
+"Js":"function (x, y){ return x + y; }",
+"accesstoken":"111111111"}]
+
+Process
+		ExecuteThis accepts a paramterDTO, a paraemterDTO can have from one to unlimited fields It produces dataModelDto, can have from one to unlimited fields
+
+		Then the code will fish out parameters executethis, access token internally the 'left over' inbound parameters will be x, wid, js
+
+		The code will proceed to 'addtomongo'…you will add to mongo as a simple record:
+		Mongo format for wids:
+		{
+		    "_id": {
+		        "$oid": "51b9e32180c3811304175f4e"
+		    },
+		    "wid": "wid1",
+		    "x": "1",
+		    "js" : "function (x, y){ return x + y; }"
+		}
+
+		AddtoMongo should return what was added so the output of this call will be:
+		Result:
+		[{"Key":"x","Value":"1"},{"Key":"wid","Value":"wid1"},{"Key":"Js","Value":"function (x, y){ return x + y; }"}]
+
+Example Part II
+			"Put" http://driarc/executethis
+			[{"ParameterName":"executeThis","ParameterValue":"JavaScript"},
+			{"ParameterName":"beginInboundParameters","ParameterValue":"wid1"},
+			{"Key":"y","Value":"2"}, 
+			{"ParameterValue":"accesstoken",{"ParameterValue":"111111111"}]
+
+			[{"executeThis":"JavaScript",
+			"beginInboundParameters":"wid1",
+			"y":"2", 
+			"accesstoken":"111111111"}]
+
+			Then the code will fish out parameters executethis, accesstoken, beginInboundParameters from inboundParameters
+			The 'left over' inbound parameters will be y
+
+			Now read what we entered in part I
+			Since beginInboundParameters exists, the code will readFromMongo from the value of beginInboundParamters.  It will read 'wid1': inbound = inbound + get from mongo (beginInboundParameters).  It receives [{"Key":"x","Value":"1"},{"Key":"wid","Value":"wid1"},{"Key":"Js","Value":"function (x, y){ return x + y; }"}]
+
+			So now inboundParamters has these values
+			y:2, x:1, wid:wid1, x:1, JS: "function (x, y){ return x + y; }"
+
+			The case statement will go to 'Javascript'
+			It will look for parameter JS
+			It will execute "value: function (x, y){ return x + y; }" with parameters wid: wid1, x:1, y:2
+			Javascript will evaluate {value: 3}
+
+			ExecuteThis returns {value: 3}
+			Result:
+			[{"Key":"value","Value":"3"}]
+
+
+Example 3
+		Assumption wid1={x:1, y:2, JS: "function (x, y){ return x + y; }"}
+
+		If we call /executethis {executethis:dri, a:b, c: d, accesstoken:1111111, beginInboundParameter=wid1}
+
+		Then the code will fish out parameters executethis, accesstoken, beginInboundParameters from inboundParameters
+		The 'left over' inbound parameters will be {a:b, c: d}
+
+		Since beginInboundParameters exists go read mongo, inbound = inbound + get from mongo (beginInboundParameters)..it gets {e:f}
+		so now inboundParameters =  {a:b, c: d,e:f}
+
+		The case statement will go to 'DRI'
+		It will call http://wiziapi.drillar.com/ButtonServe.svc/GetData/ExecuteWid?accessToken=111111111111&pagelength=4 with parameters  {a:b, c: d,e:f}
+		Note the only thing that changed in in that call was accessToken and the parameters  {a:b, c: d,e:f}
+		Assume DRI sends back a response {r:q, t:s}
+
+		ExecuteThis returns {r:q, t:s}
+
+
+
+Example 4
+		Assumption 
+			wid1={x:1, y:2, JS: "value: function (x, y){ return x + y; }"}
+			wid3={executethis:dri, a:b, c: d, accesstoken:1111111, beginInboundParameter=wid1}
+			wid2={1: wid1, 2: wid3}
+
+If we call /executethis {executethis:multiplewid, a:b, c: d, multiplewid:wid2, accesstoken:1111111}
+
+Then the code will fish out parameters executethis, accesstoken
+The 'left over' inbound parameters will be {a:b, c: d, multiplewid:wid1}
+
+The case statement will go to 'MultipleWid'
+It will multiplewid with {a:b, c: d, multiplewid:wid1 accesstoken:1111111}
+it will fish out multiplewid, accesstoken
+it will read wid1 and execute it (see prior example) send a:b c:d to it
+It will return {value: 3}
+The it will read wid3 and execute it send a:b c:d, value:3 to it
+it will return  {r:q, t:s}
+The system returns value:3, r:q, t:s
+
+
+EXAMPLES
+
+GetData/ExecuteThis {executeExternal:AddWidMaster, 
+wid:	 test1, 
+1 :	 {ExecuteThisWid=JavaScript, js:"javascript code1 z=x+y", JSType:other},
+2 :	 {ExecuteThisWid=JavaScript, js:"javascript code t='hello'", JSType:other},
+3 :	 {ExecuteThisWid=test2, JSType:other},
+4 :	 {ExecuteThisWid:DRI, executeWid:test3, JSType:other},
+5 :	 {ExecuteThisWid=JavaScript, BIP:test2 js:"javascript load x return as 'a'" JSType:other},
+6 :	 {ExecuteThisWid=JavaScript, js: "javascript return w=z+x+y" JSType:other},
+7 :	 {ExecuteThisWid=JavaScript, BOD: test4 js: "javascript return r=z+x+y" JSType:other}
+}
+ 
+GetData/ExecuteThis {executeExternal:AddWidMaster, 
+wid:	 Test2,
+x:	 4
+}
+ 
+GetData/ExecuteThis {executeExternal:AddWidMaster, 
+wid:	 Test3,
+y:	 3
+}
+ 
+GetData/ExecuteThis {executeExternal:AddWidMaster, 
+wid:	 Test4,
+x:	 string
+}
+
+getdata/ExecuteThis 
+{executeExternal=rogerwid, x=1, y=2} 
+returns {z=3}
+// sends parameters x and y to code1, code1 returns z=3
+ 
+getdata/ExecuteThis 
+{executeExternal=multipleMongo, multiplewid=test1} 
+return {z=3 t=hello x=4 y=3 a=4 w=10 r=4}
+
+This is not ready, but here it goes…
+
+We have come from different environments…we are finally centralizing on 'themes'  -- one of them is regarding ExecuteThis.
+
+The basics are that it will be called /executeThis…it will take parameters in produce parameters out.  From calling executeThis it is impossible to tell if the data that came back came from a database or if a program executed and then produced the data.
+
+Also we are just staring with the idea that one executeThis can call another executeThis.  We want to eventually write one 'executeThis' that is minimalist that we can put on any of our devices…even a mobile device.  Even just now, I changed some of the language names based on this.
+
+Spec for all executeThis
+In all versions of executeThis 
+
+Support for AddThis separate from executeThis
+Support the structure of pre, exec, post
+
+Mobile default database will be a local wid database/ Server default databased will be mongo
+
+In all version we will support these language elements
+addthis (to your defaultDB)
+executeThis
+preExecute
+postExecute
+Javascript
+Variable
+UpdateWid   -- I just changed this so mobile and server would match
+GetWid	    -- I just changed this so mobile and server would match
+ExecuteMultiple (with filter, synch, etc support) from default db
+anything else sent, get it from default db and execute it
+
+Mobile
+DisplayThis
+more…
+
+Server version
+DRI
+ExtractThis
+more…
+
+
+
+For Mobile
+
+********GetWid/Execute/ExecuteThis {inboundParameters}
+Fish out Sync/Asynch  from inboundParameters, delete it from inboundParameters  // inst for daisy?
+Fish out preExecute  from inboundParameters, delete it from inboundParameters
+Fish out ExecuteThis from inboundParameters, delete it from inboundParameters
+Fish out postExecute from inboundParameters, delete it from inboundParameters
+if preExecute exists then 
+InboundParameters = executeThis(deserialize value preExecute + InboundParameters)
+Case of ExecuteThis
+UpdateWid
+OutBoundParameters = UpdateWid(InboundParamters)
+GetWid
+OutBoundParameters = UpdateWid(InboundParamters)
+DisplayHTML
+OutBoundParameters = DisplayHTML(InboundParamters)
+ExecuteServer
+OutBoundParameters = ExecuteServer(InboundParamters)
+ExecuteMultiple
+OutBoundParameters = UpdateWid(InboundParamters)
+Variable  
+OutboundParameters = eval(<variable> + InboundParameters)
+<other> 
+OutboundParameters = ExecuteThis(getwid wid)
+if postExecute exists then 
+OutboundParameters = executeThis(deserialize value in postExecute + OutboundParameters)
+Return OutboundParameters
+
+********UpdateWid(inboundParameters)
+if inboundParameters.fromProperty exists then 
+FromProperty=inboundParameters.FromProperty
+inboundParameters = get(wid, fromProperty)
+if inboundParameters.toProperty exists then toProperty=inboundParameters.toProperty , remove from inboundParameter
+wid = inboundParameters.wid 
+if wid = "" then 
+wid = random
+createwid
+if inboundParameters.status = 5 then 
+delete wid
+else
+Save (wid,Toproperty) with inboundParameters // save wid to many properties or one
+// We could update remapTable (equivalent to watchWid) / We could update PendingRequestsToSeverWid
+Return ParametersToAdd.value['wid']
+
+
+********GetWid(inboundParameters)
+if inboundParameters.widProperty exists outboundParameters=getdata (wid, property)
+else outboundParameters=getdata (wid, "")
+return outboundParameters
+
+*******GetData(inboundParameters)
+get from local storage wid
+if not expired then return result
+else
+Add to ExecuteServerQueue
+if workoffline then return result
+wait
+return result
+add to ExecuteServerQueue
+
+
+********DisplayHTML(inboundParameters)
+if inboundParameters.HTML exists and not expired then display
+Else
+CookHTML
+UpdateWid
+
+********CookHTML(inboundParameters)
+Template = inboundParameters.HTMLTemplate
+TemplateData = inboundParameters.HTMLWid
+CookHTML
+Return CookedHTML
+
+
+********ExecuteServer(inboundParameters)
+OutboundParameters = external call to api (inboundParameters)
+return OutboundParameters
+
+
+********ExecuteMultiple	(inboundParameters)
+If InboundParamters.multipleWid exists then 
+ListToExecute=ExecuteThis(ExecuteThis=InboundParamters.multipleWid)
+OutboundParameters = ""
+For each item in ListToExecute
+executeFlag=True
+if inboundParameter.MultipleExecuteThis exists then ListToExecute[].ExecuteThis=inboundParameter.MultipleExecuteThis
+if ((inboundParameter.executeFilter exists) and (inboundParameter.executeFilter != ListToExecute[].left)) then executeFlag=False
+if executeFlag = True then outboundParameters = outboundParameters + executeThis(ExecuteThis = ListToExecute[].right)
+return OutboundParameters
+
+
+********Variable(inboundParameters)
+OutboundParameters = Eval(inboundParameters.Variable)
+return outboundParameters
+
+Queue Wids:
+Server Owner:   ServerQueue  things that were added by the server to the queue
+Client Owner:   ClientQueue  things that were added to by the client to the queue
+// note queues are in this form x {executeThis: updateWid, …} -- so they can execute anything
+// the whole queue can be released, or specific items in queue can be release (see Lookup Queue below)
+
+'Lookup' Queue Wid:
+DatabaseTriggerTable….ie. wid7.a	{executeThis: updateWid, fromProperty:(normally left value) toProperty:
+
+Example Events:
+Get server data
+Look at PendingRequestsToSeverWid
+Send to server
+Receive server data
+/executeThis {executeThis=ExecuteMultiple, MultipleWid=IncomingServerWid, MultipleExecuteThis=updateWid}
+Process each
+Call dataChanged
+DataChanged
+/executeThis {executeThis=ExecuteMultiple, executeFilter=<wid prop of data that just changed>, fromProperty:<wid prop of data that just changed>)
+
+Synch Attributes:
+SynchRule  (i.e. add to which queue)
+OfflineRule (i.e. trigger)
+ExpirationTime
+
