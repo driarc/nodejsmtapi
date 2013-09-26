@@ -219,6 +219,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             break;          
 
         case 'javascript':
+                // TODO :: Complete THIS 
                 //     Then the code will fish out parameters executethis, accesstoken, beginInboundParameters from inboundParameters
                 //     The 'left over' inbound parameters will be y
 
@@ -258,7 +259,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                         }
                     });
                 }
-
+                break;
                 
         case 'getwid':
             // handle getwid :: 
@@ -345,9 +346,12 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             break;
 
         case 'dri':
-
+            // TODO :: COMPLETE THIS
+            break;
 
         case 'multiplemongo':
+            // TODO :: COMPLETE THIS
+
             var fullURL = req.protocol + "://" + req.get('host') + req.url;
             if (reservedParameters.has('begininboundparameters')) {
                 var valU = reservedParameters.get('begininboundparameters');
