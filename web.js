@@ -55,6 +55,6 @@ app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.executethis);
 
-//app.get('/updateWidTest', common.updateWidTest);
+app.get('/updateWidTest', common.updateWidTest);
 
 app.listen(process.env.PORT || 3000);

@@ -17,7 +17,8 @@ var uuid = require("node-uuid");
 // DONE :: changed the dtynamic div being added to be error free and valid html
 // DONE :: make changes to CreateNewFile HTML shall include references to CSS and JS
 
-
+//TODO :: in case of 'file not found' É the server stops throwing an error.
+//TODO :: add conditions to updated
 
 // returns txt for specified file after applying the selector(div opt)
 
@@ -27,6 +28,7 @@ var returnJson =   {'processHtmlJson':[],'addThisJson':[]};
 exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 	var html = '';
 
+		
 
 
 	if(!mapOfFiles){
@@ -275,8 +277,6 @@ exports.handleAddThis =  function run(jsonArr,callback){
 
 	var retJson = {};
 	retJson['addThisJson']=addThisJsonArray;
-				
-	 
 	callback(retJson);	
 	
 };
@@ -405,7 +405,7 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 						 
  							var arr = getFromFile(current_file,'a');
 							
- 							for(noOfAnchors = 0 ;noOfAnchors < arr.length; noOfAnchors++){
+ 							for(var noOfAnchors = 0 ;noOfAnchors < arr.length; noOfAnchors++){
  								if(arr && arr[noOfAnchors].attr('class') && arr[noOfAnchors].attr('id') 
  								&& arr[noOfAnchors].attr('href') && arr[noOfAnchors].text()){
  									var classA = arr[noOfAnchors].attr('class');
@@ -419,7 +419,7 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
  										jsonEntry['targetLink']='href=\''+ href +'\'';
  										jsonEntry[classA]=text;
 										
- 										links.push(jsonEntry)
+ 										links.push(jsonEntry);
  									}
  								}
  							}
@@ -490,10 +490,10 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 							//	   "z":	"w"
 
 							var jsonAddThis = {};
-
-							// Generate a v1 (time-based) id
-							var wid = uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
-//							var wid = 'wid-value';
+							if(!wid){
+								// Generate a v1 (time-based) id
+								wid = uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
+							}
 
 							jsonAddThis["wid"] = {};
 							jsonAddThis["data"] = {};
