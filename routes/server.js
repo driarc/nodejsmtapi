@@ -182,41 +182,12 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             // call the file check codeZ
             callScrapeLogic(res, function(nodeObjects){
                 if(nodeObjects){
-                    // console.log(' >> nodeObjects >> '+JSON.stringify(nodeObjects));    
-                        
-                    if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'][0]){
-                        // persist the scrape results from processHTML process   
-                        for(var i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
-                            // iterate over objects and make according entries in the DB
-                            var entityToAdd = nodeObjects['processHtmlJson'][0][i];
-//                            console.log(">>>> :::: extractthis :::: processHtmlJson Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
-                            
-                            // call persistence method
-                            dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
-                               console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
-                            });
-
-                            
-                        } 
-                    }
-
-
-                    if(nodeObjects && nodeObjects['addThisJson']&& nodeObjects['addThisJson'][0]){
-                        // persist the scrape results from addThis process
-                        for(i=0;i<nodeObjects['addThisJson'][0].length; i ++){
-                            // iterate over objects and make according entries in the DB
-                            var entityToAdd = nodeObjects['addThisJson'][0][i];
-//                            console.log(">>>> :::: extractthis :::: addThisJson Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
-                            
-                             // call persistence method
-                            dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
-                               console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
-                            });
-                        } 
-                    }    
-                callback(nodeObjects);
+                    handleProcessHtmlPersistence(nodeObjects, function(){
+                        handleAddThisPersistence(nodeObjects, function(){
+                            callback(nodeObjects);
+                        });
+                    });
                 }
-                
             });
         
             break;        
@@ -318,13 +289,32 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             break;     
 
         case 'updatewid':
+        	
             // handle updatewid
             console.log('>>> updatewid ::: '+leftOverParameters);
             if(leftOverParameters.has("wid")){
-                // call get from mongo DB 
-
                 // get JSOn to be saved
                 var entityToAdd = getJsonFromMap(leftOverParameters);
+                
+                // if fromProperty exists, then copy that as a new property // TODO :: CHeck this
+            	if(leftOverParameters.has("fromProperty")){
+            		entityToAdd["fromProperty"]=leftOverParameters.get("fromProperty");
+            		delete  entityToAdd.fromProperty;
+            	}
+                
+            	// if toProperty exists, then copy that as a new property // TODO :: CHeck this
+            	if(leftOverParameters.has("toProperty")){
+            		entityToAdd["toProperty"]=leftOverParameters.get("toProperty");
+            		delete  entityToAdd.toProperty;
+            	}
+            	
+            	// if status exists, then delete the wid data // TODO :: see if more to do, like delete the entire wid value also
+            	if(leftOverParameters.has("status")){
+            		if(leftOverParameters.get("status") == 5){
+            			entityToAdd = {};
+            		}
+            	}
+            	
                 console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
 
                 // call persistence method
@@ -427,6 +417,21 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
     }
 } 
 
+function callUpdateWid(entityToAdd, callback){
+    // Make another request, to update DB data
+    var data = JSON.stringify(entityToAdd["data"]);
+     console.log(">>>>>> callUpdateWid >>>>>>> :::: "+ data);    
+    var requestObj = [];
+    requestObj.push({"executethis":"updatewid","Wid":entityToAdd["wid"],"data":entityToAdd["data"]});
+
+    superagent.put(config.SERVICE_URL+'executethis')
+        .send(requestObj)
+          .end(function(e, res){
+            console.log('>>>>>>>>> callUpdateWid :::: Sent another request :: updatewid :: PUT request ');
+            callback(res);
+    });
+}
+
 function getJsonFromMap(leftOverParameters){
     var rec = {};
     leftOverParameters.forEach(function(value, key) {
@@ -435,6 +440,51 @@ function getJsonFromMap(leftOverParameters){
     	}
     });
     return rec;
+}
+
+function handleProcessHtmlPersistence(nodeObjects, callback){
+    if(nodeObjects && nodeObjects['processHtmlJson'] && nodeObjects['processHtmlJson'][0]){
+            // persist the scrape results from processHTML process   
+            for(var i=0;i<nodeObjects['processHtmlJson'][0].length; i ++){
+                // iterate over objects and make according entries in the DB
+                var entityToAdd = nodeObjects['processHtmlJson'][0][i];
+                console.log(">>>> :::: extractthis :::: processHtmlJson Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+                
+                // // call persistence method
+                // dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                //    console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
+                // });
+                callUpdateWid(entityToAdd, function(o){
+                   console.log("::: extractthis :: processHtmlJson :: After adding/updating node to Mongo - "+ o);  
+                   callback();
+                });
+            } 
+        }else{
+            callback();
+        }
+}
+
+
+function handleAddThisPersistence(nodeObjects, callback){
+    if(nodeObjects && nodeObjects['addThisJson'] && nodeObjects['addThisJson'][0]){
+            // persist the scrape results from processHTML process   
+            for(var i=0;i<nodeObjects['addThisJson'][0].length; i ++){
+                // iterate over objects and make according entries in the DB
+                var entityToAdd = nodeObjects['addThisJson'][0][i];
+                console.log(">>>> :::: extractthis :::: handleAddThisPersistence Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
+                
+                // // call persistence method
+                // dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
+                //    console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
+                // });
+                callUpdateWid(entityToAdd, function(o){
+                   console.log("::: extractthis :: handleAddThisPersistence :: After adding/updating node to Mongo - "+ o);  
+                   callback();
+                });
+            } 
+        }else{
+            callback();
+        }
 }
 
 
