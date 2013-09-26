@@ -309,18 +309,23 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             	// if status exists and equals 5, then delete the wid data // TODO :: see if more to do, like delete the entire wid value also
             	if(leftOverParameters.has("status")){
             		if(leftOverParameters.get("status") == 5){
-            			entityToAdd = {};
+            			dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
+                            console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
+                            res.send(o);
+                            res.end();   
+                        });
             		}
-            	}
-            	
-                console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
+            	}else{
+                    console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
 
-                // call persistence method
-                dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
-                   console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
-                   res.send(o);
-                   res.end();   
-                });
+                    // call persistence method
+                    dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                       console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                       res.send(o);
+                       res.end();   
+                    });
+                }
+                
             }else{
                console.log("updatewid ::: No Wid specified, Do Nothing - ");  
                res.send({});

@@ -242,6 +242,25 @@ describe('DAO test layer', function(){
 
     });
 
+  // the request is for 'updatewid' with status 5 , witha a preexecute and postExecute method each
+  it('updatewiddelete', function(done){
+
+
+    var o = {"wid":"joetestwid","data":{"x":"y","z":"w"}};
+    var requestObj = [{ "executethis":"updatewid", "status":"5", "Wid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}]
+      // remove the added entry
+      dao.addOrUpdate(o,config.TABLE_NAME,function(o){
+          superagent.put(config.SERVICE_URL+'executethis')
+            .send(requestObj)
+              .end(function(e, res){
+                console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
+                  expect(typeof res.body).to.eql('object');
+                  done();
+            });
+        });
+
+    });
+
   // the request is for 'getwid' , witha a preexecute and postExecute method each
   it('getwid', function(done){
 
