@@ -217,7 +217,7 @@ describe('DAO test layer', function(){
   it('updatewid', function(done){
 
 
-    var o = {"wid":"test1","data":{"x":"y","z":"w"}};
+    var o = {"wid":"joetestwid","data":{"x":"y","z":"w"}};
     
 //    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x2":"y2","z2":"w2", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
@@ -233,10 +233,10 @@ describe('DAO test layer', function(){
                 	expect(typeof res.body.wid).to.eql('string');
                 	expect(typeof res.body.data).to.eql('object');
                 	
-                  cleanup(res.body, function(){
+                  // cleanup(res.body, function(){
                     //expect(res.body.msg).to.eql('success')        
                     done();
-                });
+                // });
             });
         });
 

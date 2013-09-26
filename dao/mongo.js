@@ -125,13 +125,13 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
         // check if object is found
         if(returnedObject){ 
             updateToMongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
-                console.log(" >>>> addOrUpdate ::: After updating  processHtmlJson node  to Mongo - "+ JSON.stringify(updatedObj));
+                console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
                 callback(updatedObj);
                 
             });
         }else{
             addToMongo(entityToAdd,schemaToLookup,function(addedObj){
-                console.log(" >>>> addOrUpdate ::: After adding  processHtmlJson node  to Mongo - "+ JSON.stringify(addedObj));
+                console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
                 callback(addedObj);
             });
         }
