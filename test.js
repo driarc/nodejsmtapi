@@ -221,7 +221,7 @@ describe('DAO test layer', function(){
     
 //    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x2":"y2","z2":"w2", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
-    var requestObj = [{ "executethis":"updatewid", "Wid":"joetestwid","datetime":"1380107614854"}]
+    var requestObj = [{ "executethis":"updatewid", "Wid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}]
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
           superagent.put(config.SERVICE_URL+'executethis')

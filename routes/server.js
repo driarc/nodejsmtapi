@@ -297,18 +297,16 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 var entityToAdd = getJsonFromMap(leftOverParameters);
                 
                 // if fromProperty exists, then copy that as a new property // TODO :: CHeck this
-            	if(leftOverParameters.has("fromProperty")){
-            		entityToAdd["fromProperty"]=leftOverParameters.get("fromProperty");
-            		delete  entityToAdd.fromProperty;
+            	if(entityToAdd.fromproperty){
+            		delete  entityToAdd.fromproperty;
             	}
                 
             	// if toProperty exists, then copy that as a new property // TODO :: CHeck this
-            	if(leftOverParameters.has("toProperty")){
-            		entityToAdd["toProperty"]=leftOverParameters.get("toProperty");
-            		delete  entityToAdd.toProperty;
+            	if(entityToAdd.toproperty){
+            		delete  entityToAdd.toproperty;
             	}
             	
-            	// if status exists, then delete the wid data // TODO :: see if more to do, like delete the entire wid value also
+            	// if status exists and equals 5, then delete the wid data // TODO :: see if more to do, like delete the entire wid value also
             	if(leftOverParameters.has("status")){
             		if(leftOverParameters.get("status") == 5){
             			entityToAdd = {};
