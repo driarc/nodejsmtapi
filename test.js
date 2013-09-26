@@ -233,10 +233,10 @@ describe('DAO test layer', function(){
                 	expect(typeof res.body.wid).to.eql('string');
                 	expect(typeof res.body.data).to.eql('object');
                 	
-                  // cleanup(res.body, function(){
+                  cleanup(res.body, function(){
                     //expect(res.body.msg).to.eql('success')        
                     done();
-                // });
+                });
             });
         });
 
