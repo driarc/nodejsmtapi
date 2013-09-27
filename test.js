@@ -49,7 +49,7 @@ describe('DAO test layer', function(){
       .end(function(e, res){
         console.log(' ADDTHIS :: >>>>>>>>> '+JSON.stringify(res.body));
         expect(typeof res.body).to.eql('object');
-        expect(typeof res.body.addThisJson).to.eql('object');
+        // expect(typeof res.body.addThisJson).to.eql('object');
         //expect(res.body.msg).to.eql('success')        
         done();
       });

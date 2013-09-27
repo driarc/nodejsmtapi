@@ -29,6 +29,8 @@ exports.executethis = function(req, res) {
         // assign each JSON obj in the array received for operating
         json = req.body[i];
 
+        console.log(">>> Request body is >> "+ JSON.stringify(json));
+
         for(item in json){
             // `item` is the next parameter in JSON 
             var ParameterName = item;
@@ -69,10 +71,18 @@ exports.executethis = function(req, res) {
         console.log(' AddThis operation. ' + JSON.stringify(req.body));
 
         // START PROCESSING AS PER 'addThis' param of the JSON in the request body received
-        filecheck.handleAddThis(req.body,function(o){
-            console.log('coming back after addthis'+JSON.stringify(o));
-            res.send(o);
-            res.end();
+        filecheck.handleAddThis(req.body,function(returnedObject){
+            console.log('coming back after addthis'+JSON.stringify(returnedObject));
+
+            // save returned data to DB
+            callUpdateWid(returnedObject.addThisJson[0], function(o){
+            // handleAddThisPersistence(returnedObject, function(o){
+                // console.log("::: extractthis :: AddThis As Command  :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                res.send({"message":"Addd Wid successfully "});
+                res.end();
+            });
+
+            
         });
         console.log('After addThis logic has been processed');
         console.log('------------------------------------------------');
@@ -292,7 +302,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
         case 'updatewid':
         	
             // handle updatewid
-            console.log('>>> updatewid ::: '+leftOverParameters);
+            console.log('>>> updatewid ::: '+JSON.stringify(leftOverParameters));
             if(leftOverParameters.has("wid")){
                 // get JSOn to be saved
                 var entityToAdd = getJsonFromMap(leftOverParameters);
@@ -457,10 +467,6 @@ function handleProcessHtmlPersistence(nodeObjects, callback){
                 var entityToAdd = nodeObjects['processHtmlJson'][0][i];
                 console.log(">>>> :::: extractthis :::: processHtmlJson Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                 
-                // // call persistence method
-                // dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
-                //    console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
-                // });
                 callUpdateWid(entityToAdd, function(o){
                    console.log("::: extractthis :: processHtmlJson :: After adding/updating node to Mongo - "+ o);  
                    callback();
@@ -480,10 +486,6 @@ function handleAddThisPersistence(nodeObjects, callback){
                 var entityToAdd = nodeObjects['addThisJson'][0][i];
                 console.log(">>>> :::: extractthis :::: handleAddThisPersistence Now go ahead and add the requested JSON to mongoDB : "+JSON.stringify(entityToAdd));
                 
-                // // call persistence method
-                // dao.addOrUpdate(entityToAdd,TABLE_NAME,function(o){
-                //    console.log("After adding/updating node to Mongo - "+ JSON.stringify(o));     
-                // });
                 callUpdateWid(entityToAdd, function(o){
                    console.log("::: extractthis :: handleAddThisPersistence :: After adding/updating node to Mongo - "+ o);  
                    callback();

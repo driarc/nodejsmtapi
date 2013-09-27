@@ -40,9 +40,12 @@ exports.GetFile = GetFile = function(file, targetDiv, beginArea,endArea){
 	}else{
 		if(file !== "undefinedindex.html"){
 	 		// the file is NOT already loaded in the HashMap
-			console.log('file comes as '+fs.readFileSync(file));
-			var body = fs.readFileSync(file).toString();	
-			mapOfFiles.set(file,body);	
+			// console.log('file comes as '+fs.readFileSync(file));
+			var body = fs.readFileSync(file);
+			if(body){
+				body = body.toString();
+				mapOfFiles.set(file,body);	
+			}	
 		}
 		  
 	}
