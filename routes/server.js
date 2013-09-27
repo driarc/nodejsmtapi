@@ -51,7 +51,7 @@ exports.executethis = function(req, res) {
     };
     
 
-    /// HANDLE ADDDATAWID logic :: TODO :: FIGURE OUT WHY THIS EXISTS ?
+    /// HANDLE ADDDATAWID logic 
     if (inboundParameters.has("adddatawid")) {
          console.log('---------'+JSON.stringify(inboundParameters));
         var repAdd = {};
@@ -76,8 +76,6 @@ exports.executethis = function(req, res) {
 
             // save returned data to DB
             callUpdateWid(returnedObject.addThisJson[0], function(o){
-            // handleAddThisPersistence(returnedObject, function(o){
-                // console.log("::: extractthis :: AddThis As Command  :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
                 res.send({"message":"Addd Wid successfully "});
                 res.end();
             });
@@ -88,61 +86,70 @@ exports.executethis = function(req, res) {
         console.log('------------------------------------------------');
 
     }else if (reservedParameters.has("executethis")) {
-        console.log(' <<<<<<<<<<<<<<< ExecuteThis operation. >>>>>>>>>>>>>>>>>>>> ');
-
-        // PROCESS PRE-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
-        var preExecuteFunctionName = inboundParameters.get("preexecute");
-        if(inboundParameters.has("preexecute") && preExecuteFunctionName){
-            handlePreExecuteLogic(inboundParameters, res, preExecuteFunctionName);
-            console.log('After pre-execute logic has been checked');
-        }else{
-            console.log('No pre-execute logic processed');
-        }
         console.log('------------------------------------------------');
+        console.log(' <<<<<<<<<<<<<<< PRe , ExecuteThis AND  Post operation. >>>>>>>>>>>>>>>>>>>> ');
+
+        handlePreExecuteLogic(inboundParameters, res, function(msg){
+            console.log('------------------------------------------------');
+            console.log('>>> AFTER PREEXECUTE  :: coming back '+JSON.stringify(msg));
+            console.log('After PREEXECUTE logic has been processed');
 
 
-        // START PROCESSING AS PER 'executeThis' param of the JSON in the request body received
-        handleExecuteThis(reservedParameters, res, leftOverParameters,function(o){
-            console.log('coming back '+JSON.stringify(o));
-            res.send(o);
-            res.end();
+            // START PROCESSING AS PER 'executeThis' param of the JSON in the request body received
+            handleExecuteThis(reservedParameters, res, leftOverParameters,function(o){
+                console.log('------------------------------------------------');
+                console.log('>>> AFTER EXECUTETHIS :: coming back '+JSON.stringify(o));
+                console.log('After EXECUTETHIS logic has been processed');
+
+                // PROCESS POST-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
+                handlePostExecuteLogic(inboundParameters, res, function(msg){
+                        console.log('------------------------------------------------');
+                        res.send(o);
+                        res.end();
+
+                        console.log('>>> AFTER POSTEXECUTE  :: coming back '+JSON.stringify(msg));
+                });    
+            });  
+
         });
-        console.log('After executeThis logic has been processed');
-        console.log('------------------------------------------------');
-
-
-        // PROCESS POST-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
-        var postExecuteFunctionName = inboundParameters.get("postexecute");
-        if(inboundParameters.has("postexecute") && postExecuteFunctionName){
-            handlePostExecuteLogic(inboundParameters, res, postExecuteFunctionName);
-            console.log('After post-execute logic has been checked');
-        }else{
-            console.log('No post-execute logic processed');
-        }
-        console.log('------------------------------------------------');
-
     }
     else {
         res.send({
             "error": "Requires a valid parameter : executeThis"
         });
     }
-
-    // res.end();
 };
 
 // This is a PRE-EXECUTE Logic
 function handlePreExecuteLogic(inboundParameters, res, callback){
-    // console.log('function >>>> '+ callback);
-    helperFunctions[callback]();
-    console.log('FROM :: handlePreExecuteLogic :: Pre-execute logic processed');
+    // PROCESS PRE-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
+    var preExecuteFunctionName = inboundParameters.get("preexecute");
+    if(inboundParameters.has("preexecute") && preExecuteFunctionName){
+        // console.log('function >>>> '+ callback);
+        helperFunctions[preExecuteFunctionName]();
+        console.log('After pre-execute logic has been checked');
+    }else{
+        console.log('No pre-execute logic processed');
+    }
+
+    callback('FROM :: handlePreExecuteLogic :: Pre-execute logic processed');
+    console.log('------------------------------------------------');
 }
 
 // This is a POST-EXECUTE Logic
 function handlePostExecuteLogic(inboundParameters,res,callback){
-    // console.log('function >>>> '+ callback);
-    helperFunctions[callback]();
-    console.log('FROM :: handlePostExecuteLogic :: Post-execute logic processed');
+    var postExecuteFunctionName = inboundParameters.get("postexecute");
+    if(inboundParameters.has("postexecute") && postExecuteFunctionName){
+        // handlePostExecuteLogic(inboundParameters, res, postExecuteFunctionName);
+        helperFunctions[postExecuteFunctionName]();
+        console.log('After post-execute logic has been checked');
+    }else{
+        console.log('No post-execute logic processed');
+    }
+
+
+    callback('FROM :: handlePostExecuteLogic :: Post-execute logic processed');
+    console.log('------------------------------------------------');
 }
 
 var helperFunctions = { }; // better would be to have module create an object
@@ -307,17 +314,17 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 // get JSOn to be saved
                 var entityToAdd = getJsonFromMap(leftOverParameters);
                 
-                // if fromProperty exists, then copy that as a new property // TODO :: CHeck this
+                // if fromProperty exists, then copy that as a new property
             	if(entityToAdd.fromproperty){
             		delete  entityToAdd.fromproperty;
             	}
                 
-            	// if toProperty exists, then copy that as a new property // TODO :: CHeck this
+            	// if toProperty exists, then copy that as a new property
             	if(entityToAdd.toproperty){
             		delete  entityToAdd.toproperty;
             	}
             	
-            	// if status exists and equals 5, then delete the wid data // TODO :: see if more to do, like delete the entire wid value also
+            	// if status exists and equals 5, then delete the wid data
             	if(leftOverParameters.has("status")){
             		if(leftOverParameters.get("status") == 5){
             			dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
