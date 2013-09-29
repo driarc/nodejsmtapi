@@ -120,7 +120,7 @@ describe('DAO test layer', function(){
             console.log(' ::: getfrommongo ::: >>>>>>>>> '+JSON.stringify(res.body));
             expect(typeof res.body).to.eql('object');
             
-            cleanup(res.body, function(){
+            cleanup(entityToBeAdded, function(){
               //expect(res.body.msg).to.eql('success')        
               done();
             });
@@ -179,7 +179,7 @@ describe('DAO test layer', function(){
               console.log('JAVASCRIPT >>>>>>>>>  '+JSON.stringify(res.body));
               expect(typeof res.body).to.eql('object');
               
-              cleanup(res.body, function(){
+              cleanup(addFirstObj, function(){
                   //expect(res.body.msg).to.eql('success')        
                   done();
                 });
@@ -208,7 +208,7 @@ describe('DAO test layer', function(){
                 console.log('DEFAULT CASE >>>>>>>>> '+JSON.stringify(res.body));
                 expect(typeof res.body).to.eql('object');
         
-                cleanup(res.body, function(){
+                cleanup(addFirstObj, function(){
                   //expect(res.body.msg).to.eql('success')        
                   done();
                 });
@@ -281,7 +281,7 @@ describe('DAO test layer', function(){
                 	expect(typeof res.body.wid).to.eql('string');
                 	expect(typeof res.body.data).to.eql('object');
                 	
-                  cleanup(res.body, function(){
+                  cleanup(o, function(){
                     //expect(res.body.msg).to.eql('success')        
                     done();
                 });
