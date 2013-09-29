@@ -89,11 +89,13 @@ exports.executethis = function(req, res) {
         console.log('------------------------------------------------');
         console.log(' <<<<<<<<<<<<<<< PRe , ExecuteThis AND  Post operation. >>>>>>>>>>>>>>>>>>>> ');
 
-        handlePreExecuteLogic(inboundParameters, res, function(msg){
+        handlePreExecuteLogic(inboundParameters, res, function(outboundParameters){
             console.log('------------------------------------------------');
-            console.log('>>> AFTER PREEXECUTE  :: coming back '+JSON.stringify(msg));
+            console.log('>>> AFTER PREEXECUTE  :: coming back '+JSON.stringify(outboundParameters));
             console.log('After PREEXECUTE logic has been processed');
-
+        
+            leftOverParameters = mergeParameters(leftOverParameters,outboundParameters);
+            console.log(' leftOverParameters >>  '+ JSON.stringify(leftOverParameters));
 
             // START PROCESSING AS PER 'executeThis' param of the JSON in the request body received
             handleExecuteThis(reservedParameters, res, leftOverParameters,function(o){
@@ -102,12 +104,12 @@ exports.executethis = function(req, res) {
                 console.log('After EXECUTETHIS logic has been processed');
 
                 // PROCESS POST-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
-                handlePostExecuteLogic(inboundParameters, res, function(msg){
+                handlePostExecuteLogic(inboundParameters, res, function(outboundParameters){
                         console.log('------------------------------------------------');
                         res.send(o);
                         res.end();
 
-                        console.log('>>> AFTER POSTEXECUTE  :: coming back '+JSON.stringify(msg));
+                        console.log('>>> AFTER POSTEXECUTE  :: coming back '+JSON.stringify(outboundParameters));
                 });    
             });  
 
@@ -125,8 +127,49 @@ function handlePreExecuteLogic(inboundParameters, res, callback){
     // PROCESS PRE-EXECUTE LOGIC IF ONE HAS BEEN SPECIFIED
     var preExecuteFunctionName = inboundParameters.get("preexecute");
     if(inboundParameters.has("preexecute") && preExecuteFunctionName){
-        // console.log('function >>>> '+ callback);
-        helperFunctions[preExecuteFunctionName]();
+        console.log('preExecuteFunctionName >>> '+JSON.stringify(preExecuteFunctionName));
+        var outboundParameters = new HashMap();
+
+        var requestArr = [];
+        var request = {};
+        
+        // in case of JSON received pass the same as data for the request , in case of a non-JSON, create an executeThis JSOn     
+        if('object' === typeof preExecuteFunctionName){
+
+            // JSON passed
+            if(preExecuteFunctionName.ExecuteThis){
+                request = preExecuteFunctionName;
+            }else{
+                outboundParameters = inboundParameters;
+                callback(outboundParameters);
+            }
+        }else{
+            // STRING passed
+            request.ExecuteThis = preExecuteFunctionName;
+        }
+        console.log('>>>>>>>>> inboundParameters before request  :::  ' + JSON.stringify(inboundParameters));
+        
+        requestArr.push(request);
+        console.log('request  sent '+ JSON.stringify(requestArr));
+        superagent.put(config.SERVICE_URL+'executethis')
+                .send(requestArr)
+          .end(function(e, res){
+            console.log('>>>>>>>>> handlePreExecuteLogic ::: Sent another request :: PUT request ');
+            
+            // TODO :: append the non-reserved inbound parameters also
+            outboundParameters = cleanupParameters(inboundParameters,["wid","executethis","postexecute","preexecute"]);
+            // append res JSON (non-reserved) to inbound params and return
+            for(attr in res.body.data){
+                if(attr && attr.toLowerCase() !== "wid".toLowerCase() && attr.toLowerCase() !== "executethis" && attr.toLowerCase() !== "preexecute" && attr.toLowerCase() !== "postexecute"){
+                    outboundParameters.set(attr,res.body.data[attr]);
+                }
+            }
+            console.log(JSON.stringify('outboundParameters '+ JSON.stringify(outboundParameters)));
+           
+            callback(outboundParameters);
+        });
+
+        // helperFunctions[preExecuteFunctionName]();
         console.log('After pre-execute logic has been checked');
     }else{
         console.log('No pre-execute logic processed');
@@ -307,7 +350,7 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
             break;     
 
         case 'updatewid':
-        	
+            
             // handle updatewid
             console.log('>>> updatewid ::: '+JSON.stringify(leftOverParameters));
             if(leftOverParameters.has("wid")){
@@ -315,25 +358,25 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 var entityToAdd = getJsonFromMap(leftOverParameters);
                 
                 // if fromProperty exists, then copy that as a new property
-            	if(entityToAdd.fromproperty){
-            		delete  entityToAdd.fromproperty;
-            	}
+                if(entityToAdd.fromproperty){
+                    delete  entityToAdd.fromproperty;
+                }
                 
-            	// if toProperty exists, then copy that as a new property
-            	if(entityToAdd.toproperty){
-            		delete  entityToAdd.toproperty;
-            	}
-            	
-            	// if status exists and equals 5, then delete the wid data
-            	if(leftOverParameters.has("status")){
-            		if(leftOverParameters.get("status") == 5){
-            			dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
+                // if toProperty exists, then copy that as a new property
+                if(entityToAdd.toproperty){
+                    delete  entityToAdd.toproperty;
+                }
+                
+                // if status exists and equals 5, then delete the wid data
+                if(leftOverParameters.has("status")){
+                    if(leftOverParameters.get("status") == 5){
+                        dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
                             console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
                             res.send(o);
                             res.end();   
                         });
-            		}
-            	}else{
+                    }
+                }else{
                     console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
 
                     // call persistence method
@@ -459,9 +502,9 @@ function callUpdateWid(entityToAdd, callback){
 function getJsonFromMap(leftOverParameters){
     var rec = {};
     leftOverParameters.forEach(function(value, key) {
-    	if(key != "Wid"){
-    		rec[key] = value;
-    	}
+        if(key != "Wid"){
+            rec[key] = value;
+        }
     });
     return rec;
 }
@@ -515,3 +558,23 @@ function callScrapeLogic(res, callback){
     });
 }
 
+function cleanupParameters(inboundParameters,paramsToClean){
+    var outBoundParameters = inboundParameters;
+    
+    for(var i=0;i<paramsToClean.length;i++){
+        if(outBoundParameters.has(paramsToClean[i])){
+            outBoundParameters.remove(paramsToClean[i]);
+        }
+    } 
+    return outBoundParameters;
+}
+
+function mergeParameters(c1,c2){
+    var mergedMap = c1;
+
+    for(key in c2._data){
+        c1.set(key, c2._data[key]);
+    };
+
+    return c1;
+} 

@@ -36,6 +36,54 @@ describe('DAO test layer', function(){
       });
   });
 
+  // put request for ExecuteThis --- extractThis URL
+  // the request is for 'ExtractThis' , WITHOUT a pre-execute and postExecute method
+  it('extractthisnoprepost', function(done){
+
+    var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w" }];
+    
+    superagent.put(config.SERVICE_URL+'executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log('>>>>>>>>> '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object');
+        //expect(res.body.msg).to.eql('success')        
+        done();
+      });
+  });
+
+  // put request for ExecuteThis --- extractThis URL
+  // the request is for 'ExtractThis' , WITHOUT a pre-execute but WITH a postExecute method
+  it('extractthisonlypost', function(done){
+
+    var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w","postExecute" : "sayPostHello" }];
+    
+    superagent.put(config.SERVICE_URL+'executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log('>>>>>>>>> '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object');
+        //expect(res.body.msg).to.eql('success')        
+        done();
+      });
+  });
+
+  // put request for ExecuteThis --- extractThis URL
+  // the request is for 'ExtractThis' , WITHOUT a post-execute but WITH a preExecute method
+  it('extractthisonlypre', function(done){
+
+    var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w","preExecute" : "sayPreHello" }];
+    
+    superagent.put(config.SERVICE_URL+'executethis')
+      .send(requestObj)
+      .end(function(e, res){
+        console.log('>>>>>>>>> '+JSON.stringify(res.body));
+        expect(typeof res.body).to.eql('object');
+        //expect(res.body.msg).to.eql('success')        
+        done();
+      });
+  });
+
  
 
   // the request is for 'AddThis' 
@@ -221,7 +269,7 @@ describe('DAO test layer', function(){
     
 //    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x2":"y2","z2":"w2", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
-    var requestObj = [{ "executethis":"updatewid", "Wid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}]
+    var requestObj = [{ "ExecuteThis":"UpdateWid", "Wid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}];
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
           superagent.put(config.SERVICE_URL+'executethis')
@@ -280,13 +328,46 @@ describe('DAO test layer', function(){
             	expect(typeof res.body.wid).to.eql('string');
             	expect(typeof res.body.data).to.eql('object');
               
-                  cleanup(res.body, function(){
+                cleanup(o, function(){
                     //expect(res.body.msg).to.eql('success')        
                     done();
-                });
+                  });
             });
         });
 
+    });
+
+  // the request is for 'getwid' , witha a preexecute and postExecute method each, the preexecute callas executethis recursively
+  it('getwidwithdata', function(done){
+
+    var o1 = {"wid":"abc","data":{"abc1":"abc1Val","abc2":"abc2Val"}};
+    var o2 = {"wid":"test1","data":{"test11":"test11Val","test12":"test12Val"}};
+    
+    var requestObj = [{"ExecuteThis":"GetWid","Wid":"test1","key1":"val1","key2":"val2", "preExecute":{"ExecuteThis":"GetWid","Wid":"abc"},"postExecute" : "sayPostHello"}];
+
+      // remove the added entry
+      dao.addOrUpdate(o1,config.TABLE_NAME,function(o){
+
+        dao.addOrUpdate(o2,config.TABLE_NAME,function(o){
+
+          superagent.put(config.SERVICE_URL+'executethis')
+            .send(requestObj)
+              .end(function(e, res){
+                console.log(' ::: GetWid ::: >>>>>>>>> '+JSON.stringify(res.body));
+                expect(typeof res.body).to.eql('object');
+                expect(typeof res.body._id).to.eql('string');
+                expect(typeof res.body.wid).to.eql('string');
+                expect(typeof res.body.data).to.eql('object');
+                
+                  cleanup(o1, function(){
+                    cleanup(o2, function(){
+                    //expect(res.body.msg).to.eql('success')        
+                    done();
+                    });
+                  });
+            });
+        });
+      });
     });
 
 
