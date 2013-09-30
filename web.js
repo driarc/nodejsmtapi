@@ -21,7 +21,7 @@ app.configure(function(){
     app.use(express.methodOverride());
 // Add headers
 
-// app.use(express.static(__dirname + '/../dripoint'));
+app.use(express.static(__dirname + '/../dripoint'));
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
