@@ -315,7 +315,7 @@ describe('DAO test layer', function(){
 
     var o = {"wid":"test1","data":{"x":"y","z":"w"}};
     
-    var requestObj = [{"ExecuteThis":"GetWid","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
+    var requestObj = [{"ExecuteThis":"GetWid","FromWid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
@@ -343,7 +343,7 @@ describe('DAO test layer', function(){
     var o1 = {"wid":"abc","data":{"abc1":"abc1Val","abc2":"abc2Val"}};
     var o2 = {"wid":"test1","data":{"test11":"test11Val","test12":"test12Val"}};
     
-    var requestObj = [{"ExecuteThis":"GetWid","Wid":"test1","key1":"val1","key2":"val2", "preExecute":{"ExecuteThis":"GetWid","Wid":"abc"},"postExecute" : "sayPostHello"}];
+    var requestObj = [{"ExecuteThis":"GetWid","FromWid":"test1","key1":"val1","key2":"val2", "preExecute":{"ExecuteThis":"GetWid","FromWid":"abc"},"postExecute" : "sayPostHello"}];
 
       // remove the added entry
       dao.addOrUpdate(o1,config.TABLE_NAME,function(o){

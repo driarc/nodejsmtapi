@@ -119,6 +119,7 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
     if(!widVal){
     	widVal = (entityToAdd['Wid']);
     }
+    
     console.log('addOrUpdate :::: widVal is >>> '+widVal);
 	getFromMongo({"wid":widVal},schemaToLookup,function(returnedObject){
         console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));

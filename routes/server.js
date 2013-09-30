@@ -160,7 +160,7 @@ function handlePreExecuteLogic(inboundParameters, res, callback){
             outboundParameters = cleanupParameters(inboundParameters,["wid","executethis","postexecute","preexecute"]);
             // append res JSON (non-reserved) to inbound params and return
             for(attr in res.body.data){
-                if(attr && attr.toLowerCase() !== "wid".toLowerCase() && attr.toLowerCase() !== "executethis" && attr.toLowerCase() !== "preexecute" && attr.toLowerCase() !== "postexecute"){
+                if(attr && attr.toLowerCase() !== "wid".toLowerCase() && attr.toLowerCase() !== "fromwid".toLowerCase() && attr.toLowerCase() !== "executethis" && attr.toLowerCase() !== "preexecute" && attr.toLowerCase() !== "postexecute"){
                     outboundParameters.set(attr,res.body.data[attr]);
                 }
             }
@@ -323,10 +323,10 @@ function handleExecuteThis(reservedParameters, res,leftOverParameters, callback)
                 
         case 'getwid':
             // handle getwid :: 
-            if(leftOverParameters.has("wid")){
+            if(leftOverParameters.has("fromwid")){
                 // call get from mongo DB 
-                var widVal = leftOverParameters.get("wid");
-                console.log("getwid ::: Fetching one record , with wid "+widVal);
+                var widVal = leftOverParameters.get("fromwid");
+                console.log("getwid ::: Fetching one record , with fromWid "+widVal);
                 getFromMongo({"wid":widVal},config.TABLE_NAME,function(obj){
 
                     if(obj){
