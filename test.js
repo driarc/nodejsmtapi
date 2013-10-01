@@ -244,23 +244,6 @@ describe('DAO test layer', function(){
       });
   });
 
- 
- // // TODO :: ADDDATAWID in call extractthis
-  // it('adddatawid1', function(done){
-
-  //   var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
-    
-  //   superagent.put('http://localhost:3000/executethis')
-  //     .send(requestObj)
-  //     .end(function(e, res){
-  //       console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
-  //       expect(typeof res.body).to.eql('object')
-  //       //expect(res.body.msg).to.eql('success')        
-  //       done()
-  //     })
-  // });
-
-
   // the request is for 'updatewid' , witha a preexecute and postExecute method each
   it('updatewid', function(done){
 
@@ -327,6 +310,33 @@ describe('DAO test layer', function(){
             	expect(typeof res.body._id).to.eql('string');
             	expect(typeof res.body.wid).to.eql('string');
             	expect(typeof res.body.data).to.eql('object');
+              
+                cleanup(o, function(){
+                    //expect(res.body.msg).to.eql('success')        
+                    done();
+                  });
+            });
+        });
+
+    });
+
+
+  // the request is for 'getwid' , witha a preexecute and postExecute method each
+  it('getwidwithproperty', function(done){
+
+
+    var o = {"wid":"test1","data":{"x":"y","z":"w"}};
+    
+    var requestObj = [{"ExecuteThis":"GetWid","FromWid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello", "FromProperty":"x"}];
+
+      // remove the added entry
+      dao.addOrUpdate(o,config.TABLE_NAME,function(o){
+          superagent.put(config.SERVICE_URL+'executethis')
+            .send(requestObj)
+              .end(function(e, res){
+                console.log(' ::: GetWid ::: >>>>>>>>> '+JSON.stringify(res.body));
+                expect(typeof res.body).to.eql('object');
+                expect(typeof res.body.x).to.eql('string');
               
                 cleanup(o, function(){
                     //expect(res.body.msg).to.eql('success')        
