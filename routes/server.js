@@ -156,12 +156,19 @@ exports.executethis = function(req, res) {
                     if(item.fromwid){
                         // call get from mongo DB 
                         var widVal = item.fromwid;
+                        var widFromProperty = item.fromproperty;
+
                         console.log("getwid ::: Fetching one record , with fromWid "+widVal);
                         getFromMongo({"wid":widVal},config.TABLE_NAME,function(obj){
 
                             if(obj){
                                 // get JSOn from DB
                                 console.log("getwid ::: Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                                if(widFromProperty){
+                                    // return property only
+                                    obj = JSON.parse('{"'+widFromProperty+'":"'+obj.data[widFromProperty]+'"}');
+                                }
+
                                 res.send(obj);
                                 res.end();
                             }else{
