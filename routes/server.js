@@ -136,7 +136,40 @@ exports.executethis = function(req, res) {
                         }
                     });
                 
-                    break;        
+                    break;      
+
+
+                case 'javascript':
+                    //  handle javascript case
+                    var jsFunction = JSON.stringify(item.js);
+
+
+                    var regex = 'function(\()([^)]*)(\))';
+
+                    var re = new RegExp(regex, 'gi');
+                    var array = re.exec(jsFunction);
+                    var params = array[1];
+                    params = params.replace(/\(/g,'');
+
+                    // var arr = [1,2];// TODO :: fix parsing of parameters as array
+                    var options = [];
+                    var pArr = params.split(',');
+                    for(var i=0;i < pArr.length;i++){
+                        options.push(item[pArr[i].trim()]);
+                    }
+                    eval("var fnCreated = "+eval(jsFunction));
+                    console.log(' returned value is >> '+ options);
+                    var returned = fnCreated.apply(this,options);
+                    res.send({"result" : returned});
+                    res.end();
+                    break;            
+
+                case 'variable':
+                    
+                    // TODO ::javascript,variable, executeMultiple, addwidmaster and getwidmaster    
+    
+                  
+    
 
                 case 'getfrommongo':
                     // handle get from mongo DB logic
@@ -187,7 +220,7 @@ exports.executethis = function(req, res) {
                     break;     
 
                 case 'updatewid':
-                    
+
                     // handle updatewid
                     if(item.wid){
                         // get JSOn to be saved
@@ -245,6 +278,7 @@ exports.executethis = function(req, res) {
                         res.end();
                     });
                     break;
+
 
                 default:
                     // for example if executeThis = abc and abc is not found as a case the system is supposed to go get from mongo

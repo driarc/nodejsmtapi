@@ -166,7 +166,7 @@ describe('DAO test layer', function(){
   it('javascript', function(done){
     
     // add object to DB 
-    var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1","x":"2",  "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" , "JS": "function (x, y){ return x + y; }"}];
+    var requestObj = [{"executeThis":"JavaScript", "beginInboundParameters":"wid1","x":"2", "y":"3", "accesstoken":"111111111",  "preExecute" : "sayPreHello","postExecute" : "sayPostHello" , "JS": "function (x, y){ return x + y; }"}];
     
     var addFirstObj = {"wid":"test21","data":{"x":"y","z":"w"}};
 
@@ -261,7 +261,7 @@ describe('DAO test layer', function(){
                 console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
                 	expect(typeof res.body).to.eql('object');
                 	expect(typeof res.body._id).to.eql('string');
-                	expect(typeof res.body.wid).to.eql('string');
+                	expect(typeof res.body.fromwid).to.eql('string');
                 	expect(typeof res.body.data).to.eql('object');
                 	
                   cleanup(o, function(){
@@ -286,7 +286,10 @@ describe('DAO test layer', function(){
               .end(function(e, res){
                 console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
                   expect(typeof res.body).to.eql('object');
-                  done();
+                  cleanup(o, function(){
+                    //expect(res.body.msg).to.eql('success')        
+                    done();
+                });
             });
         });
 
