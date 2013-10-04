@@ -224,7 +224,7 @@ exports.executethis = function(req, res) {
                     // handle updatewid
                     if(item.wid){
                         // get JSOn to be saved
-                        var entityToAdd = cleanParameters(item,["executethis","wid","preexecute","postexecute","fromwid"]);
+                        var entityToAdd = cleanParameters(item,["executethis","preexecute","postexecute","fromwid"]);
                         
                         // if fromProperty exists, then copy that as a new property
                         if(entityToAdd.fromproperty){

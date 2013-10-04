@@ -261,7 +261,8 @@ describe('DAO test layer', function(){
                 console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
                 	expect(typeof res.body).to.eql('object');
                 	expect(typeof res.body._id).to.eql('string');
-                	expect(typeof res.body.fromwid).to.eql('string');
+                	expect(typeof res.body.wid).to.eql('string');
+                  expect(res.body.wid === 'joetestwid');
                 	expect(typeof res.body.data).to.eql('object');
                 	
                   cleanup(o, function(){

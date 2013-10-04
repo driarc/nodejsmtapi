@@ -97,7 +97,18 @@ exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaT
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
 var addToMongo  = function(objToAdd,schemaToLookup, callback){
-	console.log(' ****** addToMongo method in dao');
+	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
+
+	for(var attr in objToAdd){
+    	if(attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id' ){
+    		if(!objToAdd.data){
+    			objToAdd.data = {};
+    		}
+    		objToAdd.data[attr] = objToAdd[attr];
+    		delete objToAdd[attr];
+    	}
+    }
+
 	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
 	    if (err) {
 			console.error(">>>>>> ::: addToMongo ::: error" + err);
@@ -132,6 +143,8 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
         }else{
             addToMongo(entityToAdd,schemaToLookup,function(addedObj){
                 console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
+
+
                 callback(addedObj);
             });
         }
