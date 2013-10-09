@@ -197,8 +197,13 @@ exports.executethis = function(req, res) {
                                 // get JSOn from DB
                                 console.log("getwid ::: Fetched from Mongo DB  - "+ JSON.stringify(obj));
                                 if(widFromProperty){
-                                    // return property only
-                                    obj = JSON.parse('{"'+widFromProperty+'":"'+obj.data[widFromProperty]+'"}');
+                                    if(!obj.data[widFromProperty]){
+                                        // no property named , return an error
+                                        obj = {"error":"No parameter by that name"};
+                                    }else{
+                                        // return property only
+                                        obj = JSON.parse('{"'+widFromProperty+'":"'+obj.data[widFromProperty]+'"}');
+                                    }
                                 }
 
                                 res.send(obj);
@@ -206,7 +211,7 @@ exports.executethis = function(req, res) {
                             }else{
                                 // get JSOn from DB
                                 console.log("getwid ::: No Wid matching value, return empty JSON - ");  
-                               res.send({});
+                               res.send({"error":"No Wid by that name"});
                                res.end(); 
                             }
                         });
