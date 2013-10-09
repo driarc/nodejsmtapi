@@ -9,3 +9,4 @@ exports.MONGODB_OPTIONS = {'safe':true,'server':true,'auto_reconnect': true, 'po
 exports.LOOKUP_DIR = '../dripoint/';
 // exports.LOOKUP_DIR = '../html/';// for testing
 exports.SERVICE_URL = 'http://localhost:3000/';
+  
