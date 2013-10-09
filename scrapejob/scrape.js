@@ -293,7 +293,7 @@ exports.handleAddThis =  function run(jsonArr,callback){
 exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_file,to_search_file,directory){
 	// # match special comments in the file
 
-	var matchesInFileArr = fileContent.match(/\<![ \r\n\t]*(--([^\-]|[\r\n]|-[^\-])*--[ \r\n\t]*)\>/g);
+	var matchesInFileArr = fileContent.match(/\<!(-- {([^\-]|[\r\n]|[\r\n]|-[^\-])*} --)\>/g);
 	
 	if(!returnJson){
 		returnJson =   {'processHtmlJson':[],'addThisJson':[]};
@@ -309,222 +309,218 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 			
 			
 			// # check if valid special comment(should be)
-			if(str && str.indexOf('{')!==-1){
-				str = str.replace('<!--','');
-				str = str.replace('-->','');
-				
-				var json = JSON.parse(str);
-				
-				var execute_this,wid,div_class,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName,addThisWid = '';
-				
-				var links = [];
-			    
-				if(json.ExecuteThis && json.AddThis){
-					execute_this = 'addthis';
-					addThisWid = json.AddThis;
-				}else if(json.ExecuteThis){
-					execute_this = json.ExecuteThis;
-				}else{
-					break;
-				}
-					
-				if(json.Wid)
-					wid = json.Wid;
-
-				if(json.DIVCLASS)	
-					div_class = json.DIVCLASS;
-					
-				if(json.DIVID)	
-					div_id = json.DIVID;
-
-				if(json.Filename)	
-					fileName = json.Filename;
-
-				if(json.Begin)	
-					beginArea = json.Begin;
-					
-				if(json.End)	
-					endArea = json.End;
-						
-				if(json.Div)	
-					file_prefix = json.Div;		
-					
-				if(json.DataForView)	
-					data_for_view = json.DataForView;	
-					
-				if(json.CreateFile)	
-					create_file = json.CreateFile;// expected values are true or false
-					
-				// add timestamp	
-				timestamp = moment().format('MMMM Do YYYY, h:mm:ss a');;	
-					
-				
-				// to be used in GetFile operation -- file from where content is to be brought	
-				file_to_search = 	directory + '/' + fileName + '.html';
-				
-				switch (execute_this.toLowerCase()){
-					
-					case 'getfile':
-						 if(create_file && (create_file === 'true' ||  create_file === true ||  create_file === 'TRUE')){
-							 // If parameter CreateFile=True the create HTML, CSS, JS actual files for <div>}
-							 createFiles(file_to_search, 'AUTOCREATED :: NewFile' );
-						 }
-							
-					 	 var file_content = "";
-					 	 if(beginArea && endArea && fileName){
-							 // file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
-							 file_content += GetFile(file_to_search,wid,beginArea,endArea);
-							 // file_content += "</div>"; 
-						 }
-						 
-						 // update the file in mapOfFiles
-						 updateFileInMap(current_file,file_content,matchesInFileArr[j],'i');
-						 
-						 break;
-						 
- 					case 'processhtml':
- 						 // added logic for handling 'ProcessHTML'
-						 // expected directive special comment will be like this - 
- 						 // <l!-- 
- 						 // {"ExecuteThis":"ProcessHTML",
- 						 // "Wid":"id1",
- 						 // "Div":"DivVal", 
- 						 // "DataForView":[{"j":"k"},{"l":"m"}],
- 						 // "TestParam1":"TestVal1" } -->
- 					     //  -->
- 					     var original_file_content = GetFile(current_file,'#'+wid);
-						 
-						 if(original_file_content){
-							 var json2 = {};
-						 	 json2["wid"] = wid;
-						 	 json2["data"] = {};
-						 	 json2["data"]["0"] = original_file_content;
-							 
-							 // json2 = extractContentToParams(original_file_content,json2);
-						 	json2["data"]["JS"] = directory+file_prefix+'.js';
-						 	json2["data"]["CSS"] = directory +file_prefix+'.css';
-						 	json2["data"]["DataForView"] = data_for_view;
-						 	json2["data"]["timestamp"] = timestamp;
-							 
- 						 	// add links values if applicable
-						 
- 							 // In ProcessHTML look for these class: 
- 							 // EventLeftClick, EventRightClick, EventMouseIn, EventMouseOut, EventHover, EventBlur
- 							 // If you find them then: create a links attribute as shown: id comes from id, targetlink from href, event<>:wid from the last part of href
-						 
- 							var arr = getFromFile(current_file,'a');
-							
- 							for(var noOfAnchors = 0 ;noOfAnchors < arr.length; noOfAnchors++){
- 								if(arr && arr[noOfAnchors].attr('class') && arr[noOfAnchors].attr('id') 
- 								&& arr[noOfAnchors].attr('href') && arr[noOfAnchors].text()){
- 									var classA = arr[noOfAnchors].attr('class');
- 									if(classA === 'EventLeftClick' || classA === 'EventRightClick'  || classA === 'EventMouseOut'  || classA === 'EventMouseIn'  || classA === 'EventBlur'  || classA === 'EventHover' ){
- 										// applicable for an entry into JSON
- 										var id = arr[noOfAnchors].attr('id');
- 										var href = arr[noOfAnchors].attr('href');
- 										var text = arr[noOfAnchors].text();
- 										var jsonEntry = {};
- 										jsonEntry['id']=id;
- 										jsonEntry['targetLink']='href=\''+ href +'\'';
- 										jsonEntry[classA]=text;
-										
- 										links.push(jsonEntry);
- 									}
- 								}
- 							}
-							
- 							if(links && links.length > 0){
- 								json2["data"]["links"]=links;
- 							}
-							 // copy any extra parameters
-							 for(var attr in json) {
-								 if(attr !== 'ExecuteThis' && attr !== 'wid' && attr !== 'Div' && attr !== 'DataForView'){
-									 // clone any extra params to json2 array being constructed
-									 json2["data"][attr]=json[attr];
-								 }
-						     }
-							 
-	   						  // It will create file C.html, C.CSS, C.JS (look for style and script tags inside div) }
-	   						  if(create_file && (create_file === 'true' || 
-							   create_file === true||  create_file === 'TRUE')){
-	   							 // If parameter CreateFile=True the create HTML, CSS, JS actual files for <div>
-	   							 createFiles(json2["CSS"],'AUTOCREATED NEW FILE');
-	   							 createFiles(json2["JS"],'AUTOCREATED NEW FILE');
-							 
-	   							 // create html content for the div  :: for creating a HTML file
-	   							 var  htmlForDiv = '';
-	   							 htmlForDiv += '<!DOCTYPE HTML>';
-	   							 htmlForDiv += '<html>';
-	   							 htmlForDiv += '<body>';
-	   							 htmlForDiv += '<div id="'+ wid +'">';
-	   							 htmlForDiv += '<link href="'+file_prefix+'.css'+'" rel="stylesheet" type="text/css" />';  
-	   							 htmlForDiv += '<script src="'+file_prefix+'.js'+'" type="text/javascript"></script>' ; 
-	   							 htmlForDiv += 'AUTOCREATED NEW HTML FILE CONTENT';
-	   							 htmlForDiv += '</div>';
-	   							 htmlForDiv += '</body>';
-	   							 htmlForDiv += '</html>';
-							 
-							 
-	   							 // create HTML file
-	   							 createFiles(directory+file_prefix+'.html',htmlForDiv);
-	   						 }
-						 
-						 	
-							
-							processHtmlJsonArray.push(json2);
-	 							
-							 
-							 // change the map value for this directive to processsed by making this as a HTML comment
-							 // update the file in mapOfFiles. This is necessary, so that the changes being done in this regard are not lost later when the file is actually written
-							 var updated_content = matchesInFileArr[j].replace('<!','<!').replace('[','\[');
-							 updated_content += "<!-- Time Stamp "+ timestamp +"-->";
-							 
-							 // update the map files so that changes made are saved when files are writen
-							 // updateFileInMap(current_file,updated_content,matchesInFileArr[j]);
-						 }
-				 			break;
-						case 'addthis':
-							// logic for handling 'AddThis'		
-						    //  
-						    // <!-- 
-						    // {
-						    // 	"AddThis":"testwidname1",
-							//  "ExecuteThis":"updatewid",
-							//  "z":"w"
-							// } 
-						    // --> 
-							// 
-							//	   to this:
-							//	   "ExecuteThis":	"updatewid"
-							//	   "z":	"w"
-
-							var jsonAddThis = {};
-							if(!wid){
-								// Generate a v1 (time-based) id
-								wid = uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
-							}
-
-							jsonAddThis["wid"] = {};
-							jsonAddThis["data"] = {};
-							jsonAddThis["wid"] = wid;
-						 	jsonAddThis["data"]["0"] = original_file_content;
-							 
-							 // json2 = extractContentToParams(original_file_content,json2);
-
-							// copy any extra parameters
-							if(addThisWid && execute_this){
-								for(var attr in json) {
-									if(attr !== 'AddThis'){
-										// clone any extra params to json2 array being constructed
-										jsonAddThis["data"][attr]=json[attr];
-									}
-							    }
-								addThisJsonArray.push(jsonAddThis);
-							}
-							break;
-				}
+			var json = JSON.parse(str);
+			
+			var execute_this,wid,div_class,div_id,file_prefix,create_file,timestamp,beginArea,endArea,fileName,addThisWid = '';
+			
+			var links = [];
+		    
+			if(json.ExecuteThis && json.AddThis){
+				execute_this = 'addthis';
+				addThisWid = json.AddThis;
+			}else if(json.ExecuteThis){
+				execute_this = json.ExecuteThis;
+			}else{
+				break;
 			}
-		}	
+				
+			if(json.Wid)
+				wid = json.Wid;
+
+			if(json.DIVCLASS)	
+				div_class = json.DIVCLASS;
+				
+			if(json.DIVID)	
+				div_id = json.DIVID;
+
+			if(json.Filename)	
+				fileName = json.Filename;
+
+			if(json.Begin)	
+				beginArea = json.Begin;
+				
+			if(json.End)	
+				endArea = json.End;
+					
+			if(json.Div)	
+				file_prefix = json.Div;		
+				
+			if(json.DataForView)	
+				data_for_view = json.DataForView;	
+				
+			if(json.CreateFile)	
+				create_file = json.CreateFile;// expected values are true or false
+				
+			// add timestamp	
+			timestamp = moment().format('MMMM Do YYYY, h:mm:ss a');;	
+				
+			
+			// to be used in GetFile operation -- file from where content is to be brought	
+			file_to_search = 	directory + '/' + fileName + '.html';
+			
+			switch (execute_this.toLowerCase()){
+				
+				case 'getfile':
+					 if(create_file && (create_file === 'true' ||  create_file === true ||  create_file === 'TRUE')){
+						 // If parameter CreateFile=True the create HTML, CSS, JS actual files for <div>}
+						 createFiles(file_to_search, 'AUTOCREATED :: NewFile' );
+					 }
+						
+				 	 var file_content = "";
+				 	 if(beginArea && endArea && fileName){
+						 // file_content="<div class='file' data-wid='"+ wid +"' data-div='"+ div_id +"'>";
+						 file_content += GetFile(file_to_search,wid,beginArea,endArea);
+						 // file_content += "</div>"; 
+					 }
+					 
+					 // update the file in mapOfFiles
+					 updateFileInMap(current_file,file_content,matchesInFileArr[j],'i');
+					 
+					 break;
+					 
+					case 'processhtml':
+						 // added logic for handling 'ProcessHTML'
+					 // expected directive special comment will be like this - 
+						 // <l!-- 
+						 // {"ExecuteThis":"ProcessHTML",
+						 // "Wid":"id1",
+						 // "Div":"DivVal", 
+						 // "DataForView":[{"j":"k"},{"l":"m"}],
+						 // "TestParam1":"TestVal1" } -->
+					     //  -->
+					     var original_file_content = GetFile(current_file,'#'+wid);
+					 
+					 if(original_file_content){
+						 var json2 = {};
+					 	 json2["wid"] = wid;
+					 	 json2["data"] = {};
+					 	 json2["data"]["0"] = original_file_content;
+						 
+						 // json2 = extractContentToParams(original_file_content,json2);
+					 	json2["data"]["JS"] = directory+file_prefix+'.js';
+					 	json2["data"]["CSS"] = directory +file_prefix+'.css';
+					 	json2["data"]["DataForView"] = data_for_view;
+					 	json2["data"]["timestamp"] = timestamp;
+						 
+						 	// add links values if applicable
+					 
+							 // In ProcessHTML look for these class: 
+							 // EventLeftClick, EventRightClick, EventMouseIn, EventMouseOut, EventHover, EventBlur
+							 // If you find them then: create a links attribute as shown: id comes from id, targetlink from href, event<>:wid from the last part of href
+					 
+							var arr = getFromFile(current_file,'a');
+						
+							for(var noOfAnchors = 0 ;noOfAnchors < arr.length; noOfAnchors++){
+								if(arr && arr[noOfAnchors].attr('class') && arr[noOfAnchors].attr('id') 
+								&& arr[noOfAnchors].attr('href') && arr[noOfAnchors].text()){
+									var classA = arr[noOfAnchors].attr('class');
+									if(classA === 'EventLeftClick' || classA === 'EventRightClick'  || classA === 'EventMouseOut'  || classA === 'EventMouseIn'  || classA === 'EventBlur'  || classA === 'EventHover' ){
+										// applicable for an entry into JSON
+										var id = arr[noOfAnchors].attr('id');
+										var href = arr[noOfAnchors].attr('href');
+										var text = arr[noOfAnchors].text();
+										var jsonEntry = {};
+										jsonEntry['id']=id;
+										jsonEntry['targetLink']='href=\''+ href +'\'';
+										jsonEntry[classA]=text;
+									
+										links.push(jsonEntry);
+									}
+								}
+							}
+						
+							if(links && links.length > 0){
+								json2["data"]["links"]=links;
+							}
+						 // copy any extra parameters
+						 for(var attr in json) {
+							 if(attr !== 'ExecuteThis' && attr !== 'wid' && attr !== 'Div' && attr !== 'DataForView'){
+								 // clone any extra params to json2 array being constructed
+								 json2["data"][attr]=json[attr];
+							 }
+					     }
+						 
+   						  // It will create file C.html, C.CSS, C.JS (look for style and script tags inside div) }
+   						  if(create_file && (create_file === 'true' || 
+						   create_file === true||  create_file === 'TRUE')){
+   							 // If parameter CreateFile=True the create HTML, CSS, JS actual files for <div>
+   							 createFiles(json2["CSS"],'AUTOCREATED NEW FILE');
+   							 createFiles(json2["JS"],'AUTOCREATED NEW FILE');
+						 
+   							 // create html content for the div  :: for creating a HTML file
+   							 var  htmlForDiv = '';
+   							 htmlForDiv += '<!DOCTYPE HTML>';
+   							 htmlForDiv += '<html>';
+   							 htmlForDiv += '<body>';
+   							 htmlForDiv += '<div id="'+ wid +'">';
+   							 htmlForDiv += '<link href="'+file_prefix+'.css'+'" rel="stylesheet" type="text/css" />';  
+   							 htmlForDiv += '<script src="'+file_prefix+'.js'+'" type="text/javascript"></script>' ; 
+   							 htmlForDiv += 'AUTOCREATED NEW HTML FILE CONTENT';
+   							 htmlForDiv += '</div>';
+   							 htmlForDiv += '</body>';
+   							 htmlForDiv += '</html>';
+						 
+						 
+   							 // create HTML file
+   							 createFiles(directory+file_prefix+'.html',htmlForDiv);
+   						 }
+					 
+					 	
+						
+						processHtmlJsonArray.push(json2);
+ 							
+						 
+						 // change the map value for this directive to processsed by making this as a HTML comment
+						 // update the file in mapOfFiles. This is necessary, so that the changes being done in this regard are not lost later when the file is actually written
+						 var updated_content = matchesInFileArr[j].replace('<!','<!').replace('[','\[');
+						 updated_content += "<!-- Time Stamp "+ timestamp +"-->";
+						 
+						 // update the map files so that changes made are saved when files are writen
+						 // updateFileInMap(current_file,updated_content,matchesInFileArr[j]);
+					 }
+			 			break;
+					case 'addthis':
+						// logic for handling 'AddThis'		
+					    //  
+					    // <!-- 
+					    // {
+					    // 	"AddThis":"testwidname1",
+						//  "ExecuteThis":"updatewid",
+						//  "z":"w"
+						// } 
+					    // --> 
+						// 
+						//	   to this:
+						//	   "ExecuteThis":	"updatewid"
+						//	   "z":	"w"
+
+						var jsonAddThis = {};
+						if(!wid){
+							// Generate a v1 (time-based) id
+							wid = uuid.v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
+						}
+
+						jsonAddThis["wid"] = {};
+						jsonAddThis["data"] = {};
+						jsonAddThis["wid"] = wid;
+					 	jsonAddThis["data"]["0"] = original_file_content;
+						 
+						 // json2 = extractContentToParams(original_file_content,json2);
+
+						// copy any extra parameters
+						if(addThisWid && execute_this){
+							for(var attr in json) {
+								if(attr !== 'AddThis'){
+									// clone any extra params to json2 array being constructed
+									jsonAddThis["data"][attr]=json[attr];
+								}
+						    }
+							addThisJsonArray.push(jsonAddThis);
+						}
+						break;
+			}
+		}
+		
 		
 	}
 	if(processHtmlJsonArray.length>0){
