@@ -293,7 +293,12 @@ exports.handleAddThis =  function run(jsonArr,callback){
 exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_file,to_search_file,directory){
 	// # match special comments in the file
 
-	var matchesInFileArr = fileContent.match(/\<!(-- {([^\-]|[\r\n]|[\r\n]|-[^\-])*} --)\>/g);
+	var regex = '\<!-- {([^\-]|[\r\n]|[\r\n]|-[^\-])*} --\>';
+	var re = new RegExp(regex, 'gi');
+	var array = re.exec(fileContent);
+	var matchesInFileArr = array;
+
+	// var matchesInFileArr = fileContent.match(//g);
 	
 	if(!returnJson){
 		returnJson =   {'processHtmlJson':[],'addThisJson':[]};
@@ -306,7 +311,8 @@ exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_fil
 		for(var j=0;j < matchesInFileArr.length;j++){
 			// # process the files associated, this will be recursive call
 			str = matchesInFileArr[j];
-			
+			str = str.replace('<!--','');
+			str = str.replace('-->','');
 			
 			// # check if valid special comment(should be)
 			var json = JSON.parse(str);
