@@ -288,6 +288,7 @@ exports.handleAddThis =  function run(jsonArr,callback){
 	
 };
 
+// TODO fix regex expression to not break if comments inside contain <
 // logic to process the special comments (all types - ProcessHTML, GetFile and AddThis)
 exports.getAndProcessFile = getAndProcessFile = function(fileContent,current_file,to_search_file,directory){
 	// # match special comments in the file

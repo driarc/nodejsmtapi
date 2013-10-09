@@ -143,7 +143,6 @@ exports.executethis = function(req, res) {
                     //  handle javascript case
                     var jsFunction = JSON.stringify(item.js);
 
-
                     var regex = 'function(\()([^)]*)(\))';
 
                     var re = new RegExp(regex, 'gi');
