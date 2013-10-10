@@ -40,7 +40,6 @@ exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, upd
 		}
 	}
 	delete queryObject.wid;
-	delete queryObject.towid;
 	
 	db.collection(schemaToLookup).update(queryObject, {$set: {"data":updatedObject}}, function(err, result) {
 		if (err) {
@@ -130,9 +129,6 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
     var widVal = (entityToAdd['wid']);
     if(!widVal){
     	widVal = (entityToAdd['Wid']);
-    }
-    if(!widVal){
-    	widVal = (entityToAdd['towid']);
     }
     console.log('addOrUpdate :::: widVal is >>> '+widVal);
 	getFromMongo({"wid":widVal},schemaToLookup,function(returnedObject){

@@ -226,24 +226,28 @@ exports.executethis = function(req, res) {
                 case 'updatewid':
 
                     // handle updatewid
-                    if(item.towid){
+                    var wid = item.towid;
+                    delete item.towid;
+                    item['wid']=wid;
+
+                    if(item.wid){
                         // get JSOn to be saved
                         var entityToAdd = cleanParameters(item,["executethis","preexecute","postexecute","fromwid"]);
                         
-                        // // if fromProperty exists, then copy that as a new property
-                        // if(entityToAdd.fromproperty){
-                        //     delete  entityToAdd.fromproperty;
-                        // }
+                        // if fromProperty exists, then copy that as a new property
+                        if(entityToAdd.fromproperty){
+                            delete  entityToAdd.fromproperty;
+                        }
                         
-                        // // if toProperty exists, then copy that as a new property
-                        // if(entityToAdd.toproperty){
-                        //     delete  entityToAdd.toproperty;
-                        // }
+                        // if toProperty exists, then copy that as a new property
+                        if(entityToAdd.toproperty){
+                            delete  entityToAdd.toproperty;
+                        }
                         
                         // if status exists and equals 5, then delete the wid data
                         if(item.status){
                             if(item.status === "5" || item.status === 5){
-                                dao.removeFromMongo({"wid":entityToAdd.towid},config.TABLE_NAME,function(o){
+                                dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
                                     console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
                                     res.send(o);
                                     res.end();   
