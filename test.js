@@ -252,7 +252,7 @@ describe('DAO test layer', function(){
     
 //    var requestObj = [{"ExecuteThis":"UpdateWid","Wid":"test1","x2":"y2","z2":"w2", "preExecute" : "sayPreHello","postExecute" : "sayPostHello"}];
 
-    var requestObj = [{ "ExecuteThis":"UpdateWid", "Wid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}];
+    var requestObj = [{ "ExecuteThis":"UpdateWid", "ToWid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}];
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
           superagent.put(config.SERVICE_URL+'executethis')
@@ -279,7 +279,7 @@ describe('DAO test layer', function(){
 
 
     var o = {"wid":"joetestwid","data":{"x":"y","z":"w"}};
-    var requestObj = [{ "executethis":"updatewid", "status":"5", "Wid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}]
+    var requestObj = [{ "executethis":"updatewid", "status":"5", "ToWid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal"}]
       // remove the added entry
       dao.addOrUpdate(o,config.TABLE_NAME,function(o){
           superagent.put(config.SERVICE_URL+'executethis')
@@ -295,6 +295,14 @@ describe('DAO test layer', function(){
         });
 
     });
+
+  // [{"ExecuteThis":"UpdateWid", "FromWid":"joetestwid2", "ToWid":"joetestwid3"}]
+  // updatewidCopyAllProperties
+
+
+  // [{"ExecuteThis":"UpdateWid", "FromWid":"joetestwid", "FromProperty":"DateTime", "ToWid":"joetestwid2", "ToProperty":"DateTime"}]
+  // updatewidCopySingleProperties
+
 
   // the request is for 'getwid' , witha a preexecute and postExecute method each
   it('getwid', function(done){
