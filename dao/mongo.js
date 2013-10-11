@@ -29,16 +29,22 @@ exports.removeFromMongo = removeFromMongo = function(objToRemove,schemaToLookup,
 exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
 	
 	delete updatedObject.wid;
-	if(!updatedObject.data){
-		for (var props in queryObject.data) {
-			updatedObject[props]=queryObject.data[props];
-		}  
-	}else{
-		delete updatedObject.data;
-		for (var props in queryObject.data) {
-			updatedObject[props]=queryObject.data[props];
+	for (var props in queryObject.data) {
+		for(var updatedProps in updatedObject){
+			var containedEarlier = false;
+
+			if(updatedProps !== props){
+				containedEarlier = true;
+				break;
+			}
+			if(!containedEarlier){
+				updatedObject[props]=queryObject.data[props];
+				console.log('updatedProps '+ updatedProps);
+				console.log('props '+ props);
+			}
 		}
 	}
+
 	delete queryObject.wid;
 	
 	db.collection(schemaToLookup).update(queryObject, {$set: {"data":updatedObject}}, function(err, result) {
@@ -138,7 +144,6 @@ exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
             updateToMongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
                 console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
                 callback(updatedObj);
-                
             });
         }else{
             addToMongo(entityToAdd,schemaToLookup,function(addedObj){

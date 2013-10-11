@@ -249,7 +249,7 @@ exports.executethis = function(req, res) {
                             if(item.status === "5" || item.status === 5){
                                 dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
                                     console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
-                                    res.send(o);
+                                    res.send({"message":"wid deleted"});
                                     res.end();   
                                 });
                             }

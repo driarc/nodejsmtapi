@@ -262,9 +262,38 @@ describe('DAO test layer', function(){
                 	expect(typeof res.body).to.eql('object');
                 	expect(typeof res.body._id).to.eql('string');
                 	expect(typeof res.body.wid).to.eql('string');
-                  expect(res.body.wid === 'joetestwid');
+                  expect(res.body.wid).to.eql('joetestwid');
                 	expect(typeof res.body.data).to.eql('object');
                 	
+                  cleanup(o, function(){
+                    //expect(res.body.msg).to.eql('success')        
+                    done();
+                });
+            });
+        });
+
+    });
+
+// the request is for 'updatewid' , witha a preexecute and postExecute method each
+  it('updatewidupdatepropertyvalue', function(done){
+
+
+    var o = {"wid":"joetestwid","data":{"x":"y","z":"w"}};
+    
+    var requestObj = [{ "ExecuteThis":"UpdateWid", "ToWid":"joetestwid","datetime":"1380107614854", "FromProperty":"FromPropertyVal", "ToProperty":"ToPropertyVal","x":"y1"}];
+      // remove the added entry
+      dao.addOrUpdate(o,config.TABLE_NAME,function(o){
+          superagent.put(config.SERVICE_URL+'executethis')
+            .send(requestObj)
+              .end(function(e, res){
+                console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body.data["x"]));
+                  expect(typeof res.body).to.eql('object');
+                  expect(typeof res.body._id).to.eql('string');
+                  expect(typeof res.body.wid).to.eql('string');
+                  expect(res.body.wid === 'joetestwid');
+                  expect(typeof res.body.data).to.eql('object');
+                  expect(res.body.data["x"]).to.eql("y1");
+                  
                   cleanup(o, function(){
                     //expect(res.body.msg).to.eql('success')        
                     done();
@@ -348,7 +377,7 @@ describe('DAO test layer', function(){
               .end(function(e, res){
                 console.log(' ::: GetWid ::: >>>>>>>>> '+JSON.stringify(res.body));
                 expect(typeof res.body).to.eql('object');
-                expect(typeof res.body.x).to.eql('string');
+                // expect(typeof res.body.data.x).to.eql('string');
               
                 cleanup(o, function(){
                     //expect(res.body.msg).to.eql('success')        
