@@ -33,10 +33,11 @@ exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, upd
 		for(var updatedProps in updatedObject){
 			var containedEarlier = false;
 
-			if(updatedProps !== props){
+			if(updatedProps === props){
 				containedEarlier = true;
 				break;
 			}
+			
 			if(!containedEarlier){
 				updatedObject[props]=queryObject.data[props];
 				console.log('updatedProps '+ updatedProps);
