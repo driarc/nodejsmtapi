@@ -324,6 +324,37 @@ describe('DAO test layer', function(){
 
   // [{"ExecuteThis":"UpdateWid", "FromWid":"joetestwid2", "ToWid":"joetestwid3"}]
   // updatewidCopyAllProperties
+  it('updatewidcopyallproperties', function(done){
+
+
+    var o1 = {"wid":"joetestwid1","data":{"x1":"y1","z1":"w1"}};
+    var o2 = {"wid":"joetestwid2","data":{"x2":"y2","z2":"w2"}};
+    var requestObj = [{ "executethis":"updatewid", "ToWid":"joetestwid2", "FromWid": "joetestwid1", "datetime":"1380107614854"}]
+      // remove the added entry
+      dao.addOrUpdate(o1,config.TABLE_NAME,function(o1){
+        dao.addOrUpdate(o2,config.TABLE_NAME,function(o2){
+          superagent.put(config.SERVICE_URL+'executethis')
+            .send(requestObj)
+              .end(function(e, res){
+                console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
+                  expect(typeof res.body).to.eql('object');
+                  expect(typeof res.body.x1).to.eql('string');
+                  expect(typeof res.body.x2).to.eql('string');
+                  expect(res.body["x1"]).to.eql('y1');
+                   expect(res.body["x2"]).to.eql('y2');
+                  expect(typeof res.body).to.eql('object');
+                  cleanup(o1, function(){
+                    cleanup(o2, function(){
+                    //expect(res.body.msg).to.eql('success')        
+                    done();
+                  });
+                });
+            });
+        });
+      }); 
+
+
+    });
 
 
   // [{"ExecuteThis":"UpdateWid", "FromWid":"joetestwid", "FromProperty":"DateTime", "ToWid":"joetestwid2", "ToProperty":"DateTime"}]
