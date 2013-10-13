@@ -261,8 +261,10 @@ exports.executethis = function(req, res) {
 
                                 dao.getFromMongo({"wid":itemToWid},config.TABLE_NAME,function(objTo){
                                     // copy existing properties to entityToAdd
-                                    for(var attr in objTo.data){
-                                       entityToAdd[attr]=objTo.data[attr]; 
+                                    if(objTo && objTo.data){
+                                        for(var attr in objTo.data){
+                                           entityToAdd[attr]=objTo.data[attr]; 
+                                        }
                                     }
 
                                     // copy new property from other wid
@@ -292,7 +294,7 @@ exports.executethis = function(req, res) {
                                 dao.getFromMongo({"wid":itemToWid},config.TABLE_NAME,function(objTo){
 
                                     // copy new property from other wid
-                                    if(objFrom && objTo){
+                                    if(objFrom && objTo && objFrom.data && objTo.data){
                                         // copy existing properties to entityToAdd
                                         for(var attr in objFrom.data){
                                            entityToAdd[attr]=objFrom.data[attr]; 
