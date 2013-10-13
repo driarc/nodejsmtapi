@@ -1,5 +1,5 @@
 
-exports.TABLE_NAME = 'colsam';
+exports.TABLE_NAME = 'maincollection';
 
 exports.MONGODB_URL = 'mongodb://trugate:tempalte-77@ds045627.mongolab.com:45627/wikiwallettesting';
 

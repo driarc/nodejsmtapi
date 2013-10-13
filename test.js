@@ -265,8 +265,7 @@ describe('DAO test layer', function(){
                   expect(res.body.wid).to.eql('joetestwid');
                 	expect(typeof res.body.data).to.eql('object');
                 	
-                  cleanup(o, function(){
-                    //expect(res.body.msg).to.eql('success')        
+                  cleanup(o, function(){      
                     done();
                 });
             });
@@ -275,7 +274,7 @@ describe('DAO test layer', function(){
     });
 
 // the request is for 'updatewid' , witha a preexecute and postExecute method each
-  it('updatewidupdatepropertyvalue', function(done){
+  it('updatewidpropertyvalue', function(done){
 
 
     var o = {"wid":"joetestwid","data":{"x":"y","z":"w"}};
@@ -286,16 +285,14 @@ describe('DAO test layer', function(){
           superagent.put(config.SERVICE_URL+'executethis')
             .send(requestObj)
               .end(function(e, res){
-                console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body.data["x"]));
+                  console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body.data["x"]));
                   expect(typeof res.body).to.eql('object');
                   expect(typeof res.body._id).to.eql('string');
                   expect(typeof res.body.wid).to.eql('string');
                   expect(res.body.wid === 'joetestwid');
                   expect(typeof res.body.data).to.eql('object');
-                  expect(res.body.data["x"]).to.eql("y1");
-                  
+                  expect(res.body.data["x"]).to.eql("y2");
                   cleanup(o, function(){
-                    //expect(res.body.msg).to.eql('success')        
                     done();
                 });
             });
@@ -327,7 +324,87 @@ describe('DAO test layer', function(){
 
   // [{"ExecuteThis":"UpdateWid", "FromWid":"joetestwid2", "ToWid":"joetestwid3"}]
   // updatewidCopyAllProperties
+  it('updatewidcopysingleproperty', function(done){
 
+
+    var o1 = {"wid":"joetestwid1","x1":"y1","z1":"w1"};
+    var o2 = {"wid":"joetestwid2","x2":"y2","z2":"w2"};
+    var requestObj = [{ "executethis":"updatewid", "ToWid":"joetestwid2", "FromWid": "joetestwid1", "datetime":"1380107614854", "ToProperty" : "x2","FromProperty":"x1"}]
+      // remove the added entry
+      dao.addOrUpdate(o1,config.TABLE_NAME,function(o1){
+        dao.addOrUpdate(o2,config.TABLE_NAME,function(o2){
+          superagent.put(config.SERVICE_URL+'executethis')
+            .send(requestObj)
+              .end(function(e, res){
+                console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
+                  expect(typeof res.body).to.eql('object');
+                  expect(typeof res.body.data).to.eql('object');
+                  console.log(' <<< '+ JSON.stringify(res.body));
+                  expect(typeof res.body.data["x2"]).to.eql('string');
+                  expect(typeof res.body.data["z2"]).to.eql('string');
+                  expect(res.body.data["x2"]).to.eql('y1');
+                   expect(res.body.data["z2"]).to.eql('w2');
+                  cleanup(o1, function(){
+                    cleanup(o2, function(){
+                    //expect(res.body.msg).to.eql('success')        
+                    done();
+                  });
+                });
+            });
+        });
+      }); 
+
+
+    });
+
+
+  it('updatewidcopyallproperties', function(done){
+
+
+    var o1 = {"wid":"joetestwid1","x1":"y1","z1":"w1"};
+    var o2 = {"wid":"joetestwid2","x2":"y2","z2":"w2"};
+    var requestObj = [{ "executethis":"updatewid", "ToWid":"joetestwid2", "FromWid": "joetestwid1", "datetime":"1380107614854"}]
+        
+    // remove the added entries, if existing
+    cleanup({"wid":o1.wid},function(o1){
+      cleanup({"wid":o2.wid},function(o2){
+
+          o1 = {"wid":"joetestwid1","x1":"y1","z1":"w1"};
+          o2 = {"wid":"joetestwid2","x2":"y2","z2":"w2"};
+
+          dao.addOrUpdate(o1,config.TABLE_NAME,function(o1){
+            dao.addOrUpdate(o2,config.TABLE_NAME,function(o2){
+              superagent.put(config.SERVICE_URL+'executethis')
+                .send(requestObj)
+                  .end(function(e, res){
+                    console.log(' ::: updatewid ::: >>>>>>>>> '+JSON.stringify(res.body));
+                      expect(typeof res.body).to.eql('object');
+                      expect(typeof res.body.data).to.eql('object');
+                      console.log(' <<< '+ JSON.stringify(res.body));
+                      expect(typeof res.body.data["x1"]).to.eql('string');
+                      expect(typeof res.body.data["x2"]).to.eql('string');
+                      expect(typeof res.body.data["z1"]).to.eql('string');
+                      expect(typeof res.body.data["z2"]).to.eql('string');
+                      expect(res.body.data["x1"]).to.eql('y1');
+                       expect(res.body.data["x2"]).to.eql('y2');
+                       expect(res.body.data["z1"]).to.eql('w1');
+                       expect(res.body.data["z2"]).to.eql('w2');
+                      cleanup(o1, function(){
+                        cleanup(o2, function(){
+                        //expect(res.body.msg).to.eql('success')        
+                        done();
+                      });
+                    });
+                });
+            });
+          }); 
+
+      
+      });
+
+    });
+
+    });
 
   // [{"ExecuteThis":"UpdateWid", "FromWid":"joetestwid", "FromProperty":"DateTime", "ToWid":"joetestwid2", "ToProperty":"DateTime"}]
   // updatewidCopySingleProperties
@@ -377,7 +454,7 @@ describe('DAO test layer', function(){
               .end(function(e, res){
                 console.log(' ::: GetWid ::: >>>>>>>>> '+JSON.stringify(res.body));
                 expect(typeof res.body).to.eql('object');
-                // expect(typeof res.body.data.x).to.eql('string');
+                expect(typeof res.body.x).to.eql('string');
               
                 cleanup(o, function(){
                     //expect(res.body.msg).to.eql('success')        

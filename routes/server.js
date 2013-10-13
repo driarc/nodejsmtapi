@@ -227,42 +227,118 @@ exports.executethis = function(req, res) {
 
                     // handle updatewid
                     var wid = item.towid;
-                    delete item.towid;
                     item['wid']=wid;
 
                     if(item.wid){
                         // get JSOn to be saved
-                        var entityToAdd = cleanParameters(item,["executethis","preexecute","postexecute","fromwid"]);
                         
-                        // if fromProperty exists, then copy that as a new property
-                        if(entityToAdd.fromproperty){
-                            delete  entityToAdd.fromproperty;
+                        var itemFromWid = item.fromwid;
+                        if(itemFromWid){
+                            itemFromWid = itemFromWid.toLowerCase();
+                        }
+
+                        var itemToWid = item.towid;
+                        if(itemToWid){
+                            itemToWid = itemToWid.toLowerCase();
+                        }
+
+                        var itemFromProperty = item.fromproperty;
+                        if(itemFromProperty){
+                            itemFromProperty = itemFromProperty.toLowerCase();
+                        }
+
+                        var itemToProperty = item.toproperty;
+                        if(itemToProperty){
+                            itemToProperty = itemToProperty.toLowerCase();
                         }
                         
-                        // if toProperty exists, then copy that as a new property
-                        if(entityToAdd.toproperty){
-                            delete  entityToAdd.toproperty;
-                        }
-                        
-                        // if status exists and equals 5, then delete the wid data
-                        if(item.status){
-                            if(item.status === "5" || item.status === 5){
-                                dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
-                                    console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
-                                    res.send({"message":"wid deleted"});
-                                    res.end();   
+                        var entityToAdd = cleanParameters(item,["executethis","preexecute","postexecute","fromwid","towid","fromproperty","toproperty"]);
+
+                        if(itemFromWid && itemToWid && itemFromProperty && itemToProperty){
+                            // if fromProperty,toproperty,towid and fromWid exists, then copy that as a new property
+                            dao.getFromMongo({"wid":itemFromWid},config.TABLE_NAME,function(objFrom){
+
+
+                                dao.getFromMongo({"wid":itemToWid},config.TABLE_NAME,function(objTo){
+                                    // copy existing properties to entityToAdd
+                                    for(var attr in objTo.data){
+                                       entityToAdd[attr]=objTo.data[attr]; 
+                                    }
+
+                                    // copy new property from other wid
+                                    if(objTo && objFrom.data[itemFromProperty]){
+                                        entityToAdd[itemToProperty] = objFrom.data[itemFromProperty];
+
+                                        // call persistence method
+                                        dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                                           console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                                           res.send(o);
+                                           res.end();   
+                                        });
+
+                                    }else{
+                                        console.log("updatewid :: fromWid is not valid - ");  
+                                        res.send({"message":"updatewid :: fromWid and fromPropertyCombination is not valid"});
+                                        res.end();   
+                                    }
+                                });    
+                            });
+                               
+
+                        }else if(itemFromWid && itemToWid){
+                            // if towid and fromWid exists, then copy every property
+                            dao.getFromMongo({"wid":itemFromWid},config.TABLE_NAME,function(objFrom){
+
+                                dao.getFromMongo({"wid":itemToWid},config.TABLE_NAME,function(objTo){
+
+                                    // copy new property from other wid
+                                    if(objFrom && objTo){
+                                        // copy existing properties to entityToAdd
+                                        for(var attr in objFrom.data){
+                                           entityToAdd[attr]=objFrom.data[attr]; 
+                                        }
+                                         
+                                        for(var attr in objTo.data){
+                                            entityToAdd[attr] = objTo.data[attr];
+                                        }
+                                        
+                                        // call persistence method
+                                        dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                                           console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                                           res.send(o);
+                                           res.end();   
+                                        });
+
+                                    }else{
+                                        console.log("updatewid :: fromWid and fromPropertyCombination is not valid ");  
+                                        res.send({"message":"updatewid :: fromWid is not valid"});
+                                        res.end();   
+                                    }
+                                });    
+                            });
+                        }else{
+
+                            // if status exists and equals 5, then delete the wid data
+                            if(item.status){
+                                if(item.status === "5" || item.status === 5){
+                                    dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
+                                        console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
+                                        res.send({"message":"wid deleted"});
+                                        res.end();   
+                                    });
+                                }
+                            }else{
+                                console.log("updatewid :: Add/update record ==== "+JSON.stringify(entityToAdd));
+
+                                // call persistence method
+                                dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                                   console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                                   res.send(o);
+                                   res.end();   
                                 });
                             }
-                        }else{
-                            console.log("updatewid :: Add/update record "+JSON.stringify(entityToAdd));
-
-                            // call persistence method
-                            dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
-                               console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
-                               res.send(o);
-                               res.end();   
-                            });
                         }
+                            
                         
                     }else{
                        console.log("updatewid ::: No Wid specified, Do Nothing - ");  
