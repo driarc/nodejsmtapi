@@ -7,7 +7,8 @@ var mongoskin = require('mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
-  , filecheck = require('../scrapejob/scrape.js');
+  , filecheck = require('../scrapejob/scrape.js')
+  , addget = require('../dao/addget.js');
 
 var TABLE_NAME = config.TABLE_NAME;
 
