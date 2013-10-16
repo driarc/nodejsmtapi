@@ -172,7 +172,7 @@ exports.executethis = function(req, res) {
                 case 'query':
                     var rec = item.query;
                     console.log("Fetching one record "+JSON.stringify(rec));
-                    dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
+                    dao.mongoquery(rec,config.TABLE_NAME,function(obj){
                         console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                         res.send(obj);
                         res.end();

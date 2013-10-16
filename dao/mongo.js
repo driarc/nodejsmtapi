@@ -82,6 +82,22 @@ exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callbac
 	
 };
 
+// the callback function on succesful addition is also specified
+exports.mongoquery = mongoquery = function(objToFind,schemaToLookup, callback){
+	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
+	// Check to see if the wid name exists
+    db.collection(schemaToLookup).find(objToFind, function(err, result) {
+    	if (!result) {
+			callback(null);
+	    }
+	    else{
+		    console.log('Found! '+ JSON.stringify(result));
+	    	callback(result);
+	    }
+	 }); 
+	
+};
+
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
 exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaToLookup, callback){
