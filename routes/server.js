@@ -169,7 +169,16 @@ exports.executethis = function(req, res) {
                     // TODO ::javascript,variable, executeMultiple, addwidmaster and getwidmaster    
     
                   
-    
+                case 'query':
+                    var rec = item.query;
+                    console.log("Fetching one record "+JSON.stringify(rec));
+                    dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                        res.send(obj);
+                        res.end();
+                    });
+
+                    break;
 
                 case 'getfrommongo':
                     // handle get from mongo DB logic
