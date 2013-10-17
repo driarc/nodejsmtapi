@@ -1,5 +1,5 @@
-var mongoose = require('mongoose')
-,config = require('../config.js')
+
+var config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
 ,db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS);

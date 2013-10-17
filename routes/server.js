@@ -92,9 +92,9 @@ function callScrapeLogic(res, callback){
 exports.executethis = function(req, res) {
 
     var item = req.body[0];
+    console.log(JSON.stringify(item));
 
     item = toLowerKeys(item);
-    console.log(JSON.stringify(item));
 
    if (item && item.addthis && item.executethis) {
         //  handle AddThis as a command 
