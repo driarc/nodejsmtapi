@@ -93,9 +93,9 @@ function callScrapeLogic(res, callback){
 exports.executethis = function(req, res) {
 
     var item = req.body[0];
+    console.log(JSON.stringify(item));
 
     item = toLowerKeys(item);
-    console.log(JSON.stringify(item));
 
    if (item && item.addthis && item.executethis) {
         //  handle AddThis as a command 
@@ -172,7 +172,7 @@ exports.executethis = function(req, res) {
                 case 'query':
                     var rec = item.query;
                     console.log("Fetching one record "+JSON.stringify(rec));
-                    dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
+                    dao.mongoquery(rec,config.TABLE_NAME,function(obj){
                         console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
                         res.send(obj);
                         res.end();

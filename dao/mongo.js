@@ -1,5 +1,5 @@
-var mongoose = require('mongoose')
-,config = require('../config.js')
+
+var config = require('../config.js')
 ,SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
 ,db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS);
@@ -82,7 +82,27 @@ exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callbac
 	
 };
 
+<<<<<<< HEAD
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
+=======
+// the callback function on succesful addition is also specified
+exports.mongoquery = mongoquery = function(objToFind,schemaToLookup, callback){
+	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
+	// Check to see if the wid name exists
+    db.collection(schemaToLookup).find(objToFind, function(err, result) {
+    	if (!result) {
+			callback(null);
+	    }
+	    else{
+		    console.log('Found! '+ JSON.stringify(result));
+	    	callback(result);
+	    }
+	 }); 
+	
+};
+
+// DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
+>>>>>>> dbc8a758a59cd67fc57f4072912ef17ad6f9ed1d
 // the callback function on successful addition is also specified
 exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaToLookup, callback){
 	console.log(' ****** getMultipleFromMongo method in dao');
