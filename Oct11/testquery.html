@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+<script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script type="text/javascript" src="C:\Users\Administrator\dropbox2\Dropbox\dripoint\saurshaz\test\scripts\Execute.js"></script>
+  
+<script> 
+
+
+function executelocal(allConfig,executeItem,callback,returnCallback){
+    // logic for local execute
+    // alert('executelocal being called');
+    executeItem = JSON.stringify(executeItem);
+    
+    var result = undefined;
+    if (typeof window[executeItem["ExecuteThis"]] == 'function') {
+        result = window[executeItem["ExecuteThis"]]();
+        // $("#resultDiv").html('<pre>' + result + '</pre>');
+    }
+    returnCallback(result);
+}
+
+
+
+function doAfterTesting(response){
+  alert('>>> from client code >>> '+JSON.stringify(response));
+  $('div#resultDiv').html('<p>'+ JSON.stringify(response) +'</p>');
+}
+
+$(function() {
+      $('button#submit').click(function(){
+        ExecuteThisPost();
+      });
+        
+      
+         
+    function ExecuteThisPost()
+    {
+      var parameterList = [];
+      var parameterDTO = {};
+      var data = null;
+      execute(JSON.parse($("#input").val()),function(data){
+        doAfterTesting(data);
+      }); 
+    }  
+    
+    function sayPreHello(){
+      alert('sayPreHello');
+    }
+
+    function sayPostHello(){
+      alert('sayPostHello');
+    }
+
+    var availableCommands = [
+    
+      {label:"breakCalls",value:'[{"executethis": "extractthis","wid": "test1", "x": "y","z": "w","configuration": {"executeThisConfiguration":  { "1": "executedri","2":"executelocal"},"options": { "sync": "false" }}}]'}
+      ,{label:"Override",value:'[{"ExecuteThis":"login1", "PhoneNumber":"555-895-4875", "configuration": {"executeThisConfiguration": { "1": "executedri"}}}] '}
+      ,{label:"AddThis",value:'[{"AddThis":"AddThisWidVal","ExecuteThis":"testWid", "Description":"This is a test wid for AddThis"}]'}
+      ,{label:"GetWid",value:'[{"ExecuteThis":"GetWid","FromWid":"joetestwid"}]'}
+      ,{label:"GetWidWithProperty",value:'[{"ExecuteThis":"GetWid","FromWid":"joetestwid","FromProperty":"x"}]'}
+      ,{label:"GetWidWithData",value:'[{"ExecuteThis":"GetWid","FromWid":"joetestwid","key1":"val1","key2":"val2", "preExecute":{"ExecuteThis":"GetWid","FromWid":"abc"},"postExecute" : "sayPostHello"}]'}
+      ,{label:"ExtractThis",value:'[{"executethis":"extractthis","wid":"test1","x":"y","z":"w", "preexecute" : "sayprehello","postexecute" : "sayposthello"}]'}
+      , {label:"JavaScript",value:'[{"ExecuteThis":"JavaScript", "JS":" function(x, y) { return x + y; };", "x":"2", "y":"2"}]'}
+      ,{label:"ExecuteThisWithConfigSync", value:'[{"executethis": "extractthis","wid": "test1", "x": "y","z": "w","preexecute": "sayprehello","postexecute": "sayposthello","configuration": {"executeThisConfiguration": { "1": "executeAjax"},"preExecuteThisConfiguration": { "1": "executedri"},"options": { "sync": "true" }}}]'}
+      ,{label:"ExecuteThisWithConfigAsync", value:'[{"executethis": "extractthis","wid": "test1", "x": "y","z": "w","preexecute": "sayprehello","postexecute": "sayposthello","configuration": {"executeThisConfiguration": { "1": "executeAjax"},"preExecuteThisConfiguration": { "1": "executedri"}}}]'}
+      ,{label:"login1","value":'[{ "ExecuteThis": "login1","PhoneNumber": "5558954875","configuration": {"executeThisConfiguration": {"1": "executedri"},"configuration": { "executeThisConfiguration": {"1": "getdataDRI"}} }}]'}
+      ,{label:"UpdateWid",value:'[{"ExecuteThis":"UpdateWid","Wid":"joetestwid"}]'}
+    ];
+    $("#commands").autocomplete({
+      source: availableCommands,
+      focus: function( event, ui ) {
+        $("#commands" ).val( ui.item.label );
+        return false;
+      },
+      select: function(event, ui){
+        $( "#commands" ).val( ui.item.label );
+        $( "#input" ).val( ui.item.value );
+        return false;
+      }
+    });
+    
+});
+</script>  
+ 
+<meta charset=utf-8 />
+<title>Testing Page for API?</title>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-12" clss="jumbotron">
+            <legend>Testing the API</legend>
+            <p>
+              <span class="well">Enter Commands: <input type="text" id="commands" class="ui-select span"/></span>
+            </p>
+            <label><h3>Insert JSON</h3></label>
+            <div class="well">
+                <textarea id="input" class="span" cols="80" rows"4">  [{"ExecuteThis":"query","query": {"$or": [{"wid":"aggregatetestwid3" }]}}]</textarea>
+            </div>
+            <p>
+                <button id="submit" class="btn btn-lg btn-success">Submit</button>
+            </p>
+            <br>
+                <h4>Results below</h4>
+            
+            <div id="resultDiv" class="alert alert-dismissable alert-warning">
+                This section will be updated with the results of the call.
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

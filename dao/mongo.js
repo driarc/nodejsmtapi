@@ -82,7 +82,7 @@ exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callbac
 	
 };
 
-// DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
+// DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
 exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaToLookup, callback){
 	console.log(' ****** getMultipleFromMongo method in dao');
