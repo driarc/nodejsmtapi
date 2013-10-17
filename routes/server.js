@@ -7,7 +7,8 @@ var mongoskin = require('mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
-  , filecheck = require('../scrapejob/scrape.js');
+  , filecheck = require('../scrapejob/scrape.js')
+  , addget = require('../dao/addget.js');
 
 var TABLE_NAME = config.TABLE_NAME;
 
@@ -168,7 +169,16 @@ exports.executethis = function(req, res) {
                     // TODO ::javascript,variable, executeMultiple, addwidmaster and getwidmaster    
     
                   
-    
+                case 'query':
+                    var rec = item.query;
+                    console.log("Fetching one record "+JSON.stringify(rec));
+                    dao.mongoquery(rec,config.TABLE_NAME,function(obj){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                        res.send(obj);
+                        res.end();
+                    });
+
+                    break;
 
                 case 'getfrommongo':
                     // handle get from mongo DB logic
