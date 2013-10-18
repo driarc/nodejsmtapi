@@ -1,3 +1,16 @@
+// Used to implement executThis functionality with an array of data to execute 
+function executeone (execute_Parameters) {
+	for (var fun_call in execute_Parameters) {
+			execute(JSON.parse(execute_Parameters[fun_call])), function(data) {
+	        	doAfterExecuteOne(data);
+	    } 
+	}
+}
+
+function doAfterExecuteOne(response){
+  alert('>>> from client code >>> '+JSON.stringify(response));
+  //$('div#resultDiv').html('<p>'+ JSON.stringify(response) +'</p>');
+}
 	
 // Starting of securityCheck function
 // LM: I think this section is turned off and not used since it was breaking the code, but it 
@@ -16,8 +29,6 @@ function securityCheck(widParameter, accessToken){ // accountwid and transaction
 	return securityCheckOutput;
 }// End of queryWid function
 
-
-
 // Cycles through local storage looking for a match to the query
 function simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, dtotype){
 
@@ -28,12 +39,14 @@ function simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, m
 
 	if(mongorelationshipdirection == "forward") {
 		// step through local storage looking for
-	   for (var key in localStorage){
-			var myvalue = JSON.parse(localStorage.getItem(key));
-
+	   var widset=getwidcopy(); // get a copy of all local storage ***
+	   	//for (var key in localStorage){ //***
+	 	for (var widkey in widset){ 	
+			//var myvalue = JSON.parse(localStorage.getItem(key)); //**
+			var myvalue = getFromMongo({wid:widkey});
 			//printToDiv('Function simpleQuery in : myvalue',  myvalue);
 
-			if ((key.indexOf(widMasterKey) == 0) && (myvalue["primarywid"] == widInput)) {
+			if ((widkey.indexOf(widMasterKey) == 0) && (myvalue["primarywid"] == widInput)) {
                var widName = myvalue["primarywid"];
 			   var key = myvalue["secondarywid"];
 			   var value = getFromMongo({wid:key}); // , dtotype:mongowidmethod
@@ -132,7 +145,7 @@ function MongoAddEditPrepare(Indto, InList, widid, widdto) {
 
 
 	InListObj["wid"]=InListObj["wid"].toLowerCase();
-	addtomongo(InListObj["wid"], InListObj)
+	addToMongo(InListObj["wid"], InListObj)
 	//addToLocalStorage(widMasterKey + InListObj["wid"], InListObj);
 	//olddebug=Debug;
 	//Debug='true';
@@ -141,7 +154,7 @@ function MongoAddEditPrepare(Indto, InList, widid, widdto) {
 
 	//Debug=olddebug;				
 	//InListObj["LOG"]="LOG";
-	//addtomongo(InListObj["wid"], InListObj)
+	//addToMongo(InListObj["wid"], InListObj)
 	// addToLocalStorage(widMasterKey + "add_"+InListObj["wid"], InListObj);
 	return InListObj;
 }
@@ -155,8 +168,11 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 	InList.push({"key":"relationshiptype","value":attr.toLowerCase()});
 	InList.push({"key":"metadata.method","value":"relationshipdto"});
 
-	for (var key in localStorage){				// search for duplicate
-		var myvalue = JSON.parse(localStorage.getItem(key));
+	var widset=getwidcopy(); // get a copy of all local storage ***
+	for (var widkey in widset){ 	
+	// for (var key in localStorage){				// search for duplicate
+		//var myvalue = JSON.parse(localStorage.getItem(key));
+		var myvalue = getFromMongo({wid:widkey});
 		if ((myvalue['primarywid']==ParentWid) && (myvalue['secondarywid']==ChildWid)) {
 			InList.push({"key":"wid","value":myvalue['wid']});
 			}
@@ -168,15 +184,15 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 
 // know issue -- cannot save blank parameter if jsonconcat (inherit)
 
-function getWidMaster(parameters){
+function getwidmaster(parameters){
 
 	var parameters = tolowerparameters(parameters, {'wid':'add', 'metadata.method':'add', 'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
 
-	printToDiv('Function getWidMaster() incoming parameters, now go to getWidMasterLevel ' , parameters);
+	printToDiv('Function getwidmaster() incoming parameters, now go to getwidmasterLevel ' , parameters);
 
 	var wid = parameters.wid;
 	var resultObj = {};	
-	printToDiv('Function getWidMasterLevel() incoming parameters, to getWidMongo' , parameters);
+	printToDiv('Function getwidmasterLevel() incoming parameters, to getWidMongo' , parameters);
 
 /*	var dtotype="";
 	if(isParameterLower(parameters, "command.dtotype")){
@@ -230,18 +246,18 @@ function getWidMaster(parameters){
 
 	olddebug=Debug;
 	Debug=olddebug;
-	printToDiv('Function getWidMasterLevel() ** before ' , resultObj);
+	printToDiv('Function getwidmasterLevel() ** before ' , resultObj);
 	if (Object.keys(resultObj).length !== 0) {
 		resultObj=cleanparameters(resultObj, dtotype, accesstoken, "remove", convertMethod);
 		}
 	resultObj=resultObj.parms;   // ************
 
-	printToDiv('Function getWidMasterLevel() ** after ' , resultObj);
+	printToDiv('Function getwidmasterLevel() ** after ' , resultObj);
 	if (convertMethod=="nowid") {
 		delete resultObj["wid"];
 		delete resultObj["metadata.method"];
 	}
-	Debug=olddebug;
+	
 	Debug=olddebug;
 
 	return resultObj
@@ -271,7 +287,7 @@ function getWidMaster(parameters){
 
 // 	else { // if resultObj["metadata.method"] = dtotype) 
 // 		if (cleanmethod=="add") { 
-// 			dtoobject = getWidMaster({'wid':dtotype, 'command.dtotype':dtotype, 'command.convertmethod':'dto'});
+// 			dtoobject = getwidmaster({'wid':dtotype, 'command.dtotype':dtotype, 'command.convertmethod':'dto'});
 // 			outputparameters=resultObj;
 // 			}
 // 		if (cleanmethod=="remove") { 
@@ -344,14 +360,14 @@ function aggressivedto(widInput, preamble) { // returns a made up dto base on ma
 
 	 if ((inputParametersObject['metadata.method'] !== "") && (dtotype=="")) {
 		metadata = inputParametersObject['metadata.method']
-		dtoobject=getWidMaster({'wid':metadata, 
+		dtoobject=getwidmaster({'wid':metadata, 
 								'command.convertmethod':'dto',
 								'command.dtotype':metadata});
 		};
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
     	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
     	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
-		dtoobject=getWidMaster({'wid':parameterObject["metadata.method"], 
+		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
 								'command.convertmethod':'dto',
 								'command.dtotype':'defaultdto'});
 		}
@@ -388,14 +404,14 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 
 	 if ((inputParametersObject['metadata.method'] !== "") && (dtotype=="")) {
 		metadata = inputParametersObject['metadata.method']
-		dtoobject=getWidMaster({'wid':metadata, 
+		dtoobject=getwidmaster({'wid':metadata, 
 								'command.convertmethod':'dto',
 								'command.dtotype':metadata});
 		};
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
     	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
     	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
-		dtoobject=getWidMaster({'wid':parameterObject["metadata.method"], 
+		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
 								'command.convertmethod':'dto',
 								'command.dtotype':'defaultdto'});
 		}
@@ -632,7 +648,7 @@ Debug=olddebug;
 				nextLevelParameters = getAndFormatNextLevel(widInput, "attributes", "all", "forward", item, convertMethod, accessToken, "inherit"); //removed dtoGlobalParameters
 				}; // 10-5 took away dtotype
 			if ((attr == "inherit") && (convertMethod != 'dto')) { 	// added 10/4 add to parameters whatever is to left side of inherit
-				nextLevelParameters = getWidMaster({'wid':item, 'command.convertmethod':'nowid'});
+				nextLevelParameters = getwidmaster({'wid':item, 'command.convertmethod':'nowid'});
 				};
 			if (nextLevelParameters=="") {AddMongoRelationship(widInput,item,"attributes")}; // if DTO existed, but no relationship at place hoder
 			printToDiv('Function getWidMongo() came back from getAndFormatNextLevel, nextLevelParameters= ', nextLevelParameters);
@@ -781,16 +797,16 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 // AddMaster to get the wid placed into the db or local storage. Note that 
 // nothing calls this except the test. This is the highest level of the adding
 // process for DOT notation.
-function AddWidObject(inputObject) {
+function addwidmaster(inputObject) {
 	var OutParameters = ConvertToDOTdri(inputObject); 
 	//OutParameters = tolowerparameters(OutParameters, OutParameters['command.convertmethod']);
 	Wid = AddWidParameters(OutParameters);
 	return Wid;
 	
-			//printToDiv('Function AddWidObject() Constant input : ', input );
-			//printToDiv('Function AddWidObject() ConstandtdtoobjectDOT : ', dtoobjectDOT );
-			//printToDiv('Function AddWidObject() Received into addWidObject inputObject : ', inputObject );
-			//printToDiv('Function AddWidObject() Sent out from OutParameters : ', OutParameters );
+			//printToDiv('Function addwidmaster() Constant input : ', input );
+			//printToDiv('Function addwidmaster() ConstandtdtoobjectDOT : ', dtoobjectDOT );
+			//printToDiv('Function addwidmaster() Received into addwidmaster inputObject : ', inputObject );
+			//printToDiv('Function addwidmaster() Sent out from OutParameters : ', OutParameters );
 }
 
 // Sets up call to addwidmaster (to add a parameter to the DTO ?)
@@ -838,14 +854,14 @@ function AddWidParameters(parameterObject) {
 	//***************
 /*  	if ((inputParametersObject['metadata.method'] !== "") && (dtotype=="")) {
 		metadata = inputParametersObject['metadata.method']
-		dtoobject=getWidMaster({'wid':metadata, 
+		dtoobject=getwidmaster({'wid':metadata, 
 								'command.convertmethod':'dto',
 								'command.dtotype':metadata});
 		};
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
     	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
     	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
-		dtoobject=getWidMaster({'wid':parameterObject["metadata.method"], 
+		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
 								'command.convertmethod':'dto',
 								'command.dtotype':'defaultdto'});
 		}*/
@@ -856,7 +872,7 @@ function AddWidParameters(parameterObject) {
 		
 		//inputParametersObject['metadatamethod'] = dtotypeindex;
 		//delete inputParametersObject['metadata.method'];
-		dtoobject=getWidMaster({'wid':metadata, 'command.convertmethod':'dto'});
+		dtoobject=getwidmaster({'wid':metadata, 'command.convertmethod':'dto'});
 		}
 	olddebug=Debug;
    	Debug='false';
@@ -865,7 +881,7 @@ function AddWidParameters(parameterObject) {
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
     	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
     	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
-		dtoobject=getWidMaster({'wid':parameterObject["metadata.method"], 
+		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
 								'command.convertmethod':'dto',
 								'command.dtotype':'defaultdto'});
 		olddebug=Debug;
