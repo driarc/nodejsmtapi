@@ -1,5 +1,6 @@
 function testquery(parameters) {
 printToDiv('testquery parameters',parameters);
+parameters['hello']='hello2';
 return parameters;
 }
 
