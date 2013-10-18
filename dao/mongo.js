@@ -88,7 +88,7 @@ exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callbac
 exports.mongoquery = mongoquery = function(objToFind,schemaToLookup, callback){
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
-    db.collection(schemaToLookup).find(objToFind, function(err, result) {
+    db.collection(schemaToLookup).findOne	(objToFind, function(err, result) {
     	if (!result) {
 			callback(null);
 	    }

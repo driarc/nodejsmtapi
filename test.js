@@ -500,55 +500,16 @@ describe('DAO test layer', function(){
 
 
 
+    it('query', function(done){
 
-// // TODO :: EXECUTEMULTIPLE in call extractthis
-  // it('executemultiple', function(done){
-
-  //   var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
+      var requestObj = {"executethis":"query","query": {"$or": [{"wid":"joetestwid" }]}};
     
-  //   superagent.put('http://localhost:3000/executethis')
-  //     .send(requestObj)
-  //     .end(function(e, res){
-  //       console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
-  //       expect(typeof res.body).to.eql('object')
-  //       //expect(res.body.msg).to.eql('success')        
-  //       done()
-  //     })
-  // });
-
-
-
-// // TODO :: VARIABLE in call extractthis
-  // it('variable', function(done){
-
-  //   var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
-    
-  //   superagent.put('http://localhost:3000/executethis')
-  //     .send(requestObj)
-  //     .end(function(e, res){
-  //       console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
-  //       expect(typeof res.body).to.eql('object')
-  //       //expect(res.body.msg).to.eql('success')        
-  //       done()
-  //     })
-  // });
-
-
-
-// // TODO :: EVENT in call extractthis
-  // it('event', function(done){
-
-  //   var requestObj = [{"ExecuteThis":"ExtractThis","Wid":"test1","x":"y","z":"w", "preExecute" : "sayPreHello","postExecute" : "sayPostHello","adddatawid":{"K":"L","M":"N"}}];
-    
-  //   superagent.put('http://localhost:3000/executethis')
-  //     .send(requestObj)
-  //     .end(function(e, res){
-  //       console.log('ADDDATAWID  ::: extractthis ::: >>>>>>>>> '+JSON.stringify(res.body));
-  //       expect(typeof res.body).to.eql('object')
-  //       //expect(res.body.msg).to.eql('success')        
-  //       done()
-  //     })
-  // });
-      
- 
+      superagent.put(config.SERVICE_URL+'executethis')
+        .send(requestObj)
+        .end(function(e, res){
+          console.log('>>>>>>>>> '+JSON.stringify(res.body));
+          expect(typeof res.body).to.eql('object');
+          done();
+        });
+    });
 });
