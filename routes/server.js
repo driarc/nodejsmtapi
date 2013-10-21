@@ -178,7 +178,16 @@ exports.executethis = function(req, res) {
                         res.send(obj);
                         res.end();
                     });
+                    break;
 
+              case 'querywid':
+                    var rec = item.query;
+                    console.log("Fetching one record "+JSON.stringify(rec));
+                    dao.mongoquery(rec,config.TABLE_NAME,function(obj){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                        res.send(obj);
+                        res.end();
+                    });
                     break;
 
                 case 'getfrommongo':
