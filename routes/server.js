@@ -11,6 +11,7 @@ var mongoskin = require('mongoskin')
   , addget = require('../dao/addget.js')
   , executethis = require('../routes/executethis.js')
   , util = require('../util.js')
+  , drifn = require('../dao/dri_functions.js')
   , querym = require('../dao/querym.js');
 
 var TABLE_NAME = config.TABLE_NAME;
