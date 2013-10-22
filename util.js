@@ -71,7 +71,7 @@ util = function(){
 		"toLowerKeys" : toLowerKeys,
 		"jsonLength" : jsonLength,
 		"cleanupParameters" : cleanupParameters,
-		"mergeParameters" : mergeParameters,
+		// "mergeParameters" : mergeParameters,
 		"getParamArray" : getParamArray
 	}
 }();
