@@ -30,7 +30,11 @@ exports.execute = function(incomingparameters, callback){
 //         ]
 //     }
 // }
-
+    if(incomingparameters["executethis"]== "Bill")
+    {
+        incomingparameters["change"] = "a";
+        callback(incomingparameters);
+    }
 
     incomingparameters = util.toLowerKeys(incomingparameters);
     incomingparameters['midexecute']=incomingparameters['executethis'];
