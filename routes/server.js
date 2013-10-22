@@ -9,8 +9,6 @@ var mongoskin = require('mongoskin')
   , superagent = require('superagent')
   , filecheck = require('../scrapejob/scrape.js')
   , addget = require('../dao/addget.js')
-  , executethis = require('../routes/executethis.js')
-  , util = require('../util.js')
   , querym = require('../dao/querym.js');
 
 var TABLE_NAME = config.TABLE_NAME;
@@ -98,11 +96,333 @@ exports.executethis = function(req, res) {
     var item = req.body[0];
     console.log(JSON.stringify(item));
 
-    executethis.execute(item,function(data){
-        res.send(data);
-        res.end();
-    })
+    item = toLowerKeys(item);
+
+   if (item && item.addthis && item.executethis) {
+        //  handle AddThis as a command 
+        console.log(' AddThis operation. ' + JSON.stringify(item));
+
+        // START PROCESSING AS PER 'addThis' param of the JSON in the request body received
+        filecheck.handleAddThis(req.body,function(returnedObject){
+            console.log('coming back after addthis'+JSON.stringify(returnedObject));
+
+            // save returned data to DB
+            callUpdateWid(returnedObject.addThisJson[0], function(o){
+                res.send({"message":"Addd Wid successfully "});
+                res.end();
+            });
+        });
+        console.log('After addThis logic has been processed');
+        console.log('------------------------------------------------');
+
+    }else if (item && item.executethis) {
+        console.log('------------------------------------------------');
+        console.log(' <<<<<<<<<<<<<<< PRe , ExecuteThis AND  Post operation. >>>>>>>>>>>>>>>>>>>> ');
+
+
+            var funcT = item.executethis;
+            console.log('funcT -- '+funcT);
+            switch (funcT.toLowerCase()) {
+
+                case 'extractthis':
+                    //  handle extractThis case
+                    // call the file check codeZ
+                    callScrapeLogic(res, function(nodeObjects){
+                        if(nodeObjects){
+                            handleProcessHtmlPersistence(nodeObjects, function(){
+                                handleAddThisPersistence(nodeObjects, function(){
+                                    res.send(nodeObjects);
+                                    res.end();
+                                });
+                            });
+                        }
+                    });
+                
+                    break;      
+
+
+                case 'javascript':
+                    //  handle javascript case
+                    var jsFunction = JSON.stringify(item.js);
+
+                    var regex = 'function(\()([^)]*)(\))';
+
+                    var re = new RegExp(regex, 'gi');
+                    var array = re.exec(jsFunction);
+                    var params = array[1];
+                    params = params.replace(/\(/g,'');
+
+                    // var arr = [1,2];// TODO :: fix parsing of parameters as array
+                    var options = [];
+                    var pArr = params.split(',');
+                    for(var i=0;i < pArr.length;i++){
+                        options.push(item[pArr[i].trim()]);
+                    }
+                    eval("var fnCreated = "+eval(jsFunction));
+                    console.log(' returned value is >> '+ options);
+                    var returned = fnCreated.apply(this,options);
+                    res.send({"result" : returned});
+                    res.end();
+                    break;            
+
+                case 'variable':
+                    
+                    // TODO ::javascript,variable, executeMultiple, addwidmaster and getwidmaster    
     
+                  
+                case 'query':
+                    var rec = item.query;
+                    console.log("Fetching one record "+JSON.stringify(rec));
+                    dao.mongoquery(rec,config.TABLE_NAME,function(obj){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                        res.send(obj);
+                        res.end();
+                    });
+
+                    break;
+
+                case 'getfrommongo':
+                    // handle get from mongo DB logic
+
+                    // call get from mongo DB 
+                    var rec = {"wid":item.wid};
+                    console.log("Fetching one record "+JSON.stringify(rec));
+                    dao.getFromMongo(rec,config.TABLE_NAME,function(obj){
+                        console.log("Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                        res.send(obj);
+                        res.end();
+                    });
+                    break;    
+
+                case 'getwid':
+                    // handle getwid :: 
+                    if(item.fromwid){
+                        // call get from mongo DB 
+                        var widVal = item.fromwid;
+                        var widFromProperty = item.fromproperty;
+
+                        console.log("getwid ::: Fetching one record , with fromWid "+widVal);
+                        getFromMongo({"wid":widVal},config.TABLE_NAME,function(obj){
+
+                            if(obj){
+                                // get JSOn from DB
+                                console.log("getwid ::: Fetched from Mongo DB  - "+ JSON.stringify(obj));
+                                if(widFromProperty){
+                                    if(!obj.data[widFromProperty]){
+                                        // no property named , return an error
+                                        obj = {"error":"No parameter by that name"};
+                                    }else{
+                                        // return property only
+                                        obj = JSON.parse('{"'+widFromProperty+'":"'+obj.data[widFromProperty]+'"}');
+                                    }
+                                }
+
+                                res.send(obj);
+                                res.end();
+                            }else{
+                                // get JSOn from DB
+                                console.log("getwid ::: No Wid matching value, return empty JSON - ");  
+                               res.send({"error":"No Wid by that name"});
+                               res.end(); 
+                            }
+                        });
+                    }else{
+                       console.log("getwid ::: No Wid specified, return empty JSON - ");  
+                       res.send({});
+                       res.end();  
+                    }
+            
+                    break;     
+
+                case 'updatewid':
+
+                    // handle updatewid
+                    var wid = item.towid;
+                    item['wid']=wid;
+
+                    if(item.wid){
+                        // get JSOn to be saved
+                        
+                        var itemFromWid = item.fromwid;
+                        if(itemFromWid){
+                            itemFromWid = itemFromWid.toLowerCase();
+                        }
+
+                        var itemToWid = item.towid;
+                        if(itemToWid){
+                            itemToWid = itemToWid.toLowerCase();
+                        }
+
+                        var itemFromProperty = item.fromproperty;
+                        if(itemFromProperty){
+                            itemFromProperty = itemFromProperty.toLowerCase();
+                        }
+
+                        var itemToProperty = item.toproperty;
+                        if(itemToProperty){
+                            itemToProperty = itemToProperty.toLowerCase();
+                        }
+                        
+                        var entityToAdd = cleanParameters(item,["executethis","preexecute","postexecute","fromwid","towid","fromproperty","toproperty"]);
+
+                        if(itemFromWid && itemToWid && itemFromProperty && itemToProperty){
+                            // if fromProperty,toproperty,towid and fromWid exists, then copy that as a new property
+                            dao.getFromMongo({"wid":itemFromWid},config.TABLE_NAME,function(objFrom){
+
+
+                                dao.getFromMongo({"wid":itemToWid},config.TABLE_NAME,function(objTo){
+                                    // copy existing properties to entityToAdd
+                                    if(objTo && objTo.data){
+                                        for(var attr in objTo.data){
+                                           entityToAdd[attr]=objTo.data[attr]; 
+                                        }
+                                    }
+
+                                    // copy new property from other wid
+                                    if(objTo && objFrom.data[itemFromProperty]){
+                                        entityToAdd[itemToProperty] = objFrom.data[itemFromProperty];
+
+                                        // call persistence method
+                                        dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                                           console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                                           res.send(o);
+                                           res.end();   
+                                        });
+
+                                    }else{
+                                        console.log("updatewid :: fromWid is not valid - ");  
+                                        res.send({"message":"updatewid :: fromWid and fromPropertyCombination is not valid"});
+                                        res.end();   
+                                    }
+                                });    
+                            });
+                               
+
+                        }else if(itemFromWid && itemToWid){
+                            // if towid and fromWid exists, then copy every property
+                            dao.getFromMongo({"wid":itemFromWid},config.TABLE_NAME,function(objFrom){
+
+                                dao.getFromMongo({"wid":itemToWid},config.TABLE_NAME,function(objTo){
+
+                                    // copy new property from other wid
+                                    if(objFrom && objTo && objFrom.data && objTo.data){
+                                        // copy existing properties to entityToAdd
+                                        for(var attr in objFrom.data){
+                                           entityToAdd[attr]=objFrom.data[attr]; 
+                                        }
+                                         
+                                        for(var attr in objTo.data){
+                                            entityToAdd[attr] = objTo.data[attr];
+                                        }
+                                        
+                                        // call persistence method
+                                        dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                                           console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                                           res.send(o);
+                                           res.end();   
+                                        });
+
+                                    }else{
+                                        console.log("updatewid :: fromWid and fromPropertyCombination is not valid ");  
+                                        res.send({"message":"updatewid :: fromWid is not valid"});
+                                        res.end();   
+                                    }
+                                });    
+                            });
+                        }else{
+
+                            // if status exists and equals 5, then delete the wid data
+                            if(item.status){
+                                if(item.status === "5" || item.status === 5){
+                                    dao.removeFromMongo({"wid":entityToAdd.wid},config.TABLE_NAME,function(o){
+                                        console.log("updatewid :: After deleting node from Mongo - "+ JSON.stringify(o));  
+                                        res.send({"message":"wid deleted"});
+                                        res.end();   
+                                    });
+                                }
+                            }else{
+                                console.log("updatewid :: Add/update record ==== "+JSON.stringify(entityToAdd));
+
+                                // call persistence method
+                                dao.addOrUpdate(entityToAdd,config.TABLE_NAME,function(o){
+                                   console.log("updatewid :: After adding/updating node to Mongo - "+ JSON.stringify(o));  
+                                   res.send(o);
+                                   res.end();   
+                                });
+                            }
+                        }
+                            
+                        
+                    }else{
+                       console.log("updatewid ::: No Wid specified, Do Nothing - ");  
+                       res.send({});
+                       res.end();  
+                    }
+                    break;            
+                        
+                case 'addtomongo':
+                    // handle ADD TO MONGO logic
+                    var rec = {};
+                    if(typeof item.wid === 'object'){
+                        rec = item.wid;
+                    }else{
+                        rec = cleanParameters(item,["executethis","wid","preexecute","postexecute","fromwid"]);
+                    }
+                    console.log("Add to mongo record -- "+JSON.stringify(rec));
+                    dao.addOrUpdate(rec,TABLE_NAME,function(o){
+                        console.log("After adding to Mongo - "+ JSON.stringify(o));
+                        res.send(o);
+                        res.end();
+                    });
+                    break;
+
+
+                default:
+                    // for example if executeThis = abc and abc is not found as a case the system is supposed to go get from mongo
+                    // (abc)…and use the results as parameters to call again - recurse into executeThis
+
+                    // if I send executeThis {executetThis=Saurabh}
+                    // in case of no case match for 'Saurabh',
+                    // parms= getfrommongo (wid=Saurabh)
+                    // call executeThis(parms)
+
+                    // if wid=Saurabh = {executeThis:extractThis} then extractThis will run
+                    var executeThisVal = funcT.toLowerCase();
+                    console.log('default parameter value for executetThis is >>> '+executeThisVal);
+
+                    // call get from mongo DB 
+                    var queryObj = {'wid':executeThisVal};
+                    dao.getFromMongo(queryObj,TABLE_NAME, function(returnedObject){
+                        console.log('>>>>>>> Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
+
+                        // check if object is found
+                        if(returnedObject){
+                            // Make another request, matching data found in MongoDB
+                            superagent.put(config.SERVICE_URL+'executethis')
+                                .send(returnedObject)
+                                  .end(function(e, res){
+                                    console.log('>>>>>>>>> Sent another request :: ExtractThis :: PUT request ');
+                                    
+                                        
+                            });
+                            res.send(returnedObject);
+                            res.end();
+                        }else{
+                            // nothing to do, no matching data found in MongoDB
+                            console.log('>>>>>>>>> nothing to do, no matching data found in MongoDB');
+                            res.send({});
+                            res.end();
+                        }
+                    });
+
+                    break;
+            }
+    }
+    else {
+        res.send({
+            "error": "Requires a valid parameter : executeThis"
+        });
+    }
 };
 
 
