@@ -10,7 +10,6 @@ exports.LOOKUP_DIR = '../dripoint/';
 // exports.LOOKUP_DIR = '../html/';// for testing
 exports.SERVICE_URL = 'http://localhost:3000/';
 
-
 var configuration = {};
 configuration.preExecute = [];
 configuration.preExecute[0] = {};
