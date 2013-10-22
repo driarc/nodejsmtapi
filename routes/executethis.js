@@ -192,7 +192,7 @@ function executeParameter(params,target,skipProcessConfig,  callback){
 
 
 // helper functions for processing required :: server 
-function getFromMongo(params, callback){
+function mirrorfunction(params, callback){
     //alert('getFromMongo called');
     delete params['configuration'];
     var params = util.toLowerKeys(params);
@@ -200,12 +200,12 @@ function getFromMongo(params, callback){
 }
 
 
-function addToMongo(params, callback){
-    //alert('getFromMongo called');
-    delete params['configuration'];
-    var params = util.toLowerKeys(params);
-    callback(params);
-}
+// function addToMongo(params, callback){
+//     //alert('getFromMongo called');
+//     delete params['configuration'];
+//     var params = util.toLowerKeys(params);
+//     callback(params);
+// }
 
 function alertFn(params, callback){
     // alert('alertFn called');
