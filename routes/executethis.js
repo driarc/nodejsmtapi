@@ -198,7 +198,7 @@ function executeParameter(params,target,skipProcessConfig,  callback){
 
 // helper functions for processing required :: server 
 function mirrorfunction(params, target,skipProcessConfig, callback){
-    //alert('getFromMongo called');
+    alert('house called');
     delete params['configuration'];
     var params = util.toLowerKeys(params);
     callback(params);
