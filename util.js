@@ -18,7 +18,22 @@ util = function(){
 		return Object.keys(obj).length; 
 	};
 
-	// Utility function to cleanup mentioned attr:val pairs from JSON passed in
+
+
+// function mergeParameters(c1,c2){
+//     var mergedMap = c1;
+
+//     for(key in c2 && (!c1[key])){
+//         c1[key] = c2[key];
+//     };
+
+//     return c1;
+// } 
+
+
+
+
+// Utility function to cleanup mentioned attr:val pairs from JSON passed in
 	var cleanupParameters = function(inboundParameters,paramsToClean){
 	    var outBoundParameters = inboundParameters;
 	    
@@ -31,15 +46,15 @@ util = function(){
 	}
 
 	// utility function to merge two JSON objects
-	var mergeParameters = function(c1,c2){
-	    var mergedMap = c1;
-	    for(var attr in c2){
-	    	mergedMap[attr] = c2[attr];
-	    } 
+	// var mergeParameters = function(c1,c2){
+	//     var mergedMap = c1;
+	//     for(var attr in c2){
+	//     	mergedMap[attr] = c2[attr];
+	//     } 
 	    
 
-	    return mergedMap;
-	} 
+	//     return mergedMap;
+	// } 
 	
 	var getParamArray = function(data){
 		var returnArray = new Array();
