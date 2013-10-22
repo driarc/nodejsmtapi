@@ -23,6 +23,7 @@ configuration.preExecute[2].order = 0;
 configuration.preExecute[2].doThis = 'executeParameter';
 configuration.preExecute[3] = {};
 configuration.midexecute = [];
+configuration.midexecute[0] = {};
 configuration.midexecute[0].order = 0;
 configuration.midexecute[0].doThis = 'doThis';
 configuration.midexecute[1] = {};
