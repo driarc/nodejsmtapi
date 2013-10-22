@@ -56,9 +56,8 @@ configuration.updateWid = [];
 configuration.updateWid[0] = {};
 configuration.updateWid[0].order = 0;
 configuration.updateWid[0].doThis = 'addToMongo';
-exports.configuration=configuration;
 configuration.login = [];
 configuration.login[0] = {};
 configuration.login[0].order = 0;
 configuration.login[0].doThis = 'getdatadri';
-     
+exports.configuration=configuration;

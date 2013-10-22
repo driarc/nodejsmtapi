@@ -84,8 +84,8 @@ function doThis(incomingparameters,targetparameter, skipProcessConfig, callback)
         }else{
             // this is the recursed call as part of the configuration
             var data = undefined;
-            if(incomingparameters['executethis'] && (window[incomingparameters['executethis']]) && ((typeof window[incomingparameters['executethis']]) === 'function')){
-                window[incomingparameters['executethis']](incomingparameters,targetparameter,true, function(data){
+            if(incomingparameters['executethis'] && (global[incomingparameters['executethis']]) && ((typeof global[incomingparameters['executethis']]) === 'function')){
+                global[incomingparameters['executethis']](incomingparameters,targetparameter,true, function(data){
                     callback(data);
                 })
             }else{
@@ -109,7 +109,7 @@ function processConfig(params,target,doThisArray, callback){
 
     var success=false;
     for(var ctr=0;ctr < doThisArray.length; ctr++){
-        if(window[doThisArray[ctr]['doThis']]){
+        if(global[doThisArray[ctr]['doThis']]){
             // alert('from processConfig method >>> '+JSON.stringify(params));
             if(doThisArray[ctr]['parameters']){
                 for(var param in doThisArray[ctr]['parameters']){
@@ -118,7 +118,7 @@ function processConfig(params,target,doThisArray, callback){
             }
 
             // call doThis function in context
-            window[doThisArray[ctr]['doThis']](params,target, true, function(data){
+            global[doThisArray[ctr]['doThis']](params,target, true, function(data){
                 if(data){
                     // alert(' processConfig function callback >>> '+ JSON.stringify(data));
                     // stop processing 
