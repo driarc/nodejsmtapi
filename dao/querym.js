@@ -1,4 +1,4 @@
-function testquery(parameters) {
+var testquery = exports.testquery = function(parameters) {
 printToDiv('testquery parameters',parameters);
 parameters['hello']='hello2';
 return parameters;
