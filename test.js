@@ -512,4 +512,89 @@ describe('DAO test layer', function(){
           done();
         });
     });
+
+  it('testexecute', function(done){
+    var configuration ={};
+    configuration.midexecute = [];
+    configuration.midexecute[0] = {};
+    configuration.midexecute[0].doThis = 'dothis';
+    configuration.a = [];
+    configuration.a[0] = {};
+    configuration.a[0].order = 0;
+    configuration.a[0].doThis = 'server';
+    configuration.a[0].parameters = {};
+    configuration.a[0].parameters.configuration={};
+        configuration.a[0].parameters.configuration.midexecute = [];
+        configuration.a[0].parameters.configuration.midexecute[0] = {};
+        configuration.a[0].parameters.configuration.midexecute[0].doThis = 'dothis';
+        configuration.a[0].parameters.configuration.a = [];
+        configuration.a[0].parameters.configuration.a[0] = {};
+        configuration.a[0].parameters.configuration.a[0].order = 0;
+        configuration.a[0].parameters.configuration.a[0].doThis = 'dothis';
+        configuration.a[0].parameters.configuration.b = [];
+        configuration.a[0].parameters.configuration.b[0] = {};
+        configuration.a[0].parameters.configuration.b[0].order = 0;
+        configuration.a[0].parameters.configuration.b[0].parameters = {};
+        configuration.a[0].parameters.configuration.b[0].doThis = 'alertfn';
+  
+
+
+      var requestObj = {"executethis":"query","query": {"$or": [{"wid":"joetestwid" }]},"configuration":configuration};
+    
+      superagent.put(config.SERVICE_URL+'executethis')
+        .send(requestObj)
+        .end(function(e, res){
+          console.log('>>>>>>>>> '+JSON.stringify(res.body));
+          expect(typeof res.body).to.eql('object');
+          done();
+        });
+    });
+
+
+it('testexecute1', function(done){
+    var configuration ={};
+    configuration.midexecute = [];
+    configuration.midexecute[0] = {};
+    configuration.midexecute[0].doThis = 'dothis';
+    configuration.midexecute[0].parameters={};
+    configuration.midexecute[0].parameters = [];
+
+    configuration.midexecute[1] = {};
+    configuration.midexecute[1].doThis = 'alertfn1';
+    configuration.midexecute[1].parameters={};
+    configuration.midexecute[1].parameters = [];
+
+
+
+      var requestObj = {"midexecute":"query","query": {"$or": [{"wid":"joetestwid" }]},"configuration":configuration};
+    
+      superagent.put(config.SERVICE_URL+'executethis')
+        .send(requestObj)
+        .end(function(e, res){
+          console.log('>>>>>>>>> '+JSON.stringify(res.body));
+          expect(typeof res.body).to.eql('object');
+          done();
+        });
+    });
+
+
+it('scrape', function(done){
+    var configuration ={};
+    configuration.midexecute = [];
+    configuration.midexecute[0] = {};
+    configuration.midexecute[0].doThis = 'callScrapeLogic';
+    configuration.midexecute[0].parameters = [];
+    
+
+    var requestObj = {"midexecute":"extractthis"};
+    
+      superagent.put(config.SERVICE_URL+'executethis')
+        .send(requestObj)
+        .end(function(e, res){
+          console.log('>>>>>>>>> '+JSON.stringify(res.body));
+          expect(typeof res.body).to.eql('object');
+          done();
+        });
+    });
+
 });

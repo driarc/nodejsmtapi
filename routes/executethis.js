@@ -1,221 +1,98 @@
 'use strict';
-
 var config = require('../config.js');
-// execute method --- method called numbered (1)
-exports.execute = function(incomingparameters, callback){
 
-//    {
-//     "executethis": "a",
-//     "b": "c",
-//     "configuration": {
-//         "midexecute": [
-//             {
-//                 "doThis": "dothis"
-//             }
-//         ],
-//         "a": [
-//             {
-//                 "order": 0,
-//                 "doThis": "server",
-//                 "parameters": {
-//                     "b": [
-//                         {
-//                             "order": 0,
-//                             "parameters": {},
-//                             "doThis": "alertfn"
-//                         }
-//                     ]
-//                 }
-//             }
-//         ]
-//     }
-// }
-    if(incomingparameters["executethis"]== "Bill")
-    {
-        incomingparameters["change"] = "a";
-        callback(incomingparameters);
-    }
+(function(window) {
+    // execute method --- method called numbered (1)
+    exports.execute = function(incomingparameters, callback){
+        if (incomingparameters["executeThis"] == "test") {
+            incomingparameters["change"] = "a";
+            callback(incomingparameters);
+        }
 
-    incomingparameters = util.toLowerKeys(incomingparameters);
-    incomingparameters['midexecute']=incomingparameters['executethis'];
-    delete incomingparameters['executethis']
+        incomingparameters = util.toLowerKeys(incomingparameters);
+        incomingparameters['midexecute'] = incomingparameters['executethis'];
+        delete incomingparameters['executethis']
 
-    // getAllParameters(incomingparameters);
+        // getAllParameters(incomingparameters);
 
-    // pre-execute method --- method called numbered (2)
-    doThis(incomingparameters,'preexecute',false,function(incomingparameters){
-        delete incomingparameters['preexecute'];
-        console.log('after preexecute >> '+JSON.stringify(incomingparameters));
-        // mid-execute method --- method called numbered (3)
-        doThis(incomingparameters,'midexecute',false,function(outgoingparameters){
-            delete incomingparameters['midexecute'];
-            console.log('after executethis >> '+JSON.stringify(outgoingparameters));
-            // post-execute method --- method called numbered (4)
-            doThis(outgoingparameters,'postexecute',false,function(outgoingparameters){
-                delete incomingparameters['postexecute'];
-                console.log('after postexecute >> '+JSON.stringify(outgoingparameters));
-                callback(outgoingparameters);
+        // pre-execute method --- method called numbered (2)
+        doThis(incomingparameters, 'preexecute', function (incomingparameters) {
+
+            console.log('after preexecute >> ' + JSON.stringify(incomingparameters));
+            // mid-execute method --- method called numbered (3)
+            doThis(incomingparameters, 'midexecute', function (outgoingparameters) {
+
+                console.log('after executethis >> ' + JSON.stringify(outgoingparameters));
+                // post-execute method --- method called numbered (4)
+                doThis(outgoingparameters, 'postexecute', function (outgoingparameters) {
+
+                    console.log('after postexecute >> ' + JSON.stringify(outgoingparameters));
+                    callback(outgoingparameters);
+                });
             });
         });
-    });
-}
-
-function doThis(incomingparameters,targetparameter, skipProcessConfig, callback){// allparameters ,'preexecute','preexecute'.configuration,callback
-    
-    var configurationO = config.configuration;
-    var incomingConfiguration = incomingparameters['configuration'];
-
-    // modify default config accordingly -- if overridable config is received 
-    if(configurationO && incomingConfiguration && configurationO[targetparameter] && incomingConfiguration[targetparameter]){
-        if((typeof configurationO[targetparameter])!=='object'){
-            configurationO[targetparameter] = new Array();
-        }
-        configurationO[targetparameter].push(incomingConfiguration[targetparameter]);
     }
 
-
-    if(incomingparameters[targetparameter] && configurationO[targetparameter]){
-        incomingparameters = util.toLowerKeys(incomingparameters);
-        configurationO = util.toLowerKeys(configurationO);
-
-        var targetparameterValue=incomingparameters[targetparameter];
-        var doThisArray = configurationO[targetparameter];  // get config for this targetparameter
-
-        if(!skipProcessConfig){
-            processConfig(incomingparameters, targetparameter,  doThisArray, function(outgoingparameters){
-                callback(outgoingparameters);// return to execute method to proceed
-            });
-        }else{
-            // this is the recursed call as part of the configuration
-            var data = undefined;
-            if(incomingparameters['executethis'] && (global[incomingparameters['executethis']]) && ((typeof global[incomingparameters['executethis']]) === 'function')){
-                global[incomingparameters['executethis']](incomingparameters,targetparameter,true, function(data){
+    // Primary execute function called after doThis
+    var executeFn = exports.executeFn =  function(params, target, callback) {
+        console.log('>>>>>> Lllll '+params);    
+        var functionToExecute = params['executethis'];
+        if (functionToExecute !== undefined) {
+            if (typeof window[functionToExecute] === 'function') {
+                window[functionToExecute](params, target, function (data) {
                     callback(data);
-                })
-            }else{
-                callback(data);
+                });
+            } else {
+                console.log("No function by that name nothing to do in executefn ...");
+                callback(params);
             }
-
-        }
-
-    }else{
-        if(!skipProcessConfig){
-            callback(incomingparameters);
-        }else{
-            callback(undefined);
+        } else {
+            console.log("Nothing to do in executefn...");
+            callback(params);
         }
     }
-        
-}
 
 
-function processConfig(params,target,doThisArray, callback){
+    // primary conmmand router based on what it reads from config
+    function doThis(params, target, callback) {
+        // TolowerCase all incoming parameters
+        var config0 = config.configuration;
+        config0 = util.toLowerKeys(config0);
+        var howToDoList = config0[target];
 
-    var success=false;
-    for(var ctr=0;ctr < doThisArray.length; ctr++){
-        if(global[doThisArray[ctr]['doThis']]){
-            // alert('from processConfig method >>> '+JSON.stringify(params));
-            if(doThisArray[ctr]['parameters']){
-                for(var param in doThisArray[ctr]['parameters']){
-                    params[param] = doThisArray[ctr]['parameters'][param];
+        console.log("How to do list: " + JSON.stringify(howToDoList));
+
+        for (var item in howToDoList) {
+            var whatToDoList = config0[params[target]];
+            console.log('>>>>>>>> '+JSON.stringify(global[howToDoList[item]['doThis']]));
+            var howToDo = howToDoList[item]['doThis'];
+
+            console.log("What to do list: " + JSON.stringify(whatToDoList));
+
+            if (whatToDoList !== undefined) { // make sure we have a list from config, if not just go execute it
+                for (item in whatToDoList) {
+                    var whatToDo = whatToDoList[item]['doThis'];
+                    console.log("Trying to execute: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + whatToDo + '"}');
+                    params['executethis'] = whatToDo;
+                    // clean up params
+                    delete params[target];
+                    window[howToDo](params, target, callback);
+                }
+            } else {
+                console.log("No config for whatToDo tyring to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+                if (window[howToDo]) {
+                    params['executethis'] = params[target];
+                    // Clean up the params do not want executethis: something and a midexecute : something
+                    delete params[target];
+                    window[howToDo](params, target, callback);
+                } else {
+                    console.log("Nothing to do in dothis...");
+                    callback(params);
                 }
             }
-
-            // call doThis function in context
-            global[doThisArray[ctr]['doThis']](params,target, true, function(data){
-                if(data){
-                    // alert(' processConfig function callback >>> '+ JSON.stringify(data));
-                    // stop processing 
-                    success=true;
-                    callback(data);
-                }
-            });
-
-
-        }
-        if(success){
-            break;
         }
     }
 
-}
+})(typeof window == "undefined" ? global : window);
 
-
-
-// if attributes called 'preexecute' && 'configuration.preexecute' both exist
-// execute 'preexecute' using a common method(pass all parameters (original parameters + configuration.preexecute.parameters))
-// once complete remove preexecute and configuration.preexecute from configuration(optional)
-
-// if attributes called 'executethis' && 'configuration.executethis' both exist
-// execute 'executethis' using a common method(pass all parameters (original parameters + configuration.executethis.parameters))
-// once complete remove executethis and configuration.executethis from configuration(optional)
-
-// if attributes called 'postexecute' && 'configuration.postexecute' both exist
-// execute 'postexecute' using a common method(pass all parameters (original parameters + configuration.postexecute.parameters))
-// once complete remove postexecute and configuration.postexecute from configuration(optional)
-
-
-// Configuration sample 
-// 
-// {
-//     "configuration": {
-//         "preExecuteThis": [
-//             {
-//                 "order": 0,
-//                 "doThis": "executeFunction"
-//             },
-//             {
-//                 "order": 1,
-//                 "doThis": "executeVariable"
-//             }
-//         ]
-//     }
-// }
-//
-// config.midexecute=doThis:executeThis
-// translation: go find a parameter called mid execute
-// x=its value
-// …now call function doThis…make sure to send to it a parmarameter called {executeThis:<x>}
-
-
-
-
-function executeVariable(params,target,skipProcessConfig, callback){
-    // alert('execute variable called');]
-    delete params['configuration'];
-    var params = util.toLowerKeys(params);
-    callback();
-}
-
-
-function executeParameter(params,target,skipProcessConfig,  callback){
-    // alert('execute parameters called');
-    delete params['configuration'];
-    var params = util.toLowerKeys(params);
-    callback();
-}
-
-
-// helper functions for processing required :: server 
-function mirrorfunction(params, target,skipProcessConfig, callback){
-    alert('house called');
-    delete params['configuration'];
-    var params = util.toLowerKeys(params);
-    callback(params);
-}
-
-
-// function addToMongo(params, callback){
-//     //alert('getFromMongo called');
-//     delete params['configuration'];
-//     var params = util.toLowerKeys(params);
-//     callback(params);
-// }
-
-function alertFn(params, callback){
-    // alert('alertFn called');
-    delete params['configuration'];
-    var params = util.toLowerKeys(params);
-    callback(params);
-}
 

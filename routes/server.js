@@ -9,6 +9,7 @@ var mongoskin = require('mongoskin')
   , superagent = require('superagent')
   , filecheck = require('../scrapejob/scrape.js')
   , addget = require('../dao/addget.js')
+  // , executethis = require('../../dripoint/saurshaz/wip/scripts/executethis.js')
   , executethis = require('../routes/executethis.js')
   , util = require('../util.js')
   , drifn = require('../dao/dri_functions.js')
@@ -96,10 +97,11 @@ function callScrapeLogic(res, callback){
 /// logic for executeThis
 exports.executethis = function(req, res) {
 
-    var item = req.body[0];
-    console.log(JSON.stringify(item));
+    var item = req.body;
 
     executethis.execute(item,function(data){
+      
+        console.log(JSON.stringify(data));
         res.send(data);
         res.end();
     })
