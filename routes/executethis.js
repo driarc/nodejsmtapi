@@ -1,12 +1,15 @@
 'use strict';
 var config = require('../config.js');
-var dao =require('../dao/mongo.js');
-require('../dao/querym.js');
+require('../dao/mongo.js');
+
+if(!global){
+    global = {};
+}
+
 (function(window) {
     // execute method --- method called numbered (1)
     exports.execute = function(incomingparameters, callback){
-
-    if(incomingparameters["executethis"] === "test")
+       if(incomingparameters["executethis"] === "test")
     {
         incomingparameters["imAlive"] = "true";
         callback(incomingparameters);
@@ -25,6 +28,10 @@ require('../dao/querym.js');
         // mid-execute method --- method called numbered (3)
         doThis(incomingparameters,'midexecute',function(outgoingparameters){
 
+            if(!outgoingparameters){
+                outgoingparameters ={};
+            }
+
             console.log('after executethis >> '+JSON.stringify(outgoingparameters));
             // post-execute method --- method called numbered (4)
             doThis(outgoingparameters,'postexecute',function(outgoingparameters){
@@ -36,11 +43,11 @@ require('../dao/querym.js');
     });
 }
 
+
 // Primary execute function called after doThis
-var executeFn = exports.executeFn = function(params, target,  callback){
+var executeFn = global.executeFn = function(params, target,  callback){
     var functionToExecute = params['executethis'];
     if(functionToExecute !== undefined) {
-        console.log('>>>> ' +functionToExecute);
         if(typeof window[functionToExecute] === 'function') {
             window[functionToExecute](params,target, function(data){
                 callback(data);
@@ -116,7 +123,7 @@ function doThis(params, target, callback) {
         console.log("What to do list: " + JSON.stringify(whatToDoList));
 
         if (whatToDoList !== undefined) { // make sure we have a list from config, if not just go execute it
-            for (item in whatToDoList) {
+            for (var item in whatToDoList) {
                 var whatToDo = whatToDoList[item]['dothis'];
                 console.log("Trying to execute: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + whatToDo + '"}');
                 params['executethis'] = whatToDo;
@@ -125,7 +132,7 @@ function doThis(params, target, callback) {
                 window[howToDo](params, target, callback);
             }
         } else {
-            console.log("No config for whatToDo tyring to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+            console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
             if(window[howToDo]) {
                 params['executethis'] = params[target];
                 // Clean up the params, do not want executethis: something and a midexecute : something
@@ -139,6 +146,4 @@ function doThis(params, target, callback) {
     }
 }
 
-})(typeof window == "undefined" ? exports : window);
-
-
+})(typeof window == "undefined" ? global : window);

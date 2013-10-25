@@ -1,12 +1,12 @@
-var testquery = exports.testquery = function(parameters) {
-printToDiv('testquery parameters',parameters);
-parameters['hello']='hello2';
-return parameters;
-}
+	var testquery = exports.testquery = function(parameters) {
+		printToDiv('testquery parameters',parameters);
+		parameters['hello']='hello2';
+		return parameters;
+	}
 
 
-function fishOut(parameters) {
-
+var fishOut = exports.f = function(parameters) {
+	console.log('f');
 	// These are the categories of possible data sent in
 
 	// For query building from wids
