@@ -35,7 +35,7 @@ var config = require('../config.js');
 
     // Primary execute function called after doThis
     var executeFn = exports.executeFn =  function(params, target, callback) {
-        console.log('>>>>>> Lllll '+params);    
+        console.log('>>>>>> Lllll '+JSON.stringify(params));    
         var functionToExecute = params['executethis'];
         if (functionToExecute !== undefined) {
             if (typeof window[functionToExecute] === 'function') {
@@ -64,7 +64,7 @@ var config = require('../config.js');
 
         for (var item in howToDoList) {
             var whatToDoList = config0[params[target]];
-            console.log('>>>>>>>> '+JSON.stringify(global[howToDoList[item]['doThis']]));
+           
             var howToDo = howToDoList[item]['doThis'];
 
             console.log("What to do list: " + JSON.stringify(whatToDoList));
@@ -93,6 +93,6 @@ var config = require('../config.js');
         }
     }
 
-})(typeof window == "undefined" ? global : window);
+})(typeof window == "undefined" ? exports : window);
 
 
