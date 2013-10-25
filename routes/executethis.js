@@ -35,8 +35,8 @@ var config = require('../config.js');
 
     // Primary execute function called after doThis
     var executeFn = exports.executeFn =  function(params, target, callback) {
-        console.log('>>>>>> Lllll '+JSON.stringify(params));    
         var functionToExecute = params['executethis'];
+        console.log('>>>>>> params >>> '+JSON.stringify(params));    
         if (functionToExecute !== undefined) {
             if (typeof window[functionToExecute] === 'function') {
                 window[functionToExecute](params, target, function (data) {
@@ -81,7 +81,7 @@ var config = require('../config.js');
             } else {
                 console.log("No config for whatToDo tyring to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
                 if (window[howToDo]) {
-                    params['executethis'] = params[target];
+                    // params['executethis'] = params[target];
                     // Clean up the params do not want executethis: something and a midexecute : something
                     delete params[target];
                     window[howToDo](params, target, callback);
