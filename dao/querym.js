@@ -1,4 +1,5 @@
 	var testquery = exports.testquery = function(parameters) {
+		console.log('>>> from testquery '+ JSON.stringify(parameters));
 		printToDiv('testquery parameters',parameters);
 		parameters['hello']='hello2';
 		return parameters;

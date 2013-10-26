@@ -1,6 +1,7 @@
 'use strict';
 var config = require('../config.js');
 require('../dao/mongo.js');
+require('../dao/querym.js');
 
 if(!global){
     global = {};
@@ -49,7 +50,8 @@ var executeFn = global.executeFn = function(params, target,  callback){
     var functionToExecute = params['executethis'];
     if(functionToExecute !== undefined) {
         if(typeof window[functionToExecute] === 'function') {
-            window[functionToExecute](params,target, function(data){
+            delete params["executethis"];
+            window[functionToExecute](params, function(data){
                 callback(data);
             });
         } else {

@@ -5,7 +5,7 @@ var config = require('../config.js')
 ,db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS);
 
 
-var TABLE_NAME = config.TABLE_NAME;
+var TABLE_NAME,schemaToLookup = config.TABLE_NAME;
 
 
 
@@ -26,7 +26,7 @@ exports.removeFromMongo = removeFromMongo = function(objToRemove,schemaToLookup,
 
 
 // DAO method to remove an entry from specified collection
-exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, updatedObject, callback){
+exports.updateToMongo = updateToMongo = function(queryObject, updatedObject, callback){
 	
 	delete updatedObject.wid;
 	for (var props in queryObject.data) {
@@ -67,10 +67,11 @@ exports.updateToMongo = updateToMongo = function(queryObject,schemaToLookup, upd
 
 
 // the callback function on succesful addition is also specified
-exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callback){
+exports.getFromMongo = getFromMongo = function(objToFind, callback){
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
+    	console.log(" >>> "+JSON.stringify(objToFind));
     	if (!result) {
 			callback(null);
 	    }
@@ -85,7 +86,7 @@ exports.getFromMongo = getFromMongo = function(objToFind,schemaToLookup, callbac
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
-exports.mongoquery = mongoquery = function(objToFind,schemaToLookup, callback){
+exports.mongoquery = mongoquery = function(objToFind, callback){
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne	(objToFind, function(err, result) {
@@ -102,7 +103,7 @@ exports.mongoquery = mongoquery = function(objToFind,schemaToLookup, callback){
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
-exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaToLookup, callback){
+exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind, callback){
 	console.log(' ****** getMultipleFromMongo method in dao');
 	db.collection(schemaToLookup).find(objToFind).toArray(function(err, result) {
 		if (err) {
@@ -121,7 +122,7 @@ exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,schemaT
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-var addToMongo  = function(objToAdd,schemaToLookup, callback){
+var addToMongo  = function(objToAdd, callback){
 	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
 	for(var attr in objToAdd){
@@ -149,7 +150,7 @@ var addToMongo  = function(objToAdd,schemaToLookup, callback){
 };
 
 
-exports.addOrUpdate = function(entityToAdd,schemaToLookup, callback){
+exports.addOrUpdate = function(entityToAdd, callback){
     
     var widVal = (entityToAdd['wid']);
     if(!widVal){
