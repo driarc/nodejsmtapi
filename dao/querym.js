@@ -1,8 +1,8 @@
-	var testquery = exports.testquery = function(parameters) {
+	var testquery = global.testquery = function(parameters, callback) {
 		console.log('>>> from testquery '+ JSON.stringify(parameters));
-		printToDiv('testquery parameters',parameters);
+		// printToDiv('testquery parameters',parameters);
 		parameters['hello']='hello2';
-		return parameters;
+		callback(parameters);
 	}
 
 
