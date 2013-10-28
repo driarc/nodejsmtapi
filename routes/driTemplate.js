@@ -9,17 +9,26 @@ var cheerio = require('cheerio')
   , lookupDir = config.LOOKUP_DIR
   , $ = undefined;
 
-exports.buildTemplate = function(parameters) {
-	buildTemplate(parameters);
+exports.buildTemplate = function(req, res) {
+	console.log('buildTemplate hit!, parameters are ' + JSON.stringify(req.body));
+	var parameters = req.body;
+
+	buildTemplate(parameters, function(results) {
+		console.log(JSON.stringify(results));
+		res.send(results);
+		res.end();
+	});
 }
 
-function buildTemplate(parameters) {
+function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
+	var results = {};
+	results.success = false;
 	console.log('**driTemplate.buildTemplate** Getting file contents of - ' + masterWml);
 	var masterContents = findAndReadFile(lookupDir, masterWml);
 
 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-	var regex = new RegExp('[[', 'g')
+	var regex = new RegExp('\[\[', 'g')
 	  , nextWml = ''
 	  , masterPath = ''
 	  , result;
@@ -32,8 +41,6 @@ function buildTemplate(parameters) {
 	}
 	console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
 
-	// (?)TODO(?) find {{<binding>}} tags and create a widForView js variable which will be a csv of all the bound wids (?)
-
 	// in here cheerio can take the entire codefile and modify it through it's jQuery interface
 	$ = cheerio.load(masterContents, {
 	    ignoreWhitespace: true,
@@ -45,7 +52,12 @@ function buildTemplate(parameters) {
 	fs.writeFile(masterPath + '/' + masterWml + '.html', masterContents, function(err) {
 		if (err) { throw err; }
 		console.log('**driTemplate.buildTemplate** Created ' + masterPath + '/' + masterWml + '.html file.');
+
+		results.success = true;
+		results.htmlfile = masterPath + '/' + masterWml + '.html';
 	});
+
+	callback(results);
 }
 
 function buildAllTemplates() {  // don't know if we want to do this as there will be master wml files and partial wml files.
