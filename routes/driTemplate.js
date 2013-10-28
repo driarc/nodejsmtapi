@@ -2,7 +2,7 @@
 
 var cheerio = require('cheerio')
   , fs = require('graceful-fs')
-  , walk = require('walk')
+  , find = require('findit')
   , moment = require('moment')
   , config = require('../config.js')
   , HashMap = require('hashmap').HashMap
@@ -62,6 +62,7 @@ function buildTemplate(parameters, callback) {
 }
 
 function buildAllTemplates() {  // don't know if we want to do this as there will be master wml files and partial wml files.
+	// TODO : change from walk to find code
 	var walker  = walk.walk(lookupDir, { followLinks: false });
 
 	walker.on('file', function(path, fileStats, next) {
@@ -72,17 +73,20 @@ function buildAllTemplates() {  // don't know if we want to do this as there wil
 
 function findAndReadFile(startDir, fileName, returnPath) {
 	returnPath = returnPath || false;
-	var walker = walk.walk(startDir, {followLinks: false });	
-	walker.on('file', function(path, fileStats, next) {
-		console.log('** walker walking on ' + path + fileStats.name + ' **');
-		// if (fileStats.name.substr(fileStats.name.indexof('.'), fileStats.name.length) === 'wml') {
-		if (fileStats.name === fileName + '.wml')
-			if (returnPath) { return path; }
-			else {
-				console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + fileStats.name);
-				return fs.readFileSync(path + fileStats.name);
-			}
-		}
-		next();
+	var finder = find(startDir);
+	finder.on('file', function(file, stat) {
+		console.log('file : ' + file + '   stat : ' + JSON.stringify(stat));
 	});
+
+	// var walker = walk.walk(startDir, {followLinks: false });	
+	// walker.on('file', function(path, fileStats, next) {
+	// 	console.log('** walker walking on ' + path + fileStats.name + ' **');
+	// 	if (fileStats.name === fileName + '.wml')
+	// 		if (returnPath) { return path; }
+	// 		else {
+	// 			console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + fileStats.name);
+	// 			return fs.readFileSync(path + fileStats.name);
+	// 		}
+	// 	}
+	// });
 }
