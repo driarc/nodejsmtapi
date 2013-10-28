@@ -24,7 +24,6 @@ function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
 	var results = {};
 	results.success = false;
-	console.log('**driTemplate.buildTemplate** Getting file contents of - ' + masterWml);
 	var masterContents = findAndReadFile(lookupDir, masterWml);
 
 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
@@ -73,9 +72,13 @@ function findAndReadFile(startDir, fileName, returnPath) {
 	returnPath = returnPath || false;
 	var walker = walk.walk(startDir, {followLinks: false });	
 	walker.on('file', function(path, fileStats, next) {
-		if (fileStats.name.substr(0, fileStats.name.indexof('.'))) {
+		console.log('** walker walking on ' + path + '/' + fileStats.name + ' **');
+		if (fileStats.name.substr(fileStats.name.indexof('.'), fileStats.name.length) === 'wml') {
 			if (returnPath) { return path; }
-			else { return fs.readFileSync(path + '/' + fileStats.name); }
+			else {
+				console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + '/' + fileStats.name);
+				return fs.readFileSync(path + '/' + fileStats.name);
+			}
 		}
 	});
 }
