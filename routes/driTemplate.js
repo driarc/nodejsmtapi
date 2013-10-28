@@ -26,9 +26,6 @@ function buildTemplate(parameters, callback) {
 	var wmlFile = {};
 	findAndReadFile(lookupDir, masterWml, function(file) {
 		wmlFile = file;
-
-		console.log('findit returned => ' + JSON.stringify(wmlFile));
-
 		var masterContents = wmlFile.contents;
 
 		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
@@ -42,6 +39,8 @@ function buildTemplate(parameters, callback) {
 		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
 		while ((result = regex.exec(masterContents))) {
+			console.log(JSON.stringify(result));
+			console.log(result);
 			nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
 			console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
 			masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
@@ -86,19 +85,7 @@ function findAndReadFile(startDir, fileName, callback) {
 	finder.on('file', function(file, stat) {
 		if (file.endsWith(fileName + '.wml')) {
 			console.log('found file => ' + file);
-			callback({ path:file, contents:fs.readFileSync(file) });
+			callback({ path:file, contents:fs.readFileSync(file).toString() });
 		}
 	});
-
-	// var walker = walk.walk(startDir, {followLinks: false });	
-	// walker.on('file', function(path, fileStats, next) {
-	// 	console.log('** walker walking on ' + path + fileStats.name + ' **');
-	// 	if (fileStats.name === fileName + '.wml')
-	// 		if (returnPath) { return path; }
-	// 		else {
-	// 			console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + fileStats.name);
-	// 			return fs.readFileSync(path + fileStats.name);
-	// 		}
-	// 	}
-	// });
 }
