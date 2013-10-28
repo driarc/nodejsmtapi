@@ -9,6 +9,10 @@ var cheerio = require('cheerio')
   , lookupDir = config.LOOKUP_DIR
   , $ = undefined;
 
+exports.buildTemplate = function(parameters) {
+	buildTemplate(parameters);
+}
+
 function buildTemplate(parameters) {
 	var masterWml = parameters.wmlfilename;
 	console.log('**driTemplate.buildTemplate** Getting file contents of - ' + masterWml);
