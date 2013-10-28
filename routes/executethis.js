@@ -10,6 +10,8 @@ if(!global){
 (function(window) {
     // execute method --- method called numbered (1)
     exports.execute = function(incomingparameters, callback){
+        incomingparameters = incomingparameters[0];
+
        if(incomingparameters["executethis"] === "test")
         {
             incomingparameters["imAlive"] = "true";
