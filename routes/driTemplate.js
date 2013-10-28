@@ -40,6 +40,10 @@ function buildTemplate(parameters, callback) {
 		while ((result = regex.exec(masterContents))) {
 			console.log(result);
 
+			var nextWml = result.toString().replace('[[', '').replace(']]', '');
+
+			console.log('nextWml => ' + nextWml);
+
 			// var tag = masterContents.substr(result.index + 2, masterContents.indexOf(']]'));
 			// console.log('tag => ' + tag);
 			// console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
