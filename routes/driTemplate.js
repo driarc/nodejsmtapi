@@ -30,7 +30,7 @@ function buildTemplate(parameters, callback) {
 		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		var regex = new RegExp('([[)(.*?)(]])', 'g')
+		var regex = new RegExp('\\[.*]', 'g')
 		  , nextWml = ''
 		  , masterPath = ''
 		  , result;
