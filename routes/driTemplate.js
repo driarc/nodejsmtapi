@@ -30,7 +30,7 @@ function buildTemplate(parameters, callback) {
 		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		var regex = new RegExp('/\[\[(.*?)\]\]/', 'g')
+		var regex = new RegExp('/\\[\\[(.*?)\\]\\]/', 'g')
 		  , nextWml = ''
 		  , masterPath = ''
 		  , result;
@@ -38,11 +38,12 @@ function buildTemplate(parameters, callback) {
 		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
 		while ((result = regex.exec(masterContents))) {
-			var tag = masterContents.substr(result.index + 2, masterContents.indexOf(']]'));
-			console.log('tag => ' + tag);
-			// nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
-			console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
-			masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
+			console.log(result);
+
+			// var tag = masterContents.substr(result.index + 2, masterContents.indexOf(']]'));
+			// console.log('tag => ' + tag);
+			// console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
+			// masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
 		}
 
 		console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
