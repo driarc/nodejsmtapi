@@ -3,6 +3,7 @@
 var cheerio = require('cheerio')
   , fs = require('graceful-fs')
   , find = require('findit')
+  , diveSync = require('diveSync')
   , moment = require('moment')
   , config = require('../config.js')
   , HashMap = require('hashmap').HashMap
@@ -22,50 +23,95 @@ exports.buildTemplate = function(req, res) {
 
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
+	var divePath = lookupDir + parameters.wmlfilename + '.wml'
 
-	findAndReadFile(lookupDir, masterWml, function(file) {
+	diveSync(divePath, function(err, file) {
 		var wmlFile = file;
-		var masterContents = wmlFile.contents.toString();
+		console.log('file => ' + JSON.stringify(file));
+		// var masterContents = wmlFile.contents.toString();
 
-		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
+		// console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
-		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		var regex = new RegExp('\\[.*]', 'g')
-		  , nextWml = ''
-		  , masterPath = ''
-		  , result;
+		// // find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
+		// var regex = new RegExp('\\[.*]', 'g')
+		//   , nextWml = ''
+		//   , masterPath = ''
+		//   , result;
 
-		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
+		// console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
-		while ((result = regex.exec(masterContents))) {
-			var stringResult = result.toString();
-			var nextWml = stringResult.replace('[[', '').replace(']]', '');
+		// while ((result = regex.exec(masterContents))) {
+		// 	var stringResult = result.toString();
+		// 	var nextWml = stringResult.replace('[[', '').replace(']]', '');
 
-			findAndReadFile(lookupDir, nextWml, function(file) {
-				var stringContents = file ? file.contents.toString() : '';
-				console.log('string file contents => ' + stringContents);
-				masterContents.replace(stringResult, file.contents.toString());
-			});
-		}
+		// 	findAndReadFile(lookupDir, nextWml, function(file) {
+		// 		var stringContents = file ? file.contents.toString() : '';
+		// 		masterContents.replace(stringResult, file.contents.toString());
+		// 	});
+		// }
 
-		console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
+		// console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
 
-		// in here cheerio can take the entire codefile and modify it through it's jQuery interface
-		$ = cheerio.load(masterContents, {
-		    ignoreWhitespace: true,
-		    xmlMode: false
-		});
+		// // in here cheerio can take the entire codefile and modify it through it's jQuery interface
+		// $ = cheerio.load(masterContents, {
+		//     ignoreWhitespace: true,
+		//     xmlMode: false
+		// });
 
-		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-		var htmlPath = wmlFile.path.replace('.wml', '.html');
-		fs.writeFile(htmlPath, masterContents, function(err) {
-			if (err) { throw err; }
+		// // save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
+		// var htmlPath = wmlFile.path.replace('.wml', '.html');
+		// fs.writeFile(htmlPath, masterContents, function(err) {
+		// 	if (err) { throw err; }
 
-			console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
-		});
+		// 	console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
+		// });
 
-		callback();
+		// callback();
 	});
+
+
+	// findAndReadFile(lookupDir, masterWml, function(file) {
+	// 	var wmlFile = file;
+	// 	var masterContents = wmlFile.contents.toString();
+
+	// 	console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
+
+	// 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
+	// 	var regex = new RegExp('\\[.*]', 'g')
+	// 	  , nextWml = ''
+	// 	  , masterPath = ''
+	// 	  , result;
+
+	// 	console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
+
+	// 	while ((result = regex.exec(masterContents))) {
+	// 		var stringResult = result.toString();
+	// 		var nextWml = stringResult.replace('[[', '').replace(']]', '');
+
+	// 		findAndReadFile(lookupDir, nextWml, function(file) {
+	// 			var stringContents = file ? file.contents.toString() : '';
+	// 			masterContents.replace(stringResult, file.contents.toString());
+	// 		});
+	// 	}
+
+	// 	console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
+
+	// 	// in here cheerio can take the entire codefile and modify it through it's jQuery interface
+	// 	$ = cheerio.load(masterContents, {
+	// 	    ignoreWhitespace: true,
+	// 	    xmlMode: false
+	// 	});
+
+	// 	// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
+	// 	var htmlPath = wmlFile.path.replace('.wml', '.html');
+	// 	fs.writeFile(htmlPath, masterContents, function(err) {
+	// 		if (err) { throw err; }
+
+	// 		console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
+	// 	});
+
+	// 	callback();
+	// });
 }
 
 function buildAllTemplates() {  // don't know if we want to do this as there will be master wml files and partial wml files.
@@ -78,11 +124,15 @@ function buildAllTemplates() {  // don't know if we want to do this as there wil
 	});
 }
 
-function findAndReadFile(startDir, fileName, callback) {
-	var finder = find(startDir);
-	finder.on('file', function(file, stat) {
-		if (file.endsWith(fileName + '.wml')) {
-			callback({ path:file, contents:fs.readFileSync(file).toString() });
-		}
-	});
+function findAndReadFile(startDir, fileName, callback, finalCallback) {
+	diveSync(startDir + fileName + '.wml', callback(err, file));
 }
+
+// function findAndReadFile(startDir, fileName, callback) {
+// 	var finder = find(startDir);
+// 	finder.on('file', function(file, stat) {
+// 		if (file.endsWith(fileName + '.wml')) {
+// 			callback({ path:file, contents:fs.readFileSync(file).toString() });
+// 		}
+// 	});
+// }
