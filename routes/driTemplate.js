@@ -22,51 +22,53 @@ exports.buildTemplate = function(req, res) {
 
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
-	var results = {};
-	results.success = false;
-	var wmlFile = findAndReadFile(lookupDir, masterWml);
+	var results = {success:false};
+	var wmlFile = {};
+	findAndReadFile(lookupDir, masterWml, function(file) {
+		wmlFile = file;
 
-	console.log('findit returned => ' + JSON.stringify(wmlFile));
+		console.log('findit returned => ' + JSON.stringify(wmlFile));
 
-	var masterContents = wmlFile.contents;
+		var masterContents = wmlFile.contents;
 
-	console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
+		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
-	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-	var regex = new RegExp('\\[\\[', 'g')
-	  , nextWml = ''
-	  , masterPath = ''
-	  , result;
+		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
+		var regex = new RegExp('\\[\\[', 'g')
+		  , nextWml = ''
+		  , masterPath = ''
+		  , result;
 
-	console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
+		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
-	while ((result = regex.exec(masterContents))) {
-		nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
-		console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
-		masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
-	}
+		while ((result = regex.exec(masterContents))) {
+			nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
+			console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
+			masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
+		}
 
-	console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
+		console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
 
-	// in here cheerio can take the entire codefile and modify it through it's jQuery interface
-	$ = cheerio.load(masterContents, {
-	    ignoreWhitespace: true,
-	    xmlMode: false
+		// in here cheerio can take the entire codefile and modify it through it's jQuery interface
+		$ = cheerio.load(masterContents, {
+		    ignoreWhitespace: true,
+		    xmlMode: false
+		});
+
+		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
+		htmlPath = wmlFile.path.replace('.wml', '.html');
+		console.log('htmlPath was resolved as ' + htmlPath);
+		fs.writeFile(htmlPath, masterContents, function(err) {
+			if (err) { throw err; }
+
+			console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
+
+			results.success = true;
+			results.htmlfile = htmlPath;
+		});
+
+		callback(results);
 	});
-
-	// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-	htmlPath = wmlFile.path.replace('.wml', '.html');
-	console.log('htmlPath was resolved as ' + htmlPath);
-	fs.writeFile(htmlPath, masterContents, function(err) {
-		if (err) { throw err; }
-
-		console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
-
-		results.success = true;
-		results.htmlfile = htmlPath;
-	});
-
-	callback(results);
 }
 
 function buildAllTemplates() {  // don't know if we want to do this as there will be master wml files and partial wml files.
@@ -79,12 +81,12 @@ function buildAllTemplates() {  // don't know if we want to do this as there wil
 	});
 }
 
-function findAndReadFile(startDir, fileName) {
+function findAndReadFile(startDir, fileName, callback) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
 		if (file.endsWith(fileName + '.wml')) {
 			console.log('found file => ' + file);
-			return { path:file, contents:fs.readFileSync(file) };
+			callback({ path:file, contents:fs.readFileSync(file) });
 		}
 	});
 
