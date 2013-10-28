@@ -27,6 +27,7 @@ function buildTemplate(parameters, callback) {
 
 	diveSync(divePath, function(err, file) {
 		var wmlFile = file;
+		console.log('error => ' + JSON.stringify(err));
 		console.log('file => ' + JSON.stringify(file));
 		// var masterContents = wmlFile.contents.toString();
 
