@@ -31,7 +31,7 @@ function buildTemplate(parameters, callback) {
 		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		var regex = new RegExp('\\[\\[', 'g')
+		var regex = new RegExp('\\[\\[+\\]\\]', 'g')
 		  , nextWml = ''
 		  , masterPath = ''
 		  , result;
@@ -84,7 +84,6 @@ function findAndReadFile(startDir, fileName, callback) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
 		if (file.endsWith(fileName + '.wml')) {
-			console.log('found file => ' + file);
 			callback({ path:file, contents:fs.readFileSync(file).toString() });
 		}
 	});
