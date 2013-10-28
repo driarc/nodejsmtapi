@@ -38,10 +38,13 @@ function buildTemplate(parameters, callback) {
 		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
 		while ((result = regex.exec(masterContents))) {
-			var nextWml = result.toString().replace('[[', '').replace(']]', '');
+			var stringResult = result.toString();
+			var nextWml = stringResult.replace('[[', '').replace(']]', '');
 
 			findAndReadFile(lookupDir, nextWml, function(file) {
-				masterContents.replace(result.toString(), file.contents.toString());
+				stringContents = file ? file.contents.toString() : '';
+				console.log('string file contents => ' + stringContents);
+				masterContents.replace(stringResult, file.contents.toString());
 			});
 		}
 
