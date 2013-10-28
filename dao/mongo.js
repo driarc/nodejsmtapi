@@ -122,7 +122,7 @@ exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind, callba
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-var addToMongo  = function(objToAdd, callback){
+var addToMongo  = exports.addToMongo = function(objToAdd, callback){
 	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
 	for(var attr in objToAdd){
