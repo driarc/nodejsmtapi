@@ -67,7 +67,7 @@ exports.updateToMongo = updateToMongo = function(queryObject, updatedObject, cal
 
 
 // the callback function on succesful addition is also specified
-exports.getFromMongo = getFromMongo = function(objToFind, callback){
+exports.getFromMongo = getFromMongo = function(objToFind,target, callback){
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
@@ -86,7 +86,7 @@ exports.getFromMongo = getFromMongo = function(objToFind, callback){
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
-exports.mongoquery = mongoquery = function(objToFind, callback){
+exports.mongoquery = mongoquery = function(objToFind,target, callback){
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne	(objToFind, function(err, result) {
@@ -103,7 +103,7 @@ exports.mongoquery = mongoquery = function(objToFind, callback){
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
-exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind, callback){
+exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,target, callback){
 	console.log(' ****** getMultipleFromMongo method in dao');
 	db.collection(schemaToLookup).find(objToFind).toArray(function(err, result) {
 		if (err) {
@@ -122,7 +122,7 @@ exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind, callba
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-var addToMongo  = exports.addToMongo = function(objToAdd, callback){
+var addToMongo  = exports.addToMongo = function(objToAdd,target, callback){
 	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
 	for(var attr in objToAdd){
@@ -150,7 +150,7 @@ var addToMongo  = exports.addToMongo = function(objToAdd, callback){
 };
 
 
-exports.addOrUpdate = function(entityToAdd, callback){
+exports.addOrUpdate = function(entityToAdd,target, callback){
     
     var widVal = (entityToAdd['wid']);
     if(!widVal){
