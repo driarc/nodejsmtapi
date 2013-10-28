@@ -28,7 +28,7 @@ function buildTemplate(parameters, callback) {
 	var masterContents = findAndReadFile(lookupDir, masterWml);
 
 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-	var regex = new RegExp('\[\[', 'g')
+	var regex = new RegExp('\\[\\[', 'g')
 	  , nextWml = ''
 	  , masterPath = ''
 	  , result;
