@@ -25,6 +25,9 @@ function buildTemplate(parameters, callback) {
 	var results = {};
 	results.success = false;
 	var wmlFile = findAndReadFile(lookupDir, masterWml);
+
+	console.log('findit returned => ' + JSON.stringify(wmlFile));
+
 	var masterContents = wmlFile.contents;
 
 	console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
