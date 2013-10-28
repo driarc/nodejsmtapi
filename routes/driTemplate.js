@@ -42,7 +42,7 @@ function buildTemplate(parameters, callback) {
 			var nextWml = stringResult.replace('[[', '').replace(']]', '');
 
 			findAndReadFile(lookupDir, nextWml, function(file) {
-				stringContents = file ? file.contents.toString() : '';
+				var stringContents = file ? file.contents.toString() : '';
 				console.log('string file contents => ' + stringContents);
 				masterContents.replace(stringResult, file.contents.toString());
 			});
