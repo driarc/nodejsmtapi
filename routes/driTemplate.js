@@ -24,7 +24,7 @@ exports.buildTemplate = function(req, res) {
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
 	
-	var files = readdirSyncRecursive(lookupDir);
+	var files = wrench.readdirSyncRecursive(lookupDir);
 
 	console.log(JSON.stringify(files));
 
