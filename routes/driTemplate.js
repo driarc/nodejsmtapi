@@ -23,7 +23,7 @@ exports.buildTemplate = function(req, res) {
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
 	var results = {success:false};
-	
+
 	findAndReadFile(lookupDir, masterWml, function(file) {
 		var wmlFile = file;
 		var masterContents = wmlFile.contents.toString();
@@ -39,7 +39,7 @@ function buildTemplate(parameters, callback) {
 		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
 		while ((result = regex.exec(masterContents))) {
-			tag = masterContents.substr(result.index + 2, masterContents.indexof(']]'));
+			tag = masterContents.substr(result.index + 2, masterContents.indexOf(']]'));
 			console.log('tag => ' + tag);
 			// nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
 			console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
