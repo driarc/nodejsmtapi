@@ -26,6 +26,7 @@ function buildTemplate(parameters, callback) {
 	results.success = false;
 	var wmlFile = findAndReadFile(lookupDir, masterWml);
 	var masterContents = wmlFile.contents;
+
 	console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
@@ -35,11 +36,13 @@ function buildTemplate(parameters, callback) {
 	  , result;
 
 	console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
+
 	while ((result = regex.exec(masterContents))) {
 		nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
 		console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
 		masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
 	}
+
 	console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
 
 	// in here cheerio can take the entire codefile and modify it through it's jQuery interface
@@ -53,6 +56,7 @@ function buildTemplate(parameters, callback) {
 	console.log('htmlPath was resolved as ' + htmlPath);
 	fs.writeFile(htmlPath, masterContents, function(err) {
 		if (err) { throw err; }
+
 		console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
 
 		results.success = true;
@@ -76,6 +80,7 @@ function findAndReadFile(startDir, fileName) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
 		if (file.endsWith(fileName + '.wml')) {
+			console.log('found file => ' + file);
 			return { path:file, contents:fs.readFileSync(file) };
 		}
 	});
