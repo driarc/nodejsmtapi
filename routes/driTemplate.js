@@ -3,7 +3,7 @@
 var cheerio = require('cheerio')
   , fs = require('graceful-fs')
   , find = require('findit')
-  , diveSync = require('diveSync')
+  , wrench = require('wrench')
   , moment = require('moment')
   , config = require('../config.js')
   , HashMap = require('hashmap').HashMap
@@ -23,52 +23,10 @@ exports.buildTemplate = function(req, res) {
 
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
-	var divePath = lookupDir + '**/' + parameters.wmlfilename + '.wml'
+	
+	var files = readdirSyncRecursive(lookupDir);
 
-	diveSync(divePath, function(err, file) {
-		var wmlFile = file;
-		console.log('error => ' + JSON.stringify(err));
-		console.log('file => ' + JSON.stringify(file));
-		// var masterContents = wmlFile.contents.toString();
-
-		// console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
-
-		// // find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		// var regex = new RegExp('\\[.*]', 'g')
-		//   , nextWml = ''
-		//   , masterPath = ''
-		//   , result;
-
-		// console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
-
-		// while ((result = regex.exec(masterContents))) {
-		// 	var stringResult = result.toString();
-		// 	var nextWml = stringResult.replace('[[', '').replace(']]', '');
-
-		// 	findAndReadFile(lookupDir, nextWml, function(file) {
-		// 		var stringContents = file ? file.contents.toString() : '';
-		// 		masterContents.replace(stringResult, file.contents.toString());
-		// 	});
-		// }
-
-		// console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
-
-		// // in here cheerio can take the entire codefile and modify it through it's jQuery interface
-		// $ = cheerio.load(masterContents, {
-		//     ignoreWhitespace: true,
-		//     xmlMode: false
-		// });
-
-		// // save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-		// var htmlPath = wmlFile.path.replace('.wml', '.html');
-		// fs.writeFile(htmlPath, masterContents, function(err) {
-		// 	if (err) { throw err; }
-
-		// 	console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
-		// });
-
-		// callback();
-	});
+	console.log(JSON.stringify(files));
 
 
 	// findAndReadFile(lookupDir, masterWml, function(file) {
