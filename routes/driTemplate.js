@@ -24,7 +24,8 @@ function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
 	var results = {};
 	results.success = false;
-	var masterContents = findAndReadFile(lookupDir, masterWml);
+	var wmlFile = findAndReadFile(lookupDir, masterWml);
+	var masterContents = wmlFile.contents;
 	console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
@@ -48,14 +49,14 @@ function buildTemplate(parameters, callback) {
 	});
 
 	// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-	masterPath = findAndReadFile(lookupDir, masterWml, true);
-	console.log('masterPath was resolved as ' + masterPath);
-	fs.writeFile(masterPath + masterWml + '.html', masterContents, function(err) {
+	htmlPath = wmlFile.path.replace('.wml', '.html');
+	console.log('htmlPath was resolved as ' + htmlPath);
+	fs.writeFile(htmlPath, masterContents, function(err) {
 		if (err) { throw err; }
-		console.log('**driTemplate.buildTemplate** Created ' + masterPath + '/' + masterWml + '.html file.');
+		console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
 
 		results.success = true;
-		results.htmlfile = masterPath + '/' + masterWml + '.html';
+		results.htmlfile = htmlPath;
 	});
 
 	callback(results);
@@ -71,11 +72,12 @@ function buildAllTemplates() {  // don't know if we want to do this as there wil
 	});
 }
 
-function findAndReadFile(startDir, fileName, returnPath) {
-	returnPath = returnPath || false;
+function findAndReadFile(startDir, fileName) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
-		console.log('file : ' + file + '   stat : ' + JSON.stringify(stat));
+		if (file.endsWith(fileName + '.wml')) {
+			return { path:file, contents:fs.readFileSync(file) };
+		}
 	});
 
 	// var walker = walk.walk(startDir, {followLinks: false });	
