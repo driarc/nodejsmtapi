@@ -75,12 +75,14 @@ function findAndReadFile(startDir, fileName, returnPath) {
 	var walker = walk.walk(startDir, {followLinks: false });	
 	walker.on('file', function(path, fileStats, next) {
 		console.log('** walker walking on ' + path + fileStats.name + ' **');
-		if (fileStats.name.substr(fileStats.name.indexof('.'), fileStats.name.length) === 'wml') {
+		// if (fileStats.name.substr(fileStats.name.indexof('.'), fileStats.name.length) === 'wml') {
+		if (fileStats.name === fileName + '.wml')
 			if (returnPath) { return path; }
 			else {
 				console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + fileStats.name);
 				return fs.readFileSync(path + fileStats.name);
 			}
 		}
+		next();
 	});
 }
