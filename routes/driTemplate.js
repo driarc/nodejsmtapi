@@ -14,15 +14,14 @@ exports.buildTemplate = function(req, res) {
 	var parameters = req.body;
 
 	buildTemplate(parameters, function(results) {
-		console.log(JSON.stringify(results));
-		res.send(results);
+		console.log(JSON.stringify());
+		res.send();
 		res.end();
 	});
 }
 
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
-	var results = {success:false};
 
 	findAndReadFile(lookupDir, masterWml, function(file) {
 		var wmlFile = file;
@@ -31,7 +30,7 @@ function buildTemplate(parameters, callback) {
 		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		var regex = new RegExp('\\[\\[', 'g')
+		var regex = new RegExp('/\[\[(.*?)\]\]/', 'g')
 		  , nextWml = ''
 		  , masterPath = ''
 		  , result;
@@ -56,17 +55,13 @@ function buildTemplate(parameters, callback) {
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		var htmlPath = wmlFile.path.replace('.wml', '.html');
-		console.log('htmlPath was resolved as ' + htmlPath);
 		fs.writeFile(htmlPath, masterContents, function(err) {
 			if (err) { throw err; }
 
 			console.log('**driTemplate.buildTemplate** Created ' + htmlPath + ' file.');
-
-			results.success = true;
-			results.htmlfile = htmlPath;
 		});
 
-		callback(results);
+		callback();
 	});
 }
 
