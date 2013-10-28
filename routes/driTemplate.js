@@ -38,16 +38,11 @@ function buildTemplate(parameters, callback) {
 		console.log('**driTemplate.buildTemplate** Starting to handle [[<wml>]] tags');
 
 		while ((result = regex.exec(masterContents))) {
-			console.log(result);
-
 			var nextWml = result.toString().replace('[[', '').replace(']]', '');
 
-			console.log('nextWml => ' + nextWml);
-
-			// var tag = masterContents.substr(result.index + 2, masterContents.indexOf(']]'));
-			// console.log('tag => ' + tag);
-			// console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
-			// masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
+			findAndReadFile(lookupDir, nextWml, function(file) {
+				masterContents.replace(result.toString(), file.contents.toString());
+			});
 		}
 
 		console.log('**driTemplate.buildTemplate** Finished handling [[<wml>]] tags');
