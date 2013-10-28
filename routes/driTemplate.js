@@ -31,7 +31,7 @@ function buildTemplate(parameters, callback) {
 		console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 		// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
-		var regex = new RegExp('\\[\\[+\\]\\]', 'g')
+		var regex = new RegExp('\\[\\[', 'g')
 		  , nextWml = ''
 		  , masterPath = ''
 		  , result;
@@ -41,7 +41,9 @@ function buildTemplate(parameters, callback) {
 		while ((result = regex.exec(masterContents))) {
 			console.log(JSON.stringify(result));
 			console.log(result);
-			nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
+			tag = masterContents.substr(result.index + 2, masterContents.indexof(']]'));
+			console.log('tag => ' + tag);
+			// nextWml = result.substr(2, result.indexof(']]'));  // remove [[ and ]]
 			console.log('**driTemplate.buildTemplate** Replacing ' + result + ' tag.');
 			masterContents.replace(result, findAndReadFile(lookupDir, nextWml + '.wml'));
 		}
@@ -55,7 +57,7 @@ function buildTemplate(parameters, callback) {
 		});
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-		htmlPath = wmlFile.path.replace('.wml', '.html');
+		var htmlPath = wmlFile.path.replace('.wml', '.html');
 		console.log('htmlPath was resolved as ' + htmlPath);
 		fs.writeFile(htmlPath, masterContents, function(err) {
 			if (err) { throw err; }
