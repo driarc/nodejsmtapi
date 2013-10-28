@@ -23,7 +23,7 @@ exports.buildTemplate = function(req, res) {
 
 function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
-	var divePath = lookupDir + parameters.wmlfilename + '.wml'
+	var divePath = lookupDir + '**/' + parameters.wmlfilename + '.wml'
 
 	diveSync(divePath, function(err, file) {
 		var wmlFile = file;
@@ -125,15 +125,11 @@ function buildAllTemplates() {  // don't know if we want to do this as there wil
 	});
 }
 
-function findAndReadFile(startDir, fileName, callback, finalCallback) {
-	diveSync(startDir + fileName + '.wml', callback(err, file));
+function findAndReadFile(startDir, fileName, callback) {
+	var finder = find(startDir);
+	finder.on('file', function(file, stat) {
+		if (file.endsWith(fileName + '.wml')) {
+			callback({ path:file, contents:fs.readFileSync(file).toString() });
+		}
+	});
 }
-
-// function findAndReadFile(startDir, fileName, callback) {
-// 	var finder = find(startDir);
-// 	finder.on('file', function(file, stat) {
-// 		if (file.endsWith(fileName + '.wml')) {
-// 			callback({ path:file, contents:fs.readFileSync(file).toString() });
-// 		}
-// 	});
-// }
