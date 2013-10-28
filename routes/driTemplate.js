@@ -24,7 +24,7 @@ function buildTemplate(parameters, callback) {
 	var masterWml = parameters.wmlfilename;
 	var results = {};
 	results.success = false;
-	var masterContents = findAndReadFile(lookupDir, masterWml).toString();
+	var masterContents = findAndReadFile(lookupDir, masterWml);
 	console.log('** retrieved contents of ' + masterWml + '.wml are => ' + masterContents);
 
 	// find [[<wmlFileName>]] tags and replace with contents of <wmlFileName>.wml
@@ -49,7 +49,8 @@ function buildTemplate(parameters, callback) {
 
 	// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 	masterPath = findAndReadFile(lookupDir, masterWml, true);
-	fs.writeFile(masterPath + '/' + masterWml + '.html', masterContents, function(err) {
+	console.log('masterPath was resolved as ' + masterPath);
+	fs.writeFile(masterPath + masterWml + '.html', masterContents, function(err) {
 		if (err) { throw err; }
 		console.log('**driTemplate.buildTemplate** Created ' + masterPath + '/' + masterWml + '.html file.');
 
@@ -73,12 +74,12 @@ function findAndReadFile(startDir, fileName, returnPath) {
 	returnPath = returnPath || false;
 	var walker = walk.walk(startDir, {followLinks: false });	
 	walker.on('file', function(path, fileStats, next) {
-		console.log('** walker walking on ' + path + '/' + fileStats.name + ' **');
+		console.log('** walker walking on ' + path + fileStats.name + ' **');
 		if (fileStats.name.substr(fileStats.name.indexof('.'), fileStats.name.length) === 'wml') {
 			if (returnPath) { return path; }
 			else {
-				console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + '/' + fileStats.name);
-				return fs.readFileSync(path + '/' + fileStats.name);
+				console.log('**driTemplate.buildTemplate** Getting file contents of ' + path + fileStats.name);
+				return fs.readFileSync(path + fileStats.name);
 			}
 		}
 	});
