@@ -1,4 +1,5 @@
-require('../utils/addget.js');
+require('../dao/addget.js');
+require('../dao/mongo.js');
 require('../config.js');
 
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
@@ -12,6 +13,7 @@ return parameters;
 
 //Starting of querywid function...formerly MongoDataQuery
 exports.querywid = querywid = function(parameters,target,callback) {
+// function querywid(parameters,target,callback) {
 	console.log(' callback >> '+ callback);
 	var output = {};
     mQueryString = "";
@@ -203,7 +205,7 @@ function relationShipQuery(parameters, input) {
 	}
     // There are always multiple sections to a relationship query
     // So the string must start with $and 
-    MQueryString = "{$and:[" ;
+    MQueryString = '{"$and":[' ;
     var returnvalues = input;
 
 	var queryParameters=[] ;
@@ -236,7 +238,7 @@ function relationShipQuery(parameters, input) {
 
 	// This section addes the dtoType to the string
 	if (dtotype) {
-		var q3 = "{metadata.method:" + dtotype + "}," ;
+		var q3 = '{"data.metadata.method":"' + dtotype + '"},' ;
 		if (q3) {
 			MQueryString += q3;
 		}
@@ -244,7 +246,7 @@ function relationShipQuery(parameters, input) {
 
 	// This section is typically 'attribute', but could really be anything.
 	if (type) {
-		var q4 = "{data.relationshiptype:" + type + "}," ;
+		var q4 = '{"data.relationshiptype":"' + type + '"},' ;
 		if (q4) {
 			MQueryString += q4;
 		}
@@ -267,7 +269,7 @@ function BuildSingleQuery(parameters) { /// BuildSingleQuery(List<DataModeldto> 
 	// seed result with the beginning of a mongo or query
 	var parametersCount = countKeys(parameters);
 	if (parametersCount > 1) {
-		result = "{$or:[";
+		result = '{"$or":[';
 	} else {
 		result = "";
 	}
@@ -311,7 +313,7 @@ function BuildMultipleQuery(parameters) {
 		//returnString += "{";
 		returnString += "";
 	}else{
-		returnString += "{$and:[";
+		returnString += '{"$and":[';
 	}
 		// Iterate through the params from each wid to get the $or groups built
 	for (var i = 0; i < parametersCount; i++) {
@@ -339,14 +341,22 @@ function RelationshipBuildSingleQuery(parameters){
 	// seed result with the beginning of a mongo or query
 	var parametersCount = countKeys(parameters);
 	if (parametersCount > 1){
-		result = "{$or:[";
+		result = '{"$or":[';
 	}else{
 		result = "";
 	}
 	// build a {key,"value"} for each parameter
 	//foreach (var p in parameters)
-	for(key in parameters){
-		result +=  JSON.stringify(parameters[key]);
+	for(var key in parameters){
+		var miniobject = parameters[key];
+		for (var item in miniobject) {
+			result += '{"' + item + '":"' + miniobject[item] + '"}';
+		}
+
+
+
+		//result +=  parameters[key];
+		//result +=  '{"' + parameters[key].key + '":' + parameters[key].value + "}";
 		result += ",";
 	}
 	
@@ -952,3 +962,4 @@ function fishOut(parameters) {
 //  proxyprinttodiv('Function mongo() out with  output : ', output );   
 //  return output;
 // }//End of mongo function
+
