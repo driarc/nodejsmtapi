@@ -6,7 +6,7 @@ var cheerio = require('cheerio')
   , config = require('../config.js')
   , lookupDir = config.LOOKUP_DIR
   , $ = undefined
-  , masterContents;
+  , masterContents = {code:''};
 
 exports.buildTemplate = function(req, res) {
 	console.log('buildTemplate hit!, parameters are ' + JSON.stringify(req.body));
@@ -22,10 +22,10 @@ exports.buildTemplate = function(req, res) {
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		var htmlPath = masterPath.replace('.wml', '.html');
 
-		Object.watch(masterContents, function() {
-			if (!masterContents.contains('[[')) {
+		masterContents.watch('code', function() {
+			if (!masterContents.code.contains('[[')) {
 				console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
-				fs.writeFile(htmlPath, masterContents, function(err) {
+				fs.writeFile(htmlPath, masterContents.code, function(err) {
 					if (err) { throw err; }
 
 					console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
@@ -40,14 +40,14 @@ exports.buildTemplate = function(req, res) {
 
 function getWmlTags(filename, callback) {
 	findAndReadFile(lookupDir, filename, '', function(file) {
-		masterContents = file.contents.toString();
+		masterContents.code = file.contents;
 
 		var regex = new RegExp('\\[.*]', 'g')
 		  , wmlTags = []
 		  , result;
 
 		console.log('**driTemplate.buildTemplate** Starting to gather [[<wml>]] tags');
-		while ((result = regex.exec(masterContents))) {
+		while ((result = regex.exec(masterContents.code))) {
 			wmlTags.push(result.toString());
 		}
 		console.log('**driTemplate.buildTemplate** Finished gathering [[<wml>]] tags');
@@ -58,7 +58,7 @@ function getWmlTags(filename, callback) {
 
 function replaceWmlTag(file) {
 	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ' + file.tag);
-	masterContents.replace(file.tag, file.contents);
+	masterContents.code.replace(file.tag, file.contents);
 }
 
 function findAndReadFile(startDir, fileName, tag, callback) {
