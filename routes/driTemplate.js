@@ -11,9 +11,9 @@ var cheerio = require('cheerio')
   , responseData = {};
 
 exports.buildTemplate = function(req, res) {
-	console.log('********START*********driTemplate.buildTemplate**********START***********');
+	console.log('*******START******** driTemplate.buildTemplate ********START*********');
 
-	response = res
+	response = res;
 	var parameters = req.body;
 
 	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
@@ -33,7 +33,7 @@ exports.buildTemplate = function(req, res) {
 // get [[<wml>]] tags from contents of master wml file
 function getWmlTags(filename, callback) {
 	findAndReadFile(lookupDir, filename, '', function(file) {
-		masterContents.code = file.contents
+		masterContents.code = file.contents;
 		var regex = new RegExp('\\[\\[.*]]', 'g')
 		  , wmlTags = []
 		  , result;
@@ -58,9 +58,12 @@ function changedContents() {
 				console.log(' Error creating file => ' + JSON.stringify(err));
 				responseData.error = err;
 			}
-			else { console.log(' Successfully created file => ' + htmlPath); }
+			else {
+				console.log(' All [[<wml>]] tags processed.');
+				console.log(' Successfully created file => ' + htmlPath);
+			}
 
-			console.log('*********END********driTemplate.buildTemplate**********END***********');
+			console.log('*********END******* driTemplate.buildTemplate *********END***********');
 			response.send(responseData);
 			response.end();
 		});
