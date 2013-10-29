@@ -34,8 +34,14 @@ configuration.b = [];
 configuration.b[0] = {};
 configuration.b[0].order = 0;
 configuration.b[0].dothis = 'randomColors';
-
-
+configuration.getWid = [];
+configuration.getWid[0] = {};
+configuration.getWid[0].order = 0;
+configuration.getWid[0].dothis = 'mongoquery';
+configuration.updateWid = [];
+configuration.updateWid[0] = {};
+configuration.updateWid[0].order = 0;
+configuration.updateWid[0].dothis = 'addorupdate';
 
 
 // Primary execute function called after doThis
