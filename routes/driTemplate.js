@@ -44,7 +44,7 @@ function getWmlTags(filename, callback) {
 	findAndReadFile(lookupDir, filename, '', function(file) {
 		masterContents.code = file.contents;
 
-		var regex = new RegExp('\\[.*]', 'g')
+		var regex = new RegExp('\\[[.*]]', 'g')
 		  , wmlTags = []
 		  , result;
 
