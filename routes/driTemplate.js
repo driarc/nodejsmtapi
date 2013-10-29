@@ -13,7 +13,7 @@ exports.buildTemplate = function(req, res) {
 	var parameters = req.body;
 
 	getWmlTags(parameters.wmlfilename, function(tags) {
-		console.log('tags found => ' JSON.stringify(tags));
+		console.log('tags found => ' + JSON.stringify(tags));
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
 			findAndReadFile(lookupDir, nextWml, replaceWmlTag(file, tags[i]));
