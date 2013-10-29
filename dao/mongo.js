@@ -89,9 +89,11 @@ exports.getFromMongo = getFromMongo = function(objToFind,target, callback){
 exports.mongoquery = mongoquery = function(objToFind,target, callback){
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
-    db.collection(schemaToLookup).findOne	(objToFind, function(err, result) {
-    	if (!result) {
-			callback(null);
+    db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
+    	if (err  || (!result)) {
+			// console.error(err);
+	    	callback(err);
+	    	// throw err;
 	    }
 	    else{
 		    console.log('Found! '+ JSON.stringify(result));
@@ -108,7 +110,8 @@ exports.getMultipleFromMongo = getMultipleFromMongo = function(objToFind,target,
 	db.collection(schemaToLookup).find(objToFind).toArray(function(err, result) {
 		if (err) {
 			// console.error(err);
-	    	throw err;
+	    	// throw err;
+	    	callback(err);
 	    }
 	    else{
 	    	console.log('Found! '+ JSON.stringify(result));

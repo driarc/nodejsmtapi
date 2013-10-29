@@ -1,262 +1,147 @@
-	var testquery = global.testquery = function(parameters, callback) {
-		console.log('>>> from testquery '+ JSON.stringify(parameters));
-		// printToDiv('testquery parameters',parameters);
-		parameters['hello']='hello2';
-		callback(parameters);
-	}
+require('../utils/addget.js');
+require('../config.js');
 
+// external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
+// FYI we now call proxyprinttodiv which is in config that calls printtodiv
 
-var fishOut = exports.f = function(parameters) {
-	console.log('f');
-	// These are the categories of possible data sent in
-
-	// For query building from wids
-	var queParams = {};
-		// For getting relationships
-	var relParams = {};
-	// For doing math on the result set
-	var aggParams = {};
-	// For adjusting the output from the query
-	var addParams = {};
-	// Loose params that can be applied to the query
-	var xtrParams = {};
-
-	var mongoQueryWid =  ""; // String
-    if (isParameterLower(parameters, "mongoQueryWid")) {
-        mongoQueryWid = parameters["mongoQueryWid"];
-        queParams['mongoQueryWid'] = mongoQueryWid;
-        remove(parameters, "mongoQueryWid");
- 	    }
-	var singlemongoquery = ""; // String I don't think we need this one
-    if (isParameterLower(parameters, "singlemongoquery")) {
-        singlemongoquery = parameters["singlemongoquery"];
-        queParams['singlemongoquery'] = singlemongoquery;
-        remove(parameters, "singlemongoquery");
-        }
-	var multiplemongoquery = ""; // String 
-    if (isParameterLower(parameters, "multiplemongoquery")) {
-        multiplemongoquery = parameters["multiplemongoquery"];
-        queParams['multiplemongoquery'] = multiplemongoquery;
-        remove(parameters, "multiplemongoquery");
-        }
-	var mongorelationshipdirection = ""; // String
-    if (isParameterLower(parameters, "mongorelationshipdirection")) {
-        mongorelationshipdirection = parameters["mongorelationshipdirection"];
-        relParams['mongorelationshipdirection'] = mongorelationshipdirection;
-        remove(parameters, "mongorelationshipdirection");
-        }
-	var mongorelationshiptype = ""; // String
-    if (isParameterLower(parameters, "mongorelationshiptype")) {
-        mongorelationshiptype = parameters["mongorelationshiptype"];
-        remove(parameters, "mongorelationshiptype");
-        relParams['mongorelationshiptype'] = mongorelationshiptype;
-        }
-	var mongorelationshipmethod = ""; // String
-    if (isParameterLower(parameters, "mongorelationshipmethod")) {
-        mongorelationshipmethod = parameters["mongorelationshipmethod"];
-        remove(parameters, "mongorelationshipmethod");
-        addParams['mongorelationshipmethod'] = mongorelationshipmethod;
-        }
-	var mongorelationshiprawquery = ""; // String
-    if (isParameterLower(parameters, "mongorelationshiprawquery")) {
-        mongorelationshiprawquery = parameters["mongorelationshiprawquery"];
-        remove(parameters, "mongorelationshiprawquery");
-        relParams['mongorelationshiprawquery'] = mongorelationshiprawquery;
-        }
-	var mongorelationshipquery = ""; // String
-    if (isParameterLower(parameters, "mongorelationshipquery")) {
-        mongorelationshipquery = parameters["mongorelationshipquery"];
-        remove(parameters, "mongorelationshipquery");
-        relParams['mongorelationshipquery'] = mongorelationshipquery;
-       }
-	var mongoToken = ""; // String
-    if (isParameterLower(parameters, "mongoToken")) {
-        mongoToken = parameters["mongoToken"];
-        remove(parameters, "mongoToken");
-        // -------------------------------------TODO: assign this to Params group
-		}
-	var mongosetfieldsinclude = ""; // String
-    if (isParameterLower(parameters, "mongosetfieldsinclude")) {
-        mongosetfieldsinclude = parameters["mongosetfieldsinclude"];
-        remove(parameters, "mongosetfieldsinclude");
-        addParams['mongosetfieldsinclude'] = mongosetfieldsinclude;
-        }
-	var mongosetfieldsexclude = ""; // String
-    if (isParameterLower(parameters, "mongosetfieldsexclude")) {
-        mongosetfieldsexclude = parameters["mongosetfieldsexclude"];
-        remove(parameters, "mongosetfieldsexclude");
-        addParams['mongosetfieldsexclude'] = mongosetfieldsexclude;
-        }
-	var mongosetlimit = ""; // String
-    if (isParameterLower(parameters, "mongosetlimit")) {
-        mongosetlimit = parameters["mongosetlimit"];
-        remove(parameters, "mongosetlimit");
-        addParams['mongosetlimit'] = mongosetlimit;
-        }
-	var mongosetskip = ""; // String
-    if (isParameterLower(parameters, "mongosetskip")) {
-        mongosetskip = parameters["mongosetskip"];
-        remove(parameters, "mongosetskip");
-        addParams['mongosetskip'] = mongosetskip;
-        }
-	var mongosethint = ""; // String
-    if (isParameterLower(parameters, "mongosethint")) {
-        mongosethint = parameters["mongosethint"];
-        remove(parameters, "mongosethint");
-        addParams['mongosethint'] = mongosethint;
-        }
-	var mongoSetMax = ""; // String
-    if (isParameterLower(parameters, "mongosetmax")) {
-        mongosetmax = parameters["mongosetmax"];
-        remove(parameters, "mongosetmax");
-        addParams['mongosetmax'] = mongosetmax;
-        }
-	var mongosetsortby = ""; // String
-    if (isParameterLower(parameters, "mongosetsortby")) {
-        mongosetsortby = parameters["mongosetsortby"];
-        remove(parameters, "mongosetsortby");
-        addParams['mongosetsortby'] = mongosetsortby;
-        }
-	var mongoreturncount = ""; // String
-    if (isParameterLower(parameters, "mongoreturncount")) {
-        mongoreturncount = parameters["mongoreturncount"];
-        remove(parameters, "mongoreturncount");
-        addParams['mongoreturncount'] = mongoreturncount;
-        }
-	var mongoexplain = ""; // String
-    if (isParameterLower(parameters, "mongoexplain")) {
-        mongoexplain = parameters["mongoexplain"];
-        remove(parameters, "mongoexplain");
-        addParams['mongoexplain'] = mongoexplain;
-        }
-	var mongosize = ""; // String
-    if (isParameterLower(parameters, "mongosize")) {
-        mongosize = parameters["mongosize"];
-        remove(parameters, "mongosize");
-        addParams['mongosize'] = mongosize;
-        }
-	var mongosetsortorder = ""; // String
-    if (isParameterLower(parameters, "mongosetsortorder")) {
-        mongosetsortorder = parameters["mongosetsortorder"];
-        remove(parameters, "mongosetsortorder");
-        addParams['mongosetsortorder'] = mongosetsortorder;
-        }
-	var mongoaggregation = ""; // String
-    if (isParameterLower(parameters, "mongoaggregation")) {
-        mongoaggregation = parameters["mongoaggregation"];
-        remove(parameters, "mongoaggregation");
-        aggParams['mongoaggregation'] = mongoaggregation;
-    	}
-	var mongodtotype = ""; // String
-    if (isParameterLower(parameters, "mongodtotype")) {
-        mongodtotype = parameters["mongodtotype"];
-        remove(parameters, "mongodtotype");
-        relParams['mongodtotype'] = mongodtotype;
-    	}
-		var mongorelquery = ""; // String
-    if (isParameterLower(parameters, "mongorelquery")) {
-        mongorelquery = parameters["mongorelquery"];
-        remove(parameters, "mongorelquery");
-        relParams['mongorelquery'] = mongorelquery;
-      }
-		var mongoaggquery = ""; // String
-    if (isParameterLower(parameters, "mongoaggquery")) {
-        mongoaggquery = parameters["mongoaggquery"];
-        remove(parameters, "mongoaggquery");
-        aggParams['mongoaggquery'] = mongoaggquery;
-      }
-
-    // Gather the left over params	
-    for (i in parameters) {
-    	xtrParams[i] = parameters[i];
-    }
-
-    // Slap all the groups into an array and return them
-    var p = [];
-    p[0] = queParams;
-    p[1] = relParams;
-    p[2] = aggParams;
-    p[3] = addParams;
-    p[4] = xtrParams;
-    return p;
+function testquery(parameters) {
+parameters["IAMALIVE"]="hello";
+proxyprinttodiv('testquery parameters',parameters, true);
+return parameters;
 }
 
-//Starting of queryWid function
-function MongoDataQuery(parameters) {
-	// If you see BugsBunny, you know you have a problem.
-	var output = 'BugsBunny'
-	mQueryString = "";
+//Starting of querywid function...formerly MongoDataQuery
+exports.querywid = querywid = function(parameters,target,callback) {
+	var output = {};
+    // if (parameters["mongorawquery"]) {
+    // 	output = mongoquery(parameters);
+    // 	return output;
+   	// 	}
+   	// else
+   	// 	{
+   	// 	output = querywidlocal(parameters);
+   	// 	return output;
+   	// 	}
 
-	// Fish out params
-	p = fishOut(parameters);
+   	// if (widInput) {rawquery=$or primary=widInput}
 
-	var queParams = p[0];
-	var relParams = p[1];
-	var aggParams = p[2];
-	var addParams = p[3];
-	var xtrParams = p[4];
-		var ListOfLists = [];
+   	// we must get the properties below working
+   	// look for command.mongo
+   	// search a deeper level data.
+   	// use var parameters = tolowerparameters(parameters, {'wid':'add', 'metadata.method':'add', 'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
+   	// add option tells it to add the a blank parameters, true just converts
 
-		// Start logic
-	
-	// Use single to set up a query with the params of 1 wid
-	if (queParams['singlemongoquery'] && !xtrParams) { 
-  		output = "";
-		var wid = queParams['singlemongoquery'];
-		var widObject = getFromMongo({'wid':wid});
-		delete widObject['wid'];
-		output = BuildSingleQuery(widObject);
-  		mQueryString = output.substring(0, output.length -1);
-		output = fetchQueryResults(mQueryString);
-	}
-	
-	// Use multiple if you want to use a list of wids as $OR groups
-	// of a query to mongo
-	if (queParams['multiplemongoquery']) {
-		output = "";
-		var paramList = {};
-		var wid = queParams['multiplemongoquery'];
-		var listOfWids = getFromMongo({'wid':wid});
-		delete listOfWids["wid"];
-		printToDiv('Function MongoDataQuery listOfWids : ', listOfWids);
+	// var widInput=sq["mongowid"];
+	// var mongorelationshiptype=sq["mongorelationshiptype"];
+	// var mongorelationshipmethod=sq["mongorelationshipmethod"];
+	// var mongorelationshipdirection=sq["mongorelationshipdirection"];
+	// var mongowidmethod=sq["mongowidmethod"];
+	// var convertmethod=sq["convertmethod"];
+	// var dtotype=sq["dtotype"];
 
-    	var i = 0;
-  		ListOfLists = [];
-		for (w in listOfWids) {
-			var tempwid = getFromMongo({'wid':w});
-			delete tempwid["wid"];
-			for (t in tempwid) {
-				paramList[t] = tempwid[t];
-			}
-    		ListOfLists.push(paramList);
-    		paramList = {};
-		}
- 		if (xtrParams) {
-    		ListOfLists.push(xtrParams);
-  		}
-		mQueryString = BuildMultipleQuery(ListOfLists);
-		output = fetchQueryResults(mQueryString);
-	}
+    mQueryString = "";
+
+    // Fish out params
+    p = fishOut(parameters);
+    proxyprinttodiv('querywid parameters',parameters);
+    proxyprinttodiv('querywid p ',p);
+    var queParams = p[0];
+    var relParams = p[1];
+    var aggParams = p[2];
+    var addParams = p[3];
+    var xtrParams = p[4];
+    var relafterParams = p[5];
+    var ListOfLists = [];
+    var queryresults = {};
+
+        // Start logic
+  
+     if (queParams['mongorawquery'] != undefined && xtrParams.length == undefined) { 
+        output = "";
+        output = queParams['mongorawquery'];
+        output=mongoquery(output,target,callback);
+    }
+       
+    // Use single to set up a query with the params of 1 wid
+    if (queParams['singlemongoquery'] != undefined && xtrParams.length == undefined) { 
+        output = "";
+        var wid = queParams['singlemongoquery'];
+        var widObject = getFromMongo({'wid':wid});
+        delete widObject['wid'];
+        delete widObject['metadata.method'];
+        output = BuildSingleQuery(widObject);
+        mQueryString = output.substring(0, output.length -1);
+        //output = mongoquery(mQueryString);
+        output = mQueryString;
+    }
+    
+    // Use multiple if you want to use a list of wids as $OR groups
+    // of a query to mongo
+    if (queParams['multiplemongoquery']) {
+        output = "";
+        var paramList = {};
+        var wid = queParams['multiplemongoquery'];
+        var listOfWids = getFromMongo({'wid':wid});
+        delete listOfWids["wid"];
+        delete listOfWids["metadata.method"];
+        proxyprinttodiv('Function MongoDataQuery listOfWids : ', listOfWids);
+
+        var i = 0;
+        ListOfLists = [];
+        for (w in listOfWids) {
+            var tempwid = getFromMongo({'wid':w});
+            delete tempwid["wid"];
+            delete tempwid["metadata.method"];
+            for (t in tempwid) {
+                paramList[t] = tempwid[t];
+            }
+            ListOfLists.push(paramList);
+            paramList = {};
+        }
+        if (xtrParams) {
+            ListOfLists.push(xtrParams);
+        }
+        mQueryString = BuildMultipleQuery(ListOfLists);
+        //output = mongoquery(mQueryString);
+        output = mQueryString;
+    }
 
     // If there is no single or multiple, make a $OR group out of the extra params
     if (!queParams['singlemongoquery'] && !queParams['multiplemongoquery'] && getObjectSize(relParams) == 0 ){
         ListOfLists.push(xtrParams);
         mQueryString = BuildMultipleQuery(ListOfLists);
-		output = fetchQueryResults(mQueryString);
+        output = mongoquery(mQueryString);
+    }
+
+    if (queParams['widinput'] != undefined) {
+    		output = queParams['widinput'];
+    		//output = {widInput:widInput};
+    		// var temp = queParams['widinput'];
+    		// var tempsize = getObjectSize(temp);
+    		// for (var j = 0; j<tempsize; j++) {
+    		// 	output[] = queParams['widinput'];
+    		//}
     }
 
     // Relationship Section **********
     // Skip if there are no relParams
     if (getObjectSize(relParams) != 0) {
-        mQueryString = relationShipQuery(relParams);
-		output = fetchQueryResults(mQueryString);
+        mQueryString = relationShipQuery(relParams,output);
+        output = mongoquery(mQueryString,target,callback);
+    }
+
+    // Relationship Section **********
+    // Skip if there are no relParams
+    if (getObjectSize(relafterParams) != 0) {
+        mQueryString = queryafterrelationship(relafterParams, output);
+        output = mongoquery(mQueryString,target,callback);
     }
 
     // Aggregation Section **********
     // Skip if there are no aggParams
     if (getObjectSize(aggParams) != 0) {
         if (mQueryString != "") {
-        	aggParams['mongoaggquery'] = mQueryString;
+            aggParams['mongoaggquery'] = mQueryString;
         }
         output = aggregationQuery(aggParams);
     }
@@ -265,174 +150,43 @@ function MongoDataQuery(parameters) {
     // Skip if there are no aggParams
     if (getObjectSize(addParams) != 0) {
         if (mQueryString != ""){
-	        // Since addonQuery will execute a query, it needs the mQueryString to work with
-	        addParams['query'] = mQueryString;
-	        var data_From_Mongo = addonQuery(addParams);
-	        output = data_From_Mongo;
+            // Since addonQuery will execute a query, it needs the mQueryString to work with
+            addParams['query'] = mQueryString;
+            var data_From_Mongo = addonQuery(addParams);
+            output = data_From_Mongo;
         }
     }
-	printToDiv('Function MongoDataQuery mQueryString : ', mQueryString);
-	return output; // whatever happens, return the output
+    proxyprinttodiv('Function MongoDataQuery output : ', output);
+    queryresults=mongoquery(output,target,callback);
+    return queryresults; // whatever happens, return the output
 } // End of MongoDataQuery
 
 // Use the mQueryString to call on mongo with it
-function fetchQueryResults(queryString) {
-  		var q = "{\"ExecuteThis\":\"query\",\"query\":" + queryString + "}]";
 
-		execute(JSON.parse(q),function(data) {
-    	doPostQuery(data);
-	}); 
+
+function queryafterrelationship (parameters, output) {
+    if (isParameterLower(parameters, "mongowidmethod")) {
+        var dtotype = parameters["mongowidmethod"];
+        remove(parameters, "mongowidmethod");
+
+		 // This section addes the dtoType to the string
+		if (dtotype) {
+			var q3 = "{metadata.method:" + dtotype + "}," ;
+			if (q3) {
+				MQueryString += q3;
+			}
+		}
+	}
 }
- 
-// When the data is returned, return it to the caller 
-function doPostQuery(data) {
-	// Simple alert to see it's output...comment out later
-	alert(data);
-	return data;
-}
-
-
-// LM: TODO -- most likely delete the queryWid function
-//Starting of queryWid function
-function queryWid(parameters) {
-	printToDiv('Function queryWid() Constant input : ', parameters );
-	
-	/*--- region Variable Bullpen ---*/
-	var returnValues = [];
-	var listOfWidNames = [];
-	var listOfKVP = []
-	var tempListOfKVP = [];
-	
-	var listsOfOrGroups = [];
-	
-	//var qb = new MongoQBuilder();
-	
-	//var connectionString = ConfigurationManager.AppSettings["MongoDBConnection"]; // String
-	//var dataBaseName = ConfigurationManager.AppSettings["MongoDB"] // String
-	//var collectionName = ConfigurationManager.AppSettings["MongoDBCollection"];
-	var mongoQueryWid =  ""; // String
-	var mongoQueryType = ""; // String
-    var mQueryString = ""; // String
-	
-	var mongoRelationshipDirection = ""; // String
-	var mongoRelationshipType = ""; // String
-	var mongoRelationshipMethod = ""; // String
-	var mongoRelationshipRawQuery = ""; // String
-	var mongoRelationshipQuery = ""; // String
-	var mongoToken = ""; // String
-	
-	var mongoSetFieldsInclude = ""; // String
-	var mongoSetFieldsExclude = ""; // String
-	var mongoSetLimit = ""; // String
-	var mongoSetSkip = ""; // String
-	var mongoSetHint = ""; // String
-	var mongoSetMax = ""; // String
-	var mongoSetSortBy = ""; // String
-	var mongoReturnCount = ""; // String
-	var mongoExplain = ""; // String
-	var mongoSize = ""; // String
-	var mongoSetSortOrder = ""; // String
-	var mongoAggregation = ""; // String
-	var mongodtotype = ""; // String
-	
-	var tempDataModeldto = [];
-	/*---  end of the region ---*/
-	
-	var output ={};
-
-	/*---  region Fishing Out Parameter Keywords ---*/
-	// Fish out the keywords from the parameterdto's Set to GME
-	if (isParameterLower(parameters, "mongodtotype")) {
-		var first = firstOrDefault(parameters, "mongodtotype");
-		mongodtotype = first.ParameterValue;
-		remove(parameters, "mongodtotype");
-	}
-	if (isParameterLower(parameters, "mongoaggregation")) {
-		var first = firstOrDefault(parameters, "mongoaggregation");
-		mongoAggregation = first.ParameterValue;
-		remove(parameters, "mongoaggregation");
-	}
-		
-	var output = getFromMongo(parameters);
-
-	/*if(!parameters.hasOwnProperty("relationshiprawmongoquery") && !parameters.hasOwnProperty("relationshipsinglemongoquery") && !parameters.hasOwnProperty("relationshipmultiplemongoquery")){
-		var txt ="";
-		txt += "Error Description: " + "Invalid Parameters in queryWid" + "\n\n";
-		txt += "Click OK to continue. \n\n";
-		alert(txt);
-		return output;
-	}*/
-	
-	if (isParameterLower(parameters, "relationshiprawmongoquery")) {
-		if(parameters.hasOwnProperty("relationshiprawmongoquery")){
-			output = parameters.relationshiprawmongoquery;			
-		}
-	}
-	
-	if (isParameterLower(parameters, "relationshipsinglemongoquery")) {
-		if(parameters.hasOwnProperty("relationshipsinglemongoquery")){
-			var wid = parameters.relationshipsinglemongoquery;
-			var widObject = getFromMongo({'wid':wid});
-			delete widObject["wid"];
-			output = BuildSingleQuery(widObject);
-		}
-	}	
-	
-	if (isParameterLower(parameters, "relationshipmultiplemongoquery")) {
-		if(parameters.hasOwnProperty("relationshipmultiplemongoquery")){
-			var wid = parameters.relationshipmultiplemongoquery;
-			var widObject = getFromMongo({'wid':wid});
-			delete widObject["wid"];
-			output = BuildMultipleQuery(widObject);
-		}
-	}	
-
-	printToDiv('Function queryWid() output : ', output );
-	return output;
-}//End of queryWid function
-
-// Pulls data out of something...in this case, local storage. At some point, 
-// this needs to point to either local storage
-// or mongo; based on a flag maybe.?.
-
-
-//Starting of mongo function
-function mongo(mquerystring) {
-	printToDiv('Function mongo() Constant input : ', mquerystring );
-	
-	var output={};
-	
-	var widSet=[];
-	switch(mquerystring){
-		case 'set1':
-			widSet =  ['1', '2', '3'];
-			break;
-		case 'set2':
-			widSet =  ['wid200', 'wid300'];
-			break;
-		case 'set3':
-			widSet=  ['wid100', 'wid100'];
-			break;
-	}
-
-	for(wid in widSet){
-		var widName = widSet[wid];
-		var widObject = getFromMongo({'wid':widName});
-		output[widName]=widObject;
-	}
-	
-	printToDiv('Function mongo() out with  output : ', output );	
-	return output;
-}//End of mongo function
 
 //Starting of relationShipQuery function
-function relationShipQuery(parameters) {
-	printToDiv('Function relationShipQuery() Constant input : ', parameters );
+function relationShipQuery(parameters, input) {
+	proxyprinttodiv('Function relationShipQuery() Constant input : ', parameters );
 	
 	var output ={};
 
 	// Simply checking to make sure all the data is here
-	if(!(parameters.hasOwnProperty("mongorelationshipdirection") && parameters.hasOwnProperty("mongorelationshiptype") && parameters.hasOwnProperty("mongorelationshipmethod"))){
+	if(!(parameters.hasOwnProperty("mongorelationshipdirection") && parameters.hasOwnProperty("mongorelationshiptype") )){
 		var txt ="";
 		txt += "Error Description: " + "Invalid Parameters in relationShipQuery" + "\n\n";
 		txt += "Click OK to continue. \n\n";
@@ -448,23 +202,26 @@ function relationShipQuery(parameters) {
         var type = parameters["mongorelationshiptype"];
         remove(parameters, "mongorelationshiptype");
     }
+    // LM: TODO, take this out...belongs (and is, i think in add-ons)
     if (isParameterLower(parameters, "mongorelationshipmethod")) {
         var method = parameters["mongorelationshipmethod"];
         remove(parameters, "mongorelationshipmethod");
     }
-    if (isParameterLower(parameters, "mongodtotype")) {
-        var dtotype = parameters["mongodtotype"];
-        remove(parameters, "mongodtotype");
-    }
+
+    if (isParameterLower(parameters, "mongowidmethod")) {
+	    var dtotype = parameters["mongowidmethod"];
+	    remove(parameters, "mongowidmethod");
+	}
     if (isParameterLower(parameters, "query")) {
         var query = parameters["query"];
         remove(parameters, "query");
     }
     // Here is where you would execute the query
     // Instead, the dummy call to mongo will return a few wids to work with
-    parameters = mongo('set1');
+    //parameters = mongo('set1');
+    //parameters = input;
 
-    var parametersCount = countKeys(parameters);
+    var parametersCount = countKeys(input);
     // Maybe there was no match...
     if (parametersCount == 0) {
     	return 'No records to find relationships of.'
@@ -472,16 +229,17 @@ function relationShipQuery(parameters) {
     // There are always multiple sections to a relationship query
     // So the string must start with $and 
     MQueryString = "{$and:[" ;
-    var returnValues = parameters;
+    var returnvalues = input;
 
 	var queryParameters=[] ;
-	for(p in returnValues) {
-		var widName = p;
+	//var p = getObjectSize(returnvalues);
+	for(var i = 0; i < parametersCount; i++) {
+		var widName = returnvalues[i];
 		var obj = {};
-		if(direction == 'forward'){
-			obj = {'secondarywid':widName};
-		}else{
-			obj = {'primarywid':widName};
+		if(direction == 'forward') {
+			obj = {'data.primarywid':widName};
+		} else {
+			obj = {'data.secondarywid':widName};
 		}
 		queryParameters.push(obj);
 	}
@@ -494,21 +252,24 @@ function relationShipQuery(parameters) {
 	}	
 
     /*
-    		var q2 = queryWid(parameters);
+    		var q2 = querywid(parameters);
     		if(q2){
     			MQueryString+= "[" + q2 + "],";
     		}
     */
-		 // This section addes the dtoType to the string
+	
+
+	// This section addes the dtoType to the string
 	if (dtotype) {
-		var q3 = "{method:" + dtotype + "}," ;
+		var q3 = "{metadata.method:" + dtotype + "}," ;
 		if (q3) {
 			MQueryString += q3;
 		}
 	}
+
 	// This section is typically 'attribute', but could really be anything.
 	if (type) {
-		var q4 = "{relationshiptype:" + type + "}," ;
+		var q4 = "{data.relationshiptype:" + type + "}," ;
 		if (q4) {
 			MQueryString += q4;
 		}
@@ -516,9 +277,113 @@ function relationShipQuery(parameters) {
 
     MQueryString = MQueryString.substring(0, MQueryString.length -1) + "]}";
 		// The string is now built and ready to return.
-	printToDiv('Relationship MQueryString : ', MQueryString );
+	proxyprinttodiv('Relationship MQueryString : ', MQueryString );
     return MQueryString;
 } //End of relationShipQuery function
+
+/// <summary>
+/// Builds 1 $OR group of a mongo query
+/// </summary>
+/// <param name="parameters">List of kvpairs</param>
+/// <returns>A string representing the $OR group of kvp</returns>
+function BuildSingleQuery(parameters) { /// BuildSingleQuery(List<DataModeldto> parameters)
+	var result;
+	
+	// seed result with the beginning of a mongo or query
+	var parametersCount = countKeys(parameters);
+	if (parametersCount > 1) {
+		result = "{$or:[";
+	} else {
+		result = "";
+	}
+	// build a {key,"value"} for each parameter
+	//foreach (var p in parameters)
+	for (key in parameters) {
+		result += BuildSimpleQuery(key, parameters[key]);
+		result += ",";
+	}
+	
+	// strip off the last comma and add the closing of OR
+	result = result.substring(0, result.length - 1);
+	if (parametersCount > 1) {
+		result += "]},";
+	} else {
+		result += ",";
+	}
+	return result;
+}
+
+// Totally a legacy call used for testing only. Probably can
+// be removed at this point.
+function BuildSimpleQuery(key, value) {
+	result = "{data." + key + ":" + value + "}";  /// {key:value}
+	return result;
+}
+
+/// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+/// <summary>
+/// Mongo multiple query builder.
+/// </summary>
+/// <param name="Lists">A list of lists of dto's. If the list of dto's has a key = rawquery, the value is the raw query.</param>
+/// <returns>A formatted mongo query string.</returns>
+function BuildMultipleQuery(parameters) { 
+	var returnString = ""; /// <<<<<<<<<<< check
+	proxyprinttodiv('Function MongoDataQuery BuildMultipleQuery : ', parameters);
+	var parametersCount = countKeys(parameters);
+// If it turns out you only have 1 set of params, don't start out the string with $and
+	if (parametersCount == 1){   
+		//returnString += "{";
+		returnString += "";
+	}else{
+		returnString += "{$and:[";
+	}
+		// Iterate through the params from each wid to get the $or groups built
+	for (var i = 0; i < parametersCount; i++) {
+        if (getObjectSize(parameters[i]) != 0) {
+			returnString += BuildSingleQuery(parameters[i]);
+        }
+  	}
+		
+	// Chop off the last comma
+	returnString = returnString.substring(0, returnString.length - 1);
+	// Close the string based on the number of parameters
+	if (parametersCount == 1){
+		//returnString += "{";
+		returnString += "";
+	}else{
+		returnString += "]}";
+	}
+	return returnString;          
+}
+
+// Similar to BuildSingleQuery, but different...let it be please.
+function RelationshipBuildSingleQuery(parameters){
+	var result;
+	
+	// seed result with the beginning of a mongo or query
+	var parametersCount = countKeys(parameters);
+	if (parametersCount > 1){
+		result = "{$or:[";
+	}else{
+		result = "";
+	}
+	// build a {key,"value"} for each parameter
+	//foreach (var p in parameters)
+	for(key in parameters){
+		result +=  JSON.stringify(parameters[key]);
+		result += ",";
+	}
+	
+	// strip off the last comma and add the closing of OR
+	result = result.substring(0, result.length - 1);
+	if (parametersCount > 1){
+		result += "]},";
+	}else{
+		result += ",";
+	}
+	return result;	
+}
 
 function aggregationQuery(parameters) {
 
@@ -534,7 +399,7 @@ function aggregationQuery(parameters) {
       mongoaggquery = parameters["mongoaggquery"];
       remove(parameters, "mongoaggquery");
     }
-		    printToDiv('THE QUERY AGGREGATION WOULD RUN IS : ', mongoaggquery );
+		    proxyprinttodiv('THE QUERY AGGREGATION WOULD RUN IS : ', mongoaggquery );
 
     // Here is where you would execute the mongoaggquery
     // Instead, the dummy call to mongo will return a few wids to work with
@@ -552,7 +417,7 @@ function aggregationQuery(parameters) {
 		
     // An array is the variable that gets set to the aggregation call.
 	var pipelineQuery = [originalQuery, mongoAggregation];
-	printToDiv('pipelineQuery : ', pipelineQuery );
+	proxyprinttodiv('pipelineQuery : ', pipelineQuery );
 	return pipelineQuery;
 }
 
@@ -774,110 +639,341 @@ function addonQuery(parameters) {
 	if (!defaultCount && !defaultExplain && !defaultSize) {
 		returnValues = mycursor;
 	}		
-	printToDiv('Function Add On Query() output : ', returnValues );
+	proxyprinttodiv('Function Add On Query() output : ', returnValues );
 	return returnValues;
 }//End of addOnQuery function
 
-/// <summary>
-/// Builds 1 $OR group of a mongo query
-/// </summary>
-/// <param name="parameters">List of kvpairs</param>
-/// <returns>A string representing the $OR group of kvp</returns>
-function BuildSingleQuery(parameters) { /// BuildSingleQuery(List<DataModeldto> parameters)
-	var result;
-	
-	// seed result with the beginning of a mongo or query
-	var parametersCount = countKeys(parameters);
-	if (parametersCount > 1) {
-		result = "{$or:[";
-	} else {
-		result = "";
-	}
-	// build a {key,"value"} for each parameter
-	//foreach (var p in parameters)
-	for (key in parameters) {
-		result += BuildSimpleQuery(key, parameters[key]);
-		result += ",";
-	}
-	
-	// strip off the last comma and add the closing of OR
-	result = result.substring(0, result.length - 1);
-	if (parametersCount > 1) {
-		result += "]},";
-	} else {
-		result += ",";
-	}
-	return result;
-}
 
-// Totally a legacy call used for testing only. Probably can
-// be removed at this point.
-function BuildSimpleQuery(key, value) {
-	result = "{" + key + ":" + value + "}";  /// {key:value}
-	return result;
-}
 
-/// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+function fishOut(parameters) {
 
-/// <summary>
-/// Mongo multiple query builder.
-/// </summary>
-/// <param name="Lists">A list of lists of dto's. If the list of dto's has a key = rawquery, the value is the raw query.</param>
-/// <returns>A formatted mongo query string.</returns>
-function BuildMultipleQuery(parameters) { 
-	var returnString = ""; /// <<<<<<<<<<< check
-	printToDiv('Function MongoDataQuery BuildMultipleQuery : ', parameters);
-	var parametersCount = countKeys(parameters);
-// If it turns out you only have 1 set of params, don't start out the string with $and
-	if (parametersCount == 1){   
-		//returnString += "{";
-		returnString += "";
-	}else{
-		returnString += "{$and:[";
-	}
-		// Iterate through the params from each wid to get the $or groups built
-	for (var i = 0; i < parametersCount; i++) {
-        if (getObjectSize(parameters[i]) != 0) {
-			returnString += BuildSingleQuery(parameters[i]);
+    // These are the categories of possible data sent in
+
+    // For query building from wids
+    var queParams = {};
+        // For getting relationships
+    var relParams = {};
+    // For doing math on the result set
+    var aggParams = {};
+    // For adjusting the output from the query
+    var addParams = {};
+    // Loose params that can be applied to the query
+    var xtrParams = {};
+    // Special case of relationship queries
+    var relafterParams = {};
+
+    var widInput =  ""; // String
+    if (isParameterLower(parameters, "widinput")) {
+        widinput = parameters["widinput"];
+        queParams['widinput'] = widinput;
+        remove(parameters, "widinput");
         }
-  	}
-		
-	// Chop off the last comma
-	returnString = returnString.substring(0, returnString.length - 1);
-	// Close the string based on the number of parameters
-	if (parametersCount == 1){
-		//returnString += "{";
-		returnString += "";
-	}else{
-		returnString += "]}";
-	}
-	return returnString;          
+
+    var mongowidmethod =  ""; // String
+    if (isParameterLower(parameters, "mongowidmethod")) {
+        mongowidmethod = parameters["mongowidmethod"];
+        relParams['mongowidmethod'] = mongowidmethod;
+        remove(parameters, "mongowidmethod");
+        }
+
+    var rawmongoquery =  ""; // String
+    if (isParameterLower(parameters, "mongorawquery")) {
+        rawmongoquery = parameters["mongorawquery"];
+        queParams['mongorawquery'] = rawmongoquery;
+        remove(parameters, "mongorawquery");
+        }
+    var mongoquerywid =  ""; // String
+    if (isParameterLower(parameters, "mongoquerywid")) {
+        mongoquerywid = parameters["mongoquerywid"];
+        queParams['mongoquerywid'] = mongoquerywid;
+        remove(parameters, "mongoquerywid");
+        }
+    var singlemongoquery = ""; // String I don't think we need this one
+    if (isParameterLower(parameters, "singlemongoquery")) {
+        singlemongoquery = parameters["singlemongoquery"];
+        queParams['singlemongoquery'] = singlemongoquery;
+        remove(parameters, "singlemongoquery");
+        }
+    var multiplemongoquery = ""; // String 
+    if (isParameterLower(parameters, "multiplemongoquery")) {
+        multiplemongoquery = parameters["multiplemongoquery"];
+        queParams['multiplemongoquery'] = multiplemongoquery;
+        remove(parameters, "multiplemongoquery");
+        }
+    var mongorelationshipdirection = ""; // String
+    if (isParameterLower(parameters, "mongorelationshipdirection")) {
+        mongorelationshipdirection = parameters["mongorelationshipdirection"];
+        relParams['mongorelationshipdirection'] = mongorelationshipdirection;
+        remove(parameters, "mongorelationshipdirection");
+        }
+    var mongorelationshiptype = ""; // String
+    if (isParameterLower(parameters, "mongorelationshiptype")) {
+        mongorelationshiptype = parameters["mongorelationshiptype"];
+        remove(parameters, "mongorelationshiptype");
+        relParams['mongorelationshiptype'] = mongorelationshiptype;
+        }
+    var mongorelationshipmethod = ""; // String
+    if (isParameterLower(parameters, "mongorelationshipmethod")) {
+        mongorelationshipmethod = parameters["mongorelationshipmethod"];
+        remove(parameters, "mongorelationshipmethod");
+        addParams['mongorelationshipmethod'] = mongorelationshipmethod;
+        }
+    var mongorelationshiprawquery = ""; // String
+    if (isParameterLower(parameters, "mongorelationshiprawquery")) {
+        mongorelationshiprawquery = parameters["mongorelationshiprawquery"];
+        remove(parameters, "mongorelationshiprawquery");
+        relParams['mongorelationshiprawquery'] = mongorelationshiprawquery;
+        }
+    var mongorelationshipquery = ""; // String
+    if (isParameterLower(parameters, "mongorelationshipquery")) {
+        mongorelationshipquery = parameters["mongorelationshipquery"];
+        remove(parameters, "mongorelationshipquery");
+        relParams['mongorelationshipquery'] = mongorelationshipquery;
+       }
+    var mongoToken = ""; // String
+    if (isParameterLower(parameters, "mongoToken")) {
+        mongoToken = parameters["mongoToken"];
+        remove(parameters, "mongoToken");
+        // -------------------------------------TODO: assign this to Params group
+        }
+    var mongosetfieldsinclude = ""; // String
+    if (isParameterLower(parameters, "mongosetfieldsinclude")) {
+        mongosetfieldsinclude = parameters["mongosetfieldsinclude"];
+        remove(parameters, "mongosetfieldsinclude");
+        addParams['mongosetfieldsinclude'] = mongosetfieldsinclude;
+        }
+    var mongosetfieldsexclude = ""; // String
+    if (isParameterLower(parameters, "mongosetfieldsexclude")) {
+        mongosetfieldsexclude = parameters["mongosetfieldsexclude"];
+        remove(parameters, "mongosetfieldsexclude");
+        addParams['mongosetfieldsexclude'] = mongosetfieldsexclude;
+        }
+    var mongosetlimit = ""; // String
+    if (isParameterLower(parameters, "mongosetlimit")) {
+        mongosetlimit = parameters["mongosetlimit"];
+        remove(parameters, "mongosetlimit");
+        addParams['mongosetlimit'] = mongosetlimit;
+        }
+    var mongosetskip = ""; // String
+    if (isParameterLower(parameters, "mongosetskip")) {
+        mongosetskip = parameters["mongosetskip"];
+        remove(parameters, "mongosetskip");
+        addParams['mongosetskip'] = mongosetskip;
+        }
+    var mongosethint = ""; // String
+    if (isParameterLower(parameters, "mongosethint")) {
+        mongosethint = parameters["mongosethint"];
+        remove(parameters, "mongosethint");
+        addParams['mongosethint'] = mongosethint;
+        }
+    var mongoSetMax = ""; // String
+    if (isParameterLower(parameters, "mongosetmax")) {
+        mongosetmax = parameters["mongosetmax"];
+        remove(parameters, "mongosetmax");
+        addParams['mongosetmax'] = mongosetmax;
+        }
+    var mongosetsortby = ""; // String
+    if (isParameterLower(parameters, "mongosetsortby")) {
+        mongosetsortby = parameters["mongosetsortby"];
+        remove(parameters, "mongosetsortby");
+        addParams['mongosetsortby'] = mongosetsortby;
+        }
+    var mongoreturncount = ""; // String
+    if (isParameterLower(parameters, "mongoreturncount")) {
+        mongoreturncount = parameters["mongoreturncount"];
+        remove(parameters, "mongoreturncount");
+        addParams['mongoreturncount'] = mongoreturncount;
+        }
+    var mongoexplain = ""; // String
+    if (isParameterLower(parameters, "mongoexplain")) {
+        mongoexplain = parameters["mongoexplain"];
+        remove(parameters, "mongoexplain");
+        addParams['mongoexplain'] = mongoexplain;
+        }
+    var mongosize = ""; // String
+    if (isParameterLower(parameters, "mongosize")) {
+        mongosize = parameters["mongosize"];
+        remove(parameters, "mongosize");
+        addParams['mongosize'] = mongosize;
+        }
+    var mongosetsortorder = ""; // String
+    if (isParameterLower(parameters, "mongosetsortorder")) {
+        mongosetsortorder = parameters["mongosetsortorder"];
+        remove(parameters, "mongosetsortorder");
+        addParams['mongosetsortorder'] = mongosetsortorder;
+        }
+    var mongoaggregation = ""; // String
+    if (isParameterLower(parameters, "mongoaggregation")) {
+        mongoaggregation = parameters["mongoaggregation"];
+        remove(parameters, "mongoaggregation");
+        aggParams['mongoaggregation'] = mongoaggregation;
+        }
+    var mongodtotype = ""; // String
+    if (isParameterLower(parameters, "mongodtotype")) {
+        mongodtotype = parameters["mongodtotype"];
+        remove(parameters, "mongodtotype");
+        relParams['mongodtotype'] = mongodtotype;
+        }
+        var mongorelquery = ""; // String
+    if (isParameterLower(parameters, "mongorelquery")) {
+        mongorelquery = parameters["mongorelquery"];
+        remove(parameters, "mongorelquery");
+        relParams['mongorelquery'] = mongorelquery;
+      }
+        var mongoaggquery = ""; // String
+    if (isParameterLower(parameters, "mongoaggquery")) {
+        mongoaggquery = parameters["mongoaggquery"];
+        remove(parameters, "mongoaggquery");
+        aggParams['mongoaggquery'] = mongoaggquery;
+      }
+
+    // Gather the left over params  
+    for (i in parameters) {
+        xtrParams[i] = parameters[i];
+    }
+
+    // Slap all the groups into an array and return them
+    var p = [];
+    p[0] = queParams;
+    p[1] = relParams;
+    p[2] = aggParams;
+    p[3] = addParams;
+    p[4] = xtrParams;
+    p[5] = relafterParams;
+    return p;
 }
 
-// Similar to BuildSingleQuery, but different...let it be please.
-function RelationshipBuildSingleQuery(parameters){
-	var result;
-	
-	// seed result with the beginning of a mongo or query
-	var parametersCount = countKeys(parameters);
-	if (parametersCount > 1){
-		result = "{$or:[";
-	}else{
-		result = "";
-	}
-	// build a {key,"value"} for each parameter
-	//foreach (var p in parameters)
-	for(key in parameters){
-		result +=  JSON.stringify(parameters[key]);
-		result += ",";
-	}
-	
-	// strip off the last comma and add the closing of OR
-	result = result.substring(0, result.length - 1);
-	if (parametersCount > 1){
-		result += "]},";
-	}else{
-		result += ",";
-	}
-	return result;	
-}
+
+// LM: TODO -- most likely delete the querywid function
+// LM: commented out as of 10/21/13
+//Starting of querywid function
+// function querywid(parameters) {
+//  proxyprinttodiv('Function querywid() Constant input : ', parameters );
+    
+//  /*--- region Variable Bullpen ---*/
+//  var returnValues = [];
+//  var listOfWidNames = [];
+//  var listOfKVP = []
+//  var tempListOfKVP = [];
+    
+//  var listsOfOrGroups = [];
+    
+//  //var qb = new MongoQBuilder();
+    
+//  //var connectionString = ConfigurationManager.AppSettings["MongoDBConnection"]; // String
+//  //var dataBaseName = ConfigurationManager.AppSettings["MongoDB"] // String
+//  //var collectionName = ConfigurationManager.AppSettings["MongoDBCollection"];
+//  var mongoquerywid =  ""; // String
+//  var mongoQueryType = ""; // String
+//     var mQueryString = ""; // String
+    
+//  var mongoRelationshipDirection = ""; // String
+//  var mongoRelationshipType = ""; // String
+//  var mongoRelationshipMethod = ""; // String
+//  var mongoRelationshipRawQuery = ""; // String
+//  var mongoRelationshipQuery = ""; // String
+//  var mongoToken = ""; // String
+    
+//  var mongoSetFieldsInclude = ""; // String
+//  var mongoSetFieldsExclude = ""; // String
+//  var mongoSetLimit = ""; // String
+//  var mongoSetSkip = ""; // String
+//  var mongoSetHint = ""; // String
+//  var mongoSetMax = ""; // String
+//  var mongoSetSortBy = ""; // String
+//  var mongoReturnCount = ""; // String
+//  var mongoExplain = ""; // String
+//  var mongoSize = ""; // String
+//  var mongoSetSortOrder = ""; // String
+//  var mongoAggregation = ""; // String
+//  var mongodtotype = ""; // String
+    
+//  var tempDataModeldto = [];
+//  /*---  end of the region ---*/
+    
+//  var output ={};
+
+//  /*---  region Fishing Out Parameter Keywords ---*/
+//  // Fish out the keywords from the parameterdto's Set to GME
+//  if (isParameterLower(parameters, "mongodtotype")) {
+//      var first = firstOrDefault(parameters, "mongodtotype");
+//      mongodtotype = first.ParameterValue;
+//      remove(parameters, "mongodtotype");
+//  }
+//  if (isParameterLower(parameters, "mongoaggregation")) {
+//      var first = firstOrDefault(parameters, "mongoaggregation");
+//      mongoAggregation = first.ParameterValue;
+//      remove(parameters, "mongoaggregation");
+//  }
+        
+//  var output = getFromMongo(parameters);
+
+//  /*if(!parameters.hasOwnProperty("relationshiprawmongoquery") && !parameters.hasOwnProperty("relationshipsinglemongoquery") && !parameters.hasOwnProperty("relationshipmultiplemongoquery")){
+//      var txt ="";
+//      txt += "Error Description: " + "Invalid Parameters in querywid" + "\n\n";
+//      txt += "Click OK to continue. \n\n";
+//      alert(txt);
+//      return output;
+//  }*/
+    
+//  if (isParameterLower(parameters, "relationshiprawmongoquery")) {
+//      if(parameters.hasOwnProperty("relationshiprawmongoquery")){
+//          output = parameters.relationshiprawmongoquery;          
+//      }
+//  }
+    
+//  if (isParameterLower(parameters, "relationshipsinglemongoquery")) {
+//      if(parameters.hasOwnProperty("relationshipsinglemongoquery")){
+//          var wid = parameters.relationshipsinglemongoquery;
+//          var widObject = getFromMongo({'wid':wid});
+//          delete widObject["wid"];
+//          output = BuildSingleQuery(widObject);
+//      }
+//  }   
+    
+//  if (isParameterLower(parameters, "relationshipmultiplemongoquery")) {
+//      if(parameters.hasOwnProperty("relationshipmultiplemongoquery")){
+//          var wid = parameters.relationshipmultiplemongoquery;
+//          var widObject = getFromMongo({'wid':wid});
+//          delete widObject["wid"];
+//          output = BuildMultipleQuery(widObject);
+//      }
+//  }   
+
+//  proxyprinttodiv('Function querywid() output : ', output );
+//  return output;
+// }//End of querywid function
+
+// Pulls data out of something...in this case, local storage. At some point, 
+// this needs to point to either local storage
+// or mongo; based on a flag maybe.?.
+
+
+//Starting of mongo function
+// function mongo(mquerystring) {
+//  proxyprinttodiv('Function mongo() Constant input : ', mquerystring );
+    
+//  var output={};
+    
+//  var widSet=[];
+//  switch(mquerystring){
+//      case 'set1':
+//          widSet =  ['1', '2', '3'];
+//          break;
+//      case 'set2':
+//          widSet =  ['wid200', 'wid300'];
+//          break;
+//      case 'set3':
+//          widSet=  ['wid100', 'wid100'];
+//          break;
+//  }
+
+//  for(wid in widSet){
+//      var widName = widSet[wid];
+//      var widObject = getFromMongo({'wid':widName});
+//      output[widName]=widObject;
+//  }
+    
+//  proxyprinttodiv('Function mongo() out with  output : ', output );   
+//  return output;
+// }//End of mongo function

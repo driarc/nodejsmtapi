@@ -45,5 +45,11 @@ var test3 = global.test3 = function(params, target,  callback){
 
 
 
+exports.proxyprinttodiv = proxyprinttodiv = function(text, obj, debugone){
+    // printToDiv(text, obj, debugone);    // comment this in server version
+}
+
+
+
 exports.configuration=configuration;
 
