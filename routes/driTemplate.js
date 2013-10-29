@@ -33,8 +33,8 @@ exports.buildTemplate = function(req, res) {
 // get [[<wml>]] tags from contents of master wml file
 function getWmlTags(filename, callback) {
 	findAndReadFile(lookupDir, filename, '', function(file) {
+		masterContents.code = file.contents
 		var regex = new RegExp('\\[\\[.*]]', 'g')
-		  , masterContents.code = file.contents
 		  , wmlTags = []
 		  , result;
 
