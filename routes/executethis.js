@@ -1,6 +1,7 @@
 'use strict';
 var config = require('../config.js');
 require('../dao/mongo.js');
+require('../dao/addget.js');
 require('../dao/querym.js');
 
 if(!global){
@@ -52,17 +53,23 @@ if(!global){
     var executeFn = global.executeFn = function(params, target,  callback){
         var functionToExecute = params['executethis'];
         if(functionToExecute !== undefined) {
-            if(typeof window[functionToExecute] === 'function') {
-                delete params["executethis"];
-                window[functionToExecute](params, target,function(data){
+            if (window[functionToExecute]=="querywid") {callback(querywid(params));}
+            else if (window[functionToExecute]=="updatewid") {callback(updatewid(params));}
+            else if (window[functionToExecute]=="getwid") {callback(getwid(params));}
+            else if (window[functionToExecute]=="getwidmaster") {callback(getwidmaster(params));}
+            else if (window[functionToExecute]=="addwidmaster") {callback(addwidmaster(params));}
+            else if (window[functionToExecute]=="addthisfn") {callback(addthisfn(params));}
+            else if(typeof window[functionToExecute] === 'function') {
+                // delete params["executethis"];
+                window[functionToExecute](params, target, function(data){
                     callback(data);
                 });
             } else {
-                console.log("No function by that name nothing to do in executefn ...");
+                // console.log("No function by that name nothing to do in executefn ...");
                 callback(params);
             }
         } else {
-            console.log("Nothing to do in executefn...");
+            // console.log("Nothing to do in executefn...");
             callback(params);
         }
     }

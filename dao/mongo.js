@@ -14,11 +14,11 @@ exports.removefrommongo = removefrommongo = function(objToRemove,schemaToLookup,
 	db.collection(schemaToLookup).remove(objToRemove, function(err) {
 		if (err) {
 			console.error(err);
-	    	throw err;
+	    	return {'error':'error in removing'};
 	    }
 	    else{
 		    console.log('Removed! '+ JSON.stringify(objToRemove));
-	    	callback(objToRemove);
+	    	return objToRemove;
 	    }
 	});
 };
@@ -26,7 +26,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,schemaToLookup,
 
 
 // DAO method to remove an entry from specified collection
-exports.updatetomongo = updatetomongo = function(queryObject, updatedObject, callback){
+exports.updatetomongo = updatetomongo = function(queryObject){
 	
 	delete updatedObject.wid;
 	for (var props in queryObject.data) {
@@ -56,9 +56,7 @@ exports.updatetomongo = updatetomongo = function(queryObject, updatedObject, cal
 	    else{
 		    console.log('Updated! '+ JSON.stringify(result));
 		    db.collection(schemaToLookup).findOne(updatedObject, function(o){
-		    	getFromMongo({"_id":queryObject._id},schemaToLookup,function(returnedObject){
-		    		callback(returnedObject);
-		    	});
+		    	return getfrommongo({"_id":queryObject._id});
 			});
 	    }
 	});
@@ -67,17 +65,17 @@ exports.updatetomongo = updatetomongo = function(queryObject, updatedObject, cal
 
 
 // the callback function on succesful addition is also specified
-exports.getfrommongo = getfrommongo = function(objToFind,target, callback){
+exports.getfrommongo = getfrommongo = function(objToFind){
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
     	console.log(" >>> "+JSON.stringify(objToFind));
     	if (!result) {
-			callback(null);
+			return {};
 	    }
 	    else{
 		    console.log('Found! '+ JSON.stringify(result));
-	    	callback(result);
+	    	return result;
 	    }
 	 }); 
 	
@@ -86,22 +84,21 @@ exports.getfrommongo = getfrommongo = function(objToFind,target, callback){
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
-exports.mongoquery = mongoquery = function(objToFind,target, callback){
+exports.mongoquery = mongoquery = function(objToFind){
 	if(!objToFind){
-		callback({});
-		return;
+		return {};
 	}
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
     	if (err  || (!result)) {
 			// console.error(err);
-	    	callback({'error':'error occurred in mongoquery'});
+	    	 return {'error':'error occurred in mongoquery'};
 	    	// throw err;
 	    }
 	    else{
 		    console.log('Found! '+ JSON.stringify(result));
-	    	callback(result);
+	    	 return result;
 	    }
 	 }); 
 	
@@ -109,17 +106,17 @@ exports.mongoquery = mongoquery = function(objToFind,target, callback){
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
-exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,target, callback){
+exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind){
 	console.log(' ****** getMultipleFromMongo method in dao');
 	db.collection(schemaToLookup).find(objToFind).toArray(function(err, result) {
 		if (err) {
 			// console.error(err);
 	    	// throw err;
-	    	callback(err);
+	    	return {'error':'error'};
 	    }
 	    else{
 	    	console.log('Found! '+ JSON.stringify(result));
-    		callback(result);
+    		return result;
         }
 	});
 };
@@ -129,7 +126,7 @@ exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,target,
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-var addtomongo  = exports.addtomongo = function(objToAdd,target, callback){
+exports.addtomongo =  addtomongo  = function(objToAdd){
 	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
 	for(var attr in objToAdd){
@@ -145,39 +142,36 @@ var addtomongo  = exports.addtomongo = function(objToAdd,target, callback){
 	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
 	    if (err) {
 			console.error(">>>>>> ::: addToMongo ::: error" + err);
-			callback({">>>>>> ::: addToMongo ::: error":err});
-	    	throw err;
+	    	return {">>>>>> ::: addToMongo ::: error":err};
 	    }
 	    if (result){
 	    	console.log('>>>>>> ::: addToMongo ::: Added! '+ JSON.stringify(result));
-	    	callback(result);
+	    	return result;
 	    } 
 	});
 
 };
 
 
-exports.addorupdate = function(entityToAdd,target, callback){
+exports.addorupdate = function(entityToAdd){
     
     var widVal = (entityToAdd['wid']);
     if(!widVal){
     	widVal = (entityToAdd['Wid']);
     }
     console.log('addOrUpdate :::: widVal is >>> '+JSON.stringify(entityToAdd));
-	getFromMongo({"wid":widVal},schemaToLookup,function(returnedObject){
+	return getfrommongo({"wid":widVal},schemaToLookup,function(returnedObject){
         console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
         // check if object is found
         if(returnedObject){ 
-            updateToMongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
+            return updatetomongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
                 console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
-                callback(updatedObj);
+                return  updatedObj;
             });
         }else{
-            addToMongo(entityToAdd,schemaToLookup,function(addedObj){
+            return addtomongo(entityToAdd,schemaToLookup,function(addedObj){
                 console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
-
-
-                callback(addedObj);
+                return addedObj;
             });
         }
     });

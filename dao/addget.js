@@ -1,100 +1,65 @@
-// Used to implement executThis functionality with an array of data to execute 
-function executeone (execute_Parameters) {
-	for (var fun_call in execute_Parameters) {
-			execute(JSON.parse(execute_Parameters[fun_call])), function(data) {
-	        	doAfterExecuteOne(data);
-	    } 
-	}
+require('../dao/mongo.js');
+
+// external functions are addwidmaster, getwidmaster, securitycheck
+
+exports.getwid = function(inputWidgetObject) {
+	printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
+	resultObj=getfrommongo(inputWidgetObject);
+	proxyprinttodiv('Function getwid in : x',  resultObj);
+	return resultObj;
 }
 
-function doAfterExecuteOne(response){
-  alert('>>> from client code >>> '+JSON.stringify(response));
-  //$('div#resultDiv').html('<p>'+ JSON.stringify(response) +'</p>');
+exports.updatewid = function(inputWidgetObject) {
+	printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject);
+	resultObj=addtomongo(inputWidgetObject);
+	proxyprinttodiv('Function updatewid in : x',  resultObj);
+	return resultObj;
 }
-	
 // Starting of securityCheck function
 // LM: I think this section is turned off and not used since it was breaking the code, but it 
 // should be saved and implemented later
-function securityCheck(widParameter, accessToken){ // accountwid and transactionType for future use
-	printToDiv('Function securityCheck() in : ', 'before' );
+function securitycheck(widParameter, accessToken){ // accountwid and transactionType for future use
+	proxyprinttodiv('Function securityCheck() in : ', 'before' );
 	return true;
-	var widInput= { wid:widParameter, mongorelationshiptype:'attributes', mongorelationshipmethod:'last' , mongowidmethod:'dtotype', mongorelationshipdirection:'forward', convertmethod:'convertmethod'};
+	var widInput= { mongowid:widParameter, mongorelationshiptype:'attributes', mongorelationshipmethod:'last' , mongowidmethod:'dtotype', mongorelationshipdirection:'forward', convertmethod:'convertmethod'};
 	var accessTokenInput= { wid:accessToken, mongorelationshiptype:'attributes', mongorelationshipmethod:'last' , mongowidmethod:'dtotype', mongorelationshipdirection:'forward', convertmethod:'convertmethod'};
-	var widOutput=queryWid(widInput);
-	printToDiv('Function queryWid() out with  output : ', widOutput );	
-	var accessTokenOutput=queryWid(accessTokenInput);
-	printToDiv('Function queryWid() out with  output : ', accessTokenOutput );	
+	var widOutput=querywid(widInput);
+	proxyprinttodiv('Function querywid() out with  output : ', widOutput );	
+	var accessTokenOutput=querywid(accessTokenInput);
+	proxyprinttodiv('Function querywid() out with  output : ', accessTokenOutput );	
 	var securityCheckOutput = widOutput['security']>accessTokenOutput['security'];
-	printToDiv('Function securityCheck() out with  output : ', securityCheckOutput );
+	proxyprinttodiv('Function securityCheck() out with  output : ', securityCheckOutput );
 	return securityCheckOutput;
-}// End of queryWid function
+}// End of querywid function
 
 // Cycles through local storage looking for a match to the query
-function simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, dtotype){
+// function simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, dtotype){
 
-	var returnfromSimpleQuery=[];
-	var enhancedreturn=[];
+// 	var executeobject={};
+// 	executeobject["executethis"]="MongoDataQuery";
+// 	executeobject["mongowid"]=widInput;
+// 	executeobject["mongorelationshiptype"]=mongorelationshiptype;
+// 	executeobject["mongorelationshipmethod"]=mongorelationshipmethod;
+// 	executeobject["mongorelationshipdirection"]=mongorelationshipdirection;
+// 	executeobject["mongowidmethod"]=mongowidmethod;
+// 	executeobject["convertmethod"]=convertmethod;
+// 	executeobject["dtotype"]="";	
+// 	proxyprinttodiv('Function getAndFormatNextLevel()  executeobject III' , executeobject);	
+// 	//var relatedParameters=MongoDataQuery(executeobject);
+// 	var relatedParameters=executethis(executeobject);
+// 	return relatedParameters
+// }
 
-	printToDiv('Function simpleQuery in : mongowidmethod',  mongowidmethod);
-
-	if(mongorelationshipdirection == "forward") {
-		// step through local storage looking for
-	   var widset=getwidcopy(); // get a copy of all local storage ***
-	   	//for (var key in localStorage){ //***
-	 	for (var widkey in widset){ 	
-			//var myvalue = JSON.parse(localStorage.getItem(key)); //**
-			var myvalue = getFromMongo({wid:widkey});
-			//printToDiv('Function simpleQuery in : myvalue',  myvalue);
-
-			if ((widkey.indexOf(widMasterKey) == 0) && (myvalue["primarywid"] == widInput)) {
-               var widName = myvalue["primarywid"];
-			   var key = myvalue["secondarywid"];
-			   var value = getFromMongo({wid:key}); // , dtotype:mongowidmethod
-               delete value.wid;
-               var resultObj = {};
-			   resultObj[key]= value;
-
-			   	//printToDiv('Function simpleQuery in : resultObj I',  resultObj);		  
-				if ((value["metadata.method"] === undefined) || (value["metadata.method"] == "")) {	
-					widdto = "";
-				}else {
-					widdto = value["metadata.method"]
-				}
-
-				// changed 10/30 if ((mongowidmethod !== undefined) && (mongowidmethod == widdto)) {
-				if (((mongowidmethod !== undefined) && (mongowidmethod == widdto)) || (mongowidmethod=="")) {
-					//printToDiv('Function simpleQuery in : resultObj',  resultObj);
-					returnfromSimpleQuery.push(resultObj);
-				}
-			 }
-		}
-	}
-	//printToDiv('Function simpleQuery in : returnfromSimpleQuery',  returnfromSimpleQuery);
-    returnfromSimpleQuery=returnfromSimpleQuery.sort(function(aObj, bObj) {
-   		var a = getAttributeByIndex(aObj, 0);
-   		var b = getAttributeByIndex(bObj, 0);     
-   		if (a < b) return -1;
-   		if (a > b) return 1;
-    	return 0;
- 		});
-    if (returnfromSimpleQuery.length>0) {
-    	if (mongorelationshipmethod='first') {enhancedreturn=returnfromSimpleQuery[0]};
-   	 	if (mongorelationshipmethod='last') {enhancedreturn=returnfromSimpleQuery[returnfromSimpleQuery.length]};
-		if (mongorelationshipmethod='all') {enhancedreturn=returnfromSimpleQuery};
-		}
-	printToDiv('Function simpleQuery in : enhancedreturn',  enhancedreturn);
-	return enhancedreturn;
-}
 
 // Prepares an object to be recorded in local storage and puts it there
 function MongoAddEditPrepare(Indto, InList, widid, widdto) {
 	/* 	Indto = [{"key":"e","value":"onetomany"}];
 
 					InList = [{"key":"e","value":"f"}]; */
-			// printToDiv('Function MongoAddEditPrepare, Indto : ', Indto);
-			// printToDiv('Function MongoAddEditPrepare, InList : ', InList);
-			// printToDiv('Function MongoAddEditPrepare, widid : ', widid);
-			// printToDiv('Function MongoAddEditPrepare, widdto : ', widdto);
+			// proxyprinttodiv('Function MongoAddEditPrepare, Indto : ', Indto);
+			// proxyprinttodiv('Function MongoAddEditPrepare, InList : ', InList);
+			// proxyprinttodiv('Function MongoAddEditPrepare, widid : ', widid);
+			// proxyprinttodiv('Function MongoAddEditPrepare, widdto : ', widdto);
 
     var InListObj = {};
     var rawobject = {};
@@ -111,14 +76,27 @@ function MongoAddEditPrepare(Indto, InList, widid, widdto) {
     	else 
     	{ // if the wid existed, read the contents of the previous wid, we want to update not add.
     	//Debug='true';
-		rawobject = getFromMongo({"wid":InListObj["wid"]}); 
+    	executeobject={};
+    	executeobject["executethis"]="getwid";
+    	executeobject["wid"]=InListObj["wid"];
+    	rawobject=executethis(executeobject);
+    	if (((rawobject["metadata.method"]!==undefined) || (rawobject["metadata.method"] != "")) && 
+    		((InListObj["metadata.method"]===undefined) || (InListObj["metadata.method"] == ""))) {
+			InListObj["metadata.method"]=rawobject["metadata.method"];
+	    	}
+		//rawobject = getfrommongo({"wid":InListObj["wid"]}); 
 		InListObj =  jsonConcat(InListObj,rawobject); // this will be the new contents concat with old stuff in wid
+
 		// rawobject = getWidMongo(InListObj["wid"],"",widdto, "","dto",Indto, ""})
 		rawobject={};  // if the dto had inherit then we only want to save what in herit does not have 
 		var item;
 		for (item in Indto) {   // load all data related to inherit
 			if (item.value=='inherit') {
-				rawobject = getFromMongo({"wid":item.key}); 	
+				executeobject={};
+    			executeobject["executethis"]="getwid";
+    			executeobject["wid"]=item.key;
+    			rawobject=executethis(executeobject);
+				//rawobject = getfrommongo({"wid":item.key}); 	
 				rawobject =  jsonConcat(rawobject,rawobject);
 				}
 			}
@@ -134,33 +112,39 @@ function MongoAddEditPrepare(Indto, InList, widid, widdto) {
  	if ((InListObj["metadata.method"] === undefined) || (InListObj["metadata.method"] == "")) {
      	InListObj["metadata.method"] = 'defaultdto';
     	} 
-		//printToDiv('Function MongoAddEditPrepare InListObj before : ', InListObj);
-		//printToDiv('Function MongoAddEditPrepare rawobject from get : ', rawobject);
+		//proxyprinttodiv('Function MongoAddEditPrepare InListObj before : ', InListObj);
+		//proxyprinttodiv('Function MongoAddEditPrepare rawobject from get : ', rawobject);
 
 		// step through dto look for inherit parameters, then delete them from save
 
-		//printToDiv('Function MongoAddEditPrepare InListObj after : ', InListObj);
+		//proxyprinttodiv('Function MongoAddEditPrepare InListObj after : ', InListObj);
 
 		//Debug='false';
 
 
 	InListObj["wid"]=InListObj["wid"].toLowerCase();
-	addToMongo(InListObj["wid"], InListObj)
+
+    InListObj["executethis"]="updatewid";
+    var addresult=executethis(InListObj);
+
+	//addtomongo(InListObj["wid"], InListObj)
+	//addtomongoII(InListObj);
+	//var addresult = addtomongo(InListObj);
 	//addToLocalStorage(widMasterKey + InListObj["wid"], InListObj);
 	//olddebug=Debug;
 	//Debug='true';
 
-	printToDiv('Function MongoAddEditPrepare, ******************* Mongo record added : ', InListObj);
-
+	proxyprinttodiv('Function MongoAddEditPrepare, ******************* InListObj : ', InListObj);
+	//proxyprinttodiv('Function MongoAddEditPrepare, ******************* addresult : ', addresult, true);
 	//Debug=olddebug;				
 	//InListObj["LOG"]="LOG";
-	//addToMongo(InListObj["wid"], InListObj)
+	//addtomongo(InListObj["wid"], InListObj)
 	// addToLocalStorage(widMasterKey + "add_"+InListObj["wid"], InListObj);
 	return InListObj;
 }
 
 function AddMongoRelationship(ParentWid,ChildWid,attr){
-	relationshipdto={'primarywid':'string','secondarywid':'string', 'relationshiptype':'string','metaddata.method':'string'};
+	relationshipdto={'primarywid':'string','secondarywid':'string', 'relationshiptype':'string','metadata.method':'string'};
 	// note above should be list but does not matter
 	InList = [];
 	InList.push({"key":"primarywid","value":ParentWid.toLowerCase()});
@@ -168,11 +152,25 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 	InList.push({"key":"relationshiptype","value":attr.toLowerCase()});
 	InList.push({"key":"metadata.method","value":"relationshipdto"});
 
-	var widset=getwidcopy(); // get a copy of all local storage ***
-	for (var widkey in widset){ 	
+	executeobject={};
+  	executeobject["mongorawquery"]={"$and": {"data.primarywid":ParentWid, "data.secondarywid":ChildWid }};
+  	executeobject["executethis"]="querywid";
+  	var widset=executethis(executeobject);
+
+	//var widset=getwidcopy(); // get a copy of all local storage ***
+	// above changed 10-27
+	// right now querywid does not do anything but a list
+
+
+	//for (var widkey in widset){ 
+	for (var myvalue in widset){ 	
 	// for (var key in localStorage){				// search for duplicate
 		//var myvalue = JSON.parse(localStorage.getItem(key));
-		var myvalue = getFromMongo({wid:widkey});
+		// executeobject={};
+  //   	executeobject["executethis"]="getwid";
+  //   	executeobject["wid"]=widkey;
+  //   	var myvalue=executethis(executeobject);
+		//var myvalue = getfrommongo({wid:widkey});
 		if ((myvalue['primarywid']==ParentWid) && (myvalue['secondarywid']==ChildWid)) {
 			InList.push({"key":"wid","value":myvalue['wid']});
 			}
@@ -182,17 +180,17 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 }
 
 
-// know issue -- cannot save blank parameter if jsonconcat (inherit)
+// know issue -- cannot save blank parameter if jsonConcat (inherit)
 
-function getwidmaster(parameters){
+exports.getwidmaster = function(parameters){
 
 	var parameters = tolowerparameters(parameters, {'wid':'add', 'metadata.method':'add', 'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
 
-	printToDiv('Function getwidmaster() incoming parameters, now go to getwidmasterLevel ' , parameters);
+	proxyprinttodiv('Function getwidmaster() incoming parameters, now go to getwidmasterLevel ' , parameters);
 
 	var wid = parameters.wid;
 	var resultObj = {};	
-	printToDiv('Function getwidmasterLevel() incoming parameters, to getWidMongo' , parameters);
+	proxyprinttodiv('Function getwidmasterLevel() incoming parameters, to getWidMongo' , parameters);
 
 /*	var dtotype="";
 	if(isParameterLower(parameters, "command.dtotype")){
@@ -231,7 +229,11 @@ function getwidmaster(parameters){
 	resultObj = getWidMongo(wid, convertMethod, accesstoken);
 
 	if(inherit) { // inherit points to wid with more datan- Grab the params from mongo(local storage)
-		moreParameters = getFromMongo({'wid':inherit}); // if we find some, add them to the return object
+		executeobject={};
+    	executeobject["executethis"]="getwid";
+    	executeobject["wid"]=inherit;
+    	moreParameters=executethis(executeobject);
+		//moreParameters = getfrommongo({'wid':inherit}); // if we find some, add them to the return object
 		if(moreParameters) {
 			resultObj = jsonConcat(resultObj, moreParameters);  // if duplicates then currentLevelObject{} wins
 			} 
@@ -246,13 +248,13 @@ function getwidmaster(parameters){
 
 	olddebug=Debug;
 	Debug=olddebug;
-	printToDiv('Function getwidmasterLevel() ** before ' , resultObj);
+	proxyprinttodiv('Function getwidmasterLevel() ** before ' , resultObj);
 	if (Object.keys(resultObj).length !== 0) {
 		resultObj=cleanparameters(resultObj, dtotype, accesstoken, "remove", convertMethod);
 		}
 	resultObj=resultObj.parms;   // ************
 
-	printToDiv('Function getwidmasterLevel() ** after ' , resultObj);
+	proxyprinttodiv('Function getwidmasterLevel() ** after ' , resultObj);
 	if (convertMethod=="nowid") {
 		delete resultObj["wid"];
 		delete resultObj["metadata.method"];
@@ -264,130 +266,91 @@ function getwidmaster(parameters){
 }
 
 
-
-// 	//if (dtotype=="") {dtotype=resultObj["metadata.method"]}; // if no dtotype sent in, then adopt method
-// 	if ((resultObj["metadata.method"]===undefined) || (resultObj["metadata.method"] == "")) {
-// 			resultObj["metadata.method"] = "defaultdto";
-// 			} // note this should not have ever happened
-// 	if ((dtotype ===undefined) || (dtotype == "")) {dtotype=resultObj["metadata.method"]}; // if no dtotype sent in, then adopt method
-
-// 	if (resultObj["metadata.method"] != dtotype) {	// we are primarly concernted if they do not match
-
-// 		if (cleanmethod=="add") { 	// if add, then find the preamble by reading a pristine dto record and looking
-// 			//dtoobject=aggressivedto(dtotype, resultObj);
-// 			dtoobject=getWidMongo(dtotype, "dto", accesstoken);
-// 			for (item in dtoobject) {
-// 				if ((item==dtotype) &&
-// 					((dtoobject[item] == 'onetomany') || (dtoobject[item] == 'onetoone'))) {
-// 		 			preAmble = item;
-// 					}
-// 				}
-// 			}		
-
-
-// 	else { // if resultObj["metadata.method"] = dtotype) 
-// 		if (cleanmethod=="add") { 
-// 			dtoobject = getwidmaster({'wid':dtotype, 'command.dtotype':dtotype, 'command.convertmethod':'dto'});
-// 			outputparameters=resultObj;
-// 			}
-// 		if (cleanmethod=="remove") { 
-// 			dtoobject = resultObj; // note this should not even be necessary
-// 			outputparameters=resultObj;
-// 			}
-// 		}	
-	
-// 	printToDiv('Function cleanparameters()  outputparameters II' , outputparameters);	
-// 	printToDiv('Function cleanparameters()  cleanmethod II' , cleanmethod);
-// 	return {
-// 		parms : outputparameters,
-// 		dto : dtoobject 
-// 		};
-// }
-
-
 function aggressivedto(widInput, preamble) { // returns a made up dto base on maximum number of relationships, etc
 	//Debug='true';
-	printToDiv('Function aggressivedto()  widInput' , widInput);
+	proxyprinttodiv('Function aggressivedto()  widInput' , widInput);
+	proxyprinttodiv('Function aggressivedto()  preamble' , preamble);
 	var moreDTOParameters={};
-	var dtoGlobalParameters={};
 	var targetwid="";
+	var nexttargetwid="";
+	var nextpreamble="";
 	var eachresult="";
 	var key="";
 	var rightparameters={};
-	var parameterObject=getFromMongo({'wid':widInput});
-	//var parameterObject=getFromMongo(widInput);
+	var dtoGlobalParameters={};
 	if (preamble === undefined) {preamble = ""};
-	if (preamble != "") {preamble = "." + preamble};
-	printToDiv('Function aggressivedto()  parameterObject' , parameterObject);
-	if (parameterObject['metadata.method'] != "") {targetwid = parameterObject['metadata.method']};
-	if (targetwid == "") {targetwid = parameterObject['wid']}; // should probably be taken out
-	if (targetwid != "") {
-		printToDiv('Function aggressivedto()  targetwid' , targetwid);
-		moreDTOParameters = simpleQuery(targetwid, "attributes", "all", "forward", "", "", "");
-		for (eachresult in moreDTOParameters) {
-			for (key in moreDTOParameters[eachresult]) {
-				rightparameters=moreDTOParameters[eachresult][key];	
-				}
-			printToDiv('Function getWidMongo() left- ', key);	
-			printToDiv('Function getWidMongo() right ', rightparameters);
-			targetwid=rightparameters['metadata.method'];
-			printToDiv('Function getWidMongo() targetwid+preamble ', targetwid+preamble);
-			dtoGlobalParameters[targetwid + preamble] = 'onetomany'
-			dtoGlobalParameters = jsonConcat(dtoGlobalParameters, aggressivedto(targetwid, key));
-			}
-		for (eachresult in parameterObject) {
-			printToDiv('Function getWidMongo() eachresult+preamble ', eachresult+preamble);
-			if ((eachresult != 'wid') && (eachresult != 'metadata.method')) {
-				dtoGlobalParameters[eachresult + preamble] = 'string';
-				}
-			}	
-	}
-	printToDiv('Function aggressivedto()  dtoGlobalParameters' , dtoGlobalParameters);
-	//Debug='false';
-	return dtoGlobalParameters
-	}
+	if (preamble !="") {preamble = preamble + "."};
+	proxyprinttodiv('Function aggressivedto()  processed preamble' , preamble);
 
+	var executeobject={};
+	targetwid=widInput;
+	executeobject["executethis"]="getwid";
+	executeobject["wid"]=widInput;
+	proxyprinttodiv('Function aggressivedto()  executeobject I' , executeobject);
+	var parameterObject=executethis(executeobject);
+	proxyprinttodiv('Function aggressivedto()  parameterObject I' , parameterObject);
 
-/*function addclean (resultObj, dtotype, accesstoken, cleanmethod, convertmethod) {
-	olddebug=Debug;
-	Debug=olddebug;
-	if (cleanmethod == "add") {
-	var inputParametersObject = {};
-	var metadata = "";
-	var dtoobject = {};
-	inputParametersObject = resultObj;
-	printToDiv('Function cleanparameters()  inputParametersObject' , inputParametersObject);
-
-	 if ((inputParametersObject['metadata.method'] !== "") && (dtotype=="")) {
-		metadata = inputParametersObject['metadata.method']
-		dtoobject=getwidmaster({'wid':metadata, 
-								'command.convertmethod':'dto',
-								'command.dtotype':metadata});
-		};
-	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
-    	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
-    	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
-		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
-								'command.convertmethod':'dto',
-								'command.dtotype':'defaultdto'});
+	if ((parameterObject['metadata.method'] != "") && (parameterObject['metadata.method'] != targetwid))  {
+		targetwid=parameterObject['metadata.method'];
+		executeobject={};
+		executeobject["executethis"]="getwid";
+		executeobject["wid"]=targetwid;
+		proxyprinttodiv('Function aggressivedto()  executeobject II' , executeobject);
+		parameterObject=executethis(executeobject);
+		proxyprinttodiv('Function aggressivedto()  parameterObject II' , parameterObject);
 		}
 
-	printToDiv('Function cleanparameters()  outputparameters ' , resultObj);
-	printToDiv('Function cleanparameters()  dtoobject ' , dtoobject);
-	Debug=olddebug;
-		return {
-		parms : resultObj,
-		dto : dtoobject 
-		};
-	};
-}*/
+	//for (eachresult in parameterObject) {
+	//	parameterObject[eachresult] = 'string';
+	//	}
+	proxyprinttodiv('Function aggressivedto()  parameterObject III' , parameterObject);
+	proxyprinttodiv('Function aggressivedto()  targetwid' , targetwid);
 
+	executeobject={};
+	executeobject["executethis"]="querywid";
+	executeobject["mongowid"]=targetwid;
+	executeobject["mongorelationshiptype"]="attributes";
+	executeobject["mongorelationshipmethod"]="all";
+	executeobject["mongorelationshipdirection"]="forward";
+	executeobject["mongowidmethod"]="";
+	executeobject["convertmethod"]="";
+	executeobject["dtotype"]="";	
+	proxyprinttodiv('Function aggressivedto()  executeobject III' , executeobject);	
+	//moreDTOParameters=MongoDataQuery(executeobject);
+	Debug='false';
+	moreDTOParameters=executethis(executeobject);
+
+	//moreDTOParameters = simpleQuery(targetwid, "attributes", "all", "forward", "", "", "");
+
+	proxyprinttodiv('Function aggressivedto()  moreDTOParameters' , moreDTOParameters);
+
+
+	for (eachresult in moreDTOParameters) {
+		rightparameters={};
+		for (key in moreDTOParameters[eachresult]) {
+			rightparameters=moreDTOParameters[eachresult][key];	
+			}
+		proxyprinttodiv('Function getWidMongo() left- ', key);	
+		proxyprinttodiv('Function getWidMongo() right ', rightparameters);
+		parameterObject[key]='onetomany';
+		parameterObject = jsonConcat(parameterObject, aggressivedto(key, key));
+		}
+
+	var dtoGlobalParameters={};
+	for (eachresult in parameterObject) {
+		dtoGlobalParameters[preamble + eachresult] = parameterObject[eachresult];
+		}
+			
+	proxyprinttodiv('Function aggressivedto()  dtoGlobalParameters' , dtoGlobalParameters);
+	//Debug='false';
+	return dtoGlobalParameters
+}
 
 function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertmethod) {
-	printToDiv('Function cleanparameters() resultObj' , resultObj);
-	printToDiv('Function cleanparameters()  dtotype' , dtotype);
-	printToDiv('Function cleanparameters()  accesstoken' , accesstoken);
-	printToDiv('Function cleanparameters()  cleanmethod' , cleanmethod);
+	proxyprinttodiv('Function cleanparameters() resultObj' , resultObj);
+	proxyprinttodiv('Function cleanparameters()  dtotype' , dtotype);
+	proxyprinttodiv('Function cleanparameters()  accesstoken' , accesstoken);
+	proxyprinttodiv('Function cleanparameters()  cleanmethod' , cleanmethod);
 	var outputparameters = {};
 	var dtoloc = 0;
 	var proposedLeft = "";
@@ -396,11 +359,48 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 	var inputParametersObject = {};
 	var metadata = "";
 	var preAmble="";
+	var item="";
+	var moreParameters={};
+	var executeobject={};
+	var eafield="";
+
+	if ((cleanmethod == "remove") && (resultObj['wid']!==undefined)) {
+		dtoobject=aggressivedto(resultObj['wid'],"");
+		proxyprinttodiv('Function cleanparameters()  aggressivedto ' , dtoobject, true);
+	
+
+		for (item in dtoobject) { 
+			preamble=""; 
+			proposedLeft=item;
+			proposedRight=dtoobject[item];
+
+			if (proposedRight == 'inherit') {
+				dtoloc=proposedLeft.lastIndexOf(".");
+				if (dtoloc!=-1) {
+					preamble=proposedLeft.substring(0 ,dtoloc);
+					proposedLeft=proposedLeft.substring(dtoloc+1, proposedLeft.length);
+					}
+				executeobject={};
+    			executeobject["executethis"]="getwid";
+    			executeobject["wid"]=proposedLeft;
+    			moreParameters=executethis(executeobject);
+    			if (preamble!=""){
+    				for (eafield in moreParameters){
+    					resultObj[preamble+eafield]=moreParameters[eafield];
+    					}
+    				}
+    			else {
+					resultObj=jsonConcat(resultObj,moreParameters);
+					}
+				}
+			}
+		proxyprinttodiv('Function cleanparameters()  resultObj end of ' , resultObj, true);
+		}
+
 
 	if (cleanmethod == "add") {
-
 	inputParametersObject = resultObj;
-	printToDiv('Function cleanparameters()  inputParametersObject' , inputParametersObject);
+	proxyprinttodiv('Function cleanparameters()  inputParametersObject' , inputParametersObject);
 
 	 if ((inputParametersObject['metadata.method'] !== "") && (dtotype=="")) {
 		metadata = inputParametersObject['metadata.method']
@@ -409,15 +409,19 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 								'command.dtotype':metadata});
 		};
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
-    	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
-    	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
-		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
-								'command.convertmethod':'dto',
-								'command.dtotype':'defaultdto'});
+    	proxyprinttodiv('Function cleanparameters()  dtotype : II ',  dtotype);
+    	//alert('before');
+    	dtoobject=aggressivedto(inputParametersObject["wid"]); // ** added 10/21, bottom part taken out
+    	//parameterObject=getfrommongo({"wid":inputParametersObject["wid"]});
+
+		// dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
+		// 						'command.convertmethod':'dto',
+		// 						'command.dtotype':'defaultdto'});
+		//alert('after');
 		}
 
-	printToDiv('Function cleanparameters()  outputparameters ' , resultObj);
-	printToDiv('Function cleanparameters()  dtoobject ' , dtoobject);
+	proxyprinttodiv('Function cleanparameters()  outputparameters ' , resultObj);
+	proxyprinttodiv('Function cleanparameters()  dtoobject ' , dtoobject);
 
 		// return {
 		// parms : resultObj,
@@ -432,10 +436,17 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 
 		// "adddto.0.palettedto":"onetomany" -- adddto.0.palettedto.0.subcategory
 		if (cleanmethod=="add") { 	// if add, then find the preamble by reading a pristine dto record and looking
-			printToDiv('Function cleanparameters()  resultObj' , resultObj);
-			dtoobject=aggressivedto(resultObj['wid']);
-			printToDiv('Function cleanparameters()  dtoobject inside ' , dtoobject);
-			//dtoobject=getWidMongo(dtotype, "dto", accesstoken);
+			proxyprinttodiv('Function cleanparameters()  resultObj' , resultObj);
+			//dtoobject=aggressivedto(resultObj['wid']);
+			proxyprinttodiv('Function cleanparameters()  dtoobject inside ' , dtoobject);
+
+			//taken out 10-22
+			//executeobject={};
+			//executeobject['wid']=resultObj['wid'];
+			//executeobject["executethis"]="getwid";
+			//dtoobject=executethis(executeobject);
+			//-------------
+			//alert(dtoobject);
 			for (item in dtoobject) {
 				dtoloc=item.indexOf(dtotype)
 				if ((dtoloc!=-1) &&
@@ -444,19 +455,19 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 					preAmble=item;
 					}
 				}
-				printToDiv('Function cleanparameters()  preAmble ' , preAmble);
+				proxyprinttodiv('Function cleanparameters()  preAmble ' , preAmble);
 			}	
 		
 		for (item in resultObj) {  // now step through each record that could be changed
 			proposedLeft=item;
 			proposedRight=resultObj[item];
 			if ((item!='wid') && (item!='metadata.method')) {
-				printToDiv('Function cleanparameters()  item' , item);
+				proxyprinttodiv('Function cleanparameters()  item' , item);
 				proposedLeft=""; // work on left first...check if add or remvove
 				if ((cleanmethod=="add") && (preAmble!="")) {proposedLeft=preAmble + "." + item}
 				if (cleanmethod=="remove"){ 
 					dtoloc=item.indexOf(dtotype+".")
-					printToDiv('Function cleanparameters()  dtoloc' , dtoloc);
+					proxyprinttodiv('Function cleanparameters()  dtoloc' , dtoloc);
 					if (dtoloc!=-1) {
 						proposedLeft=item.substring(dtoloc+dtotype.length+3 ,item.length);
 						// assume record looks like this authordto.booksdto.0.name
@@ -472,16 +483,16 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 						}
 					}
 				}	
-			printToDiv('Function cleanparameters()  proposedLeft' , proposedLeft);
-			printToDiv('Function cleanparameters()  proposedRight' , proposedRight);
+			proxyprinttodiv('Function cleanparameters()  proposedLeft' , proposedLeft);
+			proxyprinttodiv('Function cleanparameters()  proposedRight' , proposedRight);
 			if (proposedLeft!="") {outputparameters[proposedLeft]=proposedRight};
-			printToDiv('Function cleanparameters()  outputparameters' , outputparameters);	
+			proxyprinttodiv('Function cleanparameters()  outputparameters' , outputparameters);	
 			}
 //		}
 /*			for (var item in resultObj) {
-				printToDiv('Function cleanparameters()  item' , item);
+				proxyprinttodiv('Function cleanparameters()  item' , item);
 				dtoloc=item.indexOf(dtotype+".")
-				printToDiv('Function cleanparameters()  dtoloc' , dtoloc);
+				proxyprinttodiv('Function cleanparameters()  dtoloc' , dtoloc);
 				if (dtoloc!=-1) {
 					proposedLeft=item.substring(dtoloc+dtotype.length+3 ,item.length);
 					if (convertmethod=="dtonum") { 
@@ -491,10 +502,10 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 						proposedLeft=item.substring(dtoloc+dtotype.length+1 ,item.length);
 						}
 					proposedRight=resultObj[item];
-					printToDiv('Function cleanparameters()  proposedLeft' , proposedLeft);
-					printToDiv('Function cleanparameters()  proposedRight' , proposedRight);
+					proxyprinttodiv('Function cleanparameters()  proposedLeft' , proposedLeft);
+					proxyprinttodiv('Function cleanparameters()  proposedRight' , proposedRight);
 					outputparameters[proposedLeft]=proposedRight;
-					printToDiv('Function cleanparameters()  outputparameters' , outputparameters);	
+					proxyprinttodiv('Function cleanparameters()  outputparameters' , outputparameters);	
 					}
 				}
 			}*/
@@ -502,25 +513,61 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 		else { // if resultObj["metadata.method"] = dtotype) 
 			outputparameters=resultObj;
 			}	
-	printToDiv('Function cleanparameters()  outputparameters II' , outputparameters);	
-	printToDiv('Function cleanparameters()  cleanmethod II' , cleanmethod);
+	proxyprinttodiv('Function cleanparameters()  outputparameters II' , outputparameters);	
+	proxyprinttodiv('Function cleanparameters()  cleanmethod II' , cleanmethod);
 //	if (cleanmethod=="add") { 
 //		outputparameters=resultObj;
 //		}
-	printToDiv('Function cleanparameters()  outputparameters end' , outputparameters);	
-	printToDiv('Function cleanparameters()  dtoobject end' , dtoobject);
+	proxyprinttodiv('Function cleanparameters()  outputparameters end' , outputparameters);	
+	proxyprinttodiv('Function cleanparameters()  dtoobject end' , dtoobject);
 	return {
 		parms : outputparameters,
 		dto : dtoobject
 		};
 }
+//		}
+/*			for (var item in resultObj) {
+				proxyprinttodiv('Function cleanparameters()  item' , item);
+				dtoloc=item.indexOf(dtotype+".")
+				proxyprinttodiv('Function cleanparameters()  dtoloc' , dtoloc);
+				if (dtoloc!=-1) {
+					proposedLeft=item.substring(dtoloc+dtotype.length+3 ,item.length);
+					if (convertmethod=="dtonum") { 
+						proposedLeft=item.substring(dtoloc ,item.length);
+						}
+					if (convertmethod=="num") { 
+						proposedLeft=item.substring(dtoloc+dtotype.length+1 ,item.length);
+						}
+					proposedRight=resultObj[item];
+					proxyprinttodiv('Function cleanparameters()  proposedLeft' , proposedLeft);
+					proxyprinttodiv('Function cleanparameters()  proposedRight' , proposedRight);
+					outputparameters[proposedLeft]=proposedRight;
+					proxyprinttodiv('Function cleanparameters()  outputparameters' , outputparameters);	
+					}
+				}
+			}*/
+				 //    	proxyprinttodiv('Function AddWidParameters()  dtotype : II ',  dtotype);
+	 //    	executeobject={};
+	 //    	executeobject["executethis"]="getwid";
+	 //    	executeobject["wid"]=inputParametersObject["wid"];
+	 //    	parameterObject=executethis(executeobject);
+	 //    	//parameterObject=getfrommongo({"wid":inputParametersObject["wid"]});
+		// 	dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
+		// 							'command.convertmethod':'dto'});
+		// 	// dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
+		// 	// 						'command.convertmethod':'dto',
+		// 	// 						'command.dtotype':'defaultdto'});			
+		// 	}
+		// proxyprinttodiv('Function cleanparameters()  outputparameters ' , resultObj);
+		// proxyprinttodiv('Function cleanparameters()  dtoobject ' , dtoobject);
+		// };
 /*
 		// This will hold the relationship dto if found
 		var preAmble = "";
 		var splitarray = [];
 		// read dto defintion of the method, convertmethod=dto does not reutrn wid and method
 		var dtoobject = getWidMongo(resultObj["metadata.method"], "dto", accesstoken);
-		printToDiv('Function cleanparameters()  dtoobject result *******' , dtoobject);
+		proxyprinttodiv('Function cleanparameters()  dtoobject result *******' , dtoobject);
 		// Itereate through the hashes of the method object
 		for (item in dtoobject) { 		// go through DTO looking for fields that finish with DTOtype 
 										// and are one to one or one tomany
@@ -531,24 +578,24 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 			 	preAmble = item;
 				}			
 			}
-		printToDiv('Function cleanparameters() preAmble' , preAmble);
+		proxyprinttodiv('Function cleanparameters() preAmble' , preAmble);
 		// if preamble is still "", we will do all this agaianst an empty string...maybe not a good idea	
 		// we are assuming that a method and dtotype exist, but we don't know for sure if the method
 		// dto is in the database. If it is not...then what?
 		
 		// 	Look for the dto in the object we have so far
-		printToDiv('Function cleanparameters() inputlist I ' , resultObj);
+		proxyprinttodiv('Function cleanparameters() inputlist I ' , resultObj);
 
 		if (cleanmethod=="remove") {
 			var inputlist = MatchPrefix(resultObj, preAmble);
 			// Develope a list of only those parameters that match the relationship dto
-			printToDiv('Function cleanparameters() inputlist II' , inputlist);
+			proxyprinttodiv('Function cleanparameters() inputlist II' , inputlist);
 			var inputlistmatch = inputlist.match;
 			// Strip off the relationship dto from the parameter key
-			printToDiv('Function cleanparameters() inputlist III' , inputlist);
+			proxyprinttodiv('Function cleanparameters() inputlist III' , inputlist);
 			inputlist = DeletePrefix(inputlistmatch, preAmble);
 			// Set the list as the object to return
-			printToDiv('Function cleanparameters() inputlist IV' , inputlist);
+			proxyprinttodiv('Function cleanparameters() inputlist IV' , inputlist);
 			resultObj = listToObject(inputlist);
 			}
 
@@ -560,7 +607,7 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
 				// step through result object paramters and add preamble
 			}
 
-		printToDiv('Function cleanparameters() resultObj outfrom call' , resultObj);
+		proxyprinttodiv('Function cleanparameters() resultObj outfrom call' , resultObj);
 		}
 */
 
@@ -568,8 +615,8 @@ function getWidMongo(widInput, convertMethod, accessToken) {
 
 var olddebug=Debug;
 Debug=olddebug;
-	printToDiv('Function getWidMongo() in widInput: ', widInput);
-	printToDiv('Function getWidMongo() convertmethod', convertMethod);
+	proxyprinttodiv('Function getWidMongo() in widInput: ', widInput);
+	proxyprinttodiv('Function getWidMongo() convertmethod', convertMethod);
 
 	if (!widInput) {
 		return;
@@ -590,25 +637,47 @@ Debug=olddebug;
 	var createid = widInput;
 	var dtotype = "";
 
-	var currentLevelObject = getFromMongo({'wid': widInput});
+	executeobject={};
+    executeobject["executethis"]="getwid";
+    executeobject["wid"]=widInput;
+    //Debug='true';
+    proxyprinttodiv('Function getWidMongo()  executeobject' , executeobject);
+    var currentLevelObject=executethis(executeobject);
+	//var currentLevelObject = getfrommongo({'wid': widInput});
 
-	printToDiv('Function getWidMongo() currentLevelObject ++++++ top level object ', currentLevelObject);
-
+	proxyprinttodiv('Function getWidMongo() currentLevelObject ++++++ top level object ', currentLevelObject);
+	//Debug='false';
 	// if dtotype not sent in, then figure it out -- dto type will be blank at all 1+ levels
 	// first choide for dto is its method
 	if ((currentLevelObject["metadata.method"]!==undefined) && 
 	   	(currentLevelObject["metadata.method"]!=="")) {
 		dtotype=currentLevelObject["metadata.method"]
 		// Get the wid from mongo(local storage)
-		dtoGlobalParameters = getFromMongo({'wid':dtotype});
+		executeobject={};
+    	executeobject["executethis"]="getwid";
+    	executeobject["wid"]=dtotype;
+    	dtoGlobalParameters=executethis(executeobject);
+		//dtoGlobalParameters = getFromMongo({'wid':dtotype});
 		}
 	if (Object.keys(dtoGlobalParameters).length === 0) {
 		//if (dtotype!="") {createid=dtotype}
 		//dtotype='defaultdto'
-		moreDTOParameters = simpleQuery(widInput, "attributes", "all", "forward", "", "", "");
+		var executeobject={};
+		executeobject["executethis"]="querywid";
+		executeobject["mongowid"]=widInput;
+		executeobject["mongorelationshiptype"]="attributes";
+		executeobject["mongorelationshipmethod"]="all";
+		executeobject["mongorelationshipdirection"]="forward";
+		executeobject["mongowidmethod"]="";
+		executeobject["convertmethod"]="";
+		executeobject["dtotype"]="";	
+		proxyprinttodiv('Function getWidMongo()  executeobject III' , executeobject);
+		//moreDTOParameters=simpleQuery(executeobject);	
+		moreDTOParameters=executethis(executeobject);
+		//moreDTOParameters = simpleQuery(widInput, "attributes", "all", "forward", "", "", "");
 		for (eachresult in moreDTOParameters) {
 			for (key in moreDTOParameters[eachresult]) {
-				printToDiv('Function getWidMongo()eachresult[0] ',key);	
+				proxyprinttodiv('Function getWidMongo()eachresult[0] ',key);	
 				dtoGlobalParameters[key] = 'onetomany'
 				}
 			}
@@ -618,47 +687,47 @@ Debug=olddebug;
 		
 		}
 
-	printToDiv('Function getWidMongo() dtoGlobalParameters IV ', dtoGlobalParameters);	
+	proxyprinttodiv('Function getWidMongo() dtoGlobalParameters IV ', dtoGlobalParameters);	
 
 	currentLevelObjectList = objectToList(currentLevelObject);
 	dtoGlobalParametersList = objectToList(dtoGlobalParameters);
 
 
-	printToDiv('Function getWidMongo() dtoGlobalParameters near start', dtoGlobalParameters);	
-	printToDiv('Function getWidMongo() currentLevelObject II ', currentLevelObject);		
+	proxyprinttodiv('Function getWidMongo() dtoGlobalParameters near start', dtoGlobalParameters);	
+	proxyprinttodiv('Function getWidMongo() currentLevelObject II ', currentLevelObject);		
 
 	currentLevelObjectList = SplitObjectList(currentLevelObjectList, dtoGlobalParametersList);
 	currentLevelObjectList = currentLevelObjectList.match;
 	currentLevelObject = listToObject(currentLevelObjectList);
 
-	printToDiv('Function getWidMongo() currentLevelObject ----about to start relationships----', currentLevelObject);		
+	proxyprinttodiv('Function getWidMongo() currentLevelObject ----about to start relationships----', currentLevelObject);		
 
 
 	outgoingParameters=currentLevelObject;
 
 	for (var item in dtoGlobalParameters) {
-		printToDiv('Function getWidMongo() step through dto ', (item + ' ' + dtoGlobalParameters[item]));
+		proxyprinttodiv('Function getWidMongo() step through dto ', (item + ' ' + dtoGlobalParameters[item]));
 		nextLevelParameters = {};
 		attr = dtoGlobalParameters[item];
-		if ((attr == "onetoone")  || (attr == "onetomany")  || (attr == "inherit"))  {
+		if ((attr == "onetoone")  || (attr == "onetomany")) { // 10-24 || (attr == "inherit"))  {
 			if (attr == "onetoone") { // if dto states 'onetoone' then search for related records that match property
 				nextLevelParameters = getAndFormatNextLevel(widInput, "attributes", "last", "forward", item, convertMethod, accessToken); // removed inherit dtoGlobalParameters
 				}; // 10-5 took away dtotype
 			if (attr == "onetomany") { // if dto states 'onetomany' then search for related records that match property
 				nextLevelParameters = getAndFormatNextLevel(widInput, "attributes", "all", "forward", item, convertMethod, accessToken, "inherit"); //removed dtoGlobalParameters
 				}; // 10-5 took away dtotype
-			if ((attr == "inherit") && (convertMethod != 'dto')) { 	// added 10/4 add to parameters whatever is to left side of inherit
-				nextLevelParameters = getwidmaster({'wid':item, 'command.convertmethod':'nowid'});
-				};
+			//if ((attr == "inherit") && (convertMethod != 'dto')) { 	// added 10/4 add to parameters whatever is to left side of inherit
+			//	nextLevelParameters = getwidmaster({'wid':item, 'command.convertmethod':'nowid'});
+			//	};
 			if (nextLevelParameters=="") {AddMongoRelationship(widInput,item,"attributes")}; // if DTO existed, but no relationship at place hoder
-			printToDiv('Function getWidMongo() came back from getAndFormatNextLevel, nextLevelParameters= ', nextLevelParameters);
-	        printToDiv('Function getWidMongo() step through dto ', (item+' '+dtoGlobalParameters[item]));
+			proxyprinttodiv('Function getWidMongo() came back from getAndFormatNextLevel, nextLevelParameters= ', nextLevelParameters);
+	        proxyprinttodiv('Function getWidMongo() step through dto ', (item+' '+dtoGlobalParameters[item]));
 	        outgoingParameters = jsonConcat(outgoingParameters, nextLevelParameters);
-	        printToDiv('Function getWidMongo() outgoingParameters ', outgoingParameters);
+	        proxyprinttodiv('Function getWidMongo() outgoingParameters ', outgoingParameters);
    			 } // if
-        //printToDiv('Function getWidMongo() outgoingParameters ', outgoingParameters);
+        //proxyprinttodiv('Function getWidMongo() outgoingParameters ', outgoingParameters);
         } // for
-    printToDiv('Function getWidMongo() end of relationsips---------------- : ', outgoingParameters);
+    proxyprinttodiv('Function getWidMongo() end of relationsips---------------- : ', outgoingParameters);
     Debug=olddebug;
     return outgoingParameters
 }
@@ -666,13 +735,25 @@ Debug=olddebug;
 // Starting of getAndFormatNextLevel function
 function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, accesstoken) {
 
-			printToDiv('Function getAndFormatNextLevel() arriving widInput', widInput);
-			// printToDiv('-------Function getAndFormatNextLevel() in : mongowidmethod', mongowidmethod);
-			// printToDiv('-------Function getAndFormatNextLevel() in : convertmethod', convertmethod);
-			// printToDiv('-------Function getAndFormatNextLevel() in : dtotype', dtotype);
-			// printToDiv('-------Function getAndFormatNextLevel() in : dtoGlobalParameters', dtoGlobalParameters);	
+			proxyprinttodiv('Function getAndFormatNextLevel() arriving widInput', widInput);
+			// proxyprinttodiv('-------Function getAndFormatNextLevel() in : mongowidmethod', mongowidmethod);
+			// proxyprinttodiv('-------Function getAndFormatNextLevel() in : convertmethod', convertmethod);
+			// proxyprinttodiv('-------Function getAndFormatNextLevel() in : dtotype', dtotype);
+			// proxyprinttodiv('-------Function getAndFormatNextLevel() in : dtoGlobalParameters', dtoGlobalParameters);	
 
-	var relatedParameters = simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, ""); // removed dto type from end
+	var executeobject={};
+	executeobject["executethis"]="querywid";
+	executeobject["mongowid"]=widInput;
+	executeobject["mongorelationshiptype"]=mongorelationshiptype;
+	executeobject["mongorelationshipmethod"]=mongorelationshipmethod;
+	executeobject["mongorelationshipdirection"]=mongorelationshipdirection;
+	executeobject["mongowidmethod"]=mongowidmethod;
+	executeobject["convertmethod"]=convertmethod;
+	executeobject["dtotype"]="";	
+	proxyprinttodiv('Function getAndFormatNextLevel()  executeobject III' , executeobject);	
+	//var relatedParameters=simpleQuery(executeobject);
+	var relatedParameters=executethis(executeobject);
+	//var relatedParameters = simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, ""); // removed dto type from end
 	var drillDownParameters = {};
 	var rowresult = ""
 	var nextLevelParameters = [];
@@ -682,8 +763,8 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 	var item = "";
 	var iteration = 0 
 
-	printToDiv('Function getAndFormatNextLevel() in : relatedParameters  after simpleQuery++++ starting related ++++', relatedParameters);
-	// printToDiv('-------Function getAndFormatNextLevel() in : relatedParameters.length', relatedParameters.length);
+	proxyprinttodiv('Function getAndFormatNextLevel() in : relatedParameters  after simpleQuery++++ starting related ++++', relatedParameters);
+	// proxyprinttodiv('-------Function getAndFormatNextLevel() in : relatedParameters.length', relatedParameters.length);
 
 	if (relatedParameters == "") {
 		return;
@@ -693,8 +774,8 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 	for(iteration = 0 ; (iteration< relatedParameters.length ) ; iteration++ ) {
 	rowresult=relatedParameters[iteration];
 
-			printToDiv('Function getAndFormatNextLevel() in : iteration in going through results from simpleQuery', iteration);		
-			//printToDiv('Function getAndFormatNextLevel() in : current row', rowresult);
+			proxyprinttodiv('Function getAndFormatNextLevel() in : iteration in going through results from simpleQuery', iteration);		
+			//proxyprinttodiv('Function getAndFormatNextLevel() in : current row', rowresult);
 			
 			//var rowObject = relatedParameters[rowresult];
 			//for (item in rowObject) {
@@ -708,8 +789,8 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 
 				//iteration++; // proposedRight = {a:b, c:d}
 		
-				printToDiv('Function getAndFormatNextLevel() in : proposedLeft', proposedLeft);
-				printToDiv('Function getAndFormatNextLevel() in : proposedRight', proposedRight);
+				proxyprinttodiv('Function getAndFormatNextLevel() in : proposedLeft', proposedLeft);
+				proxyprinttodiv('Function getAndFormatNextLevel() in : proposedRight', proposedRight);
 
 				// LM: Found commented. Should delete?
 				// ************
@@ -725,15 +806,15 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 
 		if (convertmethod == "wid") {
 
-					//printToDiv('Function getAndFormatNextLevel() convertmethod', convertmethod);
+					//proxyprinttodiv('Function getAndFormatNextLevel() convertmethod', convertmethod);
 					//proposedRight = item; // proposedRight = wid1
-					//printToDiv('Function getAndFormatNextLevel() item', proposedRight);
+					//proxyprinttodiv('Function getAndFormatNextLevel() item', proposedRight);
 					//proposedObject[mongowidmethod] = proposedLeft;
 					//nextLevelParameters.push({"key":proposedLeft,"value":proposedRight}); // NextLevelParameters =  x<1>: wid1
 
 			nextLevelParameters.push({"key":mongowidmethod,"value":proposedLeft});
 
-					//		printToDiv('----------Function getAndFormatNextLevel() proposed wid object', proposedObject);
+					//		proxyprinttodiv('----------Function getAndFormatNextLevel() proposed wid object', proposedObject);
 
 			};
 					//alert(convertmethod);
@@ -742,18 +823,18 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 					//proposedObject[proposedLeft] = proposedRight;
 					//nextLevelParameters.push({"key":proposedLeft,"value":proposedRight}); // NextLevelParameters =  x<1>: {a:b, c:d}
 
-			nextLevelParameters.push({"key":mongowidmethod,"value":proposedRight});
+			nextLevelParameters.push({"key":mongowidmethod,"value":JSON.stringify(proposedRight)});
 
-					//		printToDiv('----------Function getAndFormatNextLevel() proposed json object', proposedObject);
+					//		proxyprinttodiv('----------Function getAndFormatNextLevel() proposed json object', proposedObject);
 
 			};
 
 		if ((convertmethod == "") || (convertmethod == "dto") || 
 			(convertmethod == "num") || (convertmethod == "dtonum")) {	
-			printToDiv('Function getAndFormatNextLevel() in convertmethod=blank, about to get drilldown: ', mongowidmethod);			
+			proxyprinttodiv('Function getAndFormatNextLevel() in convertmethod=blank, about to get drilldown: ', mongowidmethod);			
 			drillDownParameters = getWidMongo(proposedLeft, convertmethod, accesstoken); //dtoGlobalParameters, mongowidmethod);
-			printToDiv('Function getAndFormatNextLevel() after drillDown object: ', drillDownParameters);
-			//printToDiv('----------Function getAndFormatNextLevel() mongowidmethod: ', mongowidmethod);
+			proxyprinttodiv('Function getAndFormatNextLevel() after drillDown object: ', drillDownParameters);
+			//proxyprinttodiv('----------Function getAndFormatNextLevel() mongowidmethod: ', mongowidmethod);
 
 			for(item in drillDownParameters) {
 					// LM: original line
@@ -769,24 +850,24 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 
 					proposedRight = drillDownParameters[item];
 					}
-					//printToDiv('Function getAndFormatNextLevel() in : proposedLeft - drilldown loop', proposedLeft);
-					//printToDiv('Function getAndFormatNextLevel() in : proposedRight - drilldown loop', proposedRight);
+					//proxyprinttodiv('Function getAndFormatNextLevel() in : proposedLeft - drilldown loop', proposedLeft);
+					//proxyprinttodiv('Function getAndFormatNextLevel() in : proposedRight - drilldown loop', proposedRight);
 
 					nextLevelParameters.push({"key":proposedLeft,"value":proposedRight});
 
-					printToDiv('Function getAndFormatNextLevel() forloop nextLevelParameters as it grows', nextLevelParameters);				
-					//printToDiv('Function getAndFormatNextLevel() drillDown aftr dot: ', drillDownParameters);
-					//printToDiv('Function getAndFormatNextLevel() nextLevelParameters after dot : ', nextLevelParameters);	
+					proxyprinttodiv('Function getAndFormatNextLevel() forloop nextLevelParameters as it grows', nextLevelParameters);				
+					//proxyprinttodiv('Function getAndFormatNextLevel() drillDown aftr dot: ', drillDownParameters);
+					//proxyprinttodiv('Function getAndFormatNextLevel() nextLevelParameters after dot : ', nextLevelParameters);	
 							//nextLevelParameters = jsonConcat(nextLevelParameters, drillDownParameters);
-					//printToDiv('Function getAndFormatNextLevel() nextLevelParameters after concat : ', nextLevelParameters);	
+					//proxyprinttodiv('Function getAndFormatNextLevel() nextLevelParameters after concat : ', nextLevelParameters);	
 					};			
 			};
 
-			//printToDiv('Function getAndFormatNextLevel() nextLevelParameters list result : ', nextLevelParameters);
+			//proxyprinttodiv('Function getAndFormatNextLevel() nextLevelParameters list result : ', nextLevelParameters);
 	}
 	nextLevelParametersObject=listToObject(nextLevelParameters);
 
-	printToDiv('Function getAndFormatNextLevel() nextLevelParametersObject +++++++finishing realted : ', nextLevelParametersObject);
+	proxyprinttodiv('Function getAndFormatNextLevel() nextLevelParametersObject +++++++finishing realted : ', nextLevelParametersObject);
 
 	return nextLevelParametersObject;
 }
@@ -803,16 +884,16 @@ function addwidmaster(inputObject) {
 	Wid = AddWidParameters(OutParameters);
 	return Wid;
 	
-			//printToDiv('Function addwidmaster() Constant input : ', input );
-			//printToDiv('Function addwidmaster() ConstandtdtoobjectDOT : ', dtoobjectDOT );
-			//printToDiv('Function addwidmaster() Received into addwidmaster inputObject : ', inputObject );
-			//printToDiv('Function addwidmaster() Sent out from OutParameters : ', OutParameters );
+			//proxyprinttodiv('Function addwidmaster() Constant input : ', input );
+			//proxyprinttodiv('Function addwidmaster() ConstandtdtoobjectDOT : ', dtoobjectDOT );
+			//proxyprinttodiv('Function addwidmaster() Received into addwidmaster inputObject : ', inputObject );
+			//proxyprinttodiv('Function addwidmaster() Sent out from OutParameters : ', OutParameters );
 }
 
 // Sets up call to addwidmaster (to add a parameter to the DTO ?)
 function AddWidParameters(parameterObject) {
 
-				//printToDiv('Function AddWidParameters()  parameterObject : ',  parameterObject);
+				//proxyprinttodiv('Function AddWidParameters()  parameterObject : ',  parameterObject);
 
 	// obj sets up the match and nomatch arrays
 	var obj = MatchPrefix(parameterObject, "command");
@@ -825,8 +906,8 @@ function AddWidParameters(parameterObject) {
 	var inputParametersObject = listToObject(inputParametersList);
 
 
-	printToDiv('Function AddWidParameters()  inputParametersObject : ',  inputParametersObject);
-	//printToDiv('Function AddWidParameters()  commandList : ',  commandobject);
+	proxyprinttodiv('Function AddWidParameters()  inputParametersObject : ',  inputParametersObject);
+	//proxyprinttodiv('Function AddWidParameters()  commandList : ',  commandobject);
 	
 	var parameterObject={};
 	var dtoobject ={};
@@ -835,7 +916,7 @@ function AddWidParameters(parameterObject) {
 	commandobject = tolowerparameters(commandobject, {'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
 	inputParametersObject = tolowerparameters(inputParametersObject, {'metadata.method':'add','metadata.style':'true', 'wid':'add', 'primarywid':'true', 'secondarywid':'true', 'relationshiptype':'true'});
 	if (inputParametersObject["wid"]===undefined) {inputParametersObject["wid"]=""};
-	//printToDiv('Function AddWidParameters()  commandList : ',  commandobject);
+	//proxyprinttodiv('Function AddWidParameters()  commandList : ',  commandobject);
 	olddebug=Debug;
    	Debug=olddebug;
 	var checkflag = commandobject["command.checkflag"];
@@ -844,11 +925,11 @@ function AddWidParameters(parameterObject) {
 	var dtotype = commandobject["command.dtotype"];
 	var convertmethod = commandobject["command.convertmethod"];
 
-    printToDiv('Function AddWidParameters()  checkflag ',  checkflag);
-    printToDiv('Function AddWidParameters()  accesstoken : I ',  accesstoken);
-    printToDiv('Function AddWidParameters() inherit : I ',  inherit);
+    proxyprinttodiv('Function AddWidParameters()  checkflag ',  checkflag);
+    proxyprinttodiv('Function AddWidParameters()  accesstoken : I ',  accesstoken);
+    proxyprinttodiv('Function AddWidParameters() inherit : I ',  inherit);
 		
-    printToDiv('Function AddWidParameters()  dtotype : dtotype ',  dtotype);
+    proxyprinttodiv('Function AddWidParameters()  dtotype : dtotype ',  dtotype);
   	Debug=olddebug;
 
 	//***************
@@ -859,8 +940,8 @@ function AddWidParameters(parameterObject) {
 								'command.dtotype':metadata});
 		};
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
-    	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
-    	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
+    	proxyprinttodiv('Function AddWidParameters()  dtotype : II ',  dtotype);
+    	parameterObject=getfrommongo({"wid":inputParametersObject["wid"]});
 		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
 								'command.convertmethod':'dto',
 								'command.dtotype':'defaultdto'});
@@ -876,29 +957,29 @@ function AddWidParameters(parameterObject) {
 		}
 	olddebug=Debug;
    	Debug='false';
-	printToDiv('Function AddWidParameters()  dtoobject I : ',  dtoobject);
+	proxyprinttodiv('Function AddWidParameters()  dtoobject I : ',  dtoobject);
 	Debug=olddebug;
 	if (dtotype!=="") { // first read the wid, then figure out its method, then get the dto object based on it
-    	printToDiv('Function AddWidParameters()  dtotype : II ',  dtotype);
-    	parameterObject=getFromMongo({"wid":inputParametersObject["wid"]});
+    	proxyprinttodiv('Function AddWidParameters()  dtotype : II ',  dtotype);
+    	parameterObject=getfrommongo({"wid":inputParametersObject["wid"]});
 		dtoobject=getwidmaster({'wid':parameterObject["metadata.method"], 
 								'command.convertmethod':'dto',
 								'command.dtotype':'defaultdto'});
 		olddebug=Debug;
    		Debug='true';
-		printToDiv('Function AddWidParameters() dtoobject return: ',  dtoobject);
+		proxyprinttodiv('Function AddWidParameters() dtoobject return: ',  dtoobject);
 		Debug=olddebug;
 		}
 */
 		olddebug=Debug;
 		Debug=olddebug;
-		printToDiv('Function addWidParameters ** before ' , inputParametersObject);
-    	printToDiv('Function AddWidParameters() convertmethod ',  convertmethod);
-    	printToDiv('Function AddWidParameters()  dtotype : dtotype ',  dtotype);
+		proxyprinttodiv('Function addWidParameters ** before ' , inputParametersObject);
+    	proxyprinttodiv('Function AddWidParameters() convertmethod ',  convertmethod);
+    	proxyprinttodiv('Function AddWidParameters()  dtotype : dtotype ',  dtotype);
 
 
     	parameterObject = cleanparameters(inputParametersObject, dtotype, accesstoken, "add", convertmethod);
-    	printToDiv('Function AddWidParameters()  inputParametersObject ',  inputParametersObject);
+    	proxyprinttodiv('Function AddWidParameters()  inputParametersObject ',  inputParametersObject);
     	inputParametersObject = parameterObject.parms; // ************ prob dont need this
     	dtoobject = parameterObject.dto;   // ************
 
@@ -913,18 +994,22 @@ function AddWidParameters(parameterObject) {
 // (dtotype!=="") 
 
 
-		printToDiv('Function addWidParameters ** after ' , inputParametersObject);
+		proxyprinttodiv('Function addWidParameters ** after ' , inputParametersObject);
 		//if (convertMethod=="nowid") {
 		//	delete resultObj["wid"];
 		//	delete resultObj["metadata.method"];
 		//}
 		Debug=olddebug;
 
-	printToDiv('Function AddWidParameters() dtoobject return: ',  dtoobject);
-	//printToDiv('Function AddWidParameters() metadata : ',  metadata);
+	proxyprinttodiv('Function AddWidParameters() dtoobject return: ',  dtoobject);
+	//proxyprinttodiv('Function AddWidParameters() metadata : ',  metadata);
 
 	if (inherit) {
-		var moreParameters = getFromMongo({'wid':inherit});
+		executeobject={};
+    	executeobject["executethis"]="getwid";
+    	executeobject["wid"]=inherit;
+    	var moreParameters=executethis(executeobject);
+		//var moreParameters = getfrommongo({'wid':inherit});
 		if (moreParameters) {
 			inputParametersObject = jsonConcat(inputParametersObject,moreParameters);  // if duplicates then currentLevelObject{} wins
 		} 
@@ -933,27 +1018,27 @@ function AddWidParameters(parameterObject) {
 	var inputList = objectToList(inputParametersObject);
 	var dtoList=objectToList(dtoobject);	
 
-	//printToDiv('Function AddWidParameters()  inputList : ',  inputList);
-	//printToDiv('Function AddWidParameters()  metadata : ',  metadata);
+	//proxyprinttodiv('Function AddWidParameters()  inputList : ',  inputList);
+	//proxyprinttodiv('Function AddWidParameters()  metadata : ',  metadata);
 	olddebug=Debug;
    	Debug=olddebug;
-	printToDiv('Function AddWidParameters()  all parms to addmaster : ',  {"dtolist":dtoList, "inputlist":inputList, "metadata": metadata});
+	proxyprinttodiv('Function AddWidParameters()  all parms to addmaster : ',  {"dtolist":dtoList, "inputlist":inputList, "metadata": metadata});
 	Debug=olddebug;
 	if (inputParametersObject["wid"]===undefined) {inputParametersObject["wid"]=""};
 	Wid = AddMaster(dtoList, inputList, inputParametersObject["wid"], metadata);
 
-	printToDiv('Function AddWidParameters() came back from addmaster : ',  Wid);		
+	proxyprinttodiv('Function AddWidParameters() came back from addmaster : ',  Wid);		
 
 	return Wid;
 }
 
 function AddMaster(dtoList, parameterList, widName, dtotype) {
 	//Debug='true';
-	// printToDiv('Function AddMaster : dtoList ', dtoList);	
-	// printToDiv('Function AddMaster : parameterList', parameterList);	
-	// printToDiv('Function AddMaster : widName ', widName);	
-	// printToDiv('Function AddMaster : dtotype', dtotype);	
-	printToDiv('Function AddMaster : inbound parms all ', {"dtolist":dtoList, "parameterList":parameterList, "widName":widName, "dtotype":dtotype});	
+	// proxyprinttodiv('Function AddMaster : dtoList ', dtoList);	
+	// proxyprinttodiv('Function AddMaster : parameterList', parameterList);	
+	// proxyprinttodiv('Function AddMaster : widName ', widName);	
+	// proxyprinttodiv('Function AddMaster : dtotype', dtotype);	
+	proxyprinttodiv('Function AddMaster : inbound parms all ', {"dtolist":dtoList, "parameterList":parameterList, "widName":widName, "dtotype":dtotype});	
     var ChildrenListobj = {}; // go through list of incoming parameters to generate a list of childrent dtos
     var dtoobject = listToObject(dtoList); // generate a copy of dtolist that is an object        
     for (key in dtoobject) { // go through each parameter
@@ -962,7 +1047,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
             ChildrenListobj[key] = dtoobject[key]; // add it to children object list
         	}
     	}
-	printToDiv('Function AddMaster the childrent DTOs of this object: ChildrenListobj: ', ChildrenListobj);
+	proxyprinttodiv('Function AddMaster the childrent DTOs of this object: ChildrenListobj: ', ChildrenListobj);
 
     var ParentdtoList = dtoList; // now go through childrent list and delete from copy of incoming parameters
     var ParentList = parameterList; // anything related to these children
@@ -985,8 +1070,8 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
     	RelatedListParameters = RelatedListParameters.nomatch;
     var RelatedListdto = SplitObjectList(dtoList, ParentdtoList);
     	RelatedListdto = RelatedListdto.nomatch;
-	printToDiv('Function AddMaster : RelatedListParameters, after adding parent, now add these children parameters', RelatedListParameters);	
-	printToDiv('Function AddMaster : RelatedListdto, , after adding parent, now add these children dto', RelatedListdto);	
+	proxyprinttodiv('Function AddMaster : RelatedListParameters, after adding parent, now add these children parameters', RelatedListParameters);	
+	proxyprinttodiv('Function AddMaster : RelatedListdto, , after adding parent, now add these children dto', RelatedListdto);	
 
     var attrtype = "";							// onetoone we will search for only one realted (last), onetomany (all)
     var editflag = "";					// do we need to read (find out widnames) before add
@@ -1008,38 +1093,38 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
     for(childrentype in ChildrenListobj) { 	// step through all direct children
     	editflag='false';
         attr = ChildrenListobj[childrentype]; 	// onetoone or onetomany?  -left side of ChildrenListobj is the dto name
-        printToDiv('Function AddMaster : process this child object childrentype + attr', childrentype+' '+attr);
-        //printToDiv('Function AddMaster : attr', attr);
-        //printToDiv('Function AddMaster : parameterindexobj', parameterindexobj);
+        proxyprinttodiv('Function AddMaster : process this child object childrentype + attr', childrentype+' '+attr);
+        //proxyprinttodiv('Function AddMaster : attr', attr);
+        //proxyprinttodiv('Function AddMaster : parameterindexobj', parameterindexobj);
 
         // this was moved insdie child
 
 	    //if (RelatedListParameters!==[]) {}
 	    parameterindexobj = {}; // create a list of (children) parameters that start with number 
 	    for (currentcount in RelatedListParameters) {
-	    	//printToDiv('Function AddMaster : currentcount', currentcount);	
+	    	//proxyprinttodiv('Function AddMaster : currentcount', currentcount);	
 	  		currentparameter = RelatedListParameters[currentcount].key;
-	  		//printToDiv('Function AddMaster : currentparameter', currentparameter);
+	  		//proxyprinttodiv('Function AddMaster : currentparameter', currentparameter);
 	        splitkey = currentparameter.split(".");
-	        //printToDiv('Function AddMaster : splitkey', splitkey);
+	        //proxyprinttodiv('Function AddMaster : splitkey', splitkey);
 	        if (splitkey[0]==childrentype) {
 	        	currentNumber = 0;
 	       	 	if (splitkey[1]!==undefined) {currentNumber = Number(splitkey[1])};
-	        	//printToDiv('Function AddMaster : currentNumber', currentNumber);	
+	        	//proxyprinttodiv('Function AddMaster : currentNumber', currentNumber);	
 	        	if (currentNumber>=0) {
-	            	//printToDiv('Function AddMaster : currentNumber II ', currentNumber);
+	            	//proxyprinttodiv('Function AddMaster : currentNumber II ', currentNumber);
 	            	parameterindexobj[splitkey[1]] = splitkey[0];	
 	        		}
 	    		}
-	    	//printToDiv('Function AddMaster : parameterindexobj, sorted, which children have dots ', parameterindexobj);	
-	    	//printToDiv('Function AddMaster : parameterindexobj I  ', parameterindexobj);
+	    	//proxyprinttodiv('Function AddMaster : parameterindexobj, sorted, which children have dots ', parameterindexobj);	
+	    	//proxyprinttodiv('Function AddMaster : parameterindexobj I  ', parameterindexobj);
 	    	}
 
 	    	sortable=[];
 	    	for (currentitem in parameterindexobj) {
 	    		sortable.push([currentitem, parameterindexobj[currentitem]]);
 	    		}
-			printToDiv('Function AddMaster : parameterindexobj II  ', sortable);	
+			proxyprinttodiv('Function AddMaster : parameterindexobj II  ', sortable);	
 	    	// code below added 10/2 sort parameterindexobj	
 
 	    	if (Object.keys(parameterindexobj).length !== 0) {
@@ -1054,7 +1139,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
 
 			parameterindexobj=sortable;
 			
-		printToDiv('Function AddMaster : parameterindexobj, sorted, which children have dots ', parameterindexobj);	
+		proxyprinttodiv('Function AddMaster : parameterindexobj, sorted, which children have dots ', parameterindexobj);	
 		
 		// ** note there will be issues with sort
 
@@ -1063,7 +1148,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
             editflag = 'true'					// if we had parameterindex, then edit must be true
         	} 
         	
-        //printToDiv('Function AddMaster : editflag', editflag);        	
+        //proxyprinttodiv('Function AddMaster : editflag', editflag);        	
         if (attr == 'onetoone') {
             editflag = 'true'; 					// onetoone is alway edit true
             attrtype = 'last';					// onetoone -- read last record
@@ -1073,9 +1158,21 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
        		} 
        	widlist = [];
         if (editflag == 'true') {				// edit means read wids before write -- to get wid names
-        										// get list of related wids								
-            var widlist = simpleQuery(ParentWid, "attributes", attrtype, "forward", childrentype, "", "");
-            printToDiv('Function AddMaster : widlist, these are the wids related to parent and current child', widlist);	
+        										// get list of related wids	
+   			var executeobject={};
+			executeobject["executethis"]="querywid";
+			executeobject["mongowid"]=ParentWid;
+			executeobject["mongorelationshiptype"]="attributes";
+			executeobject["mongorelationshipmethod"]=attrtype;
+			executeobject["mongorelationshipdirection"]="forward";
+			executeobject["mongowidmethod"]=childrentype;
+			executeobject["convertmethod"]="";
+			executeobject["dtotype"]="";	
+			proxyprinttodiv('Function AddMaster()  executeobject III' , executeobject);	
+			//var widlist=simpleQuery(executeobject);	
+			var widlist=executethis(executeobject);							
+            //var widlist = simpleQuery(ParentWid, "attributes", attrtype, "forward", childrentype, "", "");
+            proxyprinttodiv('Function AddMaster : widlist, these are the wids related to parent and current child', widlist);	
         	}
 
         // do children with numbers first
@@ -1085,16 +1182,16 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
     	    RelatedListdto = SplitParameters.nomatch; 
 
           // save copy for next iteration
-        printToDiv('Function AddMaster : ChildrendtoList - 111, parameters for current child', ChildrendtoList);	
-        printToDiv('Function AddMaster : RelatedListdto - 111, dto for current child, now determine if number or not A/B' , RelatedListdto);	
+        proxyprinttodiv('Function AddMaster : ChildrendtoList - 111, parameters for current child', ChildrendtoList);	
+        proxyprinttodiv('Function AddMaster : RelatedListdto - 111, dto for current child, now determine if number or not A/B' , RelatedListdto);	
 
         if (Object.keys(parameterindexobj).length !== 0) {
             for (var currentchild in parameterindexobj) {
-            	printToDiv('Function AddMaster : childrenttype.currentchild - 222, process this number first, look up in widlist', childrentype+'.'+currentchild);				
+            	proxyprinttodiv('Function AddMaster : childrenttype.currentchild - 222, process this number first, look up in widlist', childrentype+'.'+currentchild);				
                 SplitParameters = MatchPrefixDelete(RelatedListParameters, childrentype+'.'+currentchild);	// separate parameters to those that start with curr number
                 	ParametersToAdd = SplitParameters.match;
                 	RelatedListParameters = SplitParameters.nomatch;		// each iteration relatedlistparameter will become smaller
-                //printToDiv('Function AddMaster : editflag', editflag);
+                //proxyprinttodiv('Function AddMaster : editflag', editflag);
                 if (ParametersToAdd.length!==0) {		
 	                widtoadd='';              
 	                if ((editflag='true') && (widlist!="")) {
@@ -1104,12 +1201,12 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
 		               			}
 		               		}
 		               	};
-	                printToDiv('Function AddMaster : ChildrendtoList - 222 wid+childdto A-', {"widtoadd":widtoadd, "ChildrendtoList":ChildrendtoList});	
-	                printToDiv('Function AddMaster : ParametersToAdd - 222, childdto+childparameters A- ', {"childrentype":childrentype, "ParametersToAdd": ParametersToAdd});	
+	                proxyprinttodiv('Function AddMaster : ChildrendtoList - 222 wid+childdto A-', {"widtoadd":widtoadd, "ChildrendtoList":ChildrendtoList});	
+	                proxyprinttodiv('Function AddMaster : ParametersToAdd - 222, childdto+childparameters A- ', {"childrentype":childrentype, "ParametersToAdd": ParametersToAdd});	
 	                ChildWid = AddMaster(ChildrendtoList, ParametersToAdd, widtoadd, childrentype);
-	                printToDiv('Function AddMaster : came back ChildWid -- 222, child added, now call addrelationship A-', ChildWid);	
+	                proxyprinttodiv('Function AddMaster : came back ChildWid -- 222, child added, now call addrelationship A-', ChildWid);	
 	                AddMongoRelationship(ParentWid, ChildWid, "attributes");
-	                //printToDiv('Function AddMaster : came back add relationship -- 222', ChildWid);	
+	                //proxyprinttodiv('Function AddMaster : came back add relationship -- 222', ChildWid);	
 	            	}
             	}
        		}
@@ -1117,8 +1214,8 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
        	SplitParameters = MatchPrefixDelete(RelatedListParameters, childrentype); // split parameters based on childtype
         	ParametersToAdd = SplitParameters.match;						// do right now
         	RelatedListParameters = SplitParameters.nomatch;   				// do next iteration
-        	printToDiv('Function AddMaster : ParametersToAdd 333 parameters for current child B and not numbers', ParametersToAdd);
-            printToDiv('Function AddMaster : RelatedListParameters 333 dto for current child B', RelatedListParameters);	
+        	proxyprinttodiv('Function AddMaster : ParametersToAdd 333 parameters for current child B and not numbers', ParametersToAdd);
+            proxyprinttodiv('Function AddMaster : RelatedListParameters 333 dto for current child B', RelatedListParameters);	
 
 
         //if (ParametersToAdd!=='') {	
@@ -1131,12 +1228,12 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
                			}
                		}
                	};
-            printToDiv('Function AddMaster : ChildrendtoList - 444 wid+childdto B- ', {"widtoadd":widtoadd, "ChildrendtoList":ChildrendtoList});	
-	        printToDiv('Function AddMaster : ParametersToAdd - 444, childdto+childparameters B-', {"childrentype":childrentype, "ParametersToAdd": ParametersToAdd});	
+            proxyprinttodiv('Function AddMaster : ChildrendtoList - 444 wid+childdto B- ', {"widtoadd":widtoadd, "ChildrendtoList":ChildrendtoList});	
+	        proxyprinttodiv('Function AddMaster : ParametersToAdd - 444, childdto+childparameters B-', {"childrentype":childrentype, "ParametersToAdd": ParametersToAdd});	
             ChildWid = AddMaster(ChildrendtoList, ParametersToAdd, widtoadd, childrentype);
-            printToDiv('Function AddMaster : came back ChildWid -- 444, now call addrelationship B-', ChildWid);	
+            proxyprinttodiv('Function AddMaster : came back ChildWid -- 444, now call addrelationship B-', ChildWid);	
             AddMongoRelationship(ParentWid, ChildWid, "attributes");
-            //printToDiv('Function AddMaster : came back add relationship -- 444', ChildWid);	
+            //proxyprinttodiv('Function AddMaster : came back add relationship -- 444', ChildWid);	
 
         	}	
     }
@@ -1149,16 +1246,16 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
 
 function MatchDelete(TargetList, TargetParameter) {      // delete all parameters starting with targetparameter
 	var output = [];
-	//printToDiv('Function MatchDelete : TargetList ', TargetList);	
-	//printToDiv('Function MatchDelete : TargetParameter ', TargetParameter);	
+	//proxyprinttodiv('Function MatchDelete : TargetList ', TargetList);	
+	//proxyprinttodiv('Function MatchDelete : TargetParameter ', TargetParameter);	
 	for (var item in TargetList) {
-		//printToDiv('Function MatchDelete item', TargetList[item].key);	
+		//proxyprinttodiv('Function MatchDelete item', TargetList[item].key);	
 		if ((TargetParameter+'.')!==(TargetList[item].key.substring(0,TargetParameter.length+1))) {
 			output.push(TargetList[item]);
 			}
 		}
 		// only items that are not equal to the '.' survive
-	printToDiv('Function MatchDelete : output ', output);	
+	proxyprinttodiv('Function MatchDelete : output ', output);	
 	return output;
 }
 
@@ -1179,8 +1276,8 @@ function DeletePrefix(arr, kw ) {
 
 	var result = [];
 
-						//printToDiv('Function DeletePrefix arr : ',  arr);   
-						//printToDiv('Function DeletePrefix kw : ',  kw);  
+						//proxyprinttodiv('Function DeletePrefix arr : ',  arr);   
+						//proxyprinttodiv('Function DeletePrefix kw : ',  kw);  
 
 	if (arr.length>0  && (kw.length>0)) {           
 		for (i = 0; i < arr.length; i++) {
@@ -1188,49 +1285,49 @@ function DeletePrefix(arr, kw ) {
 			var objvalue = obj["value"];
 			var objkey = obj["key"];
 
-						//printToDiv('Function DeletePrefix objvalue : ',  objvalue); 
-						//printToDiv('Function DeletePrefix objkey : ',  objkey);  
+						//proxyprinttodiv('Function DeletePrefix objvalue : ',  objvalue); 
+						//proxyprinttodiv('Function DeletePrefix objkey : ',  objkey);  
 
 			if (objkey != kw) {
 
-						//printToDiv('Function DeletePrefix length.objkey : ',  objkey.length);  
-						//printToDiv('Function DeletePrefix length.kw : ',  kw.length); 
+						//proxyprinttodiv('Function DeletePrefix length.objkey : ',  objkey.length);  
+						//proxyprinttodiv('Function DeletePrefix length.kw : ',  kw.length); 
 						// seems to have big if kw = e and a.x=y then x=y 
 
 				if (objkey.length > kw.length){
 					partial = objkey.substring(0,kw.length+1);
 
-						//printToDiv('Function DeletePrefix partial : ',  partial);  
+						//proxyprinttodiv('Function DeletePrefix partial : ',  partial);  
 
 					kwdot=kw+'.';
 
-						//printToDiv('Function DeletePrefix kwdot : ',  kwdot);  
+						//proxyprinttodiv('Function DeletePrefix kwdot : ',  kwdot);  
 
 					if (kwdot == partial) {
 						afterdot=kw.length+1;
 
-						//printToDiv('Function DeletePrefix afterdot : ',  afterdot);  
+						//proxyprinttodiv('Function DeletePrefix afterdot : ',  afterdot);  
 
 						beforekey = objkey;
 						objkey = beforekey.substring(afterdot);
 
-						//printToDiv('Function DeletePrefix objkey after substring : ',  objkey);  
+						//proxyprinttodiv('Function DeletePrefix objkey after substring : ',  objkey);  
 					}   
 				} 
-						//printToDiv('Function DeletePrefix obkey before push : ',  objkey);   
+						//proxyprinttodiv('Function DeletePrefix obkey before push : ',  objkey);   
 
 				if (objkey.length > 0) {
 
-						//printToDiv('Function DeletePrefix objkey push : ',  objkey);  
+						//proxyprinttodiv('Function DeletePrefix objkey push : ',  objkey);  
 
 					result.push({"key" : objkey , "value" :  objvalue });
 
-						//printToDiv('Function DeletePrefix objkey push : ',  objkey);	
+						//proxyprinttodiv('Function DeletePrefix objkey push : ',  objkey);	
 				}
 			}
 		} 
 	} 
-						//printToDiv('Function DeletePrefix result : ',  result);       
+						//proxyprinttodiv('Function DeletePrefix result : ',  result);       
 	return result;    
 }}
 
@@ -1281,8 +1378,8 @@ function SplitKeywordSet(list, attr ){
 // the function returns a value other than 1. To see more
 // goto: http://www.javascriptkit.com/javatutors/arraysort2.shtml#.UkF_G4b2qSo
 function Sortonetomanys(list, attr){
-	printToDiv('Function Sortonetomanys()  list : ',  list);
-	printToDiv('Function Sortonetomanys()  attr : ',  attr);
+	proxyprinttodiv('Function Sortonetomanys()  list : ',  list);
+	proxyprinttodiv('Function Sortonetomanys()  attr : ',  attr);
 	if(typeof(attr) == undefined){
 		attr = 'onetomany'
 	}
@@ -1303,7 +1400,7 @@ function Sortonetomanys(list, attr){
 			return 0;
 		}
 	});
-	printToDiv('Function Sortonetomanys()  output : ',  output);
+	proxyprinttodiv('Function Sortonetomanys()  output : ',  output);
 	return output;
 }
 
@@ -1320,8 +1417,8 @@ function MatchPrefix(input, kw) {
 	}
 		else {
 
-				//printToDiv('Function MatchPrefix, kw: ',  kw);
-				//printToDiv('Function MatchPrefix, input: ',  input);
+				//proxyprinttodiv('Function MatchPrefix, kw: ',  kw);
+				//proxyprinttodiv('Function MatchPrefix, input: ',  input);
 
 	for (key in input) {
 		partial = key.substring(0, kw.length + 1); 
@@ -1331,7 +1428,7 @@ function MatchPrefix(input, kw) {
 
 				// var arr = key.split('.');
 				//var arr = key.substring(0,key.lastIndexOf('.'));
-				//printToDiv('Function MatchPrefix arr: ',  arr);
+				//proxyprinttodiv('Function MatchPrefix arr: ',  arr);
 				// if ((arr === kw) || (key === kw)) 
 
 		{
@@ -1621,8 +1718,8 @@ function CleanBasedOnCheckflagList(flag, input, dto) {
 }
 
 function tolowerparameters(parameters, rightparameters) {
- //printToDiv('Function tolowerparameters : input parameters',  parameters);
- //printToDiv('Function tolowerparameters : input rightparameters',  rightparameters);
+ //proxyprinttodiv('Function tolowerparameters : input parameters',  parameters);
+ //proxyprinttodiv('Function tolowerparameters : input rightparameters',  rightparameters);
  var outputparameters = {};
 	for(eachparameter in rightparameters) {
 		if ((rightparameters[eachparameter].length>0) && (rightparameters[eachparameter]=='add')) {
@@ -1642,7 +1739,7 @@ function tolowerparameters(parameters, rightparameters) {
 			outputparameters[eachparameter.toLowerCase()] = parameters[eachparameter];
 		}
 	}
- //printToDiv('Function tolowerparameters : output outputparameters',  outputparameters);
+ //proxyprinttodiv('Function tolowerparameters : output outputparameters',  outputparameters);
  return outputparameters;
 }
 
@@ -1688,3 +1785,4 @@ function countKeys(obj) {
 	}
 	return size;
 }
+
