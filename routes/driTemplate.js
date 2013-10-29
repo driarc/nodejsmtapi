@@ -89,7 +89,9 @@ function getWmlTags(filename, callback) {
 
 function replaceWmlTag(file) {
 	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ' + file.tag);
+	console.log('old contents => ' + masterContents.code);
 	masterContents.code.replace(file.tag, file.contents);
+	console.log('contents after replacing tag => ' + masterContents.code);
 	changedContents();
 	// callWatchers(masterContents, 'code');
 }
