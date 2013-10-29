@@ -50,16 +50,18 @@ function getWmlTags(filename, callback) {
 	});
 }
 
-function replaceWmlTag(file, tag) {
-	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ' + tag);
-	masterContents.replace(tag, file.contents);
+function replaceWmlTag(file) {
+	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ');
+	// masterContents.replace(tag, file.contents);
 }
 
 function findAndReadFile(startDir, fileName, callback) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
 		if (file.endsWith(fileName + '.wml')) {
-			callback({ path:file, contents:fs.readFileSync(file).toString() });
+			if (typeof callback === 'function') {
+				callback({ path:file, contents:fs.readFileSync(file).toString() });
+			}
 		}
 	});
 }
