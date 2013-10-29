@@ -4,6 +4,9 @@ var cheerio = require('cheerio')
   , fs = require('graceful-fs')
   , find = require('findit')
   , config = require('../config.js')
+  , WatchJS = require("watchjs")
+  , watch = WatchJS.watch
+  , unwatch = WatchJS.unwatch
   , lookupDir = config.LOOKUP_DIR
   , $ = undefined
   , masterContents = {code:''};
@@ -14,6 +17,7 @@ exports.buildTemplate = function(req, res) {
 
 	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
 		console.log('tags found => ' + JSON.stringify(tags));
+
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
 			findAndReadFile(lookupDir, nextWml, tags[i], replaceWmlTag);
@@ -22,9 +26,10 @@ exports.buildTemplate = function(req, res) {
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		var htmlPath = masterPath.replace('.wml', '.html');
 
-		masterContents.watch('code', function() {
+		watch(masterContents, 'code', function() {
 			if (!masterContents.code.contains('[[')) {
 				console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+
 				fs.writeFile(htmlPath, masterContents.code, function(err) {
 					if (err) { throw err; }
 
