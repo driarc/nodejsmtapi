@@ -95,7 +95,7 @@ function replaceWmlTag(file) {
 	// masterContents.code.replace(file.tag, file.contents);
 	// console.log('contents after replacing tag => ' + masterContents.code); 
 	// changedContents();
-	// callWatchers(masterContents, 'code');
+	// callWatchers(masterContents, 'code'); 
 }
 
 function findAndReadFile(startDir, fileName, tag, callback) {
