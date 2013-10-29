@@ -34,7 +34,7 @@ function changedContents() {
 			if (err) { throw err; }
 			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
 
-			response.send({results:'Finished'});
+			response.send({filepath:htmlPath});
 			response.end();
 		});
 	}
