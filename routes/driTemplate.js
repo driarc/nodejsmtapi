@@ -13,8 +13,8 @@ var cheerio = require('cheerio')
 exports.buildTemplate = function(req, res) {
 	console.log('**********START***********driTemplate.buildTemplate************START*************');
 
-	var parameters = req.body
-	  , response = res;
+	response = res
+	var parameters = req.body;
 
 	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
 		console.log('**driTemplate.buildTemplate** retrieved [[<wml>]] tags from => ' + masterPath);
