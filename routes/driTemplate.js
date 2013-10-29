@@ -10,27 +10,6 @@ var cheerio = require('cheerio')
   , htmlPath
   , response;
 
-masterContents.watch('code', function(prop, action, newvalue, oldvalue) {
-	console.log("I see a change in masterContents.code !!");
-	console.log("newvalue is => " + newvalue);
-	console.log("oldvalue is => " + oldvalue);
-	console.log("prop is => " + prop);
-	console.log("action is => " + action);
-
-	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
-		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
-
-		fs.writeFile(htmlPath, masterContents.code, function(err) {
-			if (err) { throw err; }
-
-			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
-
-			response.send({results:'Finished'});
-			response.end();
-		});
-	}
-});
-
 exports.buildTemplate = function(req, res) {
 	response = res;
 	console.log('buildTemplate hit!, parameters are ' + JSON.stringify(req.body));
@@ -46,6 +25,27 @@ exports.buildTemplate = function(req, res) {
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		htmlPath = masterPath.replace('.wml', '.html');
+
+		masterContents.watch('code', function(prop, action, newvalue, oldvalue) {
+			console.log("I see a change in masterContents.code !!");
+			console.log("newvalue is => " + newvalue);
+			console.log("oldvalue is => " + oldvalue);
+			console.log("prop is => " + prop);
+			console.log("action is => " + action);
+
+			if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
+				console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+
+				fs.writeFile(htmlPath, masterContents.code, function(err) {
+					if (err) { throw err; }
+
+					console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+
+					response.send({results:'Finished'});
+					response.end();
+				});
+			}
+		});
 	});
 }
 
