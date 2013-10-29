@@ -14,7 +14,13 @@ var cheerio = require('cheerio')
   , response;
 
 watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
-	console.log("I see a change in masterContents.code !!  newvalue is => " + newvalue + " oldvalue is => " + oldvalue + " prop is => " + prop + " action is => " + action);
+	console.log("I see a change in masterContents.code !!");
+	console.log("newvalue is => " + newvalue);
+	console.log("oldvalue is => " + oldvalue);
+	console.log("prop is => " + prop);
+	console.log("action is => " + action);
+	return 'done';
+
 	// if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
 	// 	console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
 
