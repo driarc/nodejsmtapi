@@ -14,7 +14,7 @@ var cheerio = require('cheerio')
 
 watch(masterContents, 'code', function() {
 	console.log("I see a change in masterContents.code !!");
-	if (masterContents.code.indexof('[[') === -1) {
+	if (masterContents.code.indexOf('[[') === -1) {
 		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
 
 		fs.writeFile(htmlPath, masterContents.code, function(err) {
