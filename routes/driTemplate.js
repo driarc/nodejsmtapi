@@ -1,5 +1,4 @@
 'use strict';
-
 var cheerio = require('cheerio')
   , $ = undefined
   , fs = require('graceful-fs')
@@ -8,12 +7,15 @@ var cheerio = require('cheerio')
   , lookupDir = config.LOOKUP_DIR
   , masterContents = {code:''}
   , htmlPath
-  , response;
+  , response
+  , responseData = {};
 
 exports.buildTemplate = function(req, res) {
-	response = res;
-	var parameters = req.body;
+	console.log('**********START***********driTemplate.buildTemplate************START*************');
 
+	var parameters = req.body
+	  , response = res;
+	  
 	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
 		console.log('**driTemplate.buildTemplate** retrieved [[<wml>]] tags from => ' + masterPath);
 		console.log('**driTemplate.buildTemplate** [[<wml>]] tags found => ' + JSON.stringify(tags));
@@ -24,43 +26,48 @@ exports.buildTemplate = function(req, res) {
 		}
 
 		htmlPath = masterPath.replace('.wml', '.html');
+		responseData.filepath = htmlPath;
 	});
 }
 
-function changedContents() {
-	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
-		// save codeFile aggregation under <masterWml>.html in the same directory as <masterWml>.wml
-		fs.writeFile(htmlPath, masterContents.code, function(err) {
-			if (err) { throw err; }
-			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
-
-			response.send({filepath:htmlPath});
-			response.end();
-		});
-	}
-}
-
+// get [[<wml>]] tags from contents of master wml file
 function getWmlTags(filename, callback) {
 	findAndReadFile(lookupDir, filename, '', function(file) {
-		masterContents.code = file.contents;
-
 		var regex = new RegExp('\\[\\[.*]]', 'g')
+		  , masterContents.code = file.contents
 		  , wmlTags = []
 		  , result;
 
-		while ((result = regex.exec(masterContents.code))) {
-			wmlTags.push(result.toString());
-		}
+		while ((result = regex.exec(masterContents.code))) { wmlTags.push(result.toString()); }
 
 		callback(wmlTags, file.path);
 	});
 }
 
+// replace [[<wml>]] tags with contents of <wml>.wml
 function replaceWmlTag(file) {
 	masterContents.code = masterContents.code.replace(file.tag, file.contents);
 	changedContents();
 }
 
+// check code contents when changed and save when all [[<wml>]] tags have been processed
+function changedContents() {
+	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
+		fs.writeFile(htmlPath, masterContents.code, function(err) {
+			if (err) {
+				console.log('**driTemplate.buildTemplate** Error creating file => ' + JSON.stringify(err));
+				responseData.error = err;
+			}
+			else { console.log('**driTemplate.buildTemplate** Successfully created file => ' + htmlPath); }
+
+			console.log('***********END**********driTemplate.buildTemplate************END*************');
+			response.send(responseData);
+			response.end();
+		});
+	}
+}
+
+// find a file recursively and return it's path and contents
 function findAndReadFile(startDir, fileName, tag, callback) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
