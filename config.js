@@ -36,11 +36,11 @@ configuration.b[0].order = 0;
 configuration.b[0].dothis = 'randomColors';
 configuration.getWid = [];
 configuration.getWid[0] = {};
-configuration.getWid[0].order = 0;
+configuration.getWid[0].tryOrder = 0;
 configuration.getWid[0].dothis = 'mongoquery';
 configuration.updateWid = [];
 configuration.updateWid[0] = {};
-configuration.updateWid[0].order = 0;
+configuration.updateWid[0].tryOrder = 0;
 configuration.updateWid[0].dothis = 'addorupdate';
 
 
