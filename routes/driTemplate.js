@@ -13,12 +13,12 @@ var cheerio = require('cheerio')
   , htmlPath
   , response;
 
-watch(masterContents, 'code', function() {
+watch(masterContents, 'code', function(newvalue) {
 	console.log("I see a change in masterContents.code !!");
-	if (masterContents.code.indexOf('[[') === -1) {
+	if (newvalue.indexOf('[[') === -1) {
 		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
 
-		fs.writeFile(htmlPath, masterContents.code, function(err) {
+		fs.writeFile(htmlPath, newvalue, function(err) {
 			if (err) { throw err; }
 
 			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
@@ -27,6 +27,7 @@ watch(masterContents, 'code', function() {
 			response.end();
 		});
 	}
+	else { return false; }
 });
 
 exports.buildTemplate = function(req, res) {
