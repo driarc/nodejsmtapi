@@ -16,7 +16,7 @@ exports.buildTemplate = function(req, res) {
 		console.log('tags found => ' + JSON.stringify(tags));
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
-			findAndReadFile(lookupDir, nextWml, replaceWmlTag(tags[i]));
+			findAndReadFile(lookupDir, nextWml, tags[i], replaceWmlTag());
 		}
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
@@ -33,7 +33,7 @@ exports.buildTemplate = function(req, res) {
 }
 
 function getWmlTags(filename, callback) {
-	findAndReadFile(lookupDir, filename, function(file) {
+	findAndReadFile(lookupDir, filename, '', function(file) {
 		masterContents = file.contents.toString();
 
 		var regex = new RegExp('\\[.*]', 'g')
@@ -51,16 +51,18 @@ function getWmlTags(filename, callback) {
 }
 
 function replaceWmlTag(file) {
-	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ');
-	// masterContents.replace(tag, file.contents);
+	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ' + file.tag);
+	masterContents.replace(file.tag, file.contents);
 }
 
-function findAndReadFile(startDir, fileName, callback) {
+function findAndReadFile(startDir, fileName, tag, callback) {
 	var finder = find(startDir);
 	finder.on('file', function(file, stat) {
 		if (file.endsWith(fileName + '.wml')) {
 			if (typeof callback === 'function') {
-				callback({ path:file, contents:fs.readFileSync(file).toString() });
+				var results = { path:file, contents:fs.readFileSync(file).toString() };
+				if (tag && tag !== '') results.tag = tag;
+				callback(results);
 			}
 		}
 	});
