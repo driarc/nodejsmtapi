@@ -8,34 +8,11 @@ var cheerio = require('cheerio')
   , WatchJS = require("watchjs")
   , watch = WatchJS.watch
   , unwatch = WatchJS.unwatch
+  , callWatchers = WatchJS.callWatchers
   , lookupDir = config.LOOKUP_DIR
   , masterContents = {code:''}
   , htmlPath
   , response;
-
-watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
-	WatchJS.noMore = true;
-
-	console.log("I see a change in masterContents.code !!");
-	console.log("newvalue is => " + newvalue);
-	console.log("oldvalue is => " + oldvalue);
-	console.log("prop is => " + prop);
-	console.log("action is => " + action);
-
-	// if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
-	// 	console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
-
-	// 	fs.writeFile(htmlPath, masterContents.code, function(err) {
-	// 		if (err) { throw err; }
-
-	// 		console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
-
-	// 		response.send({results:'Finished'});
-	// 		response.end();
-	// 	});
-	// }
-	// else { return false; }
-});
 
 exports.buildTemplate = function(req, res) {
 	response = res;
@@ -52,6 +29,28 @@ exports.buildTemplate = function(req, res) {
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		htmlPath = masterPath.replace('.wml', '.html');
+		
+		watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
+			console.log("I see a change in masterContents.code !!");
+			console.log("newvalue is => " + newvalue);
+			console.log("oldvalue is => " + oldvalue);
+			console.log("prop is => " + prop);
+			console.log("action is => " + action);
+
+			// if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
+			// 	console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+
+			// 	fs.writeFile(htmlPath, masterContents.code, function(err) {
+			// 		if (err) { throw err; }
+
+			// 		console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+
+			// 		response.send({results:'Finished'});
+			// 		response.end();
+			// 	});
+			// }
+			// else { return false; }
+		});
 	});
 }
 
@@ -76,6 +75,7 @@ function getWmlTags(filename, callback) {
 function replaceWmlTag(file) {
 	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ' + file.tag);
 	masterContents.code.replace(file.tag, file.contents);
+	callWatchers(masterContents, 'code');
 }
 
 function findAndReadFile(startDir, fileName, tag, callback) {
