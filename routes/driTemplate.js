@@ -21,13 +21,19 @@ exports.buildTemplate = function(req, res) {
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		var htmlPath = masterPath.replace('.wml', '.html');
-		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
-		fs.writeFile(htmlPath, masterContents, function(err) {
-			if (err) { throw err; }
 
-			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+		masterContents.addListener('change', function() {
+			if (!masterContents.contains('[[')) {
+				console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+				fs.writeFile(htmlPath, masterContents, function(err) {
+					if (err) { throw err; }
 
-			res.end();
+					console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+
+					res.send('Finished');
+					res.end();
+				});
+			}
 		});
 	});
 }
