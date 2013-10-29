@@ -15,7 +15,7 @@ exports.buildTemplate = function(req, res) {
 
 	var parameters = req.body
 	  , response = res;
-	  
+
 	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
 		console.log('**driTemplate.buildTemplate** retrieved [[<wml>]] tags from => ' + masterPath);
 		console.log('**driTemplate.buildTemplate** [[<wml>]] tags found => ' + JSON.stringify(tags));
