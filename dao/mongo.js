@@ -65,7 +65,7 @@ exports.updatetomongo = updatetomongo = function(queryObject){
 
 
 // the callback function on succesful addition is also specified
-exports.getfrommongo = getfrommongo = function(objToFind){
+exports.getfrommongo = getfrommongo = function(objToFind){ 
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
