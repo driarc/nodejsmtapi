@@ -5,16 +5,12 @@ var cheerio = require('cheerio')
   , fs = require('graceful-fs')
   , find = require('findit')
   , config = require('../config.js')
-  , WatchJS = require("../node_modules/watchjs/watch")
-  , watch = WatchJS.watch
-  , unwatch = WatchJS.unwatch
-  , callWatchers = WatchJS.callWatchers
   , lookupDir = config.LOOKUP_DIR
   , masterContents = {code:''}
   , htmlPath
   , response;
 
-watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
+masterContents.watch('code', function(prop, action, newvalue, oldvalue) {
 	console.log("I see a change in masterContents.code !!");
 	console.log("newvalue is => " + newvalue);
 	console.log("oldvalue is => " + oldvalue);
@@ -86,6 +82,51 @@ function findAndReadFile(startDir, fileName, tag, callback) {
 				if (tag && tag !== '') results.tag = tag;
 				callback(results);
 			}
+		}
+	});
+}
+
+// object.watch
+if (!Object.prototype.watch) {
+	Object.defineProperty(Object.prototype, "watch", {
+		  enumerable: false
+		, configurable: true
+		, writable: false
+		, value: function (prop, handler) {
+			var
+			  oldval = this[prop]
+			, newval = oldval
+			, getter = function () {
+				return newval;
+			}
+			, setter = function (val) {
+				oldval = newval;
+				return newval = handler.call(this, prop, oldval, val);
+			}
+			;
+			
+			if (delete this[prop]) { // can't watch constants
+				Object.defineProperty(this, prop, {
+					  get: getter
+					, set: setter
+					, enumerable: true
+					, configurable: true
+				});
+			}
+		}
+	});
+}
+ 
+// object.unwatch
+if (!Object.prototype.unwatch) {
+	Object.defineProperty(Object.prototype, "unwatch", {
+		  enumerable: false
+		, configurable: true
+		, writable: false
+		, value: function (prop) {
+			var val = this[prop];
+			delete this[prop]; // remove accessors
+			this[prop] = val;
 		}
 	});
 }
