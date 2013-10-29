@@ -29,7 +29,7 @@ exports.buildTemplate = function(req, res) {
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
 		htmlPath = masterPath.replace('.wml', '.html');
-		
+
 		watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
 			console.log("I see a change in masterContents.code !!");
 			console.log("newvalue is => " + newvalue);
@@ -37,19 +37,18 @@ exports.buildTemplate = function(req, res) {
 			console.log("prop is => " + prop);
 			console.log("action is => " + action);
 
-			// if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
-			// 	console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+			if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
+				console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
 
-			// 	fs.writeFile(htmlPath, masterContents.code, function(err) {
-			// 		if (err) { throw err; }
+				fs.writeFile(htmlPath, masterContents.code, function(err) {
+					if (err) { throw err; }
 
-			// 		console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+					console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
 
-			// 		response.send({results:'Finished'});
-			// 		response.end();
-			// 	});
-			// }
-			// else { return false; }
+					response.send({results:'Finished'});
+					response.end();
+				});
+			}
 		});
 	});
 }
