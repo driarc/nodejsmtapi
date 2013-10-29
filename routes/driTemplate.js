@@ -10,7 +10,8 @@ var cheerio = require('cheerio')
   , unwatch = WatchJS.unwatch
   , lookupDir = config.LOOKUP_DIR
   , masterContents = {code:''}
-  , htmlPath;
+  , htmlPath
+  , response;
 
 watch(masterContents, 'code', function() {
 	console.log("I see a change in masterContents.code !!");
@@ -22,13 +23,14 @@ watch(masterContents, 'code', function() {
 
 			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
 
-			res.send('Finished');
-			res.end();
+			response.send('Finished');
+			response.end();
 		});
 	}
 });
 
 exports.buildTemplate = function(req, res) {
+	response = res;
 	console.log('buildTemplate hit!, parameters are ' + JSON.stringify(req.body));
 	var parameters = req.body;
 
