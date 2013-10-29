@@ -3,9 +3,7 @@
 var cheerio = require('cheerio')
   , fs = require('graceful-fs')
   , find = require('findit')
-  , moment = require('moment')
   , config = require('../config.js')
-  , HashMap = require('hashmap').HashMap
   , lookupDir = config.LOOKUP_DIR
   , $ = undefined
   , masterContents;
