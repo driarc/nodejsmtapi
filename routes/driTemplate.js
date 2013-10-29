@@ -16,7 +16,7 @@ exports.buildTemplate = function(req, res) {
 		console.log('tags found => ' + JSON.stringify(tags));
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
-			findAndReadFile(lookupDir, nextWml, replaceWmlTag(file, tags[i]));
+			findAndReadFile(lookupDir, nextWml, replaceWmlTag(tags[i]));
 		}
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
