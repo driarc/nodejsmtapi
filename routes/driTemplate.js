@@ -12,7 +12,7 @@ exports.buildTemplate = function(req, res) {
 	console.log('buildTemplate hit!, parameters are ' + JSON.stringify(req.body));
 	var parameters = req.body;
 
-	getWmlTags(parameters.wmlfilename, function(tags) {
+	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
 		console.log('tags found => ' + JSON.stringify(tags));
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
@@ -20,7 +20,7 @@ exports.buildTemplate = function(req, res) {
 		}
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-		var htmlPath = file.path.replace('.wml', '.html');
+		var htmlPath = masterPath.replace('.wml', '.html');
 		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
 		fs.writeFile(htmlPath, masterContents, function(err) {
 			if (err) { throw err; }
@@ -46,7 +46,7 @@ function getWmlTags(filename, callback) {
 		}
 		console.log('**driTemplate.buildTemplate** Finished gathering [[<wml>]] tags');
 
-		callback(wmlTags);
+		callback(wmlTags, file.path);
 	});
 }
 
