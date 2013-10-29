@@ -12,33 +12,8 @@ return parameters;
 
 //Starting of querywid function...formerly MongoDataQuery
 exports.querywid = querywid = function(parameters,target,callback) {
+	console.log(' callback >> '+ callback);
 	var output = {};
-    // if (parameters["mongorawquery"]) {
-    // 	output = mongoquery(parameters);
-    // 	return output;
-   	// 	}
-   	// else
-   	// 	{
-   	// 	output = querywidlocal(parameters);
-   	// 	return output;
-   	// 	}
-
-   	// if (widInput) {rawquery=$or primary=widInput}
-
-   	// we must get the properties below working
-   	// look for command.mongo
-   	// search a deeper level data.
-   	// use var parameters = tolowerparameters(parameters, {'wid':'add', 'metadata.method':'add', 'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
-   	// add option tells it to add the a blank parameters, true just converts
-
-	// var widInput=sq["mongowid"];
-	// var mongorelationshiptype=sq["mongorelationshiptype"];
-	// var mongorelationshipmethod=sq["mongorelationshipmethod"];
-	// var mongorelationshipdirection=sq["mongorelationshipdirection"];
-	// var mongowidmethod=sq["mongowidmethod"];
-	// var convertmethod=sq["convertmethod"];
-	// var dtotype=sq["dtotype"];
-
     mQueryString = "";
 
     // Fish out params
