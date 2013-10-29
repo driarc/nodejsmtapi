@@ -1,6 +1,7 @@
 'use strict';
 
 var cheerio = require('cheerio')
+  , $ = undefined
   , fs = require('graceful-fs')
   , find = require('findit')
   , config = require('../config.js')
@@ -8,8 +9,24 @@ var cheerio = require('cheerio')
   , watch = WatchJS.watch
   , unwatch = WatchJS.unwatch
   , lookupDir = config.LOOKUP_DIR
-  , $ = undefined
-  , masterContents = {code:''};
+  , masterContents = {code:''}
+  , htmlPath;
+
+watch(masterContents, 'code', function() {
+	console.log("I see a change in masterContents.code !!");
+	if (!masterContents.code.contains('[[')) {
+		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+
+		fs.writeFile(htmlPath, masterContents.code, function(err) {
+			if (err) { throw err; }
+
+			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+
+			res.send('Finished');
+			res.end();
+		});
+	}
+});
 
 exports.buildTemplate = function(req, res) {
 	console.log('buildTemplate hit!, parameters are ' + JSON.stringify(req.body));
@@ -24,22 +41,7 @@ exports.buildTemplate = function(req, res) {
 		}
 
 		// save codeFile aggregation under original <masterWml>.html in the same directory as <masterWml>.wml
-		var htmlPath = masterPath.replace('.wml', '.html');
-
-		watch(masterContents, 'code', function() {
-			if (!masterContents.code.contains('[[')) {
-				console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
-
-				fs.writeFile(htmlPath, masterContents.code, function(err) {
-					if (err) { throw err; }
-
-					console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
-
-					res.send('Finished');
-					res.end();
-				});
-			}
-		});
+		htmlPath = masterPath.replace('.wml', '.html');
 	});
 }
 
