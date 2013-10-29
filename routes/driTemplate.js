@@ -11,14 +11,14 @@ var cheerio = require('cheerio')
   , responseData = {};
 
 exports.buildTemplate = function(req, res) {
-	console.log('**********START***********driTemplate.buildTemplate************START*************');
+	console.log('********START*********driTemplate.buildTemplate**********START***********');
 
 	response = res
 	var parameters = req.body;
 
 	getWmlTags(parameters.wmlfilename, function(tags, masterPath) {
-		console.log('**driTemplate.buildTemplate** retrieved [[<wml>]] tags from => ' + masterPath);
-		console.log('**driTemplate.buildTemplate** [[<wml>]] tags found => ' + JSON.stringify(tags));
+		console.log(' retrieved [[<wml>]] tags from => ' + masterPath);
+		console.log(' [[<wml>]] tags found => ' + JSON.stringify(tags));
 
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
@@ -55,12 +55,12 @@ function changedContents() {
 	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
 		fs.writeFile(htmlPath, masterContents.code, function(err) {
 			if (err) {
-				console.log('**driTemplate.buildTemplate** Error creating file => ' + JSON.stringify(err));
+				console.log(' Error creating file => ' + JSON.stringify(err));
 				responseData.error = err;
 			}
-			else { console.log('**driTemplate.buildTemplate** Successfully created file => ' + htmlPath); }
+			else { console.log(' Successfully created file => ' + htmlPath); }
 
-			console.log('***********END**********driTemplate.buildTemplate************END*************');
+			console.log('*********END********driTemplate.buildTemplate**********END***********');
 			response.send(responseData);
 			response.end();
 		});
