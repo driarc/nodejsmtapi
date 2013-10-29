@@ -5,22 +5,17 @@ var cheerio = require('cheerio')
   , fs = require('graceful-fs')
   , find = require('findit')
   , config = require('../config.js')
-  , WatchJS = require("watchjs")
-  , watch = WatchJS.watch
-  , unwatch = WatchJS.unwatch
-  , callWatchers = WatchJS.callWatchers
+  // , WatchJS = require("watchjs")
+  // , watch = WatchJS.watch
+  // , unwatch = WatchJS.unwatch
+  // , callWatchers = WatchJS.callWatchers
   , lookupDir = config.LOOKUP_DIR
   , masterContents = {code:''}
   , htmlPath
   , response;
 
-watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
-	console.log("I see a change in masterContents.code !!");
-	console.log("newvalue is => " + newvalue);
-	console.log("oldvalue is => " + oldvalue);
-	console.log("prop is => " + prop);
-	console.log("action is => " + action);
-
+function changedContents() {
+	console.log('changed contents !! index of [[ is => ' + masterContents.code.indexOf('[['));
 	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
 		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
 
@@ -33,7 +28,28 @@ watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
 			response.end();
 		});
 	}
-});
+}
+
+// watch(masterContents, 'code', function(prop, action, newvalue, oldvalue) {
+// 	console.log("I see a change in masterContents.code !!");
+// 	console.log("newvalue is => " + newvalue);
+// 	console.log("oldvalue is => " + oldvalue);
+// 	console.log("prop is => " + prop);
+// 	console.log("action is => " + action);
+
+// 	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
+// 		console.log('**driTemplate.buildTemplate** Attempting to create file => ' + htmlPath);
+
+// 		fs.writeFile(htmlPath, masterContents.code, function(err) {
+// 			if (err) { throw err; }
+
+// 			console.log('**driTemplate.buildTemplate** Created file => ' + htmlPath);
+
+// 			response.send({results:'Finished'});
+// 			response.end();
+// 		});
+// 	}
+// });
 
 exports.buildTemplate = function(req, res) {
 	response = res;
@@ -74,6 +90,7 @@ function getWmlTags(filename, callback) {
 function replaceWmlTag(file) {
 	console.log('replaceWmlTag recieved this file => ' + file.path + ' and tag => ' + file.tag);
 	masterContents.code.replace(file.tag, file.contents);
+	changedContents();
 	// callWatchers(masterContents, 'code');
 }
 
