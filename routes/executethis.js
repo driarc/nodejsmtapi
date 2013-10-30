@@ -32,36 +32,98 @@ if(!global){
 
         inboundparms = util.toLowerKeys(inboundparms);
         execute(inboundparms, function(outboundData) {
-            if(!targetfunction || !window[targetfunction]){
-                targetfunction = 'execute';
-            } 
-           
-            if(window[targetfunction]){
-                var parmnum=window[targetfunction].length
-                  , params = util.toLowerKeys(outboundData);            
-                
-                if (parmnum===1) {
-                    // var params = JSON.parse(inboundparms[0]);  
-                    // params = util.toLowerKeys(params);  
-                    // start the async
-                    var data_to_return = window[targetfunction](params);
-                    return data_to_return;
-                }else{ 
-                    // start the async
-                    window[targetfunction](params, function(data) {
-                        window.data = data;
-                    });
+            if (!targetfunction instanceof Function) { targetfunction = execute; }
 
-                    return window.data;
-                }
-                    
-            }else{
-                return window.data;
+            var params = util.toLowerKeys(outboundData);
+
+            if (targetfunction === execute) {
+                targetfunction(params, function(data) {
+                    window.data = data;
+                });
+            } else {
+                targetfunction(params);
             }
         });
+
+        // if (!targetfunction instanceof Function) { targetfunction = execute; }
+
+        // var params = util.toLowerKeys(inboundparms);
+
+        // if (targetfunction instanceof Function){
+        //     if (targetfunction === execute) {
+        //         targetfunction(params, function(data) {
+        //             window.data = data;
+        //         });
+        //     } else {
+        //         targetfunction(params);
+        //     }
+        // } else {
+        //     return window.data;
+        // }
+
+        targetfunction(inboundparms);
+        
+        if(!targetfunction || !window[targetfunction]){
+            targetfunction = 'execute';
+        } 
+       
+        if(window[targetfunction]){
+            var parmnum=window[targetfunction].length
+              , params = inboundparms;            
+            
+            if (parmnum===1) {
+                // var params = JSON.parse(inboundparms[0]);  
+                params = util.toLowerKeys(params);  
+                // start the async
+                var data_to_return = window[targetfunction](params);
+                return data_to_return;
+            }else{ 
+                // start the async
+                window[targetfunction](params, function(data) {
+                    window.data = data;
+                });
+
+                return window.data;
+            }
+                
+        }else{
+            return window.data;
+        }
+
+        // inboundparms = util.toLowerKeys(inboundparms);
+        // execute(inboundparms, function(outboundData) {
+        //     if(!targetfunction || !window[targetfunction]){
+        //         targetfunction = 'execute';
+        //     } 
+           
+        //     if(window[targetfunction]){
+        //         var parmnum=window[targetfunction].length
+        //           , params = util.toLowerKeys(outboundData);            
+                
+        //         if (parmnum===1) {
+        //             // var params = JSON.parse(inboundparms[0]);  
+        //             // params = util.toLowerKeys(params);  
+        //             // start the async
+        //             var data_to_return = window[targetfunction](params);
+        //             return data_to_return;
+        //         }else{ 
+        //             // start the async
+        //             window[targetfunction](params, function(data) {
+        //                 window.data = data;
+        //             });
+
+        //             return window.data;
+        //         }
+                    
+        //     }else{
+        //         return window.data;
+        //     }
+        // });
     }
 
 
+
+      
 
     function addthisfn(inputWidgetObject) {
         printToDiv('Function addthis in : inputWidgetObject',  inputWidgetObject);
