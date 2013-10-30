@@ -1,17 +1,21 @@
-require('../dao/mongo.js');
+'use strict';
 
+require('../dao/mongo.js');
+// external functions are addwidmaster, getwidmaster, securitycheck
 // external functions are addwidmaster, getwidmaster, securitycheck
 
 exports.getwid = function(inputWidgetObject) {
 	printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
-	resultObj=getfrommongo(inputWidgetObject);
+    resultObj = executethis(inputWidgetObject, "getfrommongo");
+	//resultObj=getfrommongo(inputWidgetObject);
 	proxyprinttodiv('Function getwid in : x',  resultObj);
 	return resultObj;
 }
 
 exports.updatewid = function(inputWidgetObject) {
 	printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject);
-	resultObj=addtomongo(inputWidgetObject);
+    resultObj = executethis(inputWidgetObject, "addtomongo");	
+	//resultObj=addtomongo(inputWidgetObject);
 	proxyprinttodiv('Function updatewid in : x',  resultObj);
 	return resultObj;
 }
@@ -182,7 +186,7 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 
 // know issue -- cannot save blank parameter if jsonConcat (inherit)
 
-exports.getwidmaster = function(parameters){
+function getwidmaster(parameters){
 
 	var parameters = tolowerparameters(parameters, {'wid':'add', 'metadata.method':'add', 'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
 
@@ -306,19 +310,19 @@ function aggressivedto(widInput, preamble) { // returns a made up dto base on ma
 	proxyprinttodiv('Function aggressivedto()  parameterObject III' , parameterObject);
 	proxyprinttodiv('Function aggressivedto()  targetwid' , targetwid);
 
-	executeobject={};
-	executeobject["executethis"]="querywid";
-	executeobject["mongowid"]=targetwid;
-	executeobject["mongorelationshiptype"]="attributes";
-	executeobject["mongorelationshipmethod"]="all";
-	executeobject["mongorelationshipdirection"]="forward";
-	executeobject["mongowidmethod"]="";
-	executeobject["convertmethod"]="";
-	executeobject["dtotype"]="";	
+	executeobject = {};
+	executeobject["executethis"] = "querywid";
+	executeobject["mongowid"] = targetwid;
+	executeobject["mongorelationshiptype"] = "attributes";
+	executeobject["mongorelationshipmethod"] = "all";
+	executeobject["mongorelationshipdirection"] = "forward";
+	executeobject["mongowidmethod"] = "";
+	executeobject["convertmethod"] = "";
+	executeobject["dtotype"] = "";	
 	proxyprinttodiv('Function aggressivedto()  executeobject III' , executeobject);	
 	//moreDTOParameters=MongoDataQuery(executeobject);
-	Debug='false';
-	moreDTOParameters=executethis(executeobject);
+	Debug = 'false';
+	moreDTOParameters = executethis(executeobject);
 
 	//moreDTOParameters = simpleQuery(targetwid, "attributes", "all", "forward", "", "", "");
 
@@ -1785,4 +1789,5 @@ function countKeys(obj) {
 	}
 	return size;
 }
+
 

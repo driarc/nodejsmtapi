@@ -10,15 +10,15 @@ var TABLE_NAME,schemaToLookup = config.TABLE_NAME;
 
 
 // DAO method to remove an entry from specified collection
-exports.removefrommongo = removefrommongo = function(objToRemove,schemaToLookup, callback){
+exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 	db.collection(schemaToLookup).remove(objToRemove, function(err) {
 		if (err) {
 			console.error(err);
-	    	return {'error':'error in removing'};
+	    	callback({'error':'error in removing'});
 	    }
 	    else{
 		    console.log('Removed! '+ JSON.stringify(objToRemove));
-	    	return objToRemove;
+	    	callback(objToRemove);
 	    }
 	});
 };
@@ -26,7 +26,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,schemaToLookup,
 
 
 // DAO method to remove an entry from specified collection
-exports.updatetomongo = updatetomongo = function(queryObject){
+exports.updatetomongo = updatetomongo = function(queryObject,callback){
 	
 	delete updatedObject.wid;
 	for (var props in queryObject.data) {
@@ -51,12 +51,12 @@ exports.updatetomongo = updatetomongo = function(queryObject){
 	db.collection(schemaToLookup).update(queryObject, {$set: {"data":updatedObject}}, function(err, result) {
 		if (err) {
 			console.error(err);
-	    	throw err;
+	    	callback({'error':'error '});
 	    }
 	    else{
 		    console.log('Updated! '+ JSON.stringify(result));
 		    db.collection(schemaToLookup).findOne(updatedObject, function(o){
-		    	return getfrommongo({"_id":queryObject._id});
+		    	callback(getfrommongo({"_id":queryObject._id}));
 			});
 	    }
 	});
@@ -65,17 +65,17 @@ exports.updatetomongo = updatetomongo = function(queryObject){
 
 
 // the callback function on succesful addition is also specified
-exports.getfrommongo = getfrommongo = function(objToFind){ 
+exports.getfrommongo = getfrommongo = function(objToFind,callback){ 
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind['wid'], function(err, result) {
     	console.log(" >>> "+JSON.stringify(objToFind));
     	if (!result) {
-			return {};
+			callback({});
 	    }
 	    else{
 		    console.log('Found! '+ JSON.stringify(result));
-	    	return result;
+	    	callback(result);
 	    }
 	 }); 
 	
@@ -84,21 +84,21 @@ exports.getfrommongo = getfrommongo = function(objToFind){
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
-exports.mongoquery = mongoquery = function(objToFind){
+exports.mongoquery = mongoquery = function(objToFind,callback){
 	if(!objToFind){
-		return {};
+		callback({});
 	}
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
     	if (err  || (!result)) {
-			// console.error(err);
-	    	 return {'error':'error occurred in mongoquery'};
+			console.error(err);
+	    	 callback({'error':'error occurred in mongoquery'});
 	    	// throw err;
 	    }
 	    else{
 		    console.log('Found! '+ JSON.stringify(result));
-	    	 return result;
+	    	 callback(result);
 	    }
 	 }); 
 	
@@ -106,17 +106,17 @@ exports.mongoquery = mongoquery = function(objToFind){
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
-exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind){
+exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,callback){
 	console.log(' ****** getMultipleFromMongo method in dao');
 	db.collection(schemaToLookup).find(objToFind).toArray(function(err, result) {
 		if (err) {
-			// console.error(err);
+			console.error(err);
 	    	// throw err;
-	    	return {'error':'error'};
+	    	callback({'error':'error'});
 	    }
 	    else{
 	    	console.log('Found! '+ JSON.stringify(result));
-    		return result;
+    		callback(result);
         }
 	});
 };
@@ -126,7 +126,7 @@ exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind){
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-exports.addtomongo =  addtomongo  = function(objToAdd){
+exports.addtomongo =  addtomongo  = function(objToAdd,callback){
 	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
 	for(var attr in objToAdd){
@@ -142,18 +142,18 @@ exports.addtomongo =  addtomongo  = function(objToAdd){
 	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
 	    if (err) {
 			console.error(">>>>>> ::: addToMongo ::: error" + err);
-	    	return {">>>>>> ::: addToMongo ::: error":err};
+	    	callback({">>>>>> ::: addToMongo ::: error":err});
 	    }
 	    if (result){
 	    	console.log('>>>>>> ::: addToMongo ::: Added! '+ JSON.stringify(result));
-	    	return result;
+	    	callback(result);
 	    } 
 	});
 
 };
 
 
-exports.addorupdate = function(entityToAdd){
+exports.addorupdate = function(entityToAdd,callback){
     
     var widVal = (entityToAdd['wid']);
     if(!widVal){
@@ -166,12 +166,12 @@ exports.addorupdate = function(entityToAdd){
         if(returnedObject){ 
             return updatetomongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
                 console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
-                return  updatedObj;
+                callback(updatedObj);
             });
         }else{
             return addtomongo(entityToAdd,schemaToLookup,function(addedObj){
                 console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
-                return addedObj;
+                callback(addedObj);
             });
         }
     });

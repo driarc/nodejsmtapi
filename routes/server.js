@@ -98,9 +98,9 @@ function callScrapeLogic(res, callback){
 exports.executethis = function(req, res) {
 
     var item = req.body;
+    console.log(JSON.stringify(item));
 
-    executethis.execute(item,function(data){
-      
+    executethis.executethis(item,function(data){
         console.log(JSON.stringify(data));
         res.send(data);
         res.end();

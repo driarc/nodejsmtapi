@@ -1,5 +1,6 @@
-require('../dao/addget.js');
+'use strict';
 require('../dao/mongo.js');
+require('../dao/addget.js');
 require('../config.js');
 
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
@@ -12,8 +13,16 @@ return parameters;
 }
 
 //Starting of querywid function...formerly MongoDataQuery
-exports.querywid = querywid = function(parameters,target,callback) {
-// function querywid(parameters,target,callback) {
+exports.querywid  = function(parameters) {
+// function(parameters,target,callback) {
+
+if (parameters['mongorawquery']) {
+		return mongoquery(parameters);
+	} else {
+		return querywidlocal(parameters);
+	};
+
+
 	console.log(' callback >> '+ callback);
 	var output = {};
     mQueryString = "";
@@ -34,22 +43,27 @@ exports.querywid = querywid = function(parameters,target,callback) {
         // Start logic
   
      if (queParams['mongorawquery'] != undefined && xtrParams.length == undefined) { 
-        output = "";
-        output = queParams['mongorawquery'];
-        output=mongoquery(output,target,callback);
+        executeobject = queParams['mongorawquery'];
+        targetfunction = "mongoquery";
+        output = executethis(executeobject, targetfunction);
+        //output = mongoquery(output,target,callback);
     }
        
     // Use single to set up a query with the params of 1 wid
     if (queParams['singlemongoquery'] != undefined && xtrParams.length == undefined) { 
         output = "";
         var wid = queParams['singlemongoquery'];
-        var widObject = getFromMongo({'wid':wid});
+        targetfunction = "getfrommongo";
+        var widObject = executethis(wid, targetfunction)
+        // var widObject = getFromMongo({'wid':wid});
         delete widObject['wid'];
         delete widObject['metadata.method'];
         output = BuildSingleQuery(widObject);
         mQueryString = output.substring(0, output.length -1);
+        targetfunction = "mongoquery";
+        output = executethis(mQueryString, targetfunction);
         //output = mongoquery(mQueryString);
-        output = mQueryString;
+        //output = mQueryString;
     }
     
     // Use multiple if you want to use a list of wids as $OR groups
@@ -66,7 +80,8 @@ exports.querywid = querywid = function(parameters,target,callback) {
         var i = 0;
         ListOfLists = [];
         for (w in listOfWids) {
-            var tempwid = getFromMongo({'wid':w});
+        targetfunction = "getfrommongo";
+            var tempwid = executethis(w, targetfunction);
             delete tempwid["wid"];
             delete tempwid["metadata.method"];
             for (t in tempwid) {
@@ -79,24 +94,28 @@ exports.querywid = querywid = function(parameters,target,callback) {
             ListOfLists.push(xtrParams);
         }
         mQueryString = BuildMultipleQuery(ListOfLists);
+        targetfunction = "mongoquery";
+        output = executethis(mQueryString, targetfunction);
         //output = mongoquery(mQueryString);
-        output = mQueryString;
+        //output = mQueryString;
     }
 
     // If there is no single or multiple, make a $OR group out of the extra params
     if (!queParams['singlemongoquery'] && !queParams['multiplemongoquery'] && getObjectSize(relParams) == 0 ){
         ListOfLists.push(xtrParams);
         mQueryString = BuildMultipleQuery(ListOfLists);
-        output = mongoquery(mQueryString);
+        targetfunction = "mongoquery";
+        output = executethis(mQueryString, targetfunction);
+        //output = mongoquery(mQueryString);
     }
 
-    if (queParams['widinput'] != undefined) {
-    		output = queParams['widinput'];
-    		//output = {widInput:widInput};
-    		// var temp = queParams['widinput'];
+    if (queParams['mongowid'] != undefined) {
+    		output = queParams['mongowid'];
+    		//output = {mongowid:mongowid};
+    		// var temp = queParams['mongowid'];
     		// var tempsize = getObjectSize(temp);
     		// for (var j = 0; j<tempsize; j++) {
-    		// 	output[] = queParams['widinput'];
+    		// 	output[] = queParams['mongowid'];
     		//}
     }
 
@@ -104,14 +123,18 @@ exports.querywid = querywid = function(parameters,target,callback) {
     // Skip if there are no relParams
     if (getObjectSize(relParams) != 0) {
         mQueryString = relationShipQuery(relParams,output);
-        output = mongoquery(mQueryString,target,callback);
+        targetfunction = "mongoquery";
+        output = executethis(mQueryString, targetfunction);
+        //output = mongoquery(mQueryString,target,callback);
     }
 
     // Relationship Section **********
     // Skip if there are no relParams
     if (getObjectSize(relafterParams) != 0) {
         mQueryString = queryafterrelationship(relafterParams, output);
-        output = mongoquery(mQueryString,target,callback);
+        targetfunction = "mongoquery";
+        output = executethis(mQueryString, targetfunction);
+        //output = mongoquery(mQueryString,target,callback);
     }
 
     // Aggregation Section **********
@@ -134,7 +157,9 @@ exports.querywid = querywid = function(parameters,target,callback) {
         }
     }
     proxyprinttodiv('Function MongoDataQuery output : ', output);
-    queryresults=mongoquery(output,target,callback);
+    targetfunction = "mongoquery";
+    queryresults = executethis(output, targetfunction);
+    //queryresults=mongoquery(output,target,callback);
     return queryresults; // whatever happens, return the output
 } // End of MongoDataQuery
 
@@ -647,11 +672,11 @@ function fishOut(parameters) {
     // Special case of relationship queries
     var relafterParams = {};
 
-    var widInput =  ""; // String
-    if (isParameterLower(parameters, "widinput")) {
-        widinput = parameters["widinput"];
-        queParams['widinput'] = widinput;
-        remove(parameters, "widinput");
+    var mongowid =  ""; // String
+    if (isParameterLower(parameters, "mongowid")) {
+        mongowid = parameters["mongowid"];
+        queParams['mongowid'] = mongowid;
+        remove(parameters, "mongowid");
         }
 
     var mongowidmethod =  ""; // String
@@ -962,4 +987,5 @@ function fishOut(parameters) {
 //  proxyprinttodiv('Function mongo() out with  output : ', output );   
 //  return output;
 // }//End of mongo function
+
 
