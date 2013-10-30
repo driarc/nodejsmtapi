@@ -40,7 +40,7 @@ if(!global){
                     window.data = data;
                 });
             } else {
-                targetfunction();
+                targetfunction(params);
             }
         }
 
