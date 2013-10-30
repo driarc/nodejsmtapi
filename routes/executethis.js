@@ -14,7 +14,6 @@ if(!global){
 
      // make sure the global is clear
     window.data = null
-    var exports ={};
 
     // start polling at an interval until the data is found at the global
     var intvl = setInterval(function() {
@@ -27,7 +26,7 @@ if(!global){
 
     /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
     // var executethis = function(inboundparms, targetfunction) {
-    var executethis = exports.executethis = function(inboundparms, targetfunction) {
+    exports.executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
         console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
         
@@ -35,55 +34,31 @@ if(!global){
             targetfunction = 'execute';
         } 
        
-        var parmnum=window[targetfunction].length;
-        inboundparms = util.toLowerKeys(inboundparms);  
-        
-        if (parmnum===1) {
-            var params = inboundparms;  
-            // var params = JSON.parse(inboundparms[0]);  
-            params = util.toLowerKeys(params);  
-            // start the async
-            var data_to_return = window[targetfunction](params);
-            return data_to_return;
-            // window[targetfunction](params, function(data) {
-            //     window.data = data;
-            // });
+        if(window[targetfunction]){
 
-            // return window.data;
+            var parmnum=window[targetfunction].length;
+            inboundparms = util.toLowerKeys(inboundparms);  
+            
+            if (parmnum===1) {
+                var params = inboundparms;  
+                // var params = JSON.parse(inboundparms[0]);  
+                params = util.toLowerKeys(params);  
+                // start the async
+                var data_to_return = window[targetfunction](params);
+                return data_to_return;
+            }else{
+                var params = inboundparms;  
+                // start the async
+                window[targetfunction](params, function(data) {
+                    window.data = data;
+                });
+
+                return window.data;
+            }
+                
         }else{
-            var params = inboundparms;  
-            // var params = JSON.parse(inboundparms[0]);  
-            // start the async
-            window[targetfunction](params, function(data) {
-                window.data = data;
-            });
-
             return window.data;
-
-            // eval(funcCall); //Call the function   
-            // return {
-            //  returnVal
-            //  }
         }
-            // targetfn(parameters, function(){
-            // if (targetfunction===undefined) {
-            //    var params = JSON.parse(inboundparms);  
-            //    params = util.toLowerKeys(params);  
-         
-            //    execute(params, function(data) {
-            //      window.data = data;
-            //    });
-
-            //      return window.data;
-            // }   
-            // else
-            // {
-            //     window[targetfunction](params, function(data) {
-            //         window.data = data;
-            //     });
-            //    return window.data;
-            // }
-        // });
     }
 
 
@@ -240,7 +215,6 @@ if(!global){
             }
         }
     }
-
 
 
 
