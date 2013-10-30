@@ -32,7 +32,7 @@ if(!global){
 
         inboundparms = util.toLowerKeys(inboundparms);
         execute(inboundparms, function(outboundData) {
-            if (!targetfunction instanceof Function) { targetfunction = execute; }
+            if (!targetfunction || !targetfunction instanceof Function) { targetfunction = execute; }
 
             var params = util.toLowerKeys(outboundData);
 
