@@ -30,14 +30,11 @@ if(!global){
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
         // console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
 
-        if (typeof targetfunction !== 'function') { targetfunction = execute; }
+        if (!targetfunction instanceof Function) { targetfunction = execute; }
 
         var params = util.toLowerKeys(inboundparms);
-
-        console.log((targetfunction instanceof Function));
-        // console.log('typeof targetfunction => ' + );
-        console.log((targetfunction === execute));
-        if (typeof targetfunction === 'function'){
+        
+        if (targetfunction instanceof Function){
             if (targetfunction === execute) {
                 targetfunction(params, function(data) {
                     window.data = data;
