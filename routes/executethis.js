@@ -34,7 +34,7 @@ if(!global){
             targetfunction = 'execute';
         } 
        
-        console.log('type of targetfunction => ' + (typeof targetfunction));
+        console.log('window[targetfunction] => ' window[targetfunction]);
         if(window[targetfunction]){
 
             var parmnum=window[targetfunction].length;
