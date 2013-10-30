@@ -44,8 +44,6 @@ if(!global){
                 targetfunction(params);
             }
         });
-
-        // targetfunction(inboundparms);
         
         // if(!targetfunction){
         //     targetfunction = 'execute';
