@@ -28,60 +28,40 @@ if(!global){
     // var executethis = function(inboundparms, targetfunction) {
     exports.executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
-        // console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
+        console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
 
-        // if (!targetfunction instanceof Function) { targetfunction = execute; }
+        inboundparms = util.toLowerKeys(inboundparms);
+        execute(inboundparms, function(outboundData) {
+            if(!targetfunction || !window[targetfunction]){
+                targetfunction = 'execute';
+            } 
+           
+            if(window[targetfunction]){
+                var parmnum=window[targetfunction].length
+                  , params = util.toLowerKeys(outboundData);            
+                
+                if (parmnum===1) {
+                    // var params = JSON.parse(inboundparms[0]);  
+                    // params = util.toLowerKeys(params);  
+                    // start the async
+                    var data_to_return = window[targetfunction](params);
+                    return data_to_return;
+                }else{ 
+                    // start the async
+                    window[targetfunction](params, function(data) {
+                        window.data = data;
+                    });
 
-        // var params = util.toLowerKeys(inboundparms);
-
-        // if (targetfunction instanceof Function){
-        //     if (targetfunction === execute) {
-        //         targetfunction(params, function(data) {
-        //             window.data = data;
-        //         });
-        //     } else {
-        //         targetfunction(params);
-        //     }
-        // } else {
-        //     return window.data;
-        // }
-
-        targetfunction(inboundparms);
-        
-        if(!targetfunction || !window[targetfunction]){
-            targetfunction = 'execute';
-        } 
-       
-        if(window[targetfunction]){
-
-            var parmnum=window[targetfunction].length;
-            inboundparms = util.toLowerKeys(inboundparms);  
-            
-            if (parmnum===1) {
-                var params = inboundparms;  
-                // var params = JSON.parse(inboundparms[0]);  
-                params = util.toLowerKeys(params);  
-                // start the async
-                var data_to_return = window[targetfunction](params);
-                return data_to_return;
+                    return window.data;
+                }
+                    
             }else{
-                var params = inboundparms;  
-                // start the async
-                window[targetfunction](params, function(data) {
-                    window.data = data;
-                });
-
                 return window.data;
             }
-                
-        }else{
-            return window.data;
-        }
+        });
     }
 
 
-
-      
 
     function addthisfn(inputWidgetObject) {
         printToDiv('Function addthis in : inputWidgetObject',  inputWidgetObject);
