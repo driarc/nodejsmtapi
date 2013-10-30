@@ -30,51 +30,53 @@ if(!global){
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
         // console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
 
-        if (!targetfunction instanceof Function) { targetfunction = execute; }
+        // if (!targetfunction instanceof Function) { targetfunction = execute; }
 
-        var params = util.toLowerKeys(inboundparms);
+        // var params = util.toLowerKeys(inboundparms);
 
-        if (targetfunction instanceof Function){
-            if (targetfunction === execute) {
-                targetfunction(params, function(data) {
-                    window.data = data;
-                });
-            } else {
-                targetfunction(params);
-            }
-        }
-
-        // targetfunction(inboundparms);
-        
-        // if(!targetfunction){
-        //     targetfunction = 'execute';
-        // } 
-       
-        // if(window[targetfunction]){
-
-        //     var parmnum=window[targetfunction].length;
-        //     inboundparms = util.toLowerKeys(inboundparms);  
-            
-        //     if (parmnum===1) {
-        //         var params = inboundparms;  
-        //         // var params = JSON.parse(inboundparms[0]);  
-        //         params = util.toLowerKeys(params);  
-        //         // start the async
-        //         var data_to_return = window[targetfunction](params);
-        //         return data_to_return;
-        //     }else{
-        //         var params = inboundparms;  
-        //         // start the async
-        //         window[targetfunction](params, function(data) {
+        // if (targetfunction instanceof Function){
+        //     if (targetfunction === execute) {
+        //         targetfunction(params, function(data) {
         //             window.data = data;
         //         });
-
-        //         return window.data;
+        //     } else {
+        //         targetfunction(params);
         //     }
-                
-        // }else{
+        // } else {
         //     return window.data;
         // }
+
+        targetfunction(inboundparms);
+        
+        if(!targetfunction || !window[targetfunction]){
+            targetfunction = 'execute';
+        } 
+       
+        if(window[targetfunction]){
+
+            var parmnum=window[targetfunction].length;
+            inboundparms = util.toLowerKeys(inboundparms);  
+            
+            if (parmnum===1) {
+                var params = inboundparms;  
+                // var params = JSON.parse(inboundparms[0]);  
+                params = util.toLowerKeys(params);  
+                // start the async
+                var data_to_return = window[targetfunction](params);
+                return data_to_return;
+            }else{
+                var params = inboundparms;  
+                // start the async
+                window[targetfunction](params, function(data) {
+                    window.data = data;
+                });
+
+                return window.data;
+            }
+                
+        }else{
+            return window.data;
+        }
     }
 
 
