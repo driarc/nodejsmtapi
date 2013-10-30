@@ -34,9 +34,9 @@ if(!global){
 
         var params = util.toLowerKeys(inboundparms);
 
-        console.log('targetfunction is a function => ' + targetfunction instanceof Function);
+        console.log((targetfunction instanceof Function));
         // console.log('typeof targetfunction => ' + );
-        console.log('is equal to execute => ' + targetfunction === execute);
+        console.log((targetfunction === execute));
         if (typeof targetfunction === 'function'){
             if (targetfunction === execute) {
                 targetfunction(params, function(data) {
