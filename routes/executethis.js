@@ -30,8 +30,7 @@ if(!global){
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
         // console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
 
-        // if(typeof targetfunction !== 'function') { targetfunction = execute; }
-        targetfunction = execute;
+        if(typeof targetfunction !== 'function') { targetfunction = execute; }
 
         inboundparms = util.toLowerKeys(inboundparms);
 
