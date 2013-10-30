@@ -34,7 +34,7 @@ if(!global){
 
         inboundparms = util.toLowerKeys(inboundparms);
 
-        console.log(JSON.stringify(targetfunction));
+        console.log(targetfunction);
         // targetfunction(inboundparms);
         
         // if(!targetfunction){
