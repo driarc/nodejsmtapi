@@ -28,38 +28,44 @@ if(!global){
     // var executethis = function(inboundparms, targetfunction) {
     exports.executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
-        console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
+        // console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
+
+        if(typeof targetfunction !== 'function') { targetfunction = execute; }
+
+        inboundparms = util.toLowerKeys(inboundparms);
+
+        console.log(JSON.stringify(targetfunction));
+        // targetfunction(inboundparms);
         
-        if(!targetfunction){
-            targetfunction = 'execute';
-        } 
+        // if(!targetfunction){
+        //     targetfunction = 'execute';
+        // } 
        
-        console.log('window[targetfunction] => ' + window[targetfunction]);
-        if(window[targetfunction]){
+        // if(window[targetfunction]){
 
-            var parmnum=window[targetfunction].length;
-            inboundparms = util.toLowerKeys(inboundparms);  
+        //     var parmnum=window[targetfunction].length;
+        //     inboundparms = util.toLowerKeys(inboundparms);  
             
-            if (parmnum===1) {
-                var params = inboundparms;  
-                // var params = JSON.parse(inboundparms[0]);  
-                params = util.toLowerKeys(params);  
-                // start the async
-                var data_to_return = window[targetfunction](params);
-                return data_to_return;
-            }else{
-                var params = inboundparms;  
-                // start the async
-                window[targetfunction](params, function(data) {
-                    window.data = data;
-                });
+        //     if (parmnum===1) {
+        //         var params = inboundparms;  
+        //         // var params = JSON.parse(inboundparms[0]);  
+        //         params = util.toLowerKeys(params);  
+        //         // start the async
+        //         var data_to_return = window[targetfunction](params);
+        //         return data_to_return;
+        //     }else{
+        //         var params = inboundparms;  
+        //         // start the async
+        //         window[targetfunction](params, function(data) {
+        //             window.data = data;
+        //         });
 
-                return window.data;
-            }
+        //         return window.data;
+        //     }
                 
-        }else{
-            return window.data;
-        }
+        // }else{
+        //     return window.data;
+        // }
     }
 
 
