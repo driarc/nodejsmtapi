@@ -44,11 +44,13 @@ if(!global){
                 // var params = JSON.parse(inboundparms[0]);  
                 params = util.toLowerKeys(params);  
                 // start the async
+                console.log('parmnum===1 hit!');
                 var data_to_return = window[targetfunction](params);
                 return data_to_return;
             }else{
                 var params = inboundparms;  
                 // start the async
+                console.log('parmnum!==1 hit!');
                 window[targetfunction](params, function(data) {
                     window.data = data;
                 });
