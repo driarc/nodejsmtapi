@@ -34,9 +34,8 @@ if(!global){
             targetfunction = 'execute';
         } 
        
-        console.log('about to check if(window[targetfunction])');
+        console.log('type of targetfunction => ' + (typeof targetfunction));
         if(window[targetfunction]){
-            console.log('just after check if(window[targetfunction]) was resolved as true.');
 
             var parmnum=window[targetfunction].length;
             inboundparms = util.toLowerKeys(inboundparms);  
@@ -46,13 +45,11 @@ if(!global){
                 // var params = JSON.parse(inboundparms[0]);  
                 params = util.toLowerKeys(params);  
                 // start the async
-                console.log('parmnum===1 hit!');
                 var data_to_return = window[targetfunction](params);
                 return data_to_return;
             }else{
                 var params = inboundparms;  
                 // start the async
-                console.log('parmnum!==1 hit!');
                 window[targetfunction](params, function(data) {
                     window.data = data;
                 });
