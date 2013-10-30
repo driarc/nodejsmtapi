@@ -34,7 +34,9 @@ if(!global){
             targetfunction = 'execute';
         } 
        
+        console.log('about to check if(window[targetfunction])');
         if(window[targetfunction]){
+            console.log('just after check if(window[targetfunction]) was resolved as true.');
 
             var parmnum=window[targetfunction].length;
             inboundparms = util.toLowerKeys(inboundparms);  
