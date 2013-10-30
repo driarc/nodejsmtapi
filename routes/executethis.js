@@ -33,14 +33,14 @@ if(!global){
         if (!targetfunction instanceof Function) { targetfunction = execute; }
 
         var params = util.toLowerKeys(inboundparms);
-        
+
         if (targetfunction instanceof Function){
             if (targetfunction === execute) {
                 targetfunction(params, function(data) {
                     window.data = data;
                 });
             } else {
-                targetfunction;
+                targetfunction();
             }
         }
 
