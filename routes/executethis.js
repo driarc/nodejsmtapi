@@ -28,7 +28,7 @@ if(!global){
     // var executethis = function(inboundparms, targetfunction) {
     exports.executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
-        console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
+        // console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
 
         inboundparms = util.toLowerKeys(inboundparms);
         execute(inboundparms, function(outboundData) {

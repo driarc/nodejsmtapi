@@ -6,7 +6,7 @@ require('../dao/mongo.js');
 
 exports.getwid = function(inputWidgetObject) {
 	printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
-    resultObj = executethis(inputWidgetObject, "getfrommongo");
+    resultObj = executethis(inputWidgetObject, getfrommongo);
 	//resultObj=getfrommongo(inputWidgetObject);
 	proxyprinttodiv('Function getwid in : x',  resultObj);
 	return resultObj;
@@ -14,7 +14,7 @@ exports.getwid = function(inputWidgetObject) {
 
 exports.updatewid = function(inputWidgetObject) {
 	printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject);
-    resultObj = executethis(inputWidgetObject, "addtomongo");	
+    resultObj = executethis(inputWidgetObject, addtomongo);	
 	//resultObj=addtomongo(inputWidgetObject);
 	proxyprinttodiv('Function updatewid in : x',  resultObj);
 	return resultObj;
