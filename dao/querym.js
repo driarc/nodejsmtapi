@@ -1,20 +1,22 @@
 'use strict';
-require('../dao/mongo.js');
 require('../dao/addget.js');
+require('../dao/mongo.js');
 require('../config.js');
 
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
 // FYI we now call proxyprinttodiv which is in config that calls printtodiv
 
-function testquery(parameters) {
+exports.testquery = global.testquery = function(parameters) {
+
+// function testquery(parameters) {
 parameters["IAMALIVE"]="hello";
 proxyprinttodiv('testquery parameters',parameters, true);
 return parameters;
 }
 
 //Starting of querywid function...formerly MongoDataQuery
-exports.querywid  = function(parameters) {
-// function(parameters,target,callback) {
+exports.querywid  = function(parameters,target,callback) {
+// function querywid(parameters) { // can change to call back
 
 if (parameters['mongorawquery']) {
 		return mongoquery(parameters);
@@ -987,5 +989,6 @@ function fishOut(parameters) {
 //  proxyprinttodiv('Function mongo() out with  output : ', output );   
 //  return output;
 // }//End of mongo function
+
 
 

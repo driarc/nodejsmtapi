@@ -2,19 +2,24 @@
 
 require('../dao/mongo.js');
 // external functions are addwidmaster, getwidmaster, securitycheck
-// external functions are addwidmaster, getwidmaster, securitycheck
+function proxyprinttodiv(text, obj, debugone){
+    printToDiv(text, obj, debugone);    // comment this in server version
+}
 
+
+// function getwid(inputWidgetObject) {
 exports.getwid = function(inputWidgetObject) {
 	printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
-    resultObj = executethis(inputWidgetObject, "getfrommongo");
+    resultObj = executethis(inputWidgetObject);
 	//resultObj=getfrommongo(inputWidgetObject);
 	proxyprinttodiv('Function getwid in : x',  resultObj);
 	return resultObj;
 }
 
+// function updatewid(inputWidgetObject) {
 exports.updatewid = function(inputWidgetObject) {
 	printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject);
-    resultObj = executethis(inputWidgetObject, "addtomongo");	
+    resultObj = executethis(inputWidgetObject);	
 	//resultObj=addtomongo(inputWidgetObject);
 	proxyprinttodiv('Function updatewid in : x',  resultObj);
 	return resultObj;
@@ -36,34 +41,10 @@ function securitycheck(widParameter, accessToken){ // accountwid and transaction
 	return securityCheckOutput;
 }// End of querywid function
 
-// Cycles through local storage looking for a match to the query
-// function simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, dtotype){
-
-// 	var executeobject={};
-// 	executeobject["executethis"]="MongoDataQuery";
-// 	executeobject["mongowid"]=widInput;
-// 	executeobject["mongorelationshiptype"]=mongorelationshiptype;
-// 	executeobject["mongorelationshipmethod"]=mongorelationshipmethod;
-// 	executeobject["mongorelationshipdirection"]=mongorelationshipdirection;
-// 	executeobject["mongowidmethod"]=mongowidmethod;
-// 	executeobject["convertmethod"]=convertmethod;
-// 	executeobject["dtotype"]="";	
-// 	proxyprinttodiv('Function getAndFormatNextLevel()  executeobject III' , executeobject);	
-// 	//var relatedParameters=MongoDataQuery(executeobject);
-// 	var relatedParameters=executethis(executeobject);
-// 	return relatedParameters
-// }
-
 
 // Prepares an object to be recorded in local storage and puts it there
 function MongoAddEditPrepare(Indto, InList, widid, widdto) {
-	/* 	Indto = [{"key":"e","value":"onetomany"}];
-
-					InList = [{"key":"e","value":"f"}]; */
-			// proxyprinttodiv('Function MongoAddEditPrepare, Indto : ', Indto);
-			// proxyprinttodiv('Function MongoAddEditPrepare, InList : ', InList);
-			// proxyprinttodiv('Function MongoAddEditPrepare, widid : ', widid);
-			// proxyprinttodiv('Function MongoAddEditPrepare, widdto : ', widdto);
+	
 
     var InListObj = {};
     var rawobject = {};
@@ -156,13 +137,13 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 	InList.push({"key":"relationshiptype","value":attr.toLowerCase()});
 	InList.push({"key":"metadata.method","value":"relationshipdto"});
 
-	executeobject={};
-  	executeobject["mongorawquery"]={"$and": {"data.primarywid":ParentWid, "data.secondarywid":ChildWid }};
-  	executeobject["executethis"]="querywid";
-  	var widset=executethis(executeobject);
+	// executeobject={};
+ //  	executeobject["mongorawquery"]={"$and": {"data.primarywid":ParentWid, "data.secondarywid":ChildWid }};
+ //  	executeobject["executethis"]="querywid";
+ //  	var widset=executethis(executeobject);
 
-	//var widset=getwidcopy(); // get a copy of all local storage ***
-	// above changed 10-27
+	var widset=getwidcopy(); // get a copy of all local storage ***
+	// above changed 10-31 ********
 	// right now querywid does not do anything but a list
 
 
@@ -186,7 +167,8 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
 
 // know issue -- cannot save blank parameter if jsonConcat (inherit)
 
-function getwidmaster(parameters){
+exports.getwidmaster = function(parameters){
+// function getwidmaster(parameters){
 
 	var parameters = tolowerparameters(parameters, {'wid':'add', 'metadata.method':'add', 'command.dtotype':'add', 'command.convertmethod':'add', 'command.checkflag':'add', 'command.inherit':'add', 'command.accesstoken':'add'});
 
@@ -311,7 +293,7 @@ function aggressivedto(widInput, preamble) { // returns a made up dto base on ma
 	proxyprinttodiv('Function aggressivedto()  targetwid' , targetwid);
 
 	executeobject = {};
-	executeobject["executethis"] = "querywid";
+	//executeobject["executethis"] = "querywid";
 	executeobject["mongowid"] = targetwid;
 	executeobject["mongorelationshiptype"] = "attributes";
 	executeobject["mongorelationshipmethod"] = "all";
@@ -320,9 +302,10 @@ function aggressivedto(widInput, preamble) { // returns a made up dto base on ma
 	executeobject["convertmethod"] = "";
 	executeobject["dtotype"] = "";	
 	proxyprinttodiv('Function aggressivedto()  executeobject III' , executeobject);	
-	//moreDTOParameters=MongoDataQuery(executeobject);
 	Debug = 'false';
-	moreDTOParameters = executethis(executeobject);
+	//moreDTOParameters = executethis(executeobject);
+	moreDTOParameters = mongoquery(executeobject);
+	//****** 100-31
 
 	//moreDTOParameters = simpleQuery(targetwid, "attributes", "all", "forward", "", "", "");
 
@@ -667,7 +650,7 @@ Debug=olddebug;
 		//if (dtotype!="") {createid=dtotype}
 		//dtotype='defaultdto'
 		var executeobject={};
-		executeobject["executethis"]="querywid";
+		//executeobject["executethis"]="querywid";
 		executeobject["mongowid"]=widInput;
 		executeobject["mongorelationshiptype"]="attributes";
 		executeobject["mongorelationshipmethod"]="all";
@@ -676,8 +659,9 @@ Debug=olddebug;
 		executeobject["convertmethod"]="";
 		executeobject["dtotype"]="";	
 		proxyprinttodiv('Function getWidMongo()  executeobject III' , executeobject);
-		//moreDTOParameters=simpleQuery(executeobject);	
-		moreDTOParameters=executethis(executeobject);
+		moreDTOParameters=mongoquery(executeobject);	
+		//moreDTOParameters=executethis(executeobject);
+		//*****10-31
 		//moreDTOParameters = simpleQuery(widInput, "attributes", "all", "forward", "", "", "");
 		for (eachresult in moreDTOParameters) {
 			for (key in moreDTOParameters[eachresult]) {
@@ -746,7 +730,7 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 			// proxyprinttodiv('-------Function getAndFormatNextLevel() in : dtoGlobalParameters', dtoGlobalParameters);	
 
 	var executeobject={};
-	executeobject["executethis"]="querywid";
+	//executeobject["executethis"]="querywid";
 	executeobject["mongowid"]=widInput;
 	executeobject["mongorelationshiptype"]=mongorelationshiptype;
 	executeobject["mongorelationshipmethod"]=mongorelationshipmethod;
@@ -755,8 +739,9 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 	executeobject["convertmethod"]=convertmethod;
 	executeobject["dtotype"]="";	
 	proxyprinttodiv('Function getAndFormatNextLevel()  executeobject III' , executeobject);	
-	//var relatedParameters=simpleQuery(executeobject);
-	var relatedParameters=executethis(executeobject);
+	var relatedParameters=mongoquery(executeobject);
+	//var relatedParameters=executethis(executeobject);
+	// ***** 10-31
 	//var relatedParameters = simpleQuery(widInput, mongorelationshiptype, mongorelationshipmethod, mongorelationshipdirection, mongowidmethod, convertmethod, ""); // removed dto type from end
 	var drillDownParameters = {};
 	var rowresult = ""
@@ -882,11 +867,12 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 // AddMaster to get the wid placed into the db or local storage. Note that 
 // nothing calls this except the test. This is the highest level of the adding
 // process for DOT notation.
-function addwidmaster(inputObject) {
+// function addwidmaster(inputObject) {
+exports.addwidmaster = function(parameters){
 	var OutParameters = ConvertToDOTdri(inputObject); 
 	//OutParameters = tolowerparameters(OutParameters, OutParameters['command.convertmethod']);
 	Wid = AddWidParameters(OutParameters);
-	return Wid;
+	return {Wid:Wid};
 	
 			//proxyprinttodiv('Function addwidmaster() Constant input : ', input );
 			//proxyprinttodiv('Function addwidmaster() ConstandtdtoobjectDOT : ', dtoobjectDOT );
@@ -1164,7 +1150,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
         if (editflag == 'true') {				// edit means read wids before write -- to get wid names
         										// get list of related wids	
    			var executeobject={};
-			executeobject["executethis"]="querywid";
+			//executeobject["executethis"]="querywid";
 			executeobject["mongowid"]=ParentWid;
 			executeobject["mongorelationshiptype"]="attributes";
 			executeobject["mongorelationshipmethod"]=attrtype;
@@ -1173,8 +1159,9 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
 			executeobject["convertmethod"]="";
 			executeobject["dtotype"]="";	
 			proxyprinttodiv('Function AddMaster()  executeobject III' , executeobject);	
-			//var widlist=simpleQuery(executeobject);	
-			var widlist=executethis(executeobject);							
+			var widlist=mongoquery(executeobject);	
+			//var widlist=executethis(executeobject);	
+			// **** 10-31						
             //var widlist = simpleQuery(ParentWid, "attributes", attrtype, "forward", childrentype, "", "");
             proxyprinttodiv('Function AddMaster : widlist, these are the wids related to parent and current child', widlist);	
         	}

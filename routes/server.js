@@ -100,11 +100,10 @@ exports.executethis = function(req, res) {
     var item = req.body;
     console.log(JSON.stringify(item));
 
-    executethis.executethis(item,function(data){
-        console.log(JSON.stringify(data));
-        res.send(data);
-        res.end();
-    })
+    var returned = executethis.executethis(item);
+    console.log(JSON.stringify(returned));
+    res.send(returned);
+    res.end();
 };
 
 
