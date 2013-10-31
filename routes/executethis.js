@@ -41,7 +41,7 @@ if(!global){
                     window.data = data;
                 });
             } else {
-                targetfunction(params);
+                targetfunction(params);  // sometimes the callback will handle ending the response
             }
         });
         
