@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 var config = require('../config.js');
 require('../dao/mongo.js');
 require('../dao/addget.js');
@@ -22,7 +22,7 @@ require('../dao/querym.js');
 
     /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
     // var executethis = function(inboundparms, targetfunction) {
-    exports.executethis = function(inboundparms, targetfunction) {
+    exports.executethis = executethis =function(inboundparms, targetfunction) {
        // exports.executethis = executethis = function(inboundparms, targetfunction) {
     console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
     console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
@@ -199,7 +199,7 @@ function doThis(params, target, callback) {
                 params['executethis'] = params[target];
                 // Clean up the params, do not want executethis: something and a midexecute : something
                 delete params[target];
-                // console.log('>>>>>>>>>>>> From howToDo inside if line 202 '+ target +' >>> '+window[howToDo]);
+                console.log('>>>>>>>>>>>> From howToDo inside if line 202 '+ target +' >>> '+window[howToDo]);
                 window[howToDo](params, target, callback);
             } else {
                 // console.log("Nothing to do in dothis...");

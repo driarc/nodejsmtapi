@@ -15,7 +15,7 @@ return parameters;
 }
 
 //Starting of querywid function...formerly MongoDataQuery
-exports.querywid  = function(parameters,target,callback) {
+exports.querywid  = global.querywid = function(parameters,target,callback) {
 // function querywid(parameters) { // can change to call back
 
 if (parameters['mongorawquery']) {

@@ -51,7 +51,7 @@ configuration.updateWid[0].dothis = 'addorupdate';
 
 
 // Primary execute function called after doThis
-var test3 = global.test3 = function(params, target,  callback){
+var test3 = global.test3 = function(params, target, callback){
 	console.log('from test3 method');
 	callback({"test":"test3 on server called"});
 }
