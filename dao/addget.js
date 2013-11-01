@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 require('../dao/mongo.js');
 // external functions are addwidmaster, getwidmaster, securitycheck
@@ -1610,7 +1610,7 @@ function objectToList(object){
 }
 
 // Counts the number of hashes in an object
-function getObjectSize(parameters){
+exports.getObjectSize = getObjectSize = function(parameters){
 	var size = 0, key;
 	for (key in parameters) {
 		if (parameters.hasOwnProperty(key)) size++;
@@ -1619,7 +1619,7 @@ function getObjectSize(parameters){
 }
 
 // Returns true if the parameter is lower case
-function isParameterLower(parameters, str) {
+var isParameterLower = exports.isParameterLower =global.isParameterLower = function(parameters, str) {
 	getObjectSize(parameters); 
 	var length;
 	if(parameters.length === undefined) {
@@ -1627,7 +1627,7 @@ function isParameterLower(parameters, str) {
 	}else {
 		length = parameters.length
 	}
-	for (key in parameters) {	//rewritten
+	for (var key in parameters) {	//rewritten
 		if(key.toLowerCase()==str){
 			return true;
 		}
@@ -1650,7 +1650,7 @@ function firstOrDefault(parameters, str) {
 }
 
 // Deletes a hash from an object	
-function remove(parameters, str){
+exports.remove = remove = function(parameters, str){
 	var length;
 	if(parameters.length === undefined) {
 		length = getObjectSize(parameters);
@@ -1771,7 +1771,7 @@ function isInteger(val) {
 }
 
 // Returns the number of hashes in an object
-function countKeys(obj) {
+exports.countKeys = countKeys = function(obj) {
 	var size = 0, key;
 	for (key in obj) {
 		if (obj.hasOwnProperty(key)) size++;
