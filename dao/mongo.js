@@ -86,9 +86,12 @@ global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback)
 
 // the callback function on succesful addition is also specified
 global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
+	delete objToFind['executethis'];
+
 	if(!objToFind){
 		callback({});
 	}
+	
 	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne(objToFind, function(err, result) {

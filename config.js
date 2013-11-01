@@ -1,4 +1,5 @@
 
+
 exports.TABLE_NAME = 'maincollection';
 
 exports.MONGODB_URL = 'mongodb://trugate:tempalte-77@ds045627.mongolab.com:45627/wikiwallettesting';
@@ -50,12 +51,29 @@ configuration.updateWid[0].tryOrder = 0;
 configuration.updateWid[0].dothis = 'addorupdate';
 
 
+
+// callback sets the received data to a global var
+var asynccallback = global.asynccallback = function asynccallback(d) {
+  global.data = d;
+}
+
+
 // Primary execute function called after doThis
 var test3 = global.test3 = function(params, target, callback){
 	console.log('from test3 method');
 	callback({"test":"test3 on server called"});
 }
 
+
+require('./dao/mongo.js');
+var test99 = global.test99 = function(params, target, callback){
+	console.log('from test99 method');
+	return mongoquery({"wid":"test1"},"mongoquery",function(data){
+		console.log(JSON.stringify(data));
+		console.log('from callback of test99 method');
+		callback(data);
+	});
+}
 
 
 exports.proxyprinttodiv = proxyprinttodiv = function(text, obj, debugone){

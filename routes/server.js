@@ -101,7 +101,12 @@ exports.executethis = function(req, res) {
     console.log(JSON.stringify(item));
 
     var returned = executethis.executethis(item);
-    console.log(JSON.stringify(returned));
+
+    if((!returned) || (returned.length === 0)){
+      returned = global.data;
+      console.log('server.js  >>> '+JSON.stringify(returned));
+    }
+
     res.send(returned);
     res.end();
 };

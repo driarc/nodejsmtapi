@@ -23,19 +23,16 @@ require('../dao/querym.js');
     /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
     // var executethis = function(inboundparms, targetfunction) {
     exports.executethis = executethis = function(inboundparms, targetfunction) {
-       
+       // exports.executethis = executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
         console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
         
         inboundparms = util.toLowerKeys(inboundparms);  
         
-        
-        
         if(!targetfunction) {// ** DONE BY SAURABH 
-            // if((targetfunction===undefined) || (targetfunction="")) {
             targetfunction = 'execute';
         } else {
-            delete inboundparms["executethis"];
+            delete inboundparms["executethis"]
         };
 
         var params = inboundparms;  
@@ -46,12 +43,14 @@ require('../dao/querym.js');
             return data_to_return; 
         }else{
             console.log(' >>>>>>>> calling with callback '+ targetfunction + ' >>>>' );
-            return window[targetfunction](params, targetfunction, function(data){
-                console.log('after called back from executethis');
+            return window[targetfunction](params, targetfunction, function(data) {
                 window.data = data;
+                console.log('after called back from executethis '+JSON.stringify(data));
                 return window.data;
             });
+            return window.data;
         }; 
+
     }
 
   
@@ -178,7 +177,7 @@ global.doThis = doThis = function(params, target, callback) {
 
         // if (whatToDoList !== undefined) { // make sure we have a list from config, if not just go execute it
         if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
-            for (var whatitem in whatToDoList) {
+            for (var item in whatToDoList) {
                 console.log('>>>>>>>>>>>> configuration <'+ target +'> >>> '+JSON.stringify(howToDoList));
                 
                 var whatToDo = whatToDoList[item]['dothis'];
@@ -189,9 +188,9 @@ global.doThis = doThis = function(params, target, callback) {
                 window[howToDo](params, target, callback);
             }
         } else {
-            console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
             // console.log('>>>>>>>>>>>> line 197 From howToDo '+ howToDo);
-            if(window[howToDo] && (params[target])) {
+            if(window[howToDo] && params[target]) {
+                console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
                 params['executethis'] = params[target];
                 // Clean up the params, do not want executethis: something and a midexecute : something
                 delete params[target];
