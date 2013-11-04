@@ -33,22 +33,22 @@ configuration.postexecute[0] = {};
 configuration.postexecute[0].order = 0;
 configuration.postexecute[0].dothis = 'executeFn';
 
-configuration.a = [];
-configuration.a[0] = {};
-configuration.a[0].order = 0;
-configuration.a[0].dothis = 'updateWid';
-configuration.b = [];
-configuration.b[0] = {};
-configuration.b[0].order = 0;
-configuration.b[0].dothis = 'randomColors';
-configuration.getWid = [];
-configuration.getWid[0] = {};
-configuration.getWid[0].tryOrder = 0;
-configuration.getWid[0].dothis = 'getfrommongo';
-configuration.updateWid = [];
-configuration.updateWid[0] = {};
-configuration.updateWid[0].tryOrder = 0;
-configuration.updateWid[0].dothis = 'addorupdate';
+// configuration.a = [];
+// configuration.a[0] = {};
+// configuration.a[0].order = 0;
+// configuration.a[0].dothis = 'updateWid';
+// configuration.b = [];
+// configuration.b[0] = {};
+// configuration.b[0].order = 0;
+// configuration.b[0].dothis = 'randomColors';
+// configuration.getWid = [];
+// configuration.getWid[0] = {};
+// configuration.getWid[0].tryOrder = 0;
+// configuration.getWid[0].dothis = 'getfrommongo';
+// configuration.updateWid = [];
+// configuration.updateWid[0] = {};
+// configuration.updateWid[0].tryOrder = 0;
+// configuration.updateWid[0].dothis = 'addorupdate';
 
 
 
