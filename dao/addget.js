@@ -4,7 +4,7 @@
 // remove line 180-192
 
 function proxyprinttodiv(text, obj, debugone){
-    printToDiv(text, obj, debugone);    // comment this in server version
+    // printToDiv(text, obj, debugone);    // comment this in server version
 }
 
 
