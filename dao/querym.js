@@ -1,36 +1,30 @@
-// 'use strict';
-require('../dao/addget.js');
-require('../dao/mongo.js');
-require('../dao/querym.js');
-require('../config.js');
+// require('../utils/addget.js');
+// require('../config.js');
 
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
 // FYI we now call proxyprinttodiv which is in config that calls printtodiv
 
-
-global.testquery = testquery = function(parameters){
-	// exports.testquery = testquery =  function(parameters) {
-
-	// function testquery(parameters) {
-	parameters["IAMALIVE"]="hello";
-	proxyprinttodiv('testquery parameters',parameters, true);
-	return parameters;
+function testquery(parameters) {
+parameters["IAMALIVE"]="hello";
+proxyprinttodiv('testquery parameters',parameters, true);
+return parameters;
 }
 
 //Starting of querywid function...formerly MongoDataQuery
-exports.querywid  = global.querywid = function(parameters) {
-	// function querywid(parameters) { // can change to call back
+//exports.querywid = querywid = function(parameters,target,callback) {
+exports.querywid = querywid = function(parameters) { // can change to call back
 
-	if (parameters['mongorawquery']) {
-		output = mongoquery(parameters['mongorawquery']);
-		targetfunction = "mongoquery";
-	    queryresults = executethis(parameters['mongorawquery'], targetfunction);
-	    return queryresults;
-	} else {
-		return querywidlocal(parameters);
-	};
+	delete parameters['executethis']; //** added 11/2
+
+	if (config.environment="local") {return mongoquery(parameters)};
+// if (parameters['mongorawquery']) {
+// 		return mongoquery(parameters);
+// 	} else {
+// 		return querywidlocal(parameters);
+// 	};
 
 
+	console.log(' callback >> '+ callback);
 	var output = {};
     mQueryString = "";
 
@@ -994,6 +988,4 @@ function fishOut(parameters) {
 //  proxyprinttodiv('Function mongo() out with  output : ', output );   
 //  return output;
 // }//End of mongo function
-
-
 

@@ -92,19 +92,30 @@ global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
 		callback({});
 	}
 	
-	console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
-	// Check to see if the wid name exists
-    db.collection(schemaToLookup).findOne(objToFind, function(err, result) {
-    	if (err  || (!result)) {
-			console.error(err);
-	    	callback({'error':'error occurred in mongoquery'});
-	    	// throw err;
-	    }
-	    else{
-		    console.log('Found! '+ JSON.stringify(result));
-	    	callback(result);
-	    }
-	 }); 
+	  // Check to see if the wid name exists
+	  
+	    	      
+    db.collection(schemaToLookup).findOne(objToFind, function(err, res) {
+		console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
+	  	if(err){
+	  		callback({'error':'error'});
+	  	}else{
+	  		var result = undefined;
+	  		while(result===undefined){
+	  			if(res!=undefined){
+	  				result=res;
+	  				// console.log(' ****** got it');
+	  			}else{
+	  				result =undefined;
+	  				// console.log(' ****** waiting');
+	  			}
+	  			if(result){
+	  				break;
+	  			}
+	  		}
+	  		callback(result);
+	  	}
+	  });
 	
 };
 

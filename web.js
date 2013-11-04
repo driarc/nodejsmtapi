@@ -53,6 +53,7 @@ app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.executethis);
 app.put('/buildtemplate', driTemplate.buildTemplate);
+app.get('/echo',common.echo);
 
 app.get('/updateWidTest', common.updateWidTest);
 

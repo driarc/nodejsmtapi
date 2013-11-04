@@ -66,21 +66,28 @@ var test3 = global.test3 = function(params, target, callback){
 
 
 require('./dao/mongo.js');
+// var test99 = global.test99 = function(params, target, callback){
+// 	console.log('from test99 method');
+// 	return mongoquery({"wid":"test1"},"mongoquery",function(data){
+// 		console.log(JSON.stringify(data));
+// 		console.log('from callback of test99 method');
+// 		callback(data);
+// 	});
+// }
+
 var test99 = global.test99 = function(params, target, callback){
 	console.log('from test99 method');
-	return mongoquery({"wid":"test1"},"mongoquery",function(data){
+	callback( mongoquery({"wid":"test1"},"mongoquery",function(data){
 		console.log(JSON.stringify(data));
 		console.log('from callback of test99 method');
-		callback(data);
-	});
+		return data;
+	}));
 }
 
 
 exports.proxyprinttodiv = proxyprinttodiv = function(text, obj, debugone){
     // printToDiv(text, obj, debugone);    // comment this in server version
 }
-
-
 
 exports.configuration=configuration;
 

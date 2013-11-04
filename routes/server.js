@@ -102,10 +102,10 @@ exports.executethis = function(req, res) {
 
     var returned = executethis.executethis(item);
 
-    if((!returned) || (returned.length === 0)){
-      returned = global.data;
-      console.log('server.js  >>> '+JSON.stringify(returned));
-    }
+    // if((!returned) || (returned.length === 0)){
+    //   returned = global.data;
+    //   console.log('server.js  >>> '+JSON.stringify(returned));
+    // }
 
     res.send(returned);
     res.end();

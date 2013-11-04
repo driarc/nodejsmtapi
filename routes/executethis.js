@@ -1,113 +1,116 @@
 // 'use strict';
-var config = require('../config.js');
-require('../dao/mongo.js');
-require('../dao/addget.js');
-require('../dao/querym.js');
+config=require('../config.js')// TODO :: REMOVE this for this file to truly become portable
 
-(function(window) {
+ // make sure the global is clear
+exports.data = {}
+// var exports ={}; ** COMMENTED BY SAURABH
+
+// start polling at an interval until the data is found at the global
+var intvl = setInterval(function() {
+    if (exports.data) { 
+        clearInterval(intvl);
+        // console.log(data);
+    }
+}, 100);
+
+
+/// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
+exports.executethis = executethis = function(inboundparms, targetfunction) {
+    // exports.executethis = executethis = function(inboundparms, targetfunction) {
+    console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
+    console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
     
-    
-
-     // make sure the global is clear
-    window.data = null
-
-    // start polling at an interval until the data is found at the global
-    var intvl = setInterval(function() {
-        if (window.data) { 
-            clearInterval(intvl);
-            // console.log(data);
-        }
-    }, 100);
-
-
-    /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
-    // var executethis = function(inboundparms, targetfunction) {
-    exports.executethis = executethis = function(inboundparms, targetfunction) {
-       // exports.executethis = executethis = function(inboundparms, targetfunction) {
-        console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
-        console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
-        
-        inboundparms = util.toLowerKeys(inboundparms);  
-        
-        if(!targetfunction) {// ** DONE BY SAURABH 
-            targetfunction = 'execute';
-        } else {
-            delete inboundparms["executethis"]
-        };
-
-        var params = inboundparms;  
-        params = util.toLowerKeys(params);  
-        if (targetfunction === undefined || targetfunction === '') {
-            // start the async
-            var data_to_return = window[targetfunction](params);
-            return data_to_return; 
-        }else{
-            console.log(' >>>>>>>> calling with callback '+ targetfunction + ' >>>>' );
-            return window[targetfunction](params, targetfunction, function(data) {
-                window.data = data;
-                console.log('after called back from executethis '+JSON.stringify(data));
-                return window.data;
-            });
-            return window.data;
-        }; 
-
+    if(!targetfunction) {// ** DONE BY SAURABH 
+        targetfunction = 'execute';
     }
 
-  
+    var parmnum=0;
+    if (eval(targetfunction).length!==undefined) {parmnum=eval(targetfunction).length;}
 
-function addthisfn(inputWidgetObject) {
+    inboundparms = util.toLowerKeys(inboundparms);  
+    
+    if (parmnum===1) {
+        var params = inboundparms;  
+        // var params = JSON.parse(inboundparms[0]);  
+        params = util.toLowerKeys(params);  
+        // start the async
+        var data_to_return = eval(targetfunction)(params);
+        return data_to_return; 
+    };
+    if (parmnum>1) {   // **
+        var params = inboundparms;   
+        // start the async
+         eval(targetfunction)(params,targetfunction, function(data) {
+            exports.data = data;
+            console.log(exports.data);
+        });
+        return exports.data;
+    };
+   
+}
+
+
+var addthisfn = function(inputWidgetObject) {
     printToDiv('Function addthis in : inputWidgetObject',  inputWidgetObject);
     inputWidgetObject["wid"]=inputWidgetObject["addthis"];
-    delete inputWidgetObject["addthis"];
-    resultObj=addtomongo(inputWidgetObject);
+    resultObj=updatewid(inputWidgetObject);
     printToDiv('Function addthis in : x',  resultObj);
     return resultObj;
 }
 
 
+
 // execute method --- method called numbered (1)
-global.execute = execute = function(incomingparameters,target, callback){
+var execute = function(incomingparameters, targetfunction, callback){
+// we should add cases of targetfuctnion: execute, addthis, test
    if (incomingparameters["executethis"] === "test") {
         incomingparameters["imAlive"] = "true";
         callback(incomingparameters);
     }
-    incomingparameters['midexecute']=incomingparameters['executethis'];
-    delete incomingparameters['executethis'];
 
-    // getAllParameters(incomingparameters);
+    if (incomingparameters["addthis"]) {
+        output=addthisfn(incomingparameters);
+        callback(output);
+        } 
+    else
+        {
+        //if (!inputWidgetObject["executethis"]) {inputWidgetObject["executethis"=targetfunction}
+        incomingparameters['midexecute']=incomingparameters['executethis'];
+        delete incomingparameters['executethis']
 
-    // pre-execute method --- method called numbered (2)
-    doThis(incomingparameters,'preexecute',function(incomingparameters){
+        // getAllParameters(incomingparameters);
 
-        // console.log('after preexecute >> '+JSON.stringify(incomingparameters));
-        // mid-execute method --- method called numbered (3)
-        doThis(incomingparameters,'midexecute',function(outgoingparameters){
+        // pre-execute method --- method called numbered (2)
+        doThis(incomingparameters,'preexecute',function(incomingparameters){
 
-            if(!outgoingparameters){
-                outgoingparameters ={};
-            }
+            // console.log('after preexecute >> '+JSON.stringify(incomingparameters));
+            // mid-execute method --- method called numbered (3)
+            doThis(incomingparameters,'midexecute',function(outgoingparameters){
 
-            // console.log('after executethis >> '+JSON.stringify(outgoingparameters));
-            // post-execute method --- method called numbered (4)
-            doThis(outgoingparameters,'postexecute',function(outgoingparameters){
+                if(!outgoingparameters){
+                    outgoingparameters ={};
+                }
 
-                // console.log('after postexecute >> '+JSON.stringify(outgoingparameters));
-                callback(outgoingparameters);
+                console.log('after executethis >> '+JSON.stringify(outgoingparameters));
+                // post-execute method --- method called numbered (4)
+                doThis(outgoingparameters,'postexecute',function(outgoingparameters){
+                    console.log('after postexecute >> '+JSON.stringify(outgoingparameters));
+                    callback(outgoingparameters);
+                });
             });
         });
-    });
+    }
 }
 
 
 // Primary execute function called after doThis
-global.executeFn = executeFn =  function(params, target,  callback){
-    var functionToExecute = params['executethis'];
-    console.log(' >>> from executeFn >>>' + target +' '+ functionToExecute);
-    if(functionToExecute !== undefined) {
-        if(typeof window[functionToExecute] === 'function') {
-            // delete params["executethis"]; // **
+var executeFn = function(params, target,  callback){
+    if ((params['executethis']!== undefined) && (params['executethis'] !== "")) {
+        var functionToExecute = params['executethis'];
+        if(typeof eval(functionToExecute) === 'function') {
+            //delete params["executethis"];  // **
             // check for number of params
-            var param_count = window[functionToExecute].length;
+            var param_count = eval(functionToExecute).length;
             
             if (param_count === 1) {
                 // if the function to call accepts only 1 parameter, it 
@@ -115,7 +118,7 @@ global.executeFn = executeFn =  function(params, target,  callback){
                 callback(executethis(params,functionToExecute));
             } else {
                 // This version assumes a callback is present
-                window[functionToExecute](params, target, function(data) {
+                eval(functionToExecute)(params, target, function(data) {
                     callback(data);
                 });
             }
@@ -126,14 +129,19 @@ global.executeFn = executeFn =  function(params, target,  callback){
     } else {
         // console.log("Nothing to do in executefn...");
         callback(params);
-    } 
+    }
 }
 
 // primary conmmand router based on what it reads from config
-global.doThis = doThis = function(params, target, callback) {
+function doThis(params, target, callback) {
 
+    // console.log('>>>>>>>>>>>> From doThis '+ target +' >>> '+JSON.stringify(params));
     // TolowerCase all incoming parameters
-    var config0 = config.configuration;
+    var config0 = {};
+    // if(!config){
+    //     var config = require('../config.js');
+    // }
+    config0 = config.configuration;
     // ToLower the incoming config first level keys
     config0 = util.toLowerKeys(config0);
 
@@ -172,41 +180,37 @@ global.doThis = doThis = function(params, target, callback) {
 
         var whatToDoList = config0[params[target]];
         var howToDo = howToDoList[item]['dothis'];
-        
+
         // console.log("What to do list: " + JSON.stringify(whatToDoList));
 
         // if (whatToDoList !== undefined) { // make sure we have a list from config, if not just go execute it
         if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
-            for (var item in whatToDoList) {
-                console.log('>>>>>>>>>>>> configuration <'+ target +'> >>> '+JSON.stringify(howToDoList));
+            for (var whatitem in whatToDoList) {
+                // console.log('>>>>>>>>>>>> configuration <'+ target +'> >>> '+JSON.stringify(howToDoList));
                 
-                var whatToDo = whatToDoList[item]['dothis'];
+                var whatToDo = whatToDoList[whatitem]['dothis'];
                 // console.log("Trying to execute: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + whatToDo + '"}');
                 params['executethis'] = whatToDo;
                 // clean up params
                 delete params[target];
-                window[howToDo](params, target, callback);
+                eval(howToDo)(params, target, callback);
             }
         } else {
-            // console.log('>>>>>>>>>>>> line 197 From howToDo '+ howToDo);
-            if(window[howToDo] && params[target]) {
-                console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+            // console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+            if(eval(howToDo)&& (params[target])) {
                 params['executethis'] = params[target];
                 // Clean up the params, do not want executethis: something and a midexecute : something
                 delete params[target];
-                // console.log('>>>>>>>>>>>> From howToDo inside if line 202 '+ target +' >>> '+howToDo);
-                window[howToDo](params, target, callback);
+                eval(howToDo)(params, target, callback);
             } else {
                 // console.log("Nothing to do in dothis...");
                 callback(params);
             }
         }
 
-        if(window[howToDo] && typeof window[howToDo] === 'function'){
+        if(eval(howToDo) && typeof eval(howToDo) === 'function'){
             break;
         }
     }
 }
 
-
-})(typeof window == "undefined" ? global : window);
