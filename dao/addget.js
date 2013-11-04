@@ -9,7 +9,7 @@ function proxyprinttodiv(text, obj, debugone){
 
 
 exports.getwid = getwid = function(inputWidgetObject) {
-	printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
+	//printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
 	delete inputWidgetObject['executethis']; //** added 11/2
     //resultObj = executethis(inputWidgetObject);
 	resultObj=getfrommongo(inputWidgetObject);
@@ -19,7 +19,7 @@ exports.getwid = getwid = function(inputWidgetObject) {
 
 exports.updatewid = updatewid = function(inputWidgetObject) {
 	// todelete added 11/2 -- optional parm ) otherwise default to executethis -- used for addthis
-	printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject,1);
+	//printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject,1);
 	delete inputWidgetObject["executethis"]; 
 	// if (inputWidgetObject["addthisparameters"]) { // added 11/2
 	// 	inputWidgetObject=jsonConcat(inputWidgetObject,inputWidgetObject["addthisparameters"]);
