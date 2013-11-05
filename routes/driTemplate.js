@@ -1,7 +1,7 @@
 'use strict';
 var cheerio = require('cheerio')
     , $ = undefined
-    , execute = require('executethis.js')
+    , execute = require('/executethis.js')
     , fs = require('graceful-fs')
     , find = require('findit')
     , config = require('../config.js')
