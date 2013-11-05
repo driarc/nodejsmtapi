@@ -26,7 +26,8 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 
 
 // DAO method to remove an entry from specified collection
-exports.updatetomongo = updatetomongo = function(queryObject,targetfunction,callback){
+//changed line 30 from exports to global
+global.updatetomongo = updatetomongo = function(queryObject,targetfunction,callback){
 	
 	delete updatedObject.wid;
 	for (var props in queryObject.data) {
