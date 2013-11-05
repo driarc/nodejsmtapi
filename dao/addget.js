@@ -12,7 +12,7 @@ exports.getwid = getwid = function(inputWidgetObject) {
 	//printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
 	delete inputWidgetObject['executethis']; //** added 11/2
     //resultObj = executethis(inputWidgetObject);
-	resultObj=getfrommongo(inputWidgetObject);
+	resultObj = executethis(inputWidgetObject, "getfrommongo");
 	proxyprinttodiv('Function getwid in : x',  resultObj);
 	return resultObj;
 }
