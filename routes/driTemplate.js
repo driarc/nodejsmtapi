@@ -22,7 +22,7 @@ exports.buildTemplate = buildTemplate = function(req, res) {
 
 		for (var i = 0; i < tags.length; i++) {
 			var nextWml = tags[i].replace('[[', '').replace(']]', '');
-			findAndReadFile(lookupDir, nextWml, 'wml', tags[i], replaceWmlTag);
+			findAndReadFile(nextWml + '.wml', '', tags[i], replaceWmlTag);
 		}
 
 		htmlPath = masterPath.replace('.wml', '.html');
