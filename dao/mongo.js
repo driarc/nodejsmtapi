@@ -66,43 +66,43 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 
 
 
-// change made 11_5 by bd
-global.getfrommongo = getfrommongo = function (objToFind, targetfunction, callback) {
-    delete objToFind['executethis'];
+//// change made 11_5 by bd
+//global.getfrommongo = getfrommongo = function (objToFind, targetfunction, callback) {
+//    delete objToFind['executethis'];
 
-    if (!objToFind) {
-        callback({});
-    }
+//    if (!objToFind) {
+//        callback({});
+//    }
 
-    console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
-    // Check to see if the wid name exists
-    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
-        console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
-        if (err) {
-            callback({ 'error': 'error' });
-        } else {
-            var result = undefined;
-            result = res;
-        }
-        callback(result);
-    });
+//    console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+//    // Check to see if the wid name exists
+//    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
+//        console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+//        if (err) {
+//            callback({ 'error': 'error' });
+//        } else {
+//            var result = undefined;
+//            result = res;
+//        }
+//        callback(result);
+//    });
 
-};
-//global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){ 
-//	var widName = objToFind['wid'];
-//	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
-//	// Check to see if the wid name exists
-//    db.collection(schemaToLookup).findOne(widName, function(err, result) {
-//    	if (!result) {
-//			callback({});
-//	    }
-//	    else{
-//		    console.log('Found! '+ JSON.stringify(result));
-//	    	callback(result);
-//	    }
-//	 }); 
-//	
 //};
+global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){ 
+	var widName = objToFind['wid'];
+	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
+	// Check to see if the wid name exists
+    db.collection(schemaToLookup).findOne(widName, function(err, result) {
+    	if (!result) {
+			callback({});
+	    }
+	    else{
+		    console.log('Found! '+ JSON.stringify(result));
+	    	callback(result);
+	    }
+	 }); 
+	
+};
 
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
