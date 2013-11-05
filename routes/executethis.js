@@ -24,9 +24,9 @@
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + JSON.stringify(inboundparms));
         console.log(' >>>> executethis function .. before calling callback >>> ' + targetfunction);
 
-        if (targetfunction === undefined || targetfunction === null) {// ** DONE BY SAURABH 
+        if (targetfunction === undefined || targetfunction === null) {
             targetfunction = 'execute';
-            console.log(' >>>> executethis function..after applying targetfunction >>> ' + targetfunction);
+            console.log(' >>> targetfunction replaced as  ' + targetfunction);
         }
 
         var parmnum = 0;
@@ -52,10 +52,10 @@
                 console.log(window.data);
             });
 
-            while (ret === undefined) {
-                if (window.data !== undefined) {
-                    console.log(' ****** executethis got it');
+            while (typeof ret === 'undefined') {
+                if (typeof window.data !== 'undefined') {
                     ret = window.data;
+                    console.log(' ****** executethis got it , ret is ' + JSON.stringify(ret));
                 } else {
                     console.log(' ****** executethis waiting');
                 }
@@ -132,25 +132,29 @@
                     // does not have a callback...so use this version
                     callback(executethis(params, functionToExecute));
                 } else {
-                    // This version assumes a callback is present
-                    window[functionToExecute](params, target, function (data) {
-                        console.log(' ****** executeFn receiving data');
-                        window.data = data;
-                        callback(data);
-                    });
+                    // This version assumes a callback is present,
+                    // so we will not use a version with a return...it has to be
+                    // a callback
+                    window[functionToExecute](params, target, callback);
+                    // window[functionToExecute](params, target, function(data) {
+                    //     console.log(' ****** executeFn receiving data');
+                    //     callback(data);
+                    // window.data = data;
+                    // var ret = undefined;
+                    //  while(typeof ret === 'undefined'){
+                    //         if(typeof window.data!=='undefined'){
+                    //         console.log(' ****** executeFn got it');
+                    //         ret = window.data;
+                    //         return ret;
+                    //     }else{
+                    //         console.log(' ****** executeFn waiting');
+                    //     }
+                    // }
+                    // printToDiv('Function executeFn',  params);
+                    // callback(ret);         
+                    // });
 
-                    var ret = undefined;
-                    while (ret === undefined) {
-                        if (window.data !== undefined) {
-                            console.log(' ****** executeFn got it');
-                            ret = window.data;
-                            return ret;
-                        } else {
-                            console.log(' ****** executeFn waiting');
-                        }
-                    }
-                    printToDiv('Function executeFn', params);
-                    callback(ret);
+
                 }
             } else {
                 // console.log("No function by that name nothing to do in executefn ...");
@@ -239,4 +243,4 @@
         }
     }
 
-})(typeof window == "undefined" ? exports : window);
+})(typeof window == "undefined" ? global : window);
