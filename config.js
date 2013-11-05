@@ -22,12 +22,6 @@ configuration.midexecute[0] = {};
 configuration.midexecute[0].order = 0;
 configuration.midexecute[0].dothis = 'executeFn';
 
-
-configuration.executethis = [];
-configuration.executethis[0] = {};
-configuration.executethis[0].order = 0;
-configuration.executethis[0].dothis = 'executeFn';
-
 configuration.postexecute = [];
 configuration.postexecute[0] = {};
 configuration.postexecute[0].order = 0;
