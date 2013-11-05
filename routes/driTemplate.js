@@ -90,32 +90,6 @@ function getWmlTags(filename, callback) {
 	});
 }
 
-// replace [[<wml>]] tags with contents of <wml>.wml
-function replaceWmlTag(file) {
-	masterContents.code = masterContents.code.replace(file.tag, file.contents);
-	changedContents();
-}
-
-// check code contents when changed and save when all [[<wml>]] tags have been processed
-function changedContents() {
-	if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
-		fs.writeFile(htmlPath, masterContents.code, function(err) {
-			if (err) {
-				console.log(' Error creating file => ' + JSON.stringify(err));
-				responseData.error = err;
-			}
-			else {
-				console.log(' All [[<wml>]] tags processed.');
-				console.log(' Successfully created file => ' + htmlPath);
-			}
-
-			console.log('*************END********** driTemplate ************END***************');
-			response.send(responseData);
-			response.end();
-		});
-	}
-}
-
 // find a file recursively and return it's path and contents
 function findAndReadFile(fileName, area, tag, callback) {
 	var finder = find(lookupDir);
@@ -129,10 +103,17 @@ function findAndReadFile(fileName, area, tag, callback) {
 	});
 }
 
+// replace [[<wml>]] tags with contents of <wml>.wml
+function replaceWmlTag(file) {
+    console.log('replacing tag => ' + file.tag);
+    masterContents.code = masterContents.code.replace(file.tag, file.contents);
+    changedContents();
+}
+
 // extract area from found file
 function replaceTagWithArea(file) {
-    var pattern = '\<!--{"areadefinition": "begin", "areaname": "' + file.area + '"}--\>(.*)'
-                  + '\<!--{"areadefinition": "end", "areaname": "' + file.area + '"}--\>'
+    var pattern = '\\<!--{"areadefinition": "begin", "areaname": "' + file.area + '"}--\\>(.*)'
+            + '\\<!--{"areadefinition": "end", "areaname": "' + file.area + '"}--\\>'
         , regex = new RexExp(pattern, 'gi')
         , result;
 
@@ -141,4 +122,24 @@ function replaceTagWithArea(file) {
     }
 
     changedContents();
+}
+
+// check code contents when changed and save when all [[<wml>]] tags have been processed
+function changedContents() {
+    if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
+        fs.writeFile(htmlPath, masterContents.code, function(err) {
+            if (err) {
+                console.log(' Error creating file => ' + JSON.stringify(err));
+                responseData.error = err;
+            }
+            else {
+                console.log(' All [[<wml>]] tags processed.');
+                console.log(' Successfully created file => ' + htmlPath);
+            }
+
+            console.log('*************END********** driTemplate ************END***************');
+            response.send(responseData);
+            response.end();
+        });
+    }
 }
