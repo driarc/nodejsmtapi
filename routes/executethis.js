@@ -19,7 +19,7 @@
 
 
     /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
-    exports.executethis = executethis = function(inboundparms, targetfunction) {
+    global.executethis = executethis = function(inboundparms, targetfunction) {
         // exports.executethis = executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
         console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
