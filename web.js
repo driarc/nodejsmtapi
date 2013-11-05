@@ -5,6 +5,7 @@ var express = require('express')
   , common = require('./routes/common')
   , server = require('./routes/server')
   , driTemplate = require('./routes/driTemplate')
+  , jasonserver = require('./routes/server-jason');
 
 
  
@@ -52,6 +53,7 @@ app.configure('development', function(){
 app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.executethis);
+app.put('/executethisjason', jasonserver.executethis);
 app.put('/buildtemplate', driTemplate.buildTemplate);
 app.get('/echo',common.echo);
 

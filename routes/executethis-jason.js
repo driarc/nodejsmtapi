@@ -22,18 +22,21 @@
     exports.executethis = executethis = function (inboundparms, targetfunction) {
         // exports.executethis = executethis = function(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + JSON.stringify(inboundparms));
-        console.log(' >>>> executethis function .. before calling callback >>> ' + targetfunction);
+        console.log(' >>>> executethis function .. before calling callback >>> ' + targetfunction.toString());
 
         if (targetfunction === undefined || targetfunction === null) {
-            targetfunction = 'execute';
-            console.log(' >>> targetfunction replaced as  ' + targetfunction);
+            targetfunction = execute;
+            console.log(' >>> targetfunction replaced as  ' + targetfunction.toString());
         }
 
-        var parmnum = 0;
-        console.log(' >>> targetfunction replaced as  ' + JSON.stringify(inboundparms));
-        if (window[targetfunction].length !== undefined) { parmnum = window[targetfunction].length; }
+//        var parmnum = 0;
+//        if (window[targetfunction].length !== undefined) { parmnum = window[targetfunction].length; }
 
         inboundparms = util.toLowerKeys(inboundparms);
+
+        if (targetfunction instanceof Function) {
+            targetfunction(inboundparms, )
+        }
 
         if (parmnum === 1) {
             var params = inboundparms;
@@ -79,12 +82,6 @@
 
     // execute method --- method called numbered (1)
     exports.execute = execute = function (incomingparameters, targetfunction, callback) {
-        // we should add cases of targetfuctnion: execute, addthis, test
-        if (incomingparameters["executethis"] === "test") {
-            incomingparameters["imAlive"] = "true";
-            callback(incomingparameters);
-        }
-
         if (incomingparameters["addthis"]) {
             output = addthisfn(incomingparameters);
             callback(output);
