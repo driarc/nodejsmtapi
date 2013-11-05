@@ -30,6 +30,7 @@
         }
 
         var parmnum = 0;
+        console.log(' >>> targetfunction replaced as  ' + window[targetfunction].length);
         if (window[targetfunction].length !== undefined) { parmnum = window[targetfunction].length; }
 
         inboundparms = util.toLowerKeys(inboundparms);
