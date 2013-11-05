@@ -119,6 +119,31 @@ global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
 	
 };
 
+global.mongoquery2 = mongoquery2 = function (objToFind, targetfunction, callback) {
+    delete objToFind['executethis'];
+
+    if (!objToFind) {
+        callback({});
+    }
+
+    // Check to see if the wid name exists
+
+
+    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
+        console.log(' ****** mongoquery2 method in dao ' + JSON.stringify(objToFind));
+        if (err) {
+            callback({ 'error': 'error' });
+        } else {
+                    var result = undefined;
+                    result = res;
+                }
+            });
+            callback(result);
+        }
+    });
+
+};
+
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
 global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfunction,callback){
