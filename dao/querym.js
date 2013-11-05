@@ -10,6 +10,11 @@ proxyprinttodiv('testquery parameters',parameters, true);
 return parameters;
 }
 
+exports.timestamp = timestamp = function testquery(parameters) {
+    parameters["IAMALIVE"] = "hello";
+    proxyprinttodiv('testquery parameters', parameters, true);
+    return parameters;
+}
 //Starting of querywid function...formerly MongoDataQuery
 exports.querywid = querywid = function(parameters,targetfunction,callback) {
 //exports.querywid = querywid = function(parameters) { // can change to call back

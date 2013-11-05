@@ -117,7 +117,7 @@ global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
     // Check to see if the wid name exists
 
 
-    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
+    db.collection(schemaToLookup).find(objToFind, function (err, res) {
         console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
         if (err) {
             callback({ 'error': 'error' });
