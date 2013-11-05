@@ -11,8 +11,9 @@ return parameters;
 }
 
 exports.timestamp = timestamp = function testquery(parameters) {
-    parameters["IAMALIVE"] = "hello";
-    proxyprinttodiv('testquery parameters', parameters, true);
+    var timeInMs = Date.now();
+    parameters["date"] = timeInMs;
+    proxyprinttodiv('timestamp parameters', parameters, true);
     return parameters;
 }
 //Starting of querywid function...formerly MongoDataQuery
