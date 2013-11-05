@@ -180,31 +180,31 @@ global.addtomongo = addtomongo = function (objToAdd, targetfunction, callback) {
 };
 
 
-//global.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
-//	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
+global.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
+	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
-//	for(var attr in objToAdd){
-//    	if(attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id' ){
-//    		if(!objToAdd.data){
-//    			objToAdd.data = {};
-//    		}
-//    		objToAdd.data[attr] = objToAdd[attr];
-//    		delete objToAdd[attr];
-//    	}
-//    }
+	for(var attr in objToAdd){
+    	if(attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id' ){
+    		if(!objToAdd.data){
+    			objToAdd.data = {};
+    		}
+    		objToAdd.data[attr] = objToAdd[attr];
+    		delete objToAdd[attr];
+    	}
+    }
 
-//	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
-//	    if (err) {
-//			console.error(">>>>>> ::: addToMongo ::: error" + err);
-//	    	callback({">>>>>> ::: addToMongo ::: error":err});
-//	    }
-//	    if (result){
-//	    	console.log('>>>>>> ::: addToMongo ::: Added! '+ JSON.stringify(result));
-//	    	callback(result);
-//	    } 
-//	});
+	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
+	    if (err) {
+			console.error(">>>>>> ::: addToMongo ::: error" + err);
+	    	callback({">>>>>> ::: addToMongo ::: error":err});
+	    }
+	    if (result){
+	    	console.log('>>>>>> ::: addToMongo ::: Added! '+ JSON.stringify(result));
+	    	callback(result);
+	    } 
+	});
 
-//};
+};
 
 
 exports.addorupdate = function(entityToAdd,targetfunction,callback){
