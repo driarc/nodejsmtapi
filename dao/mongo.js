@@ -125,7 +125,7 @@ global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
             var result = undefined;
             result = res;
         }
-        callback(result);
+        callback(res);
     });
 }
 
