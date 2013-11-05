@@ -65,61 +65,48 @@ exports.updatetomongo = updatetomongo = function(queryObject,targetfunction,call
 
 
 
-// the callback function on succesful addition is also specified
-global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){ 
-	var widName = objToFind['wid'];
-	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
-	// Check to see if the wid name exists
-    db.collection(schemaToLookup).findOne(widName, function(err, result) {
-    	if (!result) {
-			callback({});
-	    }
-	    else{
-		    console.log('Found! '+ JSON.stringify(result));
-	    	callback(result);
-	    }
-	 }); 
-	
+// change made 11_5 by bd
+global.getfrommongo = getfrommongo = function (objToFind, targetfunction, callback) {
+    delete objToFind['executethis'];
+
+    if (!objToFind) {
+        callback({});
+    }
+
+    console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+    // Check to see if the wid name exists
+    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
+        console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+        if (err) {
+            callback({ 'error': 'error' });
+        } else {
+            var result = undefined;
+            result = res;
+        }
+        callback(result);
+    });
+
 };
+//global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){ 
+//	var widName = objToFind['wid'];
+//	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
+//	// Check to see if the wid name exists
+//    db.collection(schemaToLookup).findOne(widName, function(err, result) {
+//    	if (!result) {
+//			callback({});
+//	    }
+//	    else{
+//		    console.log('Found! '+ JSON.stringify(result));
+//	    	callback(result);
+//	    }
+//	 }); 
+//	
+//};
 
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
 global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
-	delete objToFind['executethis'];
-
-	if(!objToFind){
-		callback({});
-	}
-	
-	  // Check to see if the wid name exists
-	  
-	    	      
-    db.collection(schemaToLookup).findOne(objToFind, function(err, res) {
-		console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
-	  	if(err){
-	  		callback({'error':'error'});
-	  	}else{
-	  		var result = undefined;
-	  		while(result===undefined){
-	  			if(res!=undefined){
-	  				result=res;
-	  				// console.log(' ****** got it');
-	  			}else{
-	  				result =undefined;
-	  				// console.log(' ****** waiting');
-	  			}
-	  			if(result){
-	  				break;
-	  			}
-	  		}
-	  		callback(result);
-	  	}
-	  });
-	
-};
-
-global.mongoquery2 = mongoquery2 = function (objToFind, targetfunction, callback) {
     delete objToFind['executethis'];
 
     if (!objToFind) {
@@ -130,7 +117,7 @@ global.mongoquery2 = mongoquery2 = function (objToFind, targetfunction, callback
 
 
     db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
-        console.log(' ****** mongoquery2 method in dao ' + JSON.stringify(objToFind));
+        console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
         if (err) {
             callback({ 'error': 'error' });
         } else {
