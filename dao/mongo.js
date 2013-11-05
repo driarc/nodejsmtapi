@@ -137,12 +137,8 @@ global.mongoquery2 = mongoquery2 = function (objToFind, targetfunction, callback
                     var result = undefined;
                     result = res;
                 }
+                callback(result);
             });
-            callback(result);
-        }
-    });
-
-};
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
