@@ -4,7 +4,7 @@
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
 // FYI we now call proxyprinttodiv which is in config that calls printtodiv
 
-exports.testquery = testquery = function testquery(parameters, target, callback) {
+exports.testquery = testquery = function testquery(parameters) {
 parameters["IAMALIVE"]="hello";
 proxyprinttodiv('testquery parameters',parameters, true);
 return parameters;
