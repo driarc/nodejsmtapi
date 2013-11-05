@@ -30,7 +30,7 @@
         }
 
         var parmnum = 0;
-        console.log(' >>> targetfunction replaced as  ' + inboundparms);
+        console.log(' >>> targetfunction replaced as  ' + JSON.stringify(inboundparms));
         if (window[targetfunction].length !== undefined) { parmnum = window[targetfunction].length; }
 
         inboundparms = util.toLowerKeys(inboundparms);
