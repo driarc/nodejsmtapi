@@ -59,22 +59,15 @@
 
     // primary command router based on what it reads from config
     exports.doThis = doThis = function (params, target, callback) {
+        console.log('>>>> In doThis with: '+JSON.stringify(params));
         var w,
             h,
             whatToDo,
             whatToDoList,
             howToDo,
             howToDoList,
-            config0,
-            incomingConfiguration;
-
-        console.log('>>>> In doThis with: '+JSON.stringify(params));
-        // lowerCase all incoming parameters
-        config0 = config.configuration;
-        // ToLower the incoming config first level keys
-        config0 = util.toLowerKeys(config0);
-
-        incomingConfiguration = params['configuration'];
+            config0 = util.toLowerKeys(config.configuration),
+            incomingConfiguration = params['configuration'];
 
         // override config for howToDo
         if(typeof incomingConfiguration !== 'undefined' && typeof incomingConfiguration[target] !== 'undefined') {
@@ -111,7 +104,8 @@
         for (h in howToDoList) {
             // set the howToDo should be Server, executeFn, etc..
             if (howToDoList.hasOwnProperty(h)) { // just making sure we are accessing an array member that exists
-                howToDo = howToDoList[h]['dothis'];
+                console.log('hasOwnProperty(h) is true!');
+                howToDo = window[howToDoList[h]['dothis']];
             }
 
             // if we don't find the howToDo in global then skip to the next item in the list
@@ -120,7 +114,7 @@
                 callback(params);
                 break;
             }
-            else if (!window[howToDo]) {
+            else if (!howToDo instanceof Function) {
                 if (!whatToDo) {
                     whatToDo = 'No what to do!';
                 }
