@@ -93,7 +93,7 @@ exports.processadd100 = processadd100 = function(parameters, targetfunction, cal
 	var arr = [];
 
 	// add to mongo 100 records
-	for(var c=0;c<5;c++){
+	for(var c=0;c<100;c++){
 		var rec = {"wid":c,"text":"text","data": Math.random()};
 		arr.push(rec);
 	}
@@ -107,10 +107,26 @@ exports.processadd100 = processadd100 = function(parameters, targetfunction, cal
 }
 
 
+// the callback function on succesful addition is also specified
+exports.testselect = testselect = function(objToFind,targetfunction,callback){
+	var objToFind = {"wid":"test1"};
+    // Check to see if the wid name exists
+    db.collection('maincollection').findOne({"wid":"test1"}, function(err, res) {
+    	console.log(' ****** testselect method in dao -- res '+ res);
+	  	if(err){
+	  		callback({'error':'error'});
+	  	}else{
+	  		callback(res);
+	  	}
+	  });
+	
+};
+
+
 exports.processget100 = processget100 = function(parameters, targetfunction, callback) { // can change to call back
 
 	// get 100 records
-	var ret = {"style" : "default"};
+	var ret = {"text" : "text"};
 	var records = {};
 	getmultiple100frommongo(ret,'',function(data){
 		records = data;

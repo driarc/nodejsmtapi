@@ -130,7 +130,7 @@ exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetf
 // the callback function on successful addition is also specified
 exports.getmultiple100frommongo = getmultiple100frommongo = function(objToFind,targetfunction,callback){
 	console.log(' ****** getMultipleFromMongo method in dao '+JSON.stringify(objToFind));
-	db.collection(schemaToLookup).find(objToFind).limit(10).toArray(function(err, result) {
+	db.collection(schemaToLookup).find(objToFind).limit(100).toArray(function(err, result) {
 		if (err) {
 			console.error('Error '+err);
 	    	// throw err;
@@ -176,33 +176,18 @@ exports.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
 
 
 exports.addorupdate =  addorupdate = function(entityToAdd,targetfunction,callback){
-    
-	if(typeof entityToAdd === 'array'){
-		for(var i=0;i<entityToAdd.length;i++){
+    console.log(JSON.stringify(entityToAdd));
+	if(entityToAdd instanceof Array){
 
-		    var widVal = (entityToAdd[i]['wid']);
-		    if(!widVal){
-		    	widVal = (entityToAdd[i]['Wid']);
-		    }
-		    console.log('addOrUpdate :::: widVal is >>> '+widVal);
-			getfrommongo({"wid":widVal},targetfunction,function(returnedObject){
-		        console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
-		        // check if object is found
-		        if(returnedObject){ 
-		            updatetomongo(returnedObject,targetfunction,function(updatedObj){
-		                console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
-		               
-		            });
-		        }else{	
-		            addtomongo(entityToAdd[i],targetfunction,function(addedObj){
-		                console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
-		            });
-		        }
-		    });
+			
+        db.collection('maincollection').insert(entityToAdd,targetfunction,function(addedObj){
+            console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
+            callback({'added objects':addedObj});
+        });
 		
-		}
-        callback({'added/updated':entityToAdd.length});
+		
 	}else{
+		console.log('individual addOrUpdate');
 
 	    var widVal = (entityToAdd['wid']);
 	    if(!widVal){
@@ -230,21 +215,6 @@ exports.addorupdate =  addorupdate = function(entityToAdd,targetfunction,callbac
     
 };
 
-
-// the callback function on succesful addition is also specified
-exports.testselect = testselect = function(objToFind,targetfunction,callback){
-	var objToFind = {"wid":"test1"};
-    // Check to see if the wid name exists
-    db.collection('maincollection').findOne({"wid":"test1"}, function(err, res) {
-    	console.log(' ****** testselect method in dao -- res '+ res);
-	  	if(err){
-	  		callback({'error':'error'});
-	  	}else{
-	  		callback(res);
-	  	}
-	  });
-	
-};
 
 
 
