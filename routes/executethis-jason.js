@@ -37,6 +37,7 @@
             if (executeThisFinished) {
                 console.log('*************End************executeThis*************End*************');
                 response.send(dataToReturn);
+                dataToReturn = {};
                 response.end();
             }
         });
