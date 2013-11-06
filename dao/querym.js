@@ -4,53 +4,7 @@
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
 // FYI we now call proxyprinttodiv which is in config that calls printtodiv
 
-function testquery(parameters) {
-parameters["IAMALIVE"]="hello";
-proxyprinttodiv('testquery parameters',parameters, true);
-return parameters;
-}
 
-
-
-//Starting of querywid function...formerly MongoDataQuery
-//exports.querywid = querywid = function(parameters,target,callback) {
-exports.process100 = process100 = function(parameters, targetfunction, callback) { // can change to call back
-
-
-	console.log(' *** from process100 >> ');
-	delete parameters['executethis']; //
-	// add 100 record and get 100 record
-	var arr = [];
-
-	// add to mongo 100 records
-	for(var c=0;c<5;c++){
-		var rec = {"wid":c,"text":"text","data": Math.random()};
-		addorupdate(rec,'',function(data){
-			console.log('All the records');
-			console.log(JSON.stringify(data));
-		});
-		arr.push({});
-	}
-
-	while(arr.length < 5){  };
-
-	// get 100 records
-	var ret = {};
-	var records = {};
-	mongoquery({'text':'text'},'',function(data){
-		console.log('All the records');
-		console.log(JSON.stringify(data));
-		records = data;
-
-		console.log(' callback '+callback);
-		if(typeof callback === 'undefined'){
-			ret = records;
-		}else{
-			console.log(' *** from process100 >> '+ JSON.stringify(records));
-			callback(records);
-		}
-	});
-}
 
 //Starting of querywid function...formerly MongoDataQuery
 exports.querywid = querywid = function(parameters,target,callback) {

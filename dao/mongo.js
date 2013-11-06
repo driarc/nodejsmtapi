@@ -111,12 +111,30 @@ exports.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
 exports.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfunction,callback){
-	console.log(' ****** getMultipleFromMongo method in dao');
+	console.log(' ****** getMultipleFromMongo method in dao '+JSON.stringify(objToFind));
 	db.collection(schemaToLookup).find(objToFind).toArray(function(err, result) {
 		if (err) {
-			console.error(err);
+			console.error('Error '+err);
 	    	// throw err;
-	    	callback({'error':'error'});
+	    	callback({'error':'error in getting multiple records from mongo.'});
+	    }
+	    else{
+	    	console.log('Found! '+ JSON.stringify(result));
+    		callback(result);
+        }
+	});
+};
+
+
+// DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
+// the callback function on successful addition is also specified
+exports.getmultiple100frommongo = getmultiple100frommongo = function(objToFind,targetfunction,callback){
+	console.log(' ****** getMultipleFromMongo method in dao '+JSON.stringify(objToFind));
+	db.collection(schemaToLookup).find(objToFind).limit(10).toArray(function(err, result) {
+		if (err) {
+			console.error('Error '+err);
+	    	// throw err;
+	    	callback({'error':'error in getting multiple records from mongo.'});
 	    }
 	    else{
 	    	console.log('Found! '+ JSON.stringify(result));
@@ -159,26 +177,55 @@ exports.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
 
 exports.addorupdate =  addorupdate = function(entityToAdd,targetfunction,callback){
     
-    var widVal = (entityToAdd['wid']);
-    if(!widVal){
-    	widVal = (entityToAdd['Wid']);
-    }
-    console.log('addOrUpdate :::: widVal is >>> '+widVal);
-	getfrommongo({"wid":widVal},targetfunction,function(returnedObject){
-        console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
-        // check if object is found
-        if(returnedObject){ 
-            updatetomongo(returnedObject,targetfunction,function(updatedObj){
-                console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
-                callback(updatedObj);
-            });
-        }else{	
-            addtomongo(entityToAdd,targetfunction,function(addedObj){
-                console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
-                callback(addedObj);
-            });
-        }
-    });
+	if(typeof entityToAdd === 'array'){
+		for(var i=0;i<entityToAdd.length;i++){
+
+		    var widVal = (entityToAdd[i]['wid']);
+		    if(!widVal){
+		    	widVal = (entityToAdd[i]['Wid']);
+		    }
+		    console.log('addOrUpdate :::: widVal is >>> '+widVal);
+			getfrommongo({"wid":widVal},targetfunction,function(returnedObject){
+		        console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
+		        // check if object is found
+		        if(returnedObject){ 
+		            updatetomongo(returnedObject,targetfunction,function(updatedObj){
+		                console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
+		               
+		            });
+		        }else{	
+		            addtomongo(entityToAdd[i],targetfunction,function(addedObj){
+		                console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
+		            });
+		        }
+		    });
+		
+		}
+        callback({'added/updated':entityToAdd.length});
+	}else{
+
+	    var widVal = (entityToAdd['wid']);
+	    if(!widVal){
+	    	widVal = (entityToAdd['Wid']);
+	    }
+	    console.log('addOrUpdate :::: widVal is >>> '+widVal);
+		getfrommongo({"wid":widVal},targetfunction,function(returnedObject){
+	        console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
+	        // check if object is found
+	        if(returnedObject){ 
+	            updatetomongo(returnedObject,targetfunction,function(updatedObj){
+	                console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
+	                callback(updatedObj);
+	            });
+	        }else{	
+	            addtomongo(entityToAdd,targetfunction,function(addedObj){
+	                console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
+	                callback(addedObj);
+	            });
+	        }
+	    });
+
+	}
 
     
 };

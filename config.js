@@ -75,6 +75,50 @@ require('./dao/mongo.js');
 // 	});
 // }
 
+function testquery(parameters) {
+parameters["IAMALIVE"]="hello";
+proxyprinttodiv('testquery parameters',parameters, true);
+return parameters;
+}
+
+
+
+//Starting of querywid function...formerly MongoDataQuery
+//exports.querywid = querywid = function(parameters,target,callback) {
+exports.processadd100 = processadd100 = function(parameters, targetfunction, callback) { // can change to call back
+
+	console.log(' *** from process100 >> ');
+	delete parameters['executethis']; //
+	// add 100 record and get 100 record
+	var arr = [];
+
+	// add to mongo 100 records
+	for(var c=0;c<5;c++){
+		var rec = {"wid":c,"text":"text","data": Math.random()};
+		arr.push(rec);
+	}
+	addorupdate(arr,'',function(data){
+		console.log(JSON.stringify(data));
+		callback({'updated records':JSON.stringify(data)});
+	});
+
+
+
+}
+
+
+exports.processget100 = processget100 = function(parameters, targetfunction, callback) { // can change to call back
+
+	// get 100 records
+	var ret = {"style" : "default"};
+	var records = {};
+	getmultiple100frommongo(ret,'',function(data){
+		records = data;
+		console.log(' *** from process100 >> '+ JSON.stringify(records));
+		callback(records);
+	});
+}
+
 exports.test99 = test99 = function(params, target, callback){
 	delete params['executethis'];
 	console.log('from test99 method');
