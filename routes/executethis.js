@@ -148,7 +148,7 @@
                     // This version assumes a callback is present,
                     // so we will not use a version with a return...it has to be
                     // a callback
-                    window[functionToExecute](params, target, callback);
+                    window[functionToExecute](params, callback);
                     // window[functionToExecute](params, target, function(data) {
                     //     console.log(' ****** executeFn receiving data');
                     //     callback(data);
