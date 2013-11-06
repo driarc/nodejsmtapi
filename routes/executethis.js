@@ -59,72 +59,154 @@
 
     // primary command router based on what it reads from config
     exports.doThis = doThis = function (params, target, callback) {
-        console.log(' Beginning doThis => '+ target +' >>> '+ nonCircularStringify(params));
-        // TolowerCase all incoming parameters
-        var config0 = util.toLowerKeys(config.configuration)
-            , incomingConfig = params['configuration'];
+        var w,
+            h,
+            whatToDo,
+            whatToDoList,
+            howToDo,
+            howToDoList,
+            config0,
+            incomingConfiguration;
+
+        console.log('>>>> In doThis with: '+JSON.stringify(params));
+        // lowerCase all incoming parameters
+        config0 = config.configuration;
+        // ToLower the incoming config first level keys
+        config0 = util.toLowerKeys(config0);
+
+        incomingConfiguration = params['configuration'];
 
         // override config for howToDo
-        if ((typeof incomingConfig !== 'undefined') && (typeof incomingConfig[target] !== '')) {
-            incomingConfig = util.toLowerKeys(incomingConfig);
+        if(typeof incomingConfiguration !== 'undefined' && typeof incomingConfiguration[target] !== 'undefined') {
+            incomingConfiguration = util.toLowerKeys(incomingConfiguration);
 
-            if ((typeof config0[params[target]]) !== 'object') {
-                // console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
+            if((typeof config0[params[target]])!== 'object'){
+                console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
                 config0[target] = {};
             }
-            // console.log('Loading"' + JSON.stringify(incomingConfiguration[target]) + ' onto config0...');
-            config0[target] = incomingConfig[target];
+
+            console.log('Loading"' + JSON.stringify(incomingConfiguration[target]) + ' onto config0...');
+            config0[target] = incomingConfiguration[target];
         }
 
-        var howToDoList = config0[target];
+        // Build and/or list for howtodo
+        howToDoList = config0[target];
+        // sort by executeorder and tryorder
+        howToDoList = howToDoList.sort(function(a, b) {
+            if ( a.executeOrder > b.executeOrder )
+                return 1;
+            else if ( a.executeOrder < b.executeOrder)
+                return -1;
+            else if ( a.tryOrder > b.tryOrder )
+                return 1;
+            else if ( a.tryOrder < b.tryOrder)
+                return -1;
+            else
+                return 0;
+        });
 
-        console.log(" HowToDoList => " + JSON.stringify(howToDoList));
+        console.log("Sorted howToDoList: " + JSON.stringify(howToDoList));
 
-        for (var item in howToDoList) {
-            // Override config0 for whatToDo
-            if ((typeof incomingConfig !== 'undefined') && (incomingConfig[params[target]] !== undefined)) {
-                incomingConfig = util.toLowerKeys(incomingConfig);
-                if ((typeof config0[params[target]]) !== 'object') {
-                    // console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
-                    config0[params[target]] = {};
-                }
-                // console.log('Loading"' + JSON.stringify(incomingConfiguration[params[target]]) + ' onto config0...');
-                config0[params[target]] = incomingConfig[params[target]];
+        // Iterate through the sorted list, if the function exists
+        for (h in howToDoList) {
+            // set the howToDo should be Server, executeFn, etc..
+            if (howToDoList.hasOwnProperty(h)) { // just making sure we are accessing an array member that exists
+                howToDo = howToDoList[h]['dothis'];
             }
 
-            var whatToDoList = config0[params[target]];
-            var howToDo = window[howToDoList[item]['dothis']];
-            console.log('dothis from config => ' + howToDoList[item]['dothis']);
+            // if we don't find the howToDo in global then skip to the next item in the list
+            if (!params[target]) {
+                console.log('%c In the ' + target + ' stage with no target in params, continuing on...', 'color: #FF0000');
+                callback(params);
+                break;
+            }
+            else if (!window[howToDo]) {
+                if (!whatToDo) {
+                    whatToDo = 'No what to do!';
+                }
+                console.log('%c whatToDo = ' + whatToDo + ', Trying next function...', 'color: #FF0000');
+                continue;
+            }
 
-            console.log(" What to do list: " + JSON.stringify(whatToDoList));
+            // Override config0 for whatToDo
+            if(typeof incomingConfiguration !== 'undefined' && incomingConfiguration[params[target]] !== undefined) {
+                incomingConfiguration = util.toLowerKeys(incomingConfiguration);
 
-            if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
-                for (var whatitem in whatToDoList) {
-                    // console.log('>>>>>>>>>>>> configuration <'+ target +'> >>> '+JSON.stringify(howToDoList));
+                if((typeof config0[params[target]])!== 'object'){
+                    console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
+                    config0[params[target]] = {};
+                }
 
-                    var whatToDo = whatToDoList[whatitem]['dothis'];
+                console.log('Loading"' + JSON.stringify(incomingConfiguration[params[target]]) + ' onto config0...');
+                config0[params[target]] = incomingConfiguration[params[target]];
+            }
+
+            // Build and/or list for whattodo
+            whatToDoList = config0[params[target]];
+
+            if (whatToDoList !== undefined) {
+                // sort by executeorder and tryorder
+                //whatToDoList = whatToDoList.sort(function(a, b){return a.executeorder-b.executeorder});
+
+                whatToDoList = whatToDoList.sort(function(a, b) {
+                    if ( a.tryOrder > b.tryOrder )
+                        return 1;
+                    else if ( a.tryOrder < b.tryOrder)
+                        return -1;
+                    else if ( a.executeOrder > b.executeOrder )
+                        return 1;
+                    else if ( a.executeOrder < b.executeOrder)
+                        return -1;
+                    else
+                        return 0;
+                });
+
+                console.log("Sorted whatToDoList: " + JSON.stringify(whatToDoList));
+
+                // make sure we have a list from config, if not just go execute it
+                for (w in whatToDoList) {
+                    // set the howToDo should be something like getwidfrommongo, login1, dosomethingwithstuff, etc...
+                    if (whatToDoList.hasOwnProperty(w)) {
+                        whatToDo = whatToDoList[w]['dothis'];
+                    }
+
+                    // if we don't find the whatToDo in global then skip to the next item in the list
+                    if (!window[whatToDo]){
+                        console.log(whatToDo + ' was not found, trying next function...');
+                        continue;
+                    }
+
+                    console.log("Trying to execute: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + whatToDo + '"}');
                     params['executethis'] = whatToDo;
                     // clean up params
                     delete params[target];
-                    if (howToDo instanceof Function) {
-                        howToDo(params, function(results) { callback(results); });
-                    }
-                }
-            } else {
-                if (howToDo instanceof Function && params[target]) {
-                    params['executethis'] = params[target];
-                    // Clean up the params, do not want executethis: something and a midexecute : something
-                    delete params[target];
-                    howToDo(params, function(results) { callback(results); });
-
-                } else {
-                    console.log(" Nothing to do in dothis, sending back params...");
-                    callback(params);
+                    window[howToDo](params, target, callback);
                 }
             }
-
-            if (howToDo instanceof Function) {
-                break;
+            else { // We have a case of no config for the right hand side that needs to be handled
+                console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+                if(window[howToDo]) {
+                    params['executethis'] = params[target];
+                    if (!window[params[target]]){
+                        // if we have another iteration to try, try it else go to next step in execution
+                        if (howToDoList.length > 1 && howToDo !== 'server'){
+                            console.log("No local function for " + params[target] + " trying next")
+                        } else if (howToDo === 'server') {
+                            // server is a special case where the right hand side will not exist in local scope
+                            console.log("Sending " + params[target] + " to server for execution");
+                            delete params[target];
+                            server(params, target, callback);
+                        } else {
+                            console.log(whatToDo + ' was not found, trying next execution...');
+                            // clear out this cycle execution
+                            callback(params);
+                        }
+                    }
+                }
+                else {
+                    console.log("Nothing to do in dothis...");
+                    callback(params);
+                }
             }
         }
     };
