@@ -23,7 +23,7 @@
     };
 
     function executethisjason(params, nextfunction) {
-        if (!nextfunction || !nextfunction instanceof Function) { nextfunction = executejason; }
+        if (!nextfunction || !nextfunction instanceof Function) { nextfunction = execute; }
 
         nextfunction(params, function(results) {
             if (executeThisFinished) {
