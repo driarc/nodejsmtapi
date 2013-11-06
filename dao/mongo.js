@@ -88,7 +88,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 //    });
 
 //};
-global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){ 
+global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
 	var widName = objToFind['wid'];
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
@@ -107,7 +107,7 @@ global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback)
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
-global.mongoquery = mongoquery = function(objToFind,targetfunction,callback){
+global.mongoquery = mongoquery = function(objToFind, callback){
     delete objToFind['executethis'];
 
     if (!objToFind) {
