@@ -6,6 +6,7 @@
       , dataToReturn = {}
       , execute
       , executeFn
+      , doThis
       , executeThisFinished = false;
 
 //    if (typeof require !== 'undefined') {
