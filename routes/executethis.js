@@ -24,7 +24,6 @@
 
     function executethisjason(params, nextfunction) {
         if (!nextfunction || !nextfunction instanceof Function) { nextfunction = executejason; }
-        console.log('executethisjason hit');
 
         nextfunction(params, function(results) {
             if (executeThisFinished) {
@@ -47,6 +46,7 @@
 
     // execute method --- method called numbered (1)
     exports.executejason = executejason = function (incomingparams, callback) {
+        console.log('executejason hit!');
         if (incomingparams["addthis"]) {
             addthisfn(incomingparams, function(results) {
                 executeThisFinished = true;
