@@ -163,6 +163,8 @@ global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, target
             }
             objToAdd.data[attr] = objToAdd[attr];
             delete objToAdd[attr];
+        } else if (attr === 'wid' || attr === 'Wid') {
+            widName = objToAdd[attr];
         }
     }
 
