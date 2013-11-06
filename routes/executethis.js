@@ -24,6 +24,7 @@
 
     function executethisjason(params, nextfunction) {
         if (!nextfunction || !nextfunction instanceof Function) { nextfunction = executejason; }
+        console.log('executethisjason hit');
 
         nextfunction(params, function(results) {
             if (executeThisFinished) {
@@ -57,17 +58,17 @@
             delete incomingparams['executethis'];
 
             // pre-execute method --- method called numbered (2)
-            doThis(incomingparams, 'preexecute', function (preResults) {
+            doThisjason(incomingparams, 'preexecute', function (preResults) {
                 //  console.log(' after preexecute >> '+ nonCircularStringify(preResults));
 
                 // mid-execute method --- method called numbered (3)
-                doThis(incomingparams, 'midexecute', function (midResults) {
+                doThisjason(incomingparams, 'midexecute', function (midResults) {
                     //  console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     if (midResults && midResults.midexecute) { delete midResults['midexecute']; }
                     addObjectToReturn(midResults);
 
                     // post-execute method --- method called numbered (4)
-                    doThis(incomingparams, 'postexecute', function(postResults) {
+                    doThisjason(incomingparams, 'postexecute', function(postResults) {
                         //  console.log(' after postexecute >> ' + nonCircularStringify(postResults));
 
                         executeThisFinished = true;
@@ -185,7 +186,7 @@
             return value;
         });
     }
-    
+
 
     /*****  older 'fake' sync executethis functions **Start**/
 
