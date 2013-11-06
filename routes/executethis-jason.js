@@ -71,7 +71,7 @@
                 // mid-execute method --- method called numbered (3)
                 doThis(incomingparams, 'midexecute', function (midResults) {
 //                    console.log(' after midexecute >> ' + nonCircularStringify(midResults));
-                    if (midResults.midexecute) { delete midResults['midexecute']; }
+                    if (midResults && midResults.midexecute) { delete midResults['midexecute']; }
                     addObjectToReturn(midResults);
 
                     // post-execute method --- method called numbered (4)
