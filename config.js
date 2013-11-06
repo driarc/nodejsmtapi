@@ -44,7 +44,21 @@ configuration.postexecute[0].dothis = 'executeFn';
 // configuration.updateWid[0].tryOrder = 0;
 // configuration.updateWid[0].dothis = 'addorupdate';
 
+var configurationjason = {};
+configurationjason.preexecute = [];
+configurationjason.preexecute[0] = {};
+configurationjason.preexecute[0].order = 0;
+configurationjason.preexecute[0].dothis = 'executeFnjason';
 
+configurationjason.midexecute = [];
+configurationjason.midexecute[0] = {};
+configurationjason.midexecute[0].order = 0;
+configurationjason.midexecute[0].dothis = 'executeFnjason';
+
+configurationjason.postexecute = [];
+configurationjason.postexecute[0] = {};
+configurationjason.postexecute[0].order = 0;
+configurationjason.postexecute[0].dothis = 'executeFnjason';
 
 // callback sets the received data to a global var
 var asynccallback = global.asynccallback = function asynccallback(d) {
