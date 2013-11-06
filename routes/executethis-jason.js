@@ -71,6 +71,7 @@
                 // mid-execute method --- method called numbered (3)
                 doThis(preResults, 'midexecute', function (midResults) {
                     console.log(' after midexecute >> ' + nonCircularStringify(midResults));
+                    if (midResults.midexecute) { delete midResults['midexecute']; }
                     addObjectToReturn(midResults);
 
                     // post-execute method --- method called numbered (4)
@@ -183,7 +184,7 @@
     function nonCircularStringify(obj) {
         var cache = [];
 
-        JSON.stringify(obj, function(key, value) {
+        return JSON.stringify(obj, function(key, value) {
             if (typeof value === 'object' && value !== null) {
                 if (cache.indexOf(value) !== -1) {
                     //found circular reference, discard key
