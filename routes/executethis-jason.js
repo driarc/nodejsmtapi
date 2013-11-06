@@ -105,22 +105,22 @@
     exports.doThis = doThis = function (params, target, callback) {
         console.log(' From doThis => '+ target +' >>> '+JSON.stringify(params));
         // TolowerCase all incoming parameters
-        var config = util.toLowerKeys(config.configuration)
+        var config0 = util.toLowerKeys(config.configuration)
           , incomingConfig = params['configuration'];
 
         // override config for howToDo
         if ((typeof incomingConfig !== 'undefined') && (typeof incomingConfig[target] !== '')) {
             incomingConfig = util.toLowerKeys(incomingConfig);
 
-            if ((typeof config[params[target]]) !== 'object') {
+            if ((typeof config0[params[target]]) !== 'object') {
                 // console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
-                config[target] = {};
+                config0[target] = {};
             }
             // console.log('Loading"' + JSON.stringify(incomingConfiguration[target]) + ' onto config0...');
-            config[target] = incomingConfig[target];
+            config0[target] = incomingConfig[target];
         }
 
-        var howToDoList = config[target];
+        var howToDoList = config0[target];
 
         // console.log("How to do list: " + JSON.stringify(howToDoList));
 
@@ -128,16 +128,16 @@
             // Override config0 for whatToDo
             if ((typeof incomingConfig !== 'undefined') && (incomingConfig[params[target]] !== undefined)) {
                 incomingConfig = util.toLowerKeys(incomingConfig);
-                if ((typeof config[params[target]]) !== 'object') {
+                if ((typeof config0[params[target]]) !== 'object') {
                     // console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
-                    config[params[target]] = {};
+                    config0[params[target]] = {};
                 }
                 // console.log('Loading"' + JSON.stringify(incomingConfiguration[params[target]]) + ' onto config0...');
-                config[params[target]] = incomingConfig[params[target]];
+                config0[params[target]] = incomingConfig[params[target]];
 
             }
 
-            var whatToDoList = config[params[target]];
+            var whatToDoList = config0[params[target]];
             var howToDo = howToDoList[item]['dothis'];
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
