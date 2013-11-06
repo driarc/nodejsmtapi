@@ -88,7 +88,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 //    });
 
 //};
-global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
+global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
 	var widName = objToFind['wid'];
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
@@ -151,7 +151,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-global.addtomongo = addtomongo = function (objToAdd, targetfunction, callback) {
+global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, targetfunction, callback) {
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = '';
