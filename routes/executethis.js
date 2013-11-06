@@ -1,34 +1,29 @@
 (function (window) {
     'use strict';
     var config = require('../config.js')
-        , response
         , startexecutethis
-        , dataToReturn = {}
         , execute
         , executethis
         , executeFn
-        , doThis
-        , executeThisFinished = false;
+        , doThis;
 
     exports.startexecutethis = startexecutethis = function(req, res) {
         var params = util.toLowerKeys(req.body);
         console.log('************Start***********executeThis************Start************');
         console.log(' parameters sent in => ' + JSON.stringify(params));
 
-        response = res;
-        executethisjason(params);
+        executethisjason(params, function(results) {
+            console.log('*************End************executeThis*************End*************');
+            res.send(results);
+            res.end();
+        });
     };
 
-    function executethisjason(params, nextfunction) {
-        if (!nextfunction || !nextfunction instanceof Function) { nextfunction = execute; }
+    function executethisjason(params, callback) {
+//        if (!nextfunction || !nextfunction instanceof Function) { nextfunction = execute; }
 
-        nextfunction(params, function(results) {
-            if (executeThisFinished) {
-                console.log('*************End************executeThis*************End*************');
-                response.send(dataToReturn);
-                dataToReturn = {};
-                response.end();
-            }
+        execute(params, function(results) {
+            callback(results);
         });
     }
 
@@ -44,9 +39,9 @@
     // execute method --- method called numbered (1)
     exports.execute = execute = function (incomingparams, callback) {
         console.log('executejason hit!');
+        var overallResults = {};
         if (incomingparams["addthis"]) {
             addthisfn(incomingparams, function(results) {
-                executeThisFinished = true;
                 callback(results);
             });
         }
@@ -62,14 +57,13 @@
                 doThis(incomingparams, 'midexecute', function (midResults) {
                     //  console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     if (midResults && midResults.midexecute) { delete midResults['midexecute']; }
-                    addObjectToReturn(midResults);
+                    addObjectToReturn(midResults, overallResults);
 
                     // post-execute method --- method called numbered (4)
                     doThis(incomingparams, 'postexecute', function(postResults) {
                         //  console.log(' after postexecute >> ' + nonCircularStringify(postResults));
 
-                        executeThisFinished = true;
-                        callback(postResults);
+                        callback(overallResults);
                     });
                 });
             });
@@ -163,9 +157,9 @@
         }
     };
 
-    function addObjectToReturn(obj) {
-        for (var prop in obj) {
-            dataToReturn[prop] = obj[prop];
+    function addObjectToReturn(fromobj, toobj) {
+        for (var prop in fromobj) {
+            toobj[prop] = fromobj[prop];
         }
     }
 
@@ -190,11 +184,6 @@
         /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
     exports.executethis = executethis = function (inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + JSON.stringify(inboundparms));
-        if (inboundparms.response) {
-            response = inboundparms.response;
-            delete inboundparms['response'];
-        }
-
         if (!targetfunction || !targetfunction instanceof Function) { targetfunction = execute; }
 
         var params = util.toLowerKeys(inboundparms)
