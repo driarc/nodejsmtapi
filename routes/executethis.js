@@ -147,7 +147,7 @@
                     }
                 }
             } else {
-                // console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+                console.log('params[target] true/false => ' + params[target])
                 if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target];
                     // Clean up the params, do not want executethis: something and a midexecute : something
