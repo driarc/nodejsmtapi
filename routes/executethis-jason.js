@@ -69,12 +69,12 @@
 //                console.log(' after preexecute >> '+ nonCircularStringify(preResults));
 
                 // mid-execute method --- method called numbered (3)
-                doThis(preResults, 'midexecute', function (midResults) {
+                doThis(incomingparams, 'midexecute', function (midResults) {
 //                    console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     if (midResults.midexecute) { delete midResults['midexecute']; }
 
                     // post-execute method --- method called numbered (4)
-                    doThis(midResults, 'postexecute', function(postResults) {
+                    doThis(incomingparams, 'postexecute', function(postResults) {
 //                        console.log(' after postexecute >> ' + nonCircularStringify(postResults));
 
                         executeThisFinished = true;
