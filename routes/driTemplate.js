@@ -6,7 +6,7 @@ var cheerio = require('cheerio')
     , find = require('findit')
     , config = require('../config.js')
     , lookupDir = config.LOOKUP_DIR
-    , masterContents = {code:''}
+    , resultData = {code:''}
     , responseData = {}
     , htmlPath, response, processWml, buildTemplate;
 
@@ -51,12 +51,6 @@ exports.processWml = processWml = function(req, res) {
                 var action = tagObject.executethis || '';
 
                 if (action === 'getfile') {
-//                    if (!tagObject.fromfile || !tagObject.fromextension) {
-//                        responseData.error = "fromfile or fromextension or both are missing on this getfile tag.";
-//                        response.send(responseData);
-//                        response.end();
-//                    }
-
                     var getFilename = tagObject.fromfile + '.' + tagObject.fromextension;
 
                     // replace with specific area else entire contents of file
@@ -79,12 +73,12 @@ exports.processWml = processWml = function(req, res) {
 // get [[<wml>]] tags from contents of master wml file
 function getWmlTags(filename, callback) {
 	findAndReadFile(filename + '.wml', '', '', function(file) {
-		masterContents.code = file.contents;
+		resultData.code = file.contents;
 		var regex = new RegExp('\\[\\[.*\\]\\]', 'g')
 		  , wmlTags = []
 		  , result;
 
-		while ((result = regex.exec(masterContents.code))) { wmlTags.push(result.toString()); }
+		while ((result = regex.exec(resultData.code))) { wmlTags.push(result.toString()); }
 
 		callback(wmlTags, file.path);
 	});
@@ -105,20 +99,21 @@ function findAndReadFile(fileName, area, tag, callback) {
 
 // replace [[<wml>]] tags with contents of <wml>.wml
 function replaceWmlTag(file) {
-    console.log('replacing tag => ' + file.tag);
-    masterContents.code = masterContents.code.replace(file.tag, file.contents);
+    console.log(' replacing tag => ' + file.tag);
+    resultData.code = resultData.code.replace(file.tag, file.contents);
     changedContents();
 }
 
 // extract area from found file
 function replaceTagWithArea(file) {
+    console.log(' replacing tag => ' + file.tag);
     var pattern = '\\<!--{"areadefinition": "begin", "areaname": "' + file.area + '"}--\\>(.*)'
             + '\\<!--{"areadefinition": "end", "areaname": "' + file.area + '"}--\\>'
         , regex = new RexExp(pattern, 'gi')
         , result;
 
-    while (result = regex.exec(masterContents.code)) {
-        masterContents.code = masterContents.code.replace(file.tag, result);
+    while (result = regex.exec(resultData.code)) {
+        resultData.code = resultData.code.replace(file.tag, result.toString());
     }
 
     changedContents();
@@ -126,8 +121,8 @@ function replaceTagWithArea(file) {
 
 // check code contents when changed and save when all [[<wml>]] tags have been processed
 function changedContents() {
-    if (masterContents.code !== '' && masterContents.code.indexOf('[[') === -1) {
-        fs.writeFile(htmlPath, masterContents.code, function(err) {
+    if (resultData.code !== '' && resultData.code.indexOf('[[') === -1) {
+        fs.writeFile(htmlPath, resultData.code, function(err) {
             if (err) {
                 console.log(' Error creating file => ' + JSON.stringify(err));
                 responseData.error = err;

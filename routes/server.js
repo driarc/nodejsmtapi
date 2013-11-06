@@ -9,8 +9,10 @@ var mongoskin = require('mongoskin')
   , superagent = require('superagent')
   , filecheck = require('../scrapejob/scrape.js')
   , addget = require('../dao/addget.js')
+  , addgetjason = require('../dao/addget-jason.js')
   // , executethis = require('../../dripoint/saurshaz/wip/scripts/executethis.js')
   , executethis = require('../routes/executethis.js')
+  , executethisjason = require('../routes/executethis-jason.js')
   , util = require('../util.js')
   , drifn = require('../dao/dri_functions.js')
   , querym = require('../dao/querym.js');
@@ -19,6 +21,7 @@ var TABLE_NAME = config.TABLE_NAME;
 
 console.log(TABLE_NAME +' is the name of the table !!! ');
 
+if (!exports) { exports = {}; }
         
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data
@@ -111,6 +114,9 @@ exports.executethis = function(req, res) {
     res.end();
 };
 
+exports.executethisjason = function(req, res) {
+    executethisjason.startexecutethis(req, res);
+};
 
 function cleanParameters(inboundParameters,paramsToClean){
     var outBoundParameters = inboundParameters;
