@@ -9,7 +9,6 @@
     // execute method --- method called numbered (1)
     exports.execute = execute = function (incomingparams, callback) {
         incomingparams = util.toLowerKeys(incomingparams);
-        console.log('executejason hit!');
         var overallResults = {};
         if (incomingparams["addthis"]) {
             addthisfn(incomingparams, function(results) {
