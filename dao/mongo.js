@@ -93,11 +93,12 @@ global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,t
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne({wid:widName}, function(err, result) {
+        if (err) { console.log(' error => ' + err); }
     	if (!result) {
 			callback({});
 	    }
 	    else{
-		    console.log('Found ' + widName + '!');
+		    console.log(' Found ' + widName + '!');
 	    	callback(result);
 	    }
 	 }); 
@@ -117,7 +118,7 @@ global.mongoquery = mongoquery = function(objToFind, callback){
     // Check to see if the wid name exists
 
 
-    db.collection(schemaToLookup).find(objToFind, function (err, res) {
+    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
         console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
         if (err) {
             callback({ 'error': 'error' });
