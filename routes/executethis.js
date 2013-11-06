@@ -147,7 +147,7 @@
                     }
                 }
             } else {
-                console.log('howToDo is executeFn? => ' + howToDo === executeFn);
+                console.log('howToDo is a function? => ' + howToDo instanceof Function);
                 console.log('params[target] => ' + params[target])
                 if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target];
