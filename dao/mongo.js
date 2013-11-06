@@ -163,10 +163,12 @@ global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, target
             }
             objToAdd.data[attr] = objToAdd[attr];
             delete objToAdd[attr];
+        } else if (attr === 'wid' || attr === 'Wid') {
+            widName = objToAdd[attr];
         }
     }
 
-    db.collection(schemaToLookup).update(objToAdd, {upsert:true}, function (err, res) {
+    db.collection(schemaToLookup).update({wid:widName}, objToAdd, {upsert:true}, function (err, res) {
 //        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
         if (err) {
             console.error(">>>>>> ::: addToMongo ::: error" + err);
