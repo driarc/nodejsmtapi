@@ -137,6 +137,9 @@
 
             // Build and/or list for whattodo
             whatToDoList = config0[params[target]];
+            console.log('target is => ' + target);
+            console.log('params[target] is => ' + params[target]);
+            console.log('whattodolist comes from => ' + config0[params[target]]);
 
             if (whatToDoList !== undefined) {
                 // sort by executeorder and tryorder
