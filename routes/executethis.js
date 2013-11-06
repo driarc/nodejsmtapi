@@ -12,20 +12,12 @@
         console.log('************Start***********executeThis************Start************');
         console.log(' parameters sent in => ' + JSON.stringify(params));
 
-        executethisjason(params, function(results) {
+        execute(params, function(results) {
             console.log('*************End************executeThis*************End*************');
             res.send(results);
             res.end();
         });
     };
-
-    function executethisjason(params, callback) {
-//        if (!nextfunction || !nextfunction instanceof Function) { nextfunction = execute; }
-
-        execute(params, function(results) {
-            callback(results);
-        });
-    }
 
     var addthisfn = function (inputWidgetObject, callback) {
         printToDiv('Function addthis in : inputWidgetObject', inputWidgetObject);
