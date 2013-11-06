@@ -11,14 +11,14 @@ function proxyprinttodiv(text, obj, debugone){
 }
 
 
-exports.getwid = getwid = function(params, callback) {
+exports.getwidjason = getwidjason = function(params, callback) {
 	if (params.executethis) { delete params['executethis']; }
     mongoDao.getfrommongo(params, '', function(results) {
         callback(results);
     });
 };
 
-exports.updatewid = updatewid = function(params, callback) {
+exports.updatewidjason = updatewidjason = function(params, callback) {
     if (params.executethis) { delete params['executethis']; }
 	addtomongo(params, '', function(results) {
         callback(results);
