@@ -1,7 +1,6 @@
 (function (window) {
     'use strict';
     var config = require('../config.js')
-        , startexecutethis
         , execute
         , executethis
         , executeFn
