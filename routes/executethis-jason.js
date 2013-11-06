@@ -1,14 +1,14 @@
 (function (window) {
     'use strict';
     var config = require('../config.js')
-      , response
-      , startexecutethis
-      , dataToReturn = {}
-      , execute
-      , executethis
-      , executeFn
-      , doThis
-      , executeThisFinished = false;
+        , response
+        , startexecutethis
+        , dataToReturn = {}
+        , execute
+        , executethis
+        , executeFn
+        , doThis
+        , executeThisFinished = false;
 
     exports.startexecutethis = startexecutethis = function(req, res) {
         var params = util.toLowerKeys(req.body);
@@ -131,7 +131,7 @@
         console.log(' Beginning doThis => '+ target +' >>> '+ nonCircularStringify(params));
         // TolowerCase all incoming parameters
         var config0 = util.toLowerKeys(config.configuration)
-          , incomingConfig = params['configuration'];
+            , incomingConfig = params['configuration'];
 
         // override config for howToDo
         if ((typeof incomingConfig !== 'undefined') && (typeof incomingConfig[target] !== '')) {
