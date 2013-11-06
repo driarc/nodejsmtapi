@@ -24,6 +24,7 @@
             // pre-execute method --- method called numbered (2)
             doThis(incomingparams, 'preexecute', function (preResults) {
                 //  console.log(' after preexecute >> '+ nonCircularStringify(preResults));
+                addObjectToReturn(preResults, overallResults);
 
                 // mid-execute method --- method called numbered (3)
                 doThis(incomingparams, 'midexecute', function (midResults) {
@@ -34,7 +35,9 @@
                     // post-execute method --- method called numbered (4)
                     doThis(incomingparams, 'postexecute', function(postResults) {
                         //  console.log(' after postexecute >> ' + nonCircularStringify(postResults));
+                        addObjectToReturn(postResults, overallResults);
 
+                        if (overallResults.midexecute) { delete overallResults['midexecute']; }
                         callback(overallResults);
                     });
                 });
