@@ -61,13 +61,13 @@
             });
         }
         else {
-            incomingparams['midexecute'] = incomingparams['executethis'];
-            delete incomingparams['executethis'];
-
             // pre-execute method --- method called numbered (2)
             doThis(incomingparams, 'preexecute', function (preResults) {
 //                console.log(' after preexecute >> '+ nonCircularStringify(preResults));
                 addObjectToReturn(preResults);
+
+                incomingparams['midexecute'] = incomingparams['executethis'];
+                delete incomingparams['executethis'];
 
                 // mid-execute method --- method called numbered (3)
                 doThis(incomingparams, 'midexecute', function (midResults) {
