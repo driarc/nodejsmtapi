@@ -104,7 +104,15 @@ exports.executethis = function(req, res) {
 };
 
 exports.executethisjason = function(req, res) {
-    executethis.startexecutethis(req, res);
+    var params = util.toLowerKeys(req.body);
+    console.log('************Start***********executeThis************Start************');
+    console.log(' parameters sent in => ' + JSON.stringify(params));
+
+    executethis.execute(params, function(results) {
+        console.log('*************End************executeThis*************End*************');
+        res.send(results);
+        res.end();
+    });
 };
 
 function cleanParameters(inboundParameters,paramsToClean){

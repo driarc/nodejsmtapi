@@ -7,27 +7,6 @@
         , executeFn
         , doThis;
 
-    exports.startexecutethis = startexecutethis = function(req, res) {
-        var params = util.toLowerKeys(req.body);
-        console.log('************Start***********executeThis************Start************');
-        console.log(' parameters sent in => ' + JSON.stringify(params));
-
-        execute(params, function(results) {
-            console.log('*************End************executeThis*************End*************');
-            res.send(results);
-            res.end();
-        });
-    };
-
-    var addthisfn = function (inputWidgetObject, callback) {
-        printToDiv('Function addthis in : inputWidgetObject', inputWidgetObject);
-        inputWidgetObject["wid"] = inputWidgetObject["addthis"];
-        updatewid(inputWidgetObject, function(results) {
-            printToDiv('Function addthis in : x', resultObj);
-            callback(results);
-        });
-    };
-
     // execute method --- method called numbered (1)
     exports.execute = execute = function (incomingparams, callback) {
         console.log('executejason hit!');
@@ -147,6 +126,15 @@
                 break;
             }
         }
+    };
+
+    var addthisfn = function (inputWidgetObject, callback) {
+        printToDiv('Function addthis in : inputWidgetObject', inputWidgetObject);
+        inputWidgetObject["wid"] = inputWidgetObject["addthis"];
+        updatewid(inputWidgetObject, function(results) {
+            printToDiv('Function addthis in : x', resultObj);
+            callback(results);
+        });
     };
 
     function addObjectToReturn(fromobj, toobj) {
