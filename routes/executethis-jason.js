@@ -157,14 +157,14 @@
                 }
             } else {
                 // console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
-                if (window[howToDo] && (params[target])) {
+                if (howToDo instanceof Function && (params[target])) {
                     params['executethis'] = params[target];
                     // Clean up the params, do not want executethis: something and a midexecute : something
                     delete params[target];
                     howToDo(params, function(results) { callback(results); });
 
                 } else {
-                    // console.log("Nothing to do in dothis...");
+                    console.log(" Nothing to do in dothis, sending back params...");
                     callback(params);
                 }
             }
