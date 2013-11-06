@@ -104,7 +104,7 @@ exports.executethis = function(req, res) {
 };
 
 exports.executethisjason = function(req, res) {
-    var params = util.toLowerKeys(req.body);
+    var params = req.body;
     console.log('************Start***********executeThis************Start************');
     console.log(' parameters sent in => ' + JSON.stringify(params));
 
