@@ -70,7 +70,8 @@
 
                 // mid-execute method --- method called numbered (3)
                 doThis(preResults, 'midexecute', function (midResults) {
-                    console.log(' after midexecute >> ' + JSON.stringify(midResults));
+                    console.log(' after midexecute, raw version => ' + midResults);
+//                    console.log(' after midexecute >> ' + JSON.stringify(midResults));
                     addObjectToReturn(midResults);
 
                     // post-execute method --- method called numbered (4)
