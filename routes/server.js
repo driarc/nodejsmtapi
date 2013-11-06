@@ -11,6 +11,7 @@ var mongoskin = require('mongoskin')
   , addget = require('../dao/addget.js')
   // , executethis = require('../../dripoint/saurshaz/wip/scripts/executethis.js')
   , executethis = require('../routes/executethis.js')
+  , executethisjason = require('../routes/executethis-jason.js')
   , util = require('../util.js')
   , drifn = require('../dao/dri_functions.js')
   , querym = require('../dao/querym.js');
@@ -110,6 +111,10 @@ exports.executethis = function(req, res) {
 
     res.send(returned);
     res.end();
+};
+
+exports.executethisjason = function(req, res) {
+  executethisjason.startexecutethis(req, res);
 };
 
 

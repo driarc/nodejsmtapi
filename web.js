@@ -4,8 +4,7 @@ var express = require('express')
   , config = require('./config.js')
   , common = require('./routes/common')
   , server = require('./routes/server')
-  , driTemplate = require('./routes/driTemplate')
-  , jasonserver = require('./routes/server-jason');
+  , driTemplate = require('./routes/driTemplate');
 
 
  
@@ -53,7 +52,7 @@ app.configure('development', function(){
 app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.executethis);
-app.put('/executethisjason', jasonserver.executethis);
+app.put('/executethisjason', server.executethisjason);
 app.put('/buildtemplate', driTemplate.buildTemplate);
 app.get('/echo',common.echo);
 
