@@ -138,7 +138,7 @@
             }
 
             var whatToDoList = config0[params[target]];
-            var howToDo = howToDoList[item]['dothis'];
+            var howToDo = window[howToDoList[item]['dothis']];
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
 
