@@ -177,7 +177,7 @@ global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, target
         }
         else {
             console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
-            callback(res);
+            callback({success:true});
         }
     });
 
