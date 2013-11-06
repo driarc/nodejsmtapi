@@ -98,7 +98,7 @@
     exports.doThisjason = doThisjason = function (params, target, callback) {
         console.log(' Beginning doThis => '+ target +' >>> '+ nonCircularStringify(params));
         // TolowerCase all incoming parameters
-        var config0 = util.toLowerKeys(config.configurationjason)
+        var config0 = config.configurationjason
             , incomingConfig = params['configuration'];
 
         // override config for howToDo
