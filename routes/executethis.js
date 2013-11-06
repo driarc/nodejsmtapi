@@ -136,10 +136,7 @@
             }
 
             // Build and/or list for whattodo
-            whatToDoList = config0[params[target]];
-            console.log('target is => ' + target);
-            console.log('params[target] is => ' + params[target]);
-            console.log('whattodolist comes from => ' + config0[params[target]]);
+            whatToDoList = config0[target];
 
             if (whatToDoList !== undefined) {
                 // sort by executeorder and tryorder
@@ -168,7 +165,7 @@
                     }
 
                     // if we don't find the whatToDo in global then skip to the next item in the list
-                    if (!window[whatToDo]){
+                    if (!howToDo instanceof Function){
                         console.log(whatToDo + ' was not found, trying next function...');
                         continue;
                     }
@@ -177,22 +174,22 @@
                     params['executethis'] = whatToDo;
                     // clean up params
                     delete params[target];
-                    window[howToDo](params, target, callback);
+                    howToDo(params, function(results) { callback(results); });
                 }
             }
             else { // We have a case of no config for the right hand side that needs to be handled
                 console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
-                if(window[howToDo]) {
+                if(howToDo instanceof Function) {
                     params['executethis'] = params[target];
                     if (!window[params[target]]){
                         // if we have another iteration to try, try it else go to next step in execution
                         if (howToDoList.length > 1 && howToDo !== 'server'){
                             console.log("No local function for " + params[target] + " trying next")
-                        } else if (howToDo === 'server') {
-                            // server is a special case where the right hand side will not exist in local scope
-                            console.log("Sending " + params[target] + " to server for execution");
-                            delete params[target];
-                            server(params, target, callback);
+//                        } else if (howToDo === 'server') {  // howToDo is an actual function now, not a string.
+//                            // server is a special case where the right hand side will not exist in local scope
+//                            console.log("Sending " + params[target] + " to server for execution");
+//                            delete params[target];
+//                            server(params, target, callback);
                         } else {
                             console.log(whatToDo + ' was not found, trying next execution...');
                             // clear out this cycle execution
@@ -201,7 +198,7 @@
                     }
                 }
                 else {
-                    console.log("Nothing to do in dothis...");
+                    console.log("Nothing to do in dothis, sending back params...");
                     callback(params);
                 }
             }
