@@ -1,14 +1,14 @@
 (function (window) {
     'use strict';
-    var config
+    var config = require('../config.js')
       , response
       , startexecutethis
       , dataToReturn = {}
       , executeThisFinished = false;
 
-    if (typeof require !== 'undefined') {
-        config = require('../config.js');// TODO :: REMOVE this for this file to truly become portable
-    }
+//    if (typeof require !== 'undefined') {
+//        config = require('../config.js');// TODO :: REMOVE this for this file to truly become portable
+//    }
 
     //    // make sure the global is clear
     //    window.data = null;
