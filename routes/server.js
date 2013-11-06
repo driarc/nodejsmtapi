@@ -12,7 +12,6 @@ var mongoskin = require('mongoskin')
   , addgetjason = require('../dao/addget-jason.js')
   // , executethis = require('../../dripoint/saurshaz/wip/scripts/executethis.js')
   , executethis = require('../routes/executethis.js')
-  , executethisjason = require('../routes/executethis-jason.js')
   , util = require('../util.js')
   , drifn = require('../dao/dri_functions.js')
   , querym = require('../dao/querym.js');
@@ -99,19 +98,10 @@ function callScrapeLogic(res, callback){
 
 /// logic for executeThis
 exports.executethis = function(req, res) {
-
     var item = req.body;
-    console.log(JSON.stringify(item));
+    item.response = res;
 
-    var returned = executethis.executethis(item);
-
-    // if((!returned) || (returned.length === 0)){
-    //   returned = global.data;
-    //   console.log('server.js  >>> '+JSON.stringify(returned));
-    // }
-
-    res.send(returned);
-    res.end();
+    executethis.executethis(item);
 };
 
 exports.executethisjason = function(req, res) {

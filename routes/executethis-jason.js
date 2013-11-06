@@ -5,24 +5,10 @@
       , startexecutethis
       , dataToReturn = {}
       , execute
+      , executethis
       , executeFn
       , doThis
       , executeThisFinished = false;
-
-//    if (typeof require !== 'undefined') {
-//        config = require('../config.js');// TODO :: REMOVE this for this file to truly become portable
-//    }
-
-    //    // make sure the global is clear
-    //    window.data = null;
-
-    //// start polling at an interval until the data is found at the global
-    //var intvl = setInterval(function () {
-    //    if (window.data) {
-    //        clearInterval(intvl);
-    //        // console.log(data);
-    //    }
-    //}, 100);
 
     exports.startexecutethis = startexecutethis = function(req, res) {
         var params = util.toLowerKeys(req.body);
@@ -30,10 +16,46 @@
         console.log(' parameters sent in => ' + JSON.stringify(params));
 
         response = res;
-        executethis(params);
+        executethisjason(params);
     };
 
-    function executethis(params, nextfunction) {
+    /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
+    exports.executethis = executethis = function (inboundparms, targetfunction) {
+        console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + JSON.stringify(inboundparms));
+        if (inboundparms.response) {
+            response = inboundparms.response;
+            delete inboundparms['response'];
+        }
+
+        if (!targetfunction || !targetfunction instanceof Function) { targetfunction = execute; }
+
+        var params = util.toLowerKeys(inboundparms)
+            , argCount = 0
+            , proceedflag = false
+            , result = {};
+
+        console.log('targetfunction length => ' + targetfunction.length);
+        if (targetfunction.length !== undefined) { argCount = targetfunction.length; }
+
+        if (argCount === 1) {
+            result = targetfunction(params);
+
+            response.send(result);
+            response.end();
+        } else if (argCount > 1) {
+            targetfunction(params, function(data) {
+                proceedflag=true;
+                result=data;
+            });
+
+            while (!proceedflag) {}
+
+            response.send(result);
+            response.end();
+        }
+    };
+
+    function executethisjason(params, nextfunction) {
         if (!nextfunction || !nextfunction instanceof Function) { nextfunction = execute; }
 
         nextfunction(params, function(results) {
