@@ -88,7 +88,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 //    });
 
 //};
-global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
+global.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
 	var widName = objToFind['wid'];
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
@@ -154,6 +154,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 global.addtomongo = addtomongo = function (objToAdd, targetfunction, callback) {
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
+    var widName = '';
 
     for (var attr in objToAdd) {
         if (attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id') {
@@ -165,8 +166,8 @@ global.addtomongo = addtomongo = function (objToAdd, targetfunction, callback) {
         }
     }
 
-    db.collection(schemaToLookup).insert(objToAdd, function (err, res) {
-        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
+    db.collection(schemaToLookup).update(widName, objToAdd, {upsert:true}, function (err, res) {
+//        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
         if (err) {
             console.error(">>>>>> ::: addToMongo ::: error" + err);
             callback({ ">>>>>> ::: addToMongo ::: error": err });
