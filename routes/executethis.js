@@ -6,16 +6,16 @@
     }
 
     // make sure the global is clear
-    window.data = null;
-    // var exports ={}; ** COMMENTED BY SAURABH
+    // window.data = null;
+    // // var exports ={}; ** COMMENTED BY SAURABH
 
-    // start polling at an interval until the data is found at the global
-    var intvl = setInterval(function () {
-        if (window.data) {
-            clearInterval(intvl);
-            // console.log(data);
-        }
-    }, 100);
+    // // start polling at an interval until the data is found at the global
+    // var intvl = setInterval(function() {
+    //     if (window.data) { 
+    //         clearInterval(intvl);
+    //         // console.log(data);
+    //     }
+    // }, 100);
 
 
     /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
@@ -30,7 +30,6 @@
         }
 
         var parmnum = 0;
-        console.log(' >>> targetfunction replaced as  ' + JSON.stringify(inboundparms));
         if (window[targetfunction].length !== undefined) { parmnum = window[targetfunction].length; }
 
         inboundparms = util.toLowerKeys(inboundparms);
@@ -45,23 +44,35 @@
         };
         if (parmnum > 1) {   // **
             var params = inboundparms;
-            var ret = undefined;
+            var flag = false;
+            var result = {};
 
-            // start the async
             window[targetfunction](params, targetfunction, function (data) {
-                window.data = data;
-                console.log(window.data);
+                flag = true;
+                result = data;
             });
 
-            while (typeof ret === 'undefined') {
-                if (typeof window.data !== 'undefined') {
-                    ret = window.data;
-                    console.log(' ****** executethis got it , ret is ' + JSON.stringify(ret) + 'a');
-                } else {
-                    console.log(' ****** executethis waiting');
-                }
-            }
-            return ret;
+            while (!flag) { }
+            return result
+
+            // var params = inboundparms;  
+            // var ret = undefined;
+
+            // // start the async
+            // window[targetfunction](params, targetfunction, function(data) {
+            //     window.data = data;
+            //     console.log(window.data);
+            // });
+
+            // while(typeof ret==='undefined'){
+            //     if(typeof window.data !== 'undefined'){
+            //         ret = window.data;
+            //         console.log(' ****** executethis got it , ret is '+ JSON.stringify(ret));
+            //     }else{
+            //         console.log(' ****** executethis waiting');
+            //     }
+            // }        
+            // return ret; 
         };
 
     }
@@ -108,11 +119,12 @@
                     }
 
                     console.log('after executethis >> ' + JSON.stringify(outgoingparameters));
+                    doThis(outgoingparameters, 'postexecute', callback);
                     // post-execute method --- method called numbered (4)
-                    doThis(outgoingparameters, 'postexecute', callback) //(outgoingparameters) {
-//                        console.log('after postexecute >> ' + JSON.stringify(outgoingparameters));
-//                        callback(outgoingparameters);
-//                    ;
+                    // doThis(outgoingparameters,'postexecute',function(outgoingparameters){
+                    //     console.log('after postexecute >> '+JSON.stringify(outgoingparameters));
+                    //     callback(outgoingparameters);
+                    // });
                 });
             });
         }
