@@ -2,7 +2,7 @@
 config=require('../config.js')// TODO :: REMOVE this for this file to truly become portable
 
  // make sure the global is clear
-exports.data = {}
+exports.data = undefined;
 // var exports ={}; ** COMMENTED BY SAURABH
 
 // start polling at an interval until the data is found at the global
@@ -20,7 +20,7 @@ exports.executethis = executethis = function(inboundparms, targetfunction) {
     console.log(' >>>> executethis function from executethis before calling execute with parameters >>> '+JSON.stringify(inboundparms));
     console.log(' >>>> executethis function .. before calling callback >>> '+targetfunction);
     
-    if(!targetfunction) {// ** DONE BY SAURABH 
+    if(typeof targetfunction == 'undefined' || typeof targetfunction == 'undefined') {// ** DONE BY SAURABH 
         targetfunction = 'execute';
     }
 
@@ -38,12 +38,17 @@ exports.executethis = executethis = function(inboundparms, targetfunction) {
         return data_to_return; 
     };
     if (parmnum>1) {   // **
-        var params = inboundparms;   
+        var params = inboundparms; 
         // start the async
          eval(targetfunction)(params,targetfunction, function(data) {
             exports.data = data;
-            console.log(exports.data);
+            console.log('>> executethis >> '+ JSON.stringify(exports.data));
         });
+        
+        // while(typeof exports.data === 'undefined' || typeof exports.data === 'null'){
+            
+        // }  
+        console.log('>> returning now >> '+JSON.stringify(exports.data));
         return exports.data;
     };
    
@@ -61,7 +66,7 @@ var addthisfn = function(inputWidgetObject) {
 
 
 // execute method --- method called numbered (1)
-var execute = function(incomingparameters, targetfunction, callback){
+exports.execute =  execute = function(incomingparameters, targetfunction, callback){
 // we should add cases of targetfuctnion: execute, addthis, test
    if (incomingparameters["executethis"] === "test") {
         incomingparameters["imAlive"] = "true";
@@ -115,12 +120,10 @@ var executeFn = function(params, target,  callback){
             if (param_count === 1) {
                 // if the function to call accepts only 1 parameter, it 
                 // does not have a callback...so use this version
-                callback(executethis(params,functionToExecute));
+                eval(functionToExecute)(params,targetfunction,callback);
             } else {
                 // This version assumes a callback is present
-                eval(functionToExecute)(params, target, function(data) {
-                    callback(data);
-                });
+                eval(functionToExecute)(params, target, callback);
             }
         } else {
             // console.log("No function by that name nothing to do in executefn ...");

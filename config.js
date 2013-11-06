@@ -75,13 +75,10 @@ require('./dao/mongo.js');
 // 	});
 // }
 
-var test99 = global.test99 = function(params, target, callback){
+exports.test99 = test99 = function(params, target, callback){
+	delete params['executethis'];
 	console.log('from test99 method');
-	callback( mongoquery({"wid":"test1"},"mongoquery",function(data){
-		console.log(JSON.stringify(data));
-		console.log('from callback of test99 method');
-		return data;
-	}));
+	mongoquery({"wid":"test1"},"mongoquery",callback);
 }
 
 

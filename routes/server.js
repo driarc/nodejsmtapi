@@ -95,20 +95,15 @@ function callScrapeLogic(res, callback){
 }
 
 /// logic for executeThis
-exports.executethis = function(req, res) {
+exports.executethis = function(req, resp) {
 
     var item = req.body;
     console.log(JSON.stringify(item));
 
-    var returned = executethis.executethis(item);
-
-    // if((!returned) || (returned.length === 0)){
-    //   returned = global.data;
-    //   console.log('server.js  >>> '+JSON.stringify(returned));
-    // }
-
-    res.send(returned);
-    res.end();
+    var returned = executethis.execute(item,'',function(returned){
+      resp.send(returned);
+      resp.end();
+    });
 };
 
 

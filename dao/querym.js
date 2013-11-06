@@ -10,9 +10,51 @@ proxyprinttodiv('testquery parameters',parameters, true);
 return parameters;
 }
 
+
+
 //Starting of querywid function...formerly MongoDataQuery
 //exports.querywid = querywid = function(parameters,target,callback) {
-exports.querywid = querywid = function(parameters) { // can change to call back
+exports.process100 = process100 = function(parameters, targetfunction, callback) { // can change to call back
+
+
+	console.log(' *** from process100 >> ');
+	delete parameters['executethis']; //
+	// add 100 record and get 100 record
+	var arr = [];
+
+	// add to mongo 100 records
+	for(var c=0;c<5;c++){
+		var rec = {"wid":c,"text":"text","data": Math.random()};
+		addorupdate(rec,'',function(data){
+			console.log('All the records');
+			console.log(JSON.stringify(data));
+		});
+		arr.push({});
+	}
+
+	while(arr.length < 5){  };
+
+	// get 100 records
+	var ret = {};
+	var records = {};
+	mongoquery({'text':'text'},'',function(data){
+		console.log('All the records');
+		console.log(JSON.stringify(data));
+		records = data;
+
+		console.log(' callback '+callback);
+		if(typeof callback === 'undefined'){
+			ret = records;
+		}else{
+			console.log(' *** from process100 >> '+ JSON.stringify(records));
+			callback(records);
+		}
+	});
+}
+
+//Starting of querywid function...formerly MongoDataQuery
+exports.querywid = querywid = function(parameters,target,callback) {
+// exports.querywid = querywid = function(parameters) { // can change to call back
 
 	delete parameters['executethis']; //** added 11/2
 
@@ -46,8 +88,8 @@ exports.querywid = querywid = function(parameters) { // can change to call back
      if (queParams['mongorawquery'] != undefined && xtrParams.length == undefined) { 
         executeobject = queParams['mongorawquery'];
         targetfunction = "mongoquery";
-        output = executethis(executeobject, targetfunction);
-        //output = mongoquery(output,target,callback);
+        // output = executeobject, targetfunction);
+        mongoquery(output,target,callback);
     }
        
     // Use single to set up a query with the params of 1 wid
@@ -62,9 +104,10 @@ exports.querywid = querywid = function(parameters) { // can change to call back
         output = BuildSingleQuery(widObject);
         mQueryString = output.substring(0, output.length -1);
         targetfunction = "mongoquery";
-        output = executethis(mQueryString, targetfunction);
+        // output = executethis(mQueryString, targetfunction);
         //output = mongoquery(mQueryString);
         //output = mQueryString;
+         mongoquery(output,target,callback);
     }
     
     // Use multiple if you want to use a list of wids as $OR groups
@@ -159,9 +202,9 @@ exports.querywid = querywid = function(parameters) { // can change to call back
     }
     proxyprinttodiv('Function MongoDataQuery output : ', output);
     targetfunction = "mongoquery";
-    queryresults = executethis(output, targetfunction);
-    //queryresults=mongoquery(output,target,callback);
-    return queryresults; // whatever happens, return the output
+    // queryresults = executethis(output, targetfunction);
+    mongoquery(output,target,callback);
+    // return queryresults; // whatever happens, return the output
 } // End of MongoDataQuery
 
 // Use the mQueryString to call on mongo with it
