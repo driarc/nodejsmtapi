@@ -90,6 +90,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 //};
 global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
 	var widName = objToFind['wid'];
+    delete objToFind['wid'];
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).find(widName, function(err, result) {
