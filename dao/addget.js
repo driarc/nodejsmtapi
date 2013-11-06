@@ -11,6 +11,7 @@ function proxyprinttodiv(text, obj, debugone){
 
 exports.getwid = getwid = function(params, callback) {
     if (params.executethis) { delete params['executethis']; }
+    console.log(' about to call getwid!');
     getfrommongo(params, '', function(results) {
         callback(results);
     });
