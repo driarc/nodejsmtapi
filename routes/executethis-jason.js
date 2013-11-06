@@ -65,18 +65,17 @@
 
             // pre-execute method --- method called numbered (2)
             doThis(incomingparams, 'preexecute', function (preResults) {
-                console.log(' after preexecute >> '+JSON.stringify(preResults));
+                console.log(' after preexecute >> '+ nonCircularStringify(preResults));
                 addObjectToReturn(preResults);
 
                 // mid-execute method --- method called numbered (3)
                 doThis(preResults, 'midexecute', function (midResults) {
-                    console.log(' after midexecute, raw version => ' + midResults);
-//                    console.log(' after midexecute >> ' + JSON.stringify(midResults));
+                    console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     addObjectToReturn(midResults);
 
                     // post-execute method --- method called numbered (4)
                     doThis(midResults, 'postexecute', function(postResults) {
-                        console.log(' after postexecute >> ' + JSON.stringify(postResults));
+                        console.log(' after postexecute >> ' + nonCircularStringify(postResults));
                         addObjectToReturn(postResults);
 
                         executeThisFinished = true;
@@ -104,7 +103,7 @@
 
     // primary command router based on what it reads from config
     exports.doThis = doThis = function (params, target, callback) {
-        console.log(' From doThis => '+ target +' >>> '+ JSON.stringify(params));
+        console.log(' Beginning doThis => '+ target +' >>> '+ nonCircularStringify(params));
         // TolowerCase all incoming parameters
         var config0 = util.toLowerKeys(config.configuration)
           , incomingConfig = params['configuration'];
@@ -123,7 +122,7 @@
 
         var howToDoList = config0[target];
 
-        // console.log("How to do list: " + JSON.stringify(howToDoList));
+        console.log(" HowToDoList => " + JSON.stringify(howToDoList));
 
         for (var item in howToDoList) {
             // Override config0 for whatToDo
@@ -135,7 +134,6 @@
                 }
                 // console.log('Loading"' + JSON.stringify(incomingConfiguration[params[target]]) + ' onto config0...');
                 config0[params[target]] = incomingConfig[params[target]];
-
             }
 
             var whatToDoList = config0[params[target]];
@@ -149,7 +147,6 @@
                     // console.log('>>>>>>>>>>>> configuration <'+ target +'> >>> '+JSON.stringify(howToDoList));
 
                     var whatToDo = whatToDoList[whatitem]['dothis'];
-                    // console.log("Trying to execute: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + whatToDo + '"}');
                     params['executethis'] = whatToDo;
                     // clean up params
                     delete params[target];
@@ -181,5 +178,20 @@
         for (var prop in obj) {
             dataToReturn[prop] = obj[prop];
         }
+    }
+
+    function nonCircularStringify(obj) {
+        var cache = [];
+
+        JSON.stringify(obj, function(key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                    //found circular reference, discard key
+                    return;
+                }
+                cache.push(value);
+            }
+            return value;
+        });
     }
 })(typeof window == "undefined" ? global : window);
