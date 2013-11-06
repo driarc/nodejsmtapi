@@ -4,7 +4,7 @@
 // remove line 180-192
 
 var execute = require('../routes/executethis-jason.js')
-    , mongoDao = require('../dao/mongo.js');
+    , mongoDao = require('mongo');
 
 function proxyprinttodiv(text, obj, debugone){
     // printToDiv(text, obj, debugone);    // comment this in server version

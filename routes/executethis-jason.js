@@ -104,7 +104,7 @@
 
     // primary command router based on what it reads from config
     exports.doThis = doThis = function (params, target, callback) {
-        console.log(' From doThis => '+ target +' >>> '+JSON.stringify(params));
+        console.log(' From doThis => '+ target +' >>> '+ JSON.stringify(params));
         // TolowerCase all incoming parameters
         var config0 = util.toLowerKeys(config.configuration)
           , incomingConfig = params['configuration'];
