@@ -92,7 +92,7 @@ global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,t
 	var widName = objToFind['wid'];
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
-    db.collection(schemaToLookup).find(widName, function(err, result) {
+    db.collection(schemaToLookup).findOne(widName, function(err, result) {
     	if (!result) {
 			callback({});
 	    }
