@@ -97,7 +97,7 @@ global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,t
 			callback({});
 	    }
 	    else{
-//		    console.log('Found! '+ JSON.stringify(result));
+		    console.log('Found ' + widName + '!');
 	    	callback(result);
 	    }
 	 }); 

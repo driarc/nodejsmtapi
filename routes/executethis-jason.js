@@ -35,7 +35,6 @@
 
         nextfunction(params, function(results) {
             if (executeThisFinished) {
-                addObjectToReturn(results);
                 console.log('*************End************executeThis*************End*************');
                 response.send(dataToReturn);
                 response.end();
@@ -72,6 +71,7 @@
                 doThis(incomingparams, 'midexecute', function (midResults) {
 //                    console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     if (midResults.midexecute) { delete midResults['midexecute']; }
+                    addObjectToReturn(midResults);
 
                     // post-execute method --- method called numbered (4)
                     doThis(incomingparams, 'postexecute', function(postResults) {
@@ -139,7 +139,6 @@
             var howToDo = window[howToDoList[item]['dothis']];
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
-            console.log(' howToDo is a function => ' + (howToDo instanceof Function).toString());
 
             if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
                 for (var whatitem in whatToDoList) {
