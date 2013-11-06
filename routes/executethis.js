@@ -119,12 +119,10 @@
                     }
 
                     console.log('after executethis >> ' + JSON.stringify(outgoingparameters));
-                    doThis(outgoingparameters, 'postexecute', callback);
-                    // post-execute method --- method called numbered (4)
-                    // doThis(outgoingparameters,'postexecute',function(outgoingparameters){
-                    //     console.log('after postexecute >> '+JSON.stringify(outgoingparameters));
-                    //     callback(outgoingparameters);
-                    // });
+                    doThis(outgoingparameters, 'postexecute', function(outgoingparameters){
+                         // console.log('after postexecute >> '+JSON.stringify(outgoingparameters));
+                         callback(outgoingparameters);
+                    });
                 });
             });
         }
