@@ -5,12 +5,9 @@
         , startexecutethis
         , dataToReturn = {}
         , execute
-        , executejason
         , executethis
         , executeFn
-        , executeFnjason
         , doThis
-        , doThisjason
         , executeThisFinished = false;
 
     exports.startexecutethis = startexecutethis = function(req, res) {
@@ -131,6 +128,7 @@
 
             var whatToDoList = config0[params[target]];
             var howToDo = window[howToDoList[item]['dothis']];
+            console.log('dothis from config => ' + howToDoList[item]['dothis']);
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
 
@@ -147,8 +145,6 @@
                     }
                 }
             } else {
-                console.log('howToDo is a function? => ' + howToDo instanceof Function);
-                console.log('params[target] => ' + params[target])
                 if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target];
                     // Clean up the params, do not want executethis: something and a midexecute : something
