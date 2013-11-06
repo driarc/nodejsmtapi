@@ -19,6 +19,7 @@ var TABLE_NAME = config.TABLE_NAME;
 
 console.log(TABLE_NAME +' is the name of the table !!! ');
 
+if (!exports) { exports = {}; }
         
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data

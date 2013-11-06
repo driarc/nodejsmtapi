@@ -3,32 +3,28 @@
 
 // remove line 180-192
 
+var execute = require('../routes/executethis-jason.js')
+    , mongoDao = require('../dao/mongo.js');
+
 function proxyprinttodiv(text, obj, debugone){
     // printToDiv(text, obj, debugone);    // comment this in server version
 }
 
 
-exports.getwid = getwid = function(inputWidgetObject) {
-	//printToDiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
-	delete inputWidgetObject['executethis']; //** added 11/2
-    //resultObj = executethis(inputWidgetObject);
-	resultObj = executethis(inputWidgetObject, "getfrommongo");
-	proxyprinttodiv('Function getwid in : x',  resultObj);
-	return resultObj;
-}
+exports.getwid = getwid = function(params, callback) {
+	if (params.executethis) { delete params['executethis']; }
+    mongoDao.getfrommongo(params, '', function(results) {
+        callback(results);
+    });
+};
 
-exports.updatewid = updatewid = function(inputWidgetObject) {
-	// todelete added 11/2 -- optional parm ) otherwise default to executethis -- used for addthis
-	//printToDiv('Function updatewid in : inputWidgetObject',  inputWidgetObject,1);
-	delete inputWidgetObject["executethis"]; 
-	// if (inputWidgetObject["addthisparameters"]) { // added 11/2
-	// 	inputWidgetObject=jsonConcat(inputWidgetObject,inputWidgetObject["addthisparameters"]);
-	// 	}
-    //resultObj = executethis(inputWidgetObject);	
-	resultObj=addtomongo(inputWidgetObject);
-	proxyprinttodiv('Function updatewid in : x',  resultObj);
-	return resultObj;
-}
+exports.updatewid = updatewid = function(params, callback) {
+    if (params.executethis) { delete params['executethis']; }
+	addtomongo(params, '', function(results) {
+        callback(results);
+    });
+};
+
 // Starting of securityCheck function
 // LM: I think this section is turned off and not used since it was breaking the code, but it 
 // should be saved and implemented later
