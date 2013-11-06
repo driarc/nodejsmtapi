@@ -147,7 +147,8 @@
                     }
                 }
             } else {
-                console.log('params[target] true/false => ' + params[target])
+                console.log('howToDo is executeFn? => ' + howToDo === executeFn);
+                console.log('params[target] => ' + params[target])
                 if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target];
                     // Clean up the params, do not want executethis: something and a midexecute : something
