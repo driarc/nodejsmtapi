@@ -142,7 +142,7 @@
             var howToDo = window[howToDoList[item]['dothis']];
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
-            console.log(' howToDo function => ' + howToDo.toString());
+            console.log(' howToDo is a function => ' + (howToDo instanceof Function).toString());
 
             if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
                 for (var whatitem in whatToDoList) {
@@ -159,7 +159,7 @@
                 }
             } else {
                 // console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
-                if (howToDo instanceof Function && (params[target])) {
+                if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target];
                     // Clean up the params, do not want executethis: something and a midexecute : something
                     delete params[target];
