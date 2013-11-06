@@ -142,6 +142,7 @@
             var howToDo = window[howToDoList[item]['dothis']];
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
+            console.log(' howToDo function => ' + howToDo.toString());
 
             if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
                 for (var whatitem in whatToDoList) {
