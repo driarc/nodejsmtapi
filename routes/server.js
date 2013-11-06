@@ -105,7 +105,7 @@ exports.executethis = function(req, res) {
 };
 
 exports.executethisjason = function(req, res) {
-    executethisjason.startexecutethis(req, res);
+    executethis.startexecutethis(req, res);
 };
 
 function cleanParameters(inboundParameters,paramsToClean){
