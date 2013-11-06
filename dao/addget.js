@@ -3,13 +3,15 @@
 
 // remove line 180-192
 
+//var mongoDao = require('../dao/mongo.js');
+
 function proxyprinttodiv(text, obj, debugone){
     // printToDiv(text, obj, debugone);    // comment this in server version
 }
 
 exports.getwid = getwid = function(params, callback) {
     if (params.executethis) { delete params['executethis']; }
-    mongoDao.getfrommongo(params, '', function(results) {
+    getfrommongo(params, '', function(results) {
         callback(results);
     });
 };
