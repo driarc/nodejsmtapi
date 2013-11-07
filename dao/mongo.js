@@ -27,7 +27,8 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 
 // DAO method to remove an entry from specified collection
 exports.updatetomongo = updatetomongo = function(queryObject,updatedObject,callback){
-	
+	delete queryObject['executethis'];
+
 	delete updatedObject.wid;
 	for (var props in queryObject.data) {
 		for(var updatedProps in updatedObject){
@@ -149,6 +150,7 @@ exports.getmultiple100frommongo = getmultiple100frommongo = function(objToFind,t
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
 exports.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
+	delete objToAdd['executethis'];
 	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
 
 	for(var attr in objToAdd){
@@ -176,6 +178,7 @@ exports.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
 
 
 exports.addorupdate =  addorupdate = function(entityToAdd,targetfunction,callback){
+	delete entityToAdd['executethis'];
     console.log(JSON.stringify(entityToAdd));
 	if(entityToAdd instanceof Array){
 
