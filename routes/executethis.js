@@ -7,7 +7,7 @@
         , doThis;
 
     // execute method --- method called numbered (1)
-    exports.execute = execute = function (incomingparams, callback) {
+    exports.execute = window.execute = execute = function (incomingparams, callback) {
         incomingparams = util.toLowerKeys(incomingparams);
         if (incomingparams["addthis"]) {
             addthisfn(incomingparams, function(results) {
@@ -146,12 +146,6 @@
         });
     };
 
-    function addObjectToReturn(fromobj, toobj) {
-        for (var prop in fromobj) {
-            toobj[prop] = fromobj[prop];
-        }
-    }
-
     function nonCircularStringify(obj) {
         var cache = [];
 
@@ -167,18 +161,14 @@
         });
     }
 
-
-    /*****  older 'fake' sync executethis functions **Start**/
-
-        /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
-    exports.executethis = executethis = function (inboundparms, targetfunction) {
+    /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
+    exports.executethis = window.executethis = executethis = function executethis(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + JSON.stringify(inboundparms));
         if (!targetfunction || !targetfunction instanceof Function) { targetfunction = execute; }
 
         var params = util.toLowerKeys(inboundparms)
             , argCount = 0
-            , proceedflag = false
-            , result = {};
+            , result;
 
         console.log('targetfunction length => ' + targetfunction.length);
         if (targetfunction.length !== undefined) { argCount = targetfunction.length; }
@@ -186,21 +176,15 @@
         if (argCount === 1) {
             result = targetfunction(params);
 
-            response.send(result);
-            response.end();
+            return result;
         } else if (argCount > 1) {
             targetfunction(params, function(data) {
-                proceedflag=true;
-                result=data;
+                result = data;
             });
 
-            while (!proceedflag) {}
-
-            response.send(result);
-            response.end();
+            while(result === undefined){}
+            return result;
         }
     };
-
-    /*****  older 'fake' sync executethis functions **End**/
 
 })(typeof window == "undefined" ? global : window);
