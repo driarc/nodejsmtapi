@@ -9,7 +9,6 @@
     // execute method --- method called numbered (1)
     exports.execute = execute = function (incomingparams, callback) {
         incomingparams = util.toLowerKeys(incomingparams);
-        var overallResults = {};
         if (incomingparams["addthis"]) {
             addthisfn(incomingparams, function(results) {
                 callback(results);
@@ -24,16 +23,15 @@
                 //  console.log(' after preexecute >> '+ nonCircularStringify(preResults));
 
                 // mid-execute method --- method called numbered (3)
-                doThis(incomingparams, 'midexecute', function (midResults) {
+                doThis(preResults, 'midexecute', function (midResults) {
                     //  console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     if (midResults && midResults.midexecute) { delete midResults['midexecute']; }
-                    addObjectToReturn(midResults, overallResults);
 
                     // post-execute method --- method called numbered (4)
-                    doThis(incomingparams, 'postexecute', function(postResults) {
+                    doThis(midResults, 'postexecute', function(postResults) {
                         //  console.log(' after postexecute >> ' + nonCircularStringify(postResults));
 
-                        callback(overallResults);
+                        callback(postResults);
                     });
                 });
             });
