@@ -42,8 +42,8 @@
         if ((params['executethis'] !== undefined) && (params['executethis'] !== "")
             && (window[params['executethis']] || params['executethis'] instanceof Function)) {
             var windowFunc;
-            if(params['executethis'] instanceof Function) { windowFunc = params['executethis']; }  // function was passed in
-            else { windowFunc = window[params['executethis']]; }  // function name was passed in as string
+            if(params['executethis'] instanceof Function) { console.log('executeFn function name => ' + params['executethis']); windowFunc = params['executethis']; }  // function was passed in
+            else { console.log('executeFn function name => ' + params['executethis'].name); windowFunc = window[params['executethis']]; }  // function name was passed in as string
 
             if (windowFunc.length === 1) {
                 callback(windowFunc(params));
