@@ -89,20 +89,25 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 
 //};
 global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
-	var widName = objToFind['wid'];
+	var widName = objToFind['wid']
+      , returnData;
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne({wid:widName}, function(err, result) {
         if (err) { console.log(' error => ' + err); }
-    	if (!result) {
-			callback({});
-	    }
-	    else{
-		    console.log(' Found ' + widName + '!');
-	    	callback(result);
-	    }
+        returnData = result;
+//    	if (!result) {
+//			callback({});
+//	    }
+//	    else{
+//		    console.log(' Found ' + widName + '!');
+//	    	callback(result);
+//	    }
 	 }); 
-	
+
+    while (returnData === undefined) {}
+
+    return returnData;
 };
 
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
