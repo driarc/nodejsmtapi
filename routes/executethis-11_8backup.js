@@ -8,7 +8,6 @@
 
     // execute method --- method called numbered (1)
     exports.execute = window.execute = execute = function (incomingparams, callback) {
-        console.log('arrived in execute ' + incomingparams);
         incomingparams = util.toLowerKeys(incomingparams);
         if (incomingparams["addthis"]) {
             addthisfn(incomingparams, function(results) {
@@ -18,18 +17,20 @@
         else {
             incomingparams['midexecute'] = incomingparams['executethis'];
             delete incomingparams['executethis'];
-            console.log('starting preexecute ' + incomingparams);
+
             // pre-execute method --- method called numbered (2)
             doThis(incomingparams, 'preexecute', function (preResults) {
-                console.log(' after preexecute >> '+ nonCircularStringify(preResults));
-                console.log('starting midexecute ' + preResults);
+                //  console.log(' after preexecute >> '+ nonCircularStringify(preResults));
+
                 // mid-execute method --- method called numbered (3)
                 doThis(preResults, 'midexecute', function (midResults) {
-                    console.log(' after midexecute >> ' + nonCircularStringify(midResults));
+                    //  console.log(' after midexecute >> ' + nonCircularStringify(midResults));
                     if (midResults && midResults.midexecute) { delete midResults['midexecute']; }
+
                     // post-execute method --- method called numbered (4)
                     doThis(midResults, 'postexecute', function(postResults) {
-                        console.log(' after postexecute >> ' + nonCircularStringify(postResults));
+                        //  console.log(' after postexecute >> ' + nonCircularStringify(postResults));
+
                         callback(postResults);
                     });
                 });
@@ -39,82 +40,55 @@
 
     // Primary execute function called from doThis
     exports.executeFn = window.executeFn = executeFn = function (params, callback) {
-        if ((params['executethis'] !== undefined) && (params['executethis'] !== "")
-            && (window[params['executethis']] || params['executethis'] instanceof Function)) {
-            var windowFunc;
-            if(params['executethis'] instanceof Function) { windowFunc = params['executethis']; }  // function was passed in
-            else { windowFunc = window[params['executethis']]; }  // function name was passed in as string
+        if ((params['executethis'] !== undefined) && (params['executethis'] !== "")) {
+            var functionToExecute = params['executethis'];
 
-            if (windowFunc.length === 1) {
-                callback(windowFunc(params));
+            if (functionToExecute instanceof Function) {
+                functionToExecute(params, function(results) {
+                    callback(results);
+                });
             }
-            else {
-                windowFunc(params, callback);
+            else {  // a string function name was passed in
+                var windowFunc = window[functionToExecute];
+                if (windowFunc.length === 1) {
+                    callback(windowFunc(params));
+                } else {
+                    window[functionToExecute](params, function(results) {
+                        callback(results);
+                    });
+                }
             }
-        }
-        else {
+        } else {
             callback(params);
         }
     };
 
     // primary command router based on what it reads from config
     exports.doThis = doThis = function (params, target, callback) {
-        var w,
-            h,
-            whatToDo,
-            whatToDoList,
-            howToDo,
-            howToDoList,
-            config0,
-            incomingConfig;
-
         console.log(' Beginning doThis => '+ target +' >>> '+ nonCircularStringify(params));
+        // TolowerCase all incoming parameters
+        var config0 = util.toLowerKeys(config.configuration)
+            , incomingConfig = params['configuration'];
 
-        // Load in configuration and toLower
-        config0 = util.toLowerKeys(config.configuration);
-
-        // Check if we have an incoming config override
-        if (params.hasOwnProperty('configuration')) {
-            incomingConfig = params['configuration'];
-        }
-        else {
-            incomingConfig = 'undefined';
-        }
-
-        // override config for howToDo if we have one
-        if ((incomingConfig !== 'undefined') && (incomingConfig[target] !== '')) {
+        // override config for howToDo
+        if ((typeof incomingConfig !== 'undefined') && (typeof incomingConfig[target] !== '')) {
             incomingConfig = util.toLowerKeys(incomingConfig);
 
             if ((typeof config0[params[target]]) !== 'object') {
                 // console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
                 config0[target] = {};
             }
-
             // console.log('Loading"' + JSON.stringify(incomingConfiguration[target]) + ' onto config0...');
             config0[target] = incomingConfig[target];
         }
 
-        // Load up our how to do list based on what stage we are in (pre, mid, post), then sort it
-        howToDoList = config0[target];
-        howToDoList = howToDoList.sort(function(a, b) {
-            if ( a.executeOrder > b.executeOrder )
-                return 1;
-            else if ( a.executeOrder < b.executeOrder)
-                return -1;
-            else if ( a.tryOrder > b.tryOrder )
-                return 1;
-            else if ( a.tryOrder < b.tryOrder)
-                return -1;
-            else
-                return 0;
-        });
+        var howToDoList = config0[target];
 
         console.log(" HowToDoList => " + JSON.stringify(howToDoList));
 
-        // iterate over our how to do list
-        for (h in howToDoList) {
+        for (var item in howToDoList) {
             // Override config0 for whatToDo
-            if ((incomingConfig !== 'undefined') && (incomingConfig[params[target]] !== '')) {
+            if ((typeof incomingConfig !== 'undefined') && (incomingConfig[params[target]] !== undefined)) {
                 incomingConfig = util.toLowerKeys(incomingConfig);
                 if ((typeof config0[params[target]]) !== 'object') {
                     // console.log('Found a new config entry for "' + params[target] + '" building new object for it in config0...');
@@ -124,58 +98,34 @@
                 config0[params[target]] = incomingConfig[params[target]];
             }
 
-            whatToDoList = config0[params[target]];
-            if (whatToDoList !== undefined) {
-                // sort by executeorder and tryorder
-                whatToDoList = whatToDoList.sort(function(a, b) {
-                    if ( a.tryOrder > b.tryOrder )
-                        return 1;
-                    else if ( a.tryOrder < b.tryOrder)
-                        return -1;
-                    else if ( a.executeOrder > b.executeOrder )
-                        return 1;
-                    else if ( a.executeOrder < b.executeOrder)
-                        return -1;
-                    else
-                        return 0;
-                });
-            }
-
-            if (howToDoList.hasOwnProperty(h)) {
-                howToDo = window[howToDoList[h]['dothis']];
-            }
+            var whatToDoList = config0[params[target]];
+            var howToDo = window[howToDoList[item]['dothis']];
 
             console.log(" What to do list: " + JSON.stringify(whatToDoList));
 
             if ((whatToDoList !== undefined) && (whatToDoList != "")) { // make sure we have a list from config, if not just go execute it
-                for (w in whatToDoList) {
+                for (var whatitem in whatToDoList) {
                     // console.log('>>>>>>>>>>>> configuration <'+ target +'> >>> '+JSON.stringify(howToDoList));
 
-                    if (whatToDoList.hasOwnProperty(w)){
-                        whatToDo = whatToDoList[w]['dothis'];
-                    }
+                    var whatToDo = whatToDoList[whatitem]['dothis'];
                     params['executethis'] = whatToDo;
                     // clean up params
                     delete params[target];
                     if (howToDo instanceof Function) {
-                        //howToDo(params, function(results) { callback(results); });  *** changed by roger
-                        howToDo(params, callback);
+                        howToDo(params, function(results) { callback(results); });
                     }
                 }
-            }
-            else {
+            } else {
                 // console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
                 if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target];
                     // Clean up the params, do not want executethis: something and a midexecute : something
                     delete params[target];
                     if (howToDo instanceof Function) {
-                        // howToDo(params, function(results) { callback(results); }); *** changed by roger
-                        howToDo(params, callback);
+                        howToDo(params, function(results) { callback(results); });
                     }
 
-                }
-                else {
+                } else {
                     console.log(" Nothing to do in dothis, sending back params...");
                     callback(params);
                 }
@@ -224,7 +174,9 @@
         if (targetfunction.length !== undefined) { argCount = targetfunction.length; }
 
         if (argCount === 1) {
-            return targetfunction(params);
+            result = targetfunction(params);
+
+            return result;
         } else if (argCount > 1) {
             targetfunction(params, function(data) {
                 result = data;
