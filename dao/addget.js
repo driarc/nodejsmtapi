@@ -6,6 +6,16 @@ function proxyprinttodiv(text, obj, debugone){
     printToDiv(text, obj, debugone);    // comment this in server version
 }
 
+function printToDiv(text, obj, debugone){
+
+    if ((Debug == 'true') || (	debugone)) {{
+        var printText	= '<pre>'+ text+'<br/>' + JSON.stringify(obj) + '</pre>';
+        console.log(text);
+        console.log(obj);
+        document.getElementById('divprint').innerHTML = document.getElementById('divprint').innerHTML + printText; //append(printText);
+    }
+}
+
 exports.getwid = getwid = function getwid(inputWidgetObject, callback) {
     proxyprinttodiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
     //resultObj = executethis(inputWidgetObject);
@@ -22,7 +32,7 @@ exports.updatewid = updatewid = function updatewid(inputWidgetObject, callback) 
     // if (inputWidgetObject["addthisparameters"]) { // added 11/2
     // 	inputWidgetObject=jsonConcat(inputWidgetObject,inputWidgetObject["addthisparameters"]);
     // 	}
-    //resultObj = executethis(inputWidgetObject);	
+    //resultObj = executethis(inputWidgetObject);
     resultObj=executethis(inputWidgetObject,addtomongo);
     //resultObj=addtomongo(inputWidgetObject);
     proxyprinttodiv('Function updatewid in : x',  resultObj);
@@ -31,7 +41,7 @@ exports.updatewid = updatewid = function updatewid(inputWidgetObject, callback) 
 };
 
 // Starting of securityCheck function
-// LM: I think this section is turned off and not used since it was breaking the code, but it 
+// LM: I think this section is turned off and not used since it was breaking the code, but it
 // should be saved and implemented later
 function securitycheck(widParameter, accessToken){ // accountwid and transactionType for future use
     proxyprinttodiv('Function securityCheck() in : ', 'before' );
@@ -58,8 +68,8 @@ function securitycheck(widParameter, accessToken){ // accountwid and transaction
 // 	executeobject["mongorelationshipdirection"]=mongorelationshipdirection;
 // 	executeobject["mongowidmethod"]=mongowidmethod;
 // 	executeobject["convertmethod"]=convertmethod;
-// 	executeobject["dtotype"]="";	
-// 	proxyprinttodiv('Function getAndFormatNextLevel()  executeobject III' , executeobject);	
+// 	executeobject["dtotype"]="";
+// 	proxyprinttodiv('Function getAndFormatNextLevel()  executeobject III' , executeobject);
 // 	//var relatedParameters=MongoDataQuery(executeobject);
 // 	var relatedParameters=executethis(executeobject,execute);
 // 	return relatedParameters
@@ -594,7 +604,7 @@ function cleanparameters(resultObj, dtotype, accesstoken, cleanmethod, convertme
         outputparameters=resultObj;
     }
     proxyprinttodiv('Function cleanparameters()  cleanmethod II' , cleanmethod);
-//	if (cleanmethod=="add") { 
+//	if (cleanmethod=="add") {
 //		outputparameters=resultObj;
 //		}
     proxyprinttodiv('Function cleanparameters()  outputparameters end' , outputparameters);
@@ -847,7 +857,7 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
                 // ** do we need to replicate at top level?
                 else {
                     proposedLeft = mongowidmethod + "." + String(iteration) + "." + item;  // removed +1
-//					if ((convertmethod == "dto") && (relatedParameters.length == 1)) { 
+//					if ((convertmethod == "dto") && (relatedParameters.length == 1)) {
                     if ((convertmethod == "dto") && (countKeys(relatedParameters) == 1)) {
                         proposedLeft = mongowidmethod+"."+item;
                     }
@@ -880,7 +890,7 @@ function getAndFormatNextLevel(widInput, mongorelationshiptype, mongorelationshi
 // This tears apart an object with properties that are objects.
 // It opens up all the nested objects to create a flat list of properties
 // of an object. Then AddWidParameters is called, which in turn calls
-// AddMaster to get the wid placed into the db or local storage. Note that 
+// AddMaster to get the wid placed into the db or local storage. Note that
 // nothing calls this except the test. This is the highest level of the adding
 // process for DOT notation.
 exports.addwidmaster = addwidmaster = function addwidmaster (inputObject, callback) {
@@ -959,8 +969,8 @@ function AddWidParameters(parameterObject) {
 
 // clean parameters should filter parameters based on dtotype
 // if dtotype <> inputparmeterobject[method] then add preamble to all parameters
-// ((inputParametersObject['metadata.method'] !== "") && (dtotype=="")) 
-// (dtotype!=="") 
+// ((inputParametersObject['metadata.method'] !== "") && (dtotype==""))
+// (dtotype!=="")
 
 
     proxyprinttodiv('Function addWidParameters ** after ' , inputParametersObject);
@@ -1009,7 +1019,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
     // proxyprinttodiv('Function AddMaster : dtotype', dtotype);
     proxyprinttodiv('Function AddMaster : inbound parms all ', {"dtolist":dtoList, "parameterList":parameterList, "widName":widName, "dtotype":dtotype});
     var ChildrenListobj = {}; // go through list of incoming parameters to generate a list of childrent dtos
-    var dtoobject = listToObject(dtoList); // generate a copy of dtolist that is an object        
+    var dtoobject = listToObject(dtoList); // generate a copy of dtolist that is an object
     for (key in dtoobject) { // go through each parameter
         if ((dtoobject[key] == 'onetomany') || (dtoobject[key] == 'onetoone')) {
             // see if dto list tells us is a child
@@ -1117,7 +1127,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
             editflag = 'true'					// if we had parameterindex, then edit must be true
         }
 
-        //proxyprinttodiv('Function AddMaster : editflag', editflag);        	
+        //proxyprinttodiv('Function AddMaster : editflag', editflag);
         if (attr == 'onetoone') {
             editflag = 'true'; 					// onetoone is alway edit true
             attrtype = 'last';					// onetoone -- read last record
@@ -1189,7 +1199,7 @@ function AddMaster(dtoList, parameterList, widName, dtotype) {
         proxyprinttodiv('Function AddMaster : RelatedListParameters 333 dto for current child B', RelatedListParameters);
 
 
-        //if (ParametersToAdd!=='') {	
+        //if (ParametersToAdd!=='') {
         //if (ParametersToAdd.length!==0) {	***
         if (countKeys(ParametersToAdd)!==0) {
             widtoadd='';   // this is to catch onetoone case
