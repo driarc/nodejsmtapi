@@ -1781,12 +1781,12 @@ function isEmpty(obj) {
         }
     }
     return true;
-};
+}
 
 function isSet(val) {
     if ((val != undefined) && (val != null)){
         return true;
     }
     return false;
-};
+}
 }

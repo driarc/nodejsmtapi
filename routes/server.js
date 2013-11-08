@@ -99,8 +99,8 @@ function callScrapeLogic(res, callback){
 exports.executethis = function(req, res) {
     var item = req.body;
     item.response = res;
-
-    res.send(executethis.executethis(item));
+    var results = executethis.executethis(item);
+    res.send(results);
     res.end();
 };
 
