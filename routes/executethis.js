@@ -216,7 +216,7 @@
     }
 
     /// logic for executeThis --> accepts 1st argument -- input parameters, 2nd parameter -- callback function
-    exports.executethis = window.executethis = executethis = function executethis(inboundparms, targetfunction) {
+    window.executethis = executethis = function executethis(inboundparms, targetfunction) {
         console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + nonCircularStringify(inboundparms));
         if (!targetfunction || !targetfunction instanceof Function) { targetfunction = execute; }
 
