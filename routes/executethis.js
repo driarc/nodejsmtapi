@@ -17,7 +17,7 @@
         }
         else {
             incomingparams['midexecute'] = incomingparams['executethis'];
-            delete incomingparams['executethis'];
+//            delete incomingparams['executethis'];
             console.log('starting preexecute ' + incomingparams);
             // pre-execute method --- method called numbered (2)
             doThis(incomingparams, 'preexecute', function (preResults) {
@@ -228,6 +228,7 @@
             return targetfunction(params);
         } else if (argCount > 1) {
             targetfunction(params, function(data) {
+                if(data['executethis']) { delete data['executethis']; }
                 result = data;
             });
 
