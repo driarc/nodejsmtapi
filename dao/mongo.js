@@ -95,19 +95,14 @@ global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,t
 	// Check to see if the wid name exists
     db.collection(schemaToLookup).findOne({wid:widName}, function(err, result) {
         if (err) { console.log(' error => ' + err); }
-        returnData = result;
-//    	if (!result) {
-//			callback({});
-//	    }
-//	    else{
-//		    console.log(' Found ' + widName + '!');
-//	    	callback(result);
-//	    }
-	 }); 
-
-    while (returnData === undefined) {}
-
-    return returnData;
+    	if (!result) {
+			callback({});
+	    }
+	    else{
+		    console.log(' Found ' + widName + '!');
+	    	callback(result);
+	    }
+	 });
 };
 
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
