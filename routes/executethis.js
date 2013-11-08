@@ -39,7 +39,7 @@
 
     // Primary execute function called from doThis
     exports.executeFn = window.executeFn = executeFn = function (params, callback) {
-        console.log('executeFn hit!');
+        console.log('executeFn hit! and execute this is => ' + params.executethis);
         if ((params['executethis'] !== undefined) && (params['executethis'] !== "")
             && (window[params['executethis']] || params['executethis'] instanceof Function)) {
             var windowFunc;
@@ -228,7 +228,7 @@
             return targetfunction(params);
         } else if (argCount > 1) {
             targetfunction(params, function(data) {
-                if(data['executethis']) { delete data['executethis']; }
+                if(data.executethis) { delete data['executethis']; }
                 result = data;
             });
 
