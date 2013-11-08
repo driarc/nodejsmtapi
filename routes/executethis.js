@@ -40,13 +40,14 @@
     // Primary execute function called from doThis
     exports.executeFn = window.executeFn = executeFn = function (params, callback) {
         console.log('executeFn hit! and execute this is => ' + params.executethis);
-        console.log('executeFn if statement passes => ' + ((params['executethis'] !== undefined) && (params['executethis'] !== "")
-            && (window[params['executethis']] || params['executethis'] instanceof Function)));
-        if ((params['executethis'] !== undefined) && (params['executethis'] !== "")
-            && (window[params['executethis']] || params['executethis'] instanceof Function)) {
+        console.log('executeFn if statement passes => ' + ((params.executethis !== undefined) && (params.executethis !== "")
+            && (window[params.executethis] || params.executethis instanceof Function)));
+        console.log('executethis exists in window => ' + (window[params.executethis]))
+        if ((params.executethis !== undefined) && (params.executethis !== "")
+            && (window[params.executethis] || params.executethis instanceof Function)) {
             var windowFunc;
-            if(params['executethis'] instanceof Function) { console.log('executeFn function name => ' + params['executethis']); windowFunc = params['executethis']; }  // function was passed in
-            else { console.log('executeFn function name => ' + params['executethis'].name); windowFunc = window[params['executethis']]; }  // function name was passed in as string
+            if(params.executethis instanceof Function) { console.log('executeFn function name => ' + params.executethis); windowFunc = params.executethis; }  // function was passed in
+            else { console.log('executeFn function name => ' + window[params.executethis].name); windowFunc = window[params.executethis]; }  // function name was passed in as string
 
             if (windowFunc.length === 1) {
                 callback(windowFunc(params));
