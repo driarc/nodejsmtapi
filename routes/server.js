@@ -100,7 +100,8 @@ exports.executethis = function(req, res) {
     var item = req.body;
     item.response = res;
 
-    executethis.executethis(item);
+    res.send(executethis.executethis(item));
+    res.end();
 };
 
 exports.executethisjason = function(req, res) {
