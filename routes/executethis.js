@@ -39,6 +39,7 @@
 
     // Primary execute function called from doThis
     exports.executeFn = window.executeFn = executeFn = function (params, callback) {
+        console.log('executeFn hit!');
         if ((params['executethis'] !== undefined) && (params['executethis'] !== "")
             && (window[params['executethis']] || params['executethis'] instanceof Function)) {
             var windowFunc;
