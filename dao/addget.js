@@ -24,7 +24,7 @@ exports.getwid = getwid = function getwid(inputWidgetObject, callback) {
     proxyprinttodiv('Function getwid in : x',  resultObj);
     if (callback instanceof Function) { callback(resultObj); }
     else { return resultObj; }
-};
+}
 
 exports.updatewid = updatewid = function updatewid(inputWidgetObject, callback) {
     // todelete added 11/2 -- optional parm ) otherwise default to executethis -- used for addthis
@@ -38,7 +38,7 @@ exports.updatewid = updatewid = function updatewid(inputWidgetObject, callback) 
     proxyprinttodiv('Function updatewid in : x',  resultObj);
     if (callback instanceof Function) { callback(resultObj); }
     else { return resultObj; }
-};
+}
 
 // Starting of securityCheck function
 // LM: I think this section is turned off and not used since it was breaking the code, but it
