@@ -37,15 +37,13 @@
     };
 
     // Primary execute function called from doThis
-    exports.executeFn = executeFn = function (params, callback) {
-        console.log('executeFn hit! and execute this is => ' + params.executethis);
-        console.log('executeFn if statement passes => ' + ((params.executethis !== undefined) && (params.executethis !== "")
-            && (window[params.executethis] || params.executethis instanceof Function)));
-        console.log('executethis exists in window => ' + (window[params.executethis]));
-        console.log('window.getwid => ' + window.getwid);
-        console.log('window.updatewid => ' + window.updatewid);
-        console.log('window.getfrommongo => ' + window.getfrommongo);
-        console.log('window.getwidmaster => ' + window.getwidmaster);
+    exports.executeFn = window.executeFn = executeFn = function (params, callback) {
+//        console.log('executeFn hit! and execute this is => ' + params.executethis);
+//        console.log('executethis exists in window => ' + (window[params.executethis]));
+//        console.log('window.getwid => ' + window.getwid);  // is showing undefined
+//        console.log('window.updatewid => ' + window.updatewid);  // is showing undefined
+//        console.log('window.getfrommongo => ' + window.getfrommongo);  // function is found
+//        console.log('window.getwidmaster => ' + window.getwidmaster);  // is showing undefined
         if ((params.executethis !== undefined) && (params.executethis !== "")
             && (window[params.executethis] || params.executethis instanceof Function)) {
             var windowFunc;
