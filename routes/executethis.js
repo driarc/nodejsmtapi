@@ -42,7 +42,10 @@
         console.log('executeFn if statement passes => ' + ((params.executethis !== undefined) && (params.executethis !== "")
             && (window[params.executethis] || params.executethis instanceof Function)));
         console.log('executethis exists in window => ' + (window[params.executethis]));
-        console.log(JSON.stringify(window));
+        console.log('window.getwid => ' + window.getwid);
+        console.log('window.updatewid => ' + window.updatewid);
+        console.log('window.getfrommongo => ' + window.getfrommongo);
+        console.log('window.getwidmaster => ' + window.getwidmaster);
         if ((params.executethis !== undefined) && (params.executethis !== "")
             && (window[params.executethis] || params.executethis instanceof Function)) {
             var windowFunc;
