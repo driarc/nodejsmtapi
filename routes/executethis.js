@@ -42,7 +42,7 @@
         console.log('executeFn if statement passes => ' + ((params.executethis !== undefined) && (params.executethis !== "")
             && (window[params.executethis] || params.executethis instanceof Function)));
         console.log('executethis exists in window => ' + (window[params.executethis]));
-        console.log(nonCircularStringify(window));
+        console.log(JSON.stringify(window));
         if ((params.executethis !== undefined) && (params.executethis !== "")
             && (window[params.executethis] || params.executethis instanceof Function)) {
             var windowFunc;
