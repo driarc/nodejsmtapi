@@ -17,7 +17,7 @@ function printToDiv(text, obj, debugone){
     }
 }
 
-exports.getwid = getwid = function (inputWidgetObject, callback) {
+exports.getwid = global.getwid = getwid = function (inputWidgetObject, callback) {
     proxyprinttodiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
     //resultObj = executethis(inputWidgetObject);
     resultObj=executethis(inputWidgetObject,getfrommongo);
@@ -27,7 +27,7 @@ exports.getwid = getwid = function (inputWidgetObject, callback) {
     else { return resultObj; }
 };
 
-exports.updatewid = updatewid = function (inputWidgetObject, callback) {
+exports.updatewid = global.updatewid = updatewid = function (inputWidgetObject, callback) {
     // todelete added 11/2 -- optional parm ) otherwise default to executethis -- used for addthis
     proxyprinttodiv('Function updatewid in : inputWidgetObject',  inputWidgetObject,1);
     // if (inputWidgetObject["addthisparameters"]) { // added 11/2
