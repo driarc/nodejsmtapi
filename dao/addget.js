@@ -2,6 +2,7 @@
 // they should remove parameter executethis upon entry
 // mult acttions
 
+(function (window) {
 function proxyprinttodiv(text, obj, debugone){
     printToDiv(text, obj, debugone);    // comment this in server version
 }
@@ -16,7 +17,7 @@ function printToDiv(text, obj, debugone){
     }
 }
 
-exports.getwid = getwid = function getwid(inputWidgetObject, callback) {
+exports.getwid = getwid = function (inputWidgetObject, callback) {
     proxyprinttodiv('Function getwid in : inputWidgetObject',  inputWidgetObject);
     //resultObj = executethis(inputWidgetObject);
     resultObj=executethis(inputWidgetObject,getfrommongo);
@@ -26,7 +27,7 @@ exports.getwid = getwid = function getwid(inputWidgetObject, callback) {
     else { return resultObj; }
 };
 
-exports.updatewid = updatewid = function updatewid(inputWidgetObject, callback) {
+exports.updatewid = updatewid = function (inputWidgetObject, callback) {
     // todelete added 11/2 -- optional parm ) otherwise default to executethis -- used for addthis
     proxyprinttodiv('Function updatewid in : inputWidgetObject',  inputWidgetObject,1);
     // if (inputWidgetObject["addthisparameters"]) { // added 11/2
@@ -1790,3 +1791,4 @@ function isSet(val) {
     return false;
 }
 }
+})(typeof window == "undefined" ? global : window);
