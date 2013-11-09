@@ -51,7 +51,7 @@ app.configure('development', function(){
 //// *********************** Route Mapping for Application follows   *********************** 
 app.get('/', common.index);
 app.get('/test', common.test);
-app.put('/executethis', server.executethis);
+app.put('/executethis', server.callexecutethis);
 app.put('/executethisjason', server.executethisjason);
 app.put('/buildtemplate', driTemplate.buildTemplate);
 app.get('/echo',common.echo);

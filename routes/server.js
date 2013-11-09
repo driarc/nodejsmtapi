@@ -96,7 +96,7 @@ function callScrapeLogic(res, callback){
 }
 
 /// logic for executeThis
-exports.executethis = function(req, res) {
+exports.callexecutethis = function(req, res) {
     var item = req.body;
     var results = executethis.executethis(item);
     res.send(results);
