@@ -52,7 +52,7 @@ var asynccallback = global.asynccallback = function asynccallback(d) {
 
 
 // Primary execute function called after doThis
-var test3 = global.test3 = function(params, target, callback){
+var test3 = global.test3 = function(params, callback){
 	console.log('from test3 method');
 	callback({"test":"test3 on server called"});
 }
@@ -68,7 +68,7 @@ require('./dao/mongo.js');
 // 	});
 // }
 
-var test99 = global.test99 = function(params, target, callback){
+var test99 = global.test99 = function(params, callback){
 	console.log('from test99 method');
 	callback( mongoquery({"wid":"test1"},"mongoquery",function(data){
 		console.log(JSON.stringify(data));
