@@ -1,34 +1,31 @@
+(function (window) {
+
 // require('../utils/addget.js');
 // require('../config.js');
 
 // external functions are testquery, querywid, relationShipQuery, aggregationQuery, addonQuery(
 // FYI we now call proxyprinttodiv which is in config that calls printtodiv
 
-exports.testquery = testquery = function testquery(parameters) {
+function testquery(parameters) {
 parameters["IAMALIVE"]="hello";
 proxyprinttodiv('testquery parameters',parameters, true);
 return parameters;
 }
 
-exports.timestamp = timestamp = function testquery(parameters) {
-    var timeInMs = Date.now();
-    parameters["date"] = timeInMs;
-    proxyprinttodiv('timestamp parameters', parameters, true);
-    return parameters;
-}
 //Starting of querywid function...formerly MongoDataQuery
-exports.querywid = querywid = function(parameters,targetfunction,callback) {
-//exports.querywid = querywid = function(parameters) { // can change to call back
+//exports.querywid = querywid = function(parameters,target,callback) {
+exports.querywid = querywid = function querywid(parameters) { // can change to call back
 
 	delete parameters['executethis']; //** added 11/2
-
-	if (config.environment="local") {return mongoquery(parameters)};
+	var x = window['mongoquery']
+	if (config.environment="local") //{return mongoquery(parameters)}
+		 {return executethis(parameters, x);}
 // if (parameters['mongorawquery']) {
 // 		return mongoquery(parameters);
 // 	} else {
 // 		return querywidlocal(parameters);
 // 	};
-
+	console.log('should NOT MAKE IT HERE');
 
 	console.log(' callback >> '+ callback);
 	var output = {};
@@ -46,29 +43,30 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
     var relafterParams = p[5];
     var ListOfLists = [];
     var queryresults = {};
+    var wid;
 
         // Start logic
   
      if (queParams['mongorawquery'] != undefined && xtrParams.length == undefined) { 
         executeobject = queParams['mongorawquery'];
-        targetfunction = "mongoquery";
-        output = executethis(executeobject, targetfunction);
+        targetfunction = mongoquery;
+        output = executethis(executeobject, mongoquery);
         //output = mongoquery(output,target,callback);
     }
        
     // Use single to set up a query with the params of 1 wid
     if (queParams['singlemongoquery'] != undefined && xtrParams.length == undefined) { 
         output = "";
-        var wid = queParams['singlemongoquery'];
-        targetfunction = "getfrommongo";
-        var widObject = executethis(wid, targetfunction)
+        wid = queParams['singlemongoquery'];
+        targetfunction = getfrommongo;
+        var widObject = executethis(wid, getfrommongo);
         // var widObject = getFromMongo({'wid':wid});
         delete widObject['wid'];
         delete widObject['metadata.method'];
         output = BuildSingleQuery(widObject);
         mQueryString = output.substring(0, output.length -1);
-        targetfunction = "mongoquery";
-        output = executethis(mQueryString, targetfunction);
+        targetfunction = mongoquery;
+        output = executethis(mQueryString, mongoquery);
         //output = mongoquery(mQueryString);
         //output = mQueryString;
     }
@@ -78,7 +76,7 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
     if (queParams['multiplemongoquery']) {
         output = "";
         var paramList = {};
-        var wid = queParams['multiplemongoquery'];
+        wid = queParams['multiplemongoquery'];
         var listOfWids = getFromMongo({'wid':wid});
         delete listOfWids["wid"];
         delete listOfWids["metadata.method"];
@@ -87,8 +85,8 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
         var i = 0;
         ListOfLists = [];
         for (w in listOfWids) {
-        targetfunction = "getfrommongo";
-            var tempwid = executethis(w, targetfunction);
+        targetfunction = getfrommongo;
+            var tempwid = executethis(w, getfrommongo);
             delete tempwid["wid"];
             delete tempwid["metadata.method"];
             for (t in tempwid) {
@@ -101,8 +99,8 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
             ListOfLists.push(xtrParams);
         }
         mQueryString = BuildMultipleQuery(ListOfLists);
-        targetfunction = "mongoquery";
-        output = executethis(mQueryString, targetfunction);
+        targetfunction = mongoquery;
+        output = executethis(mQueryString, mongoquery);
         //output = mongoquery(mQueryString);
         //output = mQueryString;
     }
@@ -111,8 +109,8 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
     if (!queParams['singlemongoquery'] && !queParams['multiplemongoquery'] && getObjectSize(relParams) == 0 ){
         ListOfLists.push(xtrParams);
         mQueryString = BuildMultipleQuery(ListOfLists);
-        targetfunction = "mongoquery";
-        output = executethis(mQueryString, targetfunction);
+        targetfunction = mongoquery;
+        output = executethis(mQueryString, mongoquery);
         //output = mongoquery(mQueryString);
     }
 
@@ -130,8 +128,8 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
     // Skip if there are no relParams
     if (getObjectSize(relParams) != 0) {
         mQueryString = relationShipQuery(relParams,output);
-        targetfunction = "mongoquery";
-        output = executethis(mQueryString, targetfunction);
+        targetfunction = mongoquery;
+        output = executethis(mQueryString, mongoquery);
         //output = mongoquery(mQueryString,target,callback);
     }
 
@@ -139,8 +137,8 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
     // Skip if there are no relParams
     if (getObjectSize(relafterParams) != 0) {
         mQueryString = queryafterrelationship(relafterParams, output);
-        targetfunction = "mongoquery";
-        output = executethis(mQueryString, targetfunction);
+        targetfunction = mongoquery;
+        output = executethis(mQueryString, mongoquery);
         //output = mongoquery(mQueryString,target,callback);
     }
 
@@ -164,8 +162,8 @@ exports.querywid = querywid = function(parameters,targetfunction,callback) {
         }
     }
     proxyprinttodiv('Function MongoDataQuery output : ', output);
-    targetfunction = "mongoquery";
-    queryresults = executethis(output, targetfunction);
+    targetfunction = mongoquery;
+    queryresults = executethis(output, mongoquery);
     //queryresults=mongoquery(output,target,callback);
     return queryresults; // whatever happens, return the output
 } // End of MongoDataQuery
@@ -994,4 +992,4 @@ function fishOut(parameters) {
 //  proxyprinttodiv('Function mongo() out with  output : ', output );   
 //  return output;
 // }//End of mongo function
-
+})(typeof window == "undefined" ? global : window);

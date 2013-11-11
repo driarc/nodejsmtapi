@@ -88,7 +88,7 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 //    });
 
 //};
-global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,targetfunction,callback){
+global.getfrommongo = exports.getfrommongo = getfrommongo = function(objToFind,callback){
 	var widName = objToFind['wid']
       , returnData;
 	console.log(' ****** getFromMongo method in dao ' + JSON.stringify(widName));
