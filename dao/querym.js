@@ -27,7 +27,7 @@ exports.querywid = querywid = function querywid(parameters) { // can change to c
 // 		return querywidlocal(parameters);
 // 	};
 	console.log('should NOT MAKE IT HERE');
-	
+
 	var output = {};
     mQueryString = "";
 

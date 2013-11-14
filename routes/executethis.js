@@ -295,28 +295,40 @@
                 if (data) {result = data} else {result={}}
             });
 
+            // var retResult = undefined;
+            // function counter()
+            // {
+            //    retResult = result;
+            // }
+            // var idx = setInterval(function() {
+            //     if(!result){
+            //         counter();
+            //     }else{
+            //         clearInterval(idx);
+            //     }
+            // }, 100);
+            
+            // return retResult;
+
             var retResult = undefined;
+            var cnt=0;
+            
             function counter()
             {
                retResult = result;
+               cnt++;
             }
+            
             var idx = setInterval(function() {
-                if(!result){
+                if((!result) && (cnt<50)) {
                     counter();
                 }else{
                     clearInterval(idx);
                 }
             }, 100);
-            // while(result === undefined){ 
-            //     // put a counter to set result in cases where something went wrong with callback
-            // }   
-            // return result;
-
-            // var counter = 0;
-            // while((result === undefined) && (counter<10000)){ 
-            //     counter++
-            // }   
-            return retResult;
+            
+            if(!retResult){retResult={}}
+            return retResult;    
         }
     };
 
