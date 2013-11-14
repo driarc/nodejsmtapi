@@ -295,9 +295,15 @@
                 if (data) {result = data} else {result={}}
             });
 
-            while(result === undefined){ 
-                // put a counter to set result in cases where something went wrong with callback
+            // while(result === undefined){ 
+            //     // put a counter to set result in cases where something went wrong with callback
+            // }   
+            // return result;
+
+            while((result === undefined) && (counter<10000)){ 
+                counter++
             }   
+            if (!result){result={}}
             return result;
         }
     };
