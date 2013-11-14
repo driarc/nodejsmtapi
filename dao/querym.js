@@ -1,5 +1,4 @@
 (function (window) {
-
 // require('../utils/addget.js');
 // require('../config.js');
 
@@ -992,4 +991,6 @@ function fishOut(parameters) {
 //  proxyprinttodiv('Function mongo() out with  output : ', output );   
 //  return output;
 // }//End of mongo function
+
+
 })(typeof window == "undefined" ? global : window);

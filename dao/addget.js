@@ -1,23 +1,28 @@
 
-(function (window) {
 
+
+(function (window) {
 // external functions are getwid, upatewid, addwidmaster, getwidmaster, securitycheck
 // they should remove parameter executethis upon entry
 // mult acttions
 
-function proxyprinttodiv(text, obj, debugone){
-    printToDiv(text, obj, debugone);    // comment this in server version
-}
+exports.proxyprinttodiv = window.proxyprinttodiv = proxyprinttodiv =  function proxyprinttodiv(text, obj, debugone){// **** making code node compatible
+    if(typeof require !== "undefined"){// **** making code node compatible
+        printToDiv(text, obj, debugone);    // **** making code node compatible
+    }// **** making code node compatible
+}// **** making code node compatible
+
+
 
 exports.getwid = getwid = function getwid(inputWidgetObject, callback) {
     delete inputWidgetObject['executethis'];// ** added by Saurabh 11/9
 
-    proxyprinttodiv('Function getwid in : inputWidgetObject',  inputWidgetObject,99);
+    proxyprinttodiv('Function getwid in : inputWidgetObject',  inputWidgetObject,1);
     //resultObj = executethis(inputWidgetObject);
     var x = window['getfrommongo'];
     var resultObj=executethis(inputWidgetObject,x);
     //var resultObj=getfrommongo(inputWidgetObject);
-    proxyprinttodiv('Function getwid in : x',  resultObj,99);
+    proxyprinttodiv('Function getwid in : x',  resultObj,1);
     // note this should always be called as callback so logic below can be simplfied as callback()
     // if (callback instanceof Function) { callback(resultObj); }
  //    else { return resultObj; }
@@ -199,26 +204,6 @@ function AddMongoRelationship(ParentWid,ChildWid,attr){
     var widobject=listToObject(widset);
     InList.push(widobject);
 
-    //var widset=getwidcopy(); // get a copy of all local storage ***
-    // above changed 11-3 ********
-    // right now querywid does not do anything but a list
-
-
-    //for (var widkey in widset){ 
-    // for (var key in localStorage){               // search for duplicate
-        //var myvalue = JSON.parse(localStorage.getItem(key));
-        // executeobject={};
-  //    executeobject["executethis"]="getwid";
-  //    executeobject["wid"]=widkey;
-  //    var myvalue=executethis(executeobject,execute);
-        //var myvalue = getfrommongo({wid:widkey});
-
-    // this was commented 11/3
-    // for (var myvalue in widset){         
-    //  if ((myvalue['primarywid']==ParentWid) && (myvalue['secondarywid']==ChildWid)) {
-    //      InList.push({"key":"wid","value":myvalue['wid']});
-    //      }
-    //  }
     
     widset=InList;
 
@@ -376,6 +361,7 @@ function aggressivedto(widInput, preamble, level) { // returns a made up dto bas
     executeobject["convertmethod"] = "";
     executeobject["dtotype"] = "";  
     executeobject["executethis"] = querywid;
+    // executeobject["executethis"] = mongoquery; /// *** Change by Saurabh 12/11 for checking #402 error
     proxyprinttodiv('Function aggressivedto()  executeobject III' , executeobject,20);  
     // it does NOT seem to like this:
     //moreDTOParameters = executethis(executeobject,execute);
@@ -394,14 +380,14 @@ function aggressivedto(widInput, preamble, level) { // returns a made up dto bas
     //moreDTOParameters = executethis(executeobject,x);
 
     //it seems to like the two below--then it did not
-    //var x = window['querywid'];
-    //moreDTOParameters = executethis(executeobject,x);
+    var x = window['querywid'];
+    moreDTOParameters = executethis(executeobject,x);
 
     //it seems to like the two below:
     //var x = window['querywidlocal'];
     //moreDTOParameters = executethis(executeobject,x);
 
-    //it seems to like the two below:
+    //it seems to like the two below:-- not any more
     //var x = window['mongoquery'];
     //moreDTOParameters = executethis(executeobject,x);
 
@@ -781,7 +767,7 @@ var olddebug=Debug;
                 executeobject["wid"]=item;
                 executeobject["command.convertmethod"]="nowid";
                 nextLevelParameters=executethis(executeobject,execute);
-                proxyprinttodiv('Function getWidMongo nextLevelParameters - inherit', nextLevelParameters,99);
+                proxyprinttodiv('Function getWidMongo nextLevelParameters - inherit', nextLevelParameters,1);
                 }
             //  nextLevelParameters = getwidmaster({'wid':item, 'command.convertmethod':'nowid'});
             //  };
@@ -1655,7 +1641,7 @@ function objectToList(object){
 }
 
 // Counts the number of hashes in an object
-function getObjectSize(parameters){
+exports.getObjectSize = getObjectSize = function getObjectSize(parameters){
     var size = 0, key;
     for (key in parameters) {
         if (parameters.hasOwnProperty(key)) size++;
@@ -1664,7 +1650,7 @@ function getObjectSize(parameters){
 }
 
 // Returns true if the parameter is lower case
-function isParameterLower(parameters, str) {
+exports.isParameterLower = isParameterLower = function isParameterLower(parameters, str) {
     getObjectSize(parameters); 
     var length;
     if(parameters.length === undefined) {
@@ -1679,8 +1665,9 @@ function isParameterLower(parameters, str) {
     }
 }
 
+
 // Finds the first key in parameters that matches the string, or nothing if none is found   
-function firstOrDefault(parameters, str) {
+exports.firstOrDefault = firstOrDefault = function firstOrDefault(parameters, str) {
     var length;
     if(parameters.length === undefined) {
         length = getObjectSize(parameters);
@@ -1695,7 +1682,7 @@ function firstOrDefault(parameters, str) {
 }
 
 // Deletes a hash from an object    
-function remove(parameters, str){
+exports.remove = remove = function remove(parameters, str){
     var length;
     if(parameters.length === undefined) {
         length = getObjectSize(parameters);
@@ -1712,7 +1699,7 @@ function remove(parameters, str){
 // Creates output based on whether the flas is DTO or JSON. It formates
 // the DTO strings with quotes around the values. For JSON, it checks to make sure that
 // numbers are actual numbers, and strings have quotes around them.
-function CleanBasedOnCheckflagList(flag, input, dto) {
+exports.CleanBasedOnCheckflagList = CleanBasedOnCheckflagList = function CleanBasedOnCheckflagList(flag, input, dto) {
     output  = input;
 
     if (flag === "dto") {
@@ -1755,7 +1742,7 @@ function CleanBasedOnCheckflagList(flag, input, dto) {
     return output;
 }
 
-function tolowerparameters(parameters, rightparameters) {
+exports.tolowerparameters = tolowerparameters = function tolowerparameters(parameters, rightparameters) {
  //proxyprinttodiv('Function tolowerparameters : input parameters',  parameters);
  //proxyprinttodiv('Function tolowerparameters : input rightparameters',  rightparameters);
  var outputparameters = {};
@@ -1784,7 +1771,7 @@ function tolowerparameters(parameters, rightparameters) {
 //rightparameters && rightparameters[eachparameter] && 
 
 
-function getAttributeByIndex(obj, index){
+exports.getAttributeByIndex = getAttributeByIndex = function getAttributeByIndex(obj, index){
  var i = 0;
  for (var attr in obj){
   if (index === i){
@@ -1846,4 +1833,5 @@ if ((val != undefined) && (val != null)){
 return false;
 };
 
-})(typeof window == "undefined" ? global : window);
+
+})(typeof window === "undefined" ? global : window);

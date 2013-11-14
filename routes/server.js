@@ -95,14 +95,6 @@ function callScrapeLogic(res, callback){
     });
 }
 
-/// logic for executeThis
-exports.executethis = function(req, res) {
-    var item = req.body;
-    var results = executethis.executethis(item);
-    res.send(results);
-    res.end();
-};
-
 exports.executethisjason = function(req, res) {
     var params = req.body;
     console.log('************Start***********executeThis************Start************');

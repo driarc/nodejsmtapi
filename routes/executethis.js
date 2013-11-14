@@ -106,14 +106,11 @@
         console.log(' *** test4  '+ JSON.stringify(params));
         if (params["executethis"]==="test4") {
             return callback({'test4':'Reached test4 code.. doThis function '});
-        }else if(params["executethis"]==="test50") {
-            return window['test99'](params,callback);
         }
-        
         // it is possible the function sent in a string or an actual function...we need to convert to string 
         // so we can look up config -- line below added by Roger ***
-        if(params[target] instanceof Function) { targetfunction = params[target]; }  // function was passed in
-            else { targetfunction = window[params[target]]; }  // function name was passed in as string
+        if(params[target] instanceof Function) { targetfunction = params[target].name; }  // function was passed in
+            else { targetfunction = params[target]; }  // function name was passed in as string
 
         console.log(' Beginning doThis => '+ target +' >>> '+ nonCircularStringify(params));
 
@@ -217,7 +214,7 @@
                 }
             }
             else {
-                console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
+                // console.log("No config for whatToDo trying to execute directly: " + JSON.stringify(howToDo) + ' with: {"executethis":"' + params[target] + '"}');
                 if (howToDo instanceof Function && params[target]) {
                     params['executethis'] = params[target]; 
                     //params['executethis'] = targetfunction; 
@@ -272,14 +269,14 @@
         /// 1st argument -- input parameters, 2nd parameter -- callback function
         /// second parameter must be a function, if not sent in will be defaulted to 'execute'
         /// if the function to be called has only one input object then this fn will wait for results (act asynch)
-    exports.executethis = window.executethis = function executethis(inboundparms, targetfunction) {
+    exports.executethis = window.executethis = executethis = function executethis(inboundparms, targetfunction) {
 
         // if test1 ***
         if (inboundparms["executethis"]==="test1") {
             return {'test1':'Reached test1 code.. executethis function'};
         }
 
-        // console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + nonCircularStringify(inboundparms));
+        console.log(' >>>> executethis function from executethis before calling execute with parameters >>> ' + nonCircularStringify(inboundparms));
         if (!targetfunction || !targetfunction instanceof Function) { targetfunction = execute; }
 
         var params = util.toLowerKeys(inboundparms)
@@ -295,18 +292,14 @@
             return targetfunction(params);
         } else if (argCount > 1) {
             targetfunction(params, function(data) {
-                // if(data['executethis']!==undefined) { delete data['executethis']; } // ** taken away by roger
-                // note above should be done in do this
-                // note targetfn should be string so we can check config
-                result = data;
+                if (data) {result = data} else {result={}}
             });
 
             while(result === undefined){ 
                 // put a counter to set result in cases where something went wrong with callback
-                }   
+            }   
             return result;
         }
     };
 
 })(typeof window == "undefined" ? global : window);
-

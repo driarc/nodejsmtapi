@@ -56,9 +56,7 @@ configuration.postexecute[2].executeorder = 0;
 configuration.postexecute[2].tryorder = 0;
 configuration.postexecute[2].dothis = 'executeFn';
 
-
-
-
+var localStorage = exports.localStorage = {};
 
 
 // callback sets the received data to a global var
@@ -90,9 +88,13 @@ exports.printToDiv = printToDiv=  function(){
 
 }
 
+exports.updateMemory = function(){
+    
+}
+
 exports.test99 = test99 =  function(params, callback){
 	console.log('from test99 method');
-	getwid({"wid":"test1"},callback);
+	getfrommongo({"wid":"test1"},callback);
 
 }
 
