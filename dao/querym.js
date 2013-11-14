@@ -16,17 +16,18 @@ return parameters;
 exports.querywid = querywid = function querywid(parameters) { // can change to call back
 
 	delete parameters['executethis']; //** added 11/2
+
 	var x = window['mongoquery']
-	if (config.environment="local") //{return mongoquery(parameters)}
+	if ((typeof config !== "undefined") && (config.environment==="local")) //{return mongoquery(parameters)}
 		 {return executethis(parameters, x);}
+
 // if (parameters['mongorawquery']) {
 // 		return mongoquery(parameters);
 // 	} else {
 // 		return querywidlocal(parameters);
 // 	};
 	console.log('should NOT MAKE IT HERE');
-
-	console.log(' callback >> '+ callback);
+	
 	var output = {};
     mQueryString = "";
 
@@ -47,11 +48,14 @@ exports.querywid = querywid = function querywid(parameters) { // can change to c
         // Start logic
   
      if (queParams['mongorawquery'] != undefined && xtrParams.length == undefined) { 
-        executeobject = queParams['mongorawquery'];
-        targetfunction = mongoquery;
-        output = executethis(executeobject, mongoquery);
+        // executeobject = queParams['mongorawquery'];
+        // targetfunction = mongoquery;
+        output = executethis(queParams, mongoquery);
         //output = mongoquery(output,target,callback);
     }
+    
+	return output;
+	// nothing below should run
        
     // Use single to set up a query with the params of 1 wid
     if (queParams['singlemongoquery'] != undefined && xtrParams.length == undefined) { 

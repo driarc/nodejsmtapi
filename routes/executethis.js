@@ -2,7 +2,7 @@
       // 'use strict';
 
     if(typeof require !== 'undefined'){// *** Added by Saurabh for making it node compatible 11/11
-        config=require('../config.js')// *** Added by Saurabh for making it node compatible 11/11
+        var config=require('../config.js')// *** Added by Saurabh for making it node compatible 11/11
     }else{// *** Added by Saurabh for making it node compatible 11/11
         exports = {};// *** Added by Saurabh for making it node compatible 12/11
     }
@@ -295,16 +295,28 @@
                 if (data) {result = data} else {result={}}
             });
 
+            var retResult = undefined;
+            function counter()
+            {
+               retResult = result;
+            }
+            var idx = setInterval(function() {
+                if(!result){
+                    counter();
+                }else{
+                    clearInterval(idx);
+                }
+            }, 100);
             // while(result === undefined){ 
             //     // put a counter to set result in cases where something went wrong with callback
             // }   
             // return result;
 
-            while((result === undefined) && (counter<10000)){ 
-                counter++
-            }   
-            if (!result){result={}}
-            return result;
+            // var counter = 0;
+            // while((result === undefined) && (counter<10000)){ 
+            //     counter++
+            // }   
+            return retResult;
         }
     };
 

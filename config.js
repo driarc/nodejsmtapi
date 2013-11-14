@@ -12,7 +12,6 @@ exports.LOOKUP_DIR = '../dripoint/';
 exports.SERVICE_URL = 'http://localhost:3000/';
 
 configuration = {};
-configuration.environment='server';
 
 configuration.preexecute = [];
 configuration.preexecute[0] = {};
@@ -88,7 +87,7 @@ exports.printToDiv = printToDiv=  function(){
 
 }
 
-exports.updateMemory = function(){
+exports.updateMemory = updateMemory = function updateMemory(){
     
 }
 
@@ -112,6 +111,10 @@ var executegetwid = exports.executegetwid = function executegetwid(params, callb
         callback(data);
     });
 }
+
+exports.config=configuration;
+exports.config.environment='server';
+
 
 exports.configuration=configuration;
 

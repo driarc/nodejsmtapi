@@ -23,71 +23,6 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 	});
 };
 
-
-
-// DAO method to remove an entry from specified collection
-//changed line 30 from exports to global
-//global.updatetomongo = updatetomongo = function(queryObject,targetfunction,callback){
-//	
-//	delete updatedObject.wid;
-//	for (var props in queryObject.data) {
-//		for(var updatedProps in updatedObject){
-//			var containedEarlier = false;
-
-//			if(updatedProps === props){
-//				containedEarlier = true;
-//				break;
-//			}
-//			
-//			if(!containedEarlier){
-//				updatedObject[props]=queryObject.data[props];
-//				console.log('updatedProps '+ updatedProps);
-//				console.log('props '+ props);
-//			}
-//		}
-//	}
-
-//	delete queryObject.wid;
-//	
-//	db.collection(schemaToLookup).update(queryObject, {$set: {"data":updatedObject}}, function(err, result) {
-//		if (err) {
-//			console.error(err);
-//			throw err;
-//	    	callback({'error':'error '});
-//	    }
-//	    else{
-//		    console.log('Updated! '+ JSON.stringify(result));
-//		    db.collection(schemaToLookup).findOne(updatedObject, function(o){
-//		    	callback(getfrommongo({"_id":queryObject._id}));
-//			});
-//	    }
-//	});
-//};
-
-
-
-//// change made 11_5 by bd
-//global.getfrommongo = getfrommongo = function (objToFind, targetfunction, callback) {
-//    delete objToFind['executethis'];
-
-//    if (!objToFind) {
-//        callback({});
-//    }
-
-//    console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
-//    // Check to see if the wid name exists
-//    db.collection(schemaToLookup).findOne(objToFind, function (err, res) {
-//        console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
-//        if (err) {
-//            callback({ 'error': 'error' });
-//        } else {
-//            var result = undefined;
-//            result = res;
-//        }
-//        callback(result);
-//    });
-
-//};
 exports.getfrommongo = getfrommongo = function(objToFind,callback){
 	var widName = objToFind['wid']
       , returnData;
@@ -142,7 +77,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, targetfunction, callback) {
+global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, callback) {
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = '';
@@ -159,7 +94,7 @@ global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, target
         }
     }
 
-    db.collection(schemaToLookup).update({wid:widName}, objToAdd, {upsert:true}, function (err, res) {
+    db.collection(schemaToLookup).update({"wid":widName}, objToAdd, {"upsert":true}, function (err, res) {
 //        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
         if (err) {
             console.error(">>>>>> ::: addToMongo ::: error" + err);
@@ -167,41 +102,14 @@ global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, target
         }
         else {
             console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
-            callback({success:true});
+            callback({"success":true});
         }
     });
 
 };
 
 
-//global.addtomongo =  addtomongo  = function(objToAdd,targetfunction,callback){
-//	console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
-
-//	for(var attr in objToAdd){
-//    	if(attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id' ){
-//    		if(!objToAdd.data){
-//    			objToAdd.data = {};
-//    		}
-//    		objToAdd.data[attr] = objToAdd[attr];
-//    		delete objToAdd[attr];
-//    	}
-//    }
-
-//	db.collection(schemaToLookup).insert(objToAdd, function(err, result) {
-//	    if (err) {
-//			console.error(">>>>>> ::: addToMongo ::: error" + err);
-//	    	callback({">>>>>> ::: addToMongo ::: error":err});
-//	    }
-//	    if (result){
-//	    	console.log('>>>>>> ::: addToMongo ::: Added! '+ JSON.stringify(result));
-//	    	callback(result);
-//	    } 
-//	});
-
-//};
-
-
-exports.addorupdate = function(entityToAdd,targetfunction,callback){
+exports.addorupdate = function(entityToAdd,callback){
     
     var widVal = (entityToAdd['wid']);
     if(!widVal){
