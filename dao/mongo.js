@@ -1,11 +1,11 @@
 
-var config = require('../config.js')
-,SkinStore = require('connect-mongoskin')
+var SkinStore = require('connect-mongoskin')
 , mongoskin = require('mongoskin')
-,db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS);
+, settings = require('../settings.js')
+,db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS);
 
 
-var TABLE_NAME,schemaToLookup = config.TABLE_NAME;
+var TABLE_NAME,schemaToLookup = settings.TABLE_NAME;
 
 
 

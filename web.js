@@ -1,18 +1,26 @@
+exports.config = config = require('../dripoint/js/config-server.js');
 var express = require('express')
   , app = express()
   , request = require('request')
-  , config = require('./config.js')
   , common = require('./routes/common')
   , server = require('./routes/server')
   , driTemplate = require('./routes/driTemplate');
 
 
-require('./tests/test.js');
-require('./tests/testing.js');
-require('./tests/test.js');
-require('./tests/Unit_tests.js');
+
+// require('./tests/test.js');
+// require('./tests/testing.js');
+// require('./tests/test.js');
+// require('./tests/Unit_tests.js');
 
 
+// using common files at server side also
+require('../dripoint/js/testing.js');
+require('../dripoint/js/test.js');
+require('../dripoint/js/test.js');
+require('../dripoint/js/Unit_tests.js');
+
+// console.log('config is '+ JSON.stringify(config));
 
  
  //// *********************** Express Application Configuration follows   *********************** 
