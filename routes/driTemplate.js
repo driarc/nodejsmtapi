@@ -59,7 +59,9 @@ exports.processWml = processWml = function(req, res) {
                 } else {
                     // process the executeThis call
                     var params = {executethis:action};
+
                     // TODO: figure out what to do with the executeThis results
+
                     responseData.executeresults = execute.executethis(params);
                 }
             } else { findAndReadFile(tagValue + '.wml', '', tags[i], replaceWmlTag); }
