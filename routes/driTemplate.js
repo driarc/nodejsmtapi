@@ -1,10 +1,10 @@
 'use strict';
 var cheerio = require('cheerio')
     , $ = undefined
-    , execute = require('../routes/executethis.js')
+    , execute = require('../../dripoint/js/executethis.js')
     , fs = require('graceful-fs')
     , find = require('findit')
-    , config = require('../config.js')
+    , config = require('../../dripoint/js/config-server.js')
     , lookupDir = config.LOOKUP_DIR
     , resultData = {code:''}
     , responseData = {}

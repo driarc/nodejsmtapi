@@ -1,21 +1,27 @@
 // Server specific Routes here
-var mongoskin = require('mongoskin')
-  , mongoose = require('mongoose')
-  , config = require('../config.js')
-  , db = mongoskin.db(config.MONGODB_URL, config.MONGODB_OPTIONS)
+
+var mongoskin = require('mongoskin');
+var config = require('../../dripoint/js/config-server.js')
+
+// using common files at server side also
+  , addget = require('../../dripoint/js/addget.js')
+  , executethis = require('../../dripoint/js/executethis.js')
+  , querym = require('../../dripoint/js/querym.js')
+  , settings = require('../settings.js')
+  , db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
   , filecheck = require('../scrapejob/scrape.js')
-  , addget = require('../dao/addget.js')
-  // , executethis = require('../../dripoint/saurshaz/wip/scripts/executethis.js')
-  , executethis = require('../routes/executethis.js')
-  , util = require('../util.js')
-  , drifn = require('../dao/dri_functions.js')
-  , querym = require('../dao/querym.js');
+  // , addget = require('../dao/addget.js')
+  // , executethis = require('../routes/executethis.js')
+  // , util = require('../util.js')
+  // , drifn = require('../dao/dri_functions.js')
+  // , querym = require('../dao/querym.js');
 
-var TABLE_NAME = config.TABLE_NAME;
+
+var TABLE_NAME = settings.TABLE_NAME;
 
 console.log(TABLE_NAME +' is the name of the table !!! ');
 
@@ -28,7 +34,7 @@ function callUpdateWid(entityToAdd, callback){
     var requestObj = [];
     requestObj.push({"executethis":"updatewid","Wid":entityToAdd["wid"],"data":entityToAdd["data"]});
 
-    superagent.put(config.SERVICE_URL+'executethis')
+    superagent.put(settings.SERVICE_URL+'executethis')
         .send(requestObj)
           .end(function(e, res){
             console.log('>>>>>>>>> callUpdateWid :::: Sent another request :: updatewid :: PUT request ');
