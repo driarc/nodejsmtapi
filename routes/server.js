@@ -1,7 +1,8 @@
 // Server specific Routes here
 
 var mongoskin = require('mongoskin');
-var config = require('../../dripoint/js/config-server.js')
+require('../config-server.js');
+var config = require('../config-server.js')
 
 // using common files at server side also
   , addget = require('../../dripoint/js/addget.js')
@@ -27,11 +28,12 @@ console.log(TABLE_NAME +' is the name of the table !!! ');
 
 if (!exports) { exports = {}; }
 
-function runExecutethis(req, res) {
-    var results = executethis.executethis(req.body);
-    res.send(results);
-    res.end();
-}
+ function runExecutethis(req, res) {
+    executethis.execute(req.body, function(results) {
+      res.send(results);
+      res.end();
+    });
+ }
         
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data
