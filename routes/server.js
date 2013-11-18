@@ -4,9 +4,9 @@ var mongoskin = require('mongoskin');
 var config = require('../config-server.js')
 
 // using common files at server side also
-  , addget = require('../../dripoint/js/addget.js')
-  , executethis = require('../../dripoint/js/executethis.js')
-  , querym = require('../../dripoint/js/querym.js')
+  , addget = require('../../dripoint/testing/jason/addget.js')
+  , executethis = require('../../dripoint/testing/jason/executethis.js')
+  , querym = require('../../dripoint/testing/jason/querym.js')
   , settings = require('../settings.js')
   , db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
@@ -14,11 +14,7 @@ var config = require('../config-server.js')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
   , filecheck = require('../scrapejob/scrape.js');
-  // , addget = require('../dao/addget.js')
-  // , executethis = require('../routes/executethis.js')
-  // , util = require('../util.js')
   // , drifn = require('../dao/dri_functions.js')
-  // , querym = require('../dao/querym.js');
 
 
 var TABLE_NAME = settings.TABLE_NAME;

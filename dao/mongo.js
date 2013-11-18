@@ -53,7 +53,7 @@ exports.mongoquery = mongoquery = function(objToFind, callback){
         }
         callback(res);
     });
-}
+};
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
 // the callback function on successful addition is also specified
@@ -77,7 +77,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
-global.addtomongo = exports.addtomongo = addtomongo = function (objToAdd, callback) {
+exports.addtomongo = addtomongo = function (objToAdd, callback) {
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = '';
