@@ -1,7 +1,6 @@
 // Server specific Routes here
 
 var mongoskin = require('mongoskin');
-require('../config-server.js');
 var config = require('../config-server.js')
 
 // using common files at server side also
@@ -29,12 +28,16 @@ console.log(TABLE_NAME +' is the name of the table !!! ');
 if (!exports) { exports = {}; }
 
 
- function runExecutethis(req, res) {
-    executethis.execute(req.body, function(results) {
-      res.send(results);
-      res.end();
-    });
- }
+exports.runExecutethis = function(req, resp) {
+  
+  var item = req.body;
+    console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
+
+    executethis.execute(item,function(returned){
+      resp.send(returned);
+      resp.end();
+  });
+};
         
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data
