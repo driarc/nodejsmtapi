@@ -4,9 +4,9 @@ var mongoskin = require('mongoskin');
 var config = require('../config-server.js')
 
 // using common files at server side also
-  , addget = require('../../dripoint/testing/jason/addget.js')
-  , executethis = require('../../dripoint/testing/jason/executethis.js')
-  , querym = require('../../dripoint/testing/jason/querym.js')
+  , addget = require('../../dripoint/js/addget.js')
+  , executethis = require('../../dripoint/js/executethis.js')
+  , querym = require('../../dripoint/js/querym.js')
   , settings = require('../settings.js')
   , db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
