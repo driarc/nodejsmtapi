@@ -28,9 +28,10 @@ console.log(TABLE_NAME +' is the name of the table !!! ');
 if (!exports) { exports = {}; }
 
 function runExecutethis(req, res) {
-    var results = executethis.executethis(req.body);
-    res.send(results);
-    res.end();
+    executethis.execute(req.body, function(results) {
+        res.send(results);
+        res.end();
+    });
 }
         
 function callUpdateWid(entityToAdd, callback){
