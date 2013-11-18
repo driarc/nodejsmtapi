@@ -62,6 +62,21 @@ configuration.querywid[0] = {};
 configuration.querywid[0].order = 0;
 configuration.querywid[0].dothis = 'querywid';
 
+    configuration.getwid = [];
+    configuration.getwid[0] = {};
+    configuration.getwid[0].order = 0;
+    configuration.getwid[0].dothis = 'getwid';
+
+    configuration.updatewid = [];
+    configuration.updatewid[0] = {};
+    configuration.updatewid[0].order = 0;
+    configuration.updatewid[0].dothis = 'updatewid';
+
+    configuration.querywid = [];
+    configuration.querywid[0] = {};
+    configuration.querywid[0].order = 0;
+    configuration.querywid[0].dothis = 'querywid';
+
     return {
         "configuration": configuration
     }
