@@ -35,6 +35,9 @@ exports.getfrommongo = getfrommongo = function(objToFind,callback){
             var result = undefined;
             result = res;
         }
+
+         console.log('getfrommongo about to send [ ' + JSON.stringify(res) + ' ] to this function => ' + callback.toString());
+
         callback(res);
     });
 };
