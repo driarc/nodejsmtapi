@@ -13,7 +13,7 @@ var config = require('../../dripoint/js/config-server.js')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
-  , filecheck = require('../scrapejob/scrape.js')
+  , filecheck = require('../scrapejob/scrape.js');
   // , addget = require('../dao/addget.js')
   // , executethis = require('../routes/executethis.js')
   // , util = require('../util.js')
@@ -26,6 +26,12 @@ var TABLE_NAME = settings.TABLE_NAME;
 console.log(TABLE_NAME +' is the name of the table !!! ');
 
 if (!exports) { exports = {}; }
+
+function runExecutethis(req, res) {
+    var results = executethis.executethis(req.body);
+    res.send(results);
+    res.end();
+}
         
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data
@@ -70,7 +76,6 @@ function handleProcessHtmlPersistence(nodeObjects, callback){
         }
 }
 
-
 function handleAddThisPersistence(nodeObjects, callback){
     if(nodeObjects && nodeObjects['addThisJson'] && nodeObjects['addThisJson'][0]){
             // persist the scrape results from processHTML process   
@@ -89,8 +94,6 @@ function handleAddThisPersistence(nodeObjects, callback){
         }
 }
 
-
-
 function callScrapeLogic(res, callback){
     var dirName = config.LOOKUP_DIR; 
     filecheck.run(dirName, function(returnJson){
@@ -100,18 +103,6 @@ function callScrapeLogic(res, callback){
         callback(returnJson);
     });
 }
-
-exports.executethisjason = function(req, res) {
-    var params = req.body;
-    console.log('************Start***********executeThis************Start************');
-    console.log(' parameters sent in => ' + JSON.stringify(params));
-
-    executethis.execute(params, function(results) {
-        console.log('*************End************executeThis*************End*************');
-        res.send(results);
-        res.end();
-    });
-};
 
 function cleanParameters(inboundParameters,paramsToClean){
     var outBoundParameters = inboundParameters;
