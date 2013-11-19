@@ -30,13 +30,12 @@ exports.getfrommongo = getfrommongo = function(objToFind,callback){
         console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
      db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
         if (err) {
-            return callback({ 'error': 'error in getfrommongo' });
+            callback({ 'error': 'error in getfrommongo' });
         } else {
             var result = undefined;
             result = res;
+            callback(res);
         }
-
-        callback(res);
     });
 };
 
@@ -47,12 +46,12 @@ exports.mongoquery = mongoquery = function(objToFind, callback){
         console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
      db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
         if (err) {
-            return callback({ 'error': 'error' });
+            callback({ 'error': 'error' });
         } else {
             var result = undefined;
             result = res;
+            callback(res);
         }
-        callback(res);
     });
 };
 
@@ -64,7 +63,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 		if (err) {
 			console.error(err);
 	    	// throw err;
-	    	return callback({'error':'error'});
+            callback({'error':'error'});
 	    }
 	    else{
 	    	console.log('Found! '+ JSON.stringify(result));
@@ -83,27 +82,27 @@ exports.addtomongo = addtomongo = function (objToAdd, callback) {
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = '';
 
-    for (var attr in objToAdd) {
-        if (attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id') {
-            if (!objToAdd.data) {
-                objToAdd.data = {};
-            }
-            objToAdd.data[attr] = objToAdd[attr];
-            delete objToAdd[attr];
-        } else if (attr === 'wid' || attr === 'Wid') {
-            widName = objToAdd[attr];
-        }
-    }
+    // for (var attr in objToAdd) {
+    //     if (attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id') {
+    //         if (!objToAdd.data) {
+    //             objToAdd.data = {};
+    //         }
+    //         objToAdd.data[attr] = objToAdd[attr];
+    //         delete objToAdd[attr];
+    //     } else if (attr === 'wid' || attr === 'Wid') {
+    //         widName = objToAdd[attr];
+    //     }
+    // }
 
     db.collection(schemaToLookup).update({"wid":widName}, objToAdd, {"upsert":true}, function (err, res) {
 //        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
         if (err) {
             console.error(">>>>>> ::: addToMongo ::: error" + err);
-            return callback({ " >>>>>> ::: addToMongo ::: error": err });
+            callback({ " >>>>>> ::: addToMongo ::: error": err });
         }
         else {
             console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
-            return callback({"success":true});
+            callback({"success":true});
         }
     });
 
