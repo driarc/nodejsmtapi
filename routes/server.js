@@ -26,14 +26,14 @@ if (!exports) { exports = {}; }
 
 
 exports.runExecutethis = function(req, resp) {
-    var item = req.body;
+    var parameters = req.body;
     // console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
 
-    var returned = executethis.executethis(item, executethis.execute);
+    var returned = executethis.executethis(parameters);
     resp.send(returned);
     resp.end();
 };
-        
+
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data
     var data = JSON.stringify(entityToAdd["data"]);

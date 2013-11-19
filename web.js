@@ -1,11 +1,10 @@
-require('./config-server.js');
 var express = require('express')
+  , config = require('./config-server.js')
   , app = express()
   , request = require('request')
   , common = require('./routes/common')
   , server = require('./routes/server')
   , driTemplate = require('./routes/driTemplate');
-
 
 
 // require('./tests/test.js');
