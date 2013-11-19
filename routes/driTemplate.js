@@ -1,7 +1,6 @@
 'use strict';
 var cheerio = require('cheerio')
     , $ = undefined
-//    , execute = require('../../dripoint/js/executethis.js')
     , fs = require('graceful-fs')
     , find = require('findit')
     , config = require('../config-server.js')
@@ -62,7 +61,7 @@ exports.processWml = processWml = function(req, res) {
 
                     // TODO: figure out what to do with the executeThis results
 
-                    responseData.executeresults = execute.executethis(params);
+                    responseData.executeresults = executethis.executethis(params);
                 }
             } else { findAndReadFile(tagValue + '.wml', '', tags[i], replaceWmlTag); }
         }

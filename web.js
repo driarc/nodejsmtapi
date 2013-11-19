@@ -7,22 +7,11 @@ var express = require('express')
   , driTemplate = require('./routes/driTemplate');
 
 
-// require('./tests/test.js');
-// require('./tests/testing.js');
-// require('./tests/test.js');
-// require('./tests/Unit_tests.js');
-
-
 // using common files at server side also
 require('../dripoint/js/testing.js');
 require('../dripoint/js/test.js');
 require('../dripoint/js/test.js');
 require('../dripoint/js/Unit_tests.js');
-
-//require('../dripoint/testing/roger/testing.js');
-//require('../dripoint/testing/roger/test.js');
-//require('../dripoint/testing/roger/test.js');
-//require('../dripoint/testing/roger/Unit_tests.js');
 
 
 // console.log('config is '+ JSON.stringify(config));
@@ -35,27 +24,28 @@ app.configure(function(){
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-// Add headers
 
-app.use(express.static(__dirname + '/../dripoint'));
-app.use(function (req, res, next) {
+    // Add headers
+    app.use(express.static(__dirname + '/../dripoint'));
+    app.use(function (req, res, next) {
 
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
+        // Website you wish to allow to connect
+        res.setHeader('Access-Control-Allow-Origin', '*');
 
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        // Request methods you wish to allow
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+        // Request headers you wish to allow
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
+        // Set to true if you need the website to include cookies in the requests sent
+        // to the API (e.g. in case you use sessions)
+        res.setHeader('Access-Control-Allow-Credentials', true);
 
-    // Pass to next layer of middlewaresssss
-    next();
-});
+        // Pass to next layer of middlewaresssss
+        next();
+    });
+
     app.use(app.router);
     app.set('html', __dirname + '/html');
     app.use("/css", express.static(__dirname + '/views/css'));
