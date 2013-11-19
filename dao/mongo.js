@@ -30,7 +30,7 @@ exports.getfrommongo = getfrommongo = function(objToFind,callback){
         console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
      db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
         if (err) {
-            callback({ 'error': 'error in getfrommongo' });
+            return callback({ 'error': 'error in getfrommongo' });
         } else {
             var result = undefined;
             result = res;
@@ -47,7 +47,7 @@ exports.mongoquery = mongoquery = function(objToFind, callback){
         console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
      db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
         if (err) {
-            callback({ 'error': 'error' });
+            return callback({ 'error': 'error' });
         } else {
             var result = undefined;
             result = res;
@@ -64,7 +64,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 		if (err) {
 			console.error(err);
 	    	// throw err;
-	    	callback({'error':'error'});
+	    	return callback({'error':'error'});
 	    }
 	    else{
 	    	console.log('Found! '+ JSON.stringify(result));
@@ -99,11 +99,11 @@ exports.addtomongo = addtomongo = function (objToAdd, callback) {
 //        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
         if (err) {
             console.error(">>>>>> ::: addToMongo ::: error" + err);
-            callback({ ">>>>>> ::: addToMongo ::: error": err });
+            return callback({ ">>>>>> ::: addToMongo ::: error": err });
         }
         else {
             console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
-            callback({"success":true});
+            return callback({"success":true});
         }
     });
 

@@ -4,9 +4,13 @@ var mongoskin = require('mongoskin');
 var config = require('../config-server.js')
 
 // using common files at server side also
-  , addget = require('../../dripoint/js/addget.js')
-  , executethis = require('../../dripoint/js/executethis.js')
-  , querym = require('../../dripoint/js/querym.js')
+  // , addget = require('../../dripoint/js/addget.js')
+  // , executethis = require('../../dripoint/js/executethis.js')
+  // , querym = require('../../dripoint/js/querym.js')
+  addget = require('../../dripoint/testing/roger/addget.js')
+  , executethis = require('../../dripoint/testing/roger/executethis.js')
+  , querym = require('../../dripoint/testing/roger/querym.js')
+
   , settings = require('../settings.js')
   , db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
@@ -26,12 +30,11 @@ if (!exports) { exports = {}; }
 
 exports.runExecutethis = function(req, resp) {
     var item = req.body;
-    console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
+    // console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
 
-    executethis.execute(item,function(returned){
-      resp.send(returned);
-      resp.end();
-    });
+    var returned = executethis(item,execute);
+    resp.send(returned);
+    resp.end();
 };
         
 function callUpdateWid(entityToAdd, callback){

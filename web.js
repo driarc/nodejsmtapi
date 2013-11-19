@@ -15,10 +15,16 @@ var express = require('express')
 
 
 // using common files at server side also
-require('../dripoint/js/testing.js');
-require('../dripoint/js/test.js');
-require('../dripoint/js/test.js');
-require('../dripoint/js/Unit_tests.js');
+// require('../dripoint/js/testing.js');
+// require('../dripoint/js/test.js');
+// require('../dripoint/js/test.js');
+// require('../dripoint/js/Unit_tests.js');
+
+require('../dripoint/testing/roger/testing.js');
+require('../dripoint/testing/roger/test.js');
+require('../dripoint/testing/roger/test.js');
+require('../dripoint/testing/roger/Unit_tests.js');
+
 
 // console.log('config is '+ JSON.stringify(config));
 
