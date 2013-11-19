@@ -15,15 +15,15 @@ var express = require('express')
 
 
 // using common files at server side also
-// require('../dripoint/js/testing.js');
-// require('../dripoint/js/test.js');
-// require('../dripoint/js/test.js');
-// require('../dripoint/js/Unit_tests.js');
+require('../dripoint/js/testing.js');
+require('../dripoint/js/test.js');
+require('../dripoint/js/test.js');
+require('../dripoint/js/Unit_tests.js');
 
-require('../dripoint/testing/roger/testing.js');
-require('../dripoint/testing/roger/test.js');
-require('../dripoint/testing/roger/test.js');
-require('../dripoint/testing/roger/Unit_tests.js');
+//require('../dripoint/testing/roger/testing.js');
+//require('../dripoint/testing/roger/test.js');
+//require('../dripoint/testing/roger/test.js');
+//require('../dripoint/testing/roger/Unit_tests.js');
 
 
 // console.log('config is '+ JSON.stringify(config));
@@ -32,7 +32,7 @@ require('../dripoint/testing/roger/Unit_tests.js');
  //// *********************** Express Application Configuration follows   *********************** 
 app.configure(function(){
     app.set('port', process.env.PORT || 3000);  //test
-	app.enable('trust proxy')
+	app.enable('trust proxy');
     app.use(express.logger('dev'));
     app.use(express.bodyParser());
     app.use(express.methodOverride());
@@ -73,7 +73,6 @@ app.configure('development', function(){
 app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.runExecutethis);
-// app.put('/executethis', server.executethis);
 app.put('/buildtemplate', driTemplate.buildTemplate);
 app.get('/echo',common.echo);
 

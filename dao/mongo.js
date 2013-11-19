@@ -1,8 +1,8 @@
 
 var SkinStore = require('connect-mongoskin')
-, mongoskin = require('mongoskin')
-, settings = require('../settings.js')
-,db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS);
+  , mongoskin = require('mongoskin')
+  , settings = require('../settings.js')
+  ,db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS);
 
 
 var TABLE_NAME,schemaToLookup = settings.TABLE_NAME;
@@ -24,16 +24,13 @@ exports.removefrommongo = removefrommongo = function(objToRemove,callback){
 };
 
 exports.getfrommongo = getfrommongo = function(objToFind,callback){
-	var widName = objToFind['wid']
-      , returnData;
-	// Check to see if the wid name exists
-        console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
-     db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
+	var widName = objToFind['wid'];
+    console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+
+    db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
         if (err) {
-            callback({ 'error': 'error in getfrommongo' });
+            callback({ 'error': 'error in getfrommongo => ' + err });
         } else {
-            var result = undefined;
-            result = res;
             callback(res);
         }
     });
