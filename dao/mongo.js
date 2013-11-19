@@ -99,7 +99,7 @@ exports.addtomongo = addtomongo = function (objToAdd, callback) {
 //        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
         if (err) {
             console.error(">>>>>> ::: addToMongo ::: error" + err);
-            return callback({ ">>>>>> ::: addToMongo ::: error": err });
+            return callback({ " >>>>>> ::: addToMongo ::: error": err });
         }
         else {
             console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
