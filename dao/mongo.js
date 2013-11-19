@@ -77,7 +77,7 @@ global.getmultiplefrommongo = getmultiplefrommongo = function(objToFind,targetfu
 exports.addtomongo = addtomongo = function (objToAdd, callback) {
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
-    var widName = '';
+    var widName = objToAdd.wid;
 
     // for (var attr in objToAdd) {
     //     if (attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id') {
