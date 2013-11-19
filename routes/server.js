@@ -29,9 +29,10 @@ exports.runExecutethis = function(req, resp) {
     var parameters = req.body;
     // console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
 
-    var returned = executethis.executethis(parameters);
-    resp.send(returned);
-    resp.end();
+    executethis.execute(parameters, function(results) {
+        resp.send(results);
+        resp.end();
+    });
 };
 
 function callUpdateWid(entityToAdd, callback){
