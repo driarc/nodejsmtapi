@@ -29,7 +29,7 @@ exports.runExecutethis = function(req, resp) {
     var item = req.body;
     // console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
 
-    var returned = executethis(item,execute);
+    var returned = executethis.executethis(item, executethis.execute);
     resp.send(returned);
     resp.end();
 };
