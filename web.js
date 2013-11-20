@@ -1,4 +1,9 @@
 require('../dripoint/js/et-utils.js');
+
+// using common files at server side also
+require('../dripoint/js/et-testing.js');
+require('../dripoint/js/et-test.js');
+require('../dripoint/js/et-unit_tests.js');
 var express = require('express')
   , config = require('./config-server.js')
   , app = express()
@@ -7,11 +12,6 @@ var express = require('express')
   , server = require('./routes/server')
   , driTemplate = require('./routes/driTemplate');
 
-
-// using common files at server side also
-require('../dripoint/js/et-testing.js');
-require('../dripoint/js/et-test.js');
-require('../dripoint/js/et-unit_tests.js');
 
 
 // console.log('config is '+ JSON.stringify(config));

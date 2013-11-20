@@ -1,9 +1,9 @@
 // Server specific Routes here
 
+require('../../dripoint/js/et-utils.js');
 require('../../dripoint/js/et-add.js');
 require('../../dripoint/js/et-get.js');
 require('../../dripoint/js/et-query.js');
-require('../../dripoint/js/et-utils.js');
 var mongoskin = require('mongoskin')
   , config = require('../config-server.js')
   , executethis = require('../../dripoint/js/executethis.js')
