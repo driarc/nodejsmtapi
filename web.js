@@ -1,9 +1,24 @@
-require('../dripoint/js/et-utils.js');
 
 // using common files at server side also
+
+require('../dripoint/js/et-utils.js');
+require('../dripoint/js/et-add.js');
+require('../dripoint/js/et-get.js');
 require('../dripoint/js/et-testing.js');
 require('../dripoint/js/et-test.js');
+require('../dripoint/js/et-query.js');
 require('../dripoint/js/et-unit_tests.js');
+
+
+// require('../dripoint/saurshaz/js/et-utils.js');
+// require('../dripoint/saurshaz/js/et-add.js');
+// require('../dripoint/saurshaz/js/et-get.js');
+// require('../dripoint/saurshaz/js/et-testing.js');
+// require('../dripoint/saurshaz/js/et-test.js');
+// require('../dripoint/saurshaz/js/et-query.js');
+// require('../dripoint/saurshaz/js/et-unit_tests.js');
+
+
 var express = require('express')
   , config = require('./config-server.js')
   , app = express()
