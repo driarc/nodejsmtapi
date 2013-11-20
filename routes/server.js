@@ -1,10 +1,12 @@
 // Server specific Routes here
 
+require('../../dripoint/js/et-add.js');
+require('../../dripoint/js/et-get.js');
+require('../../dripoint/js/et-query.js');
+require('../../dripoint/js/et-utils.js');
 var mongoskin = require('mongoskin')
   , config = require('../config-server.js')
-  , addget = require('../../dripoint/js/addget.js')
   , executethis = require('../../dripoint/js/executethis.js')
-  , querym = require('../../dripoint/js/querym.js')
   , settings = require('../settings.js')
   , db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS)
   , SkinStore = require('connect-mongoskin')
