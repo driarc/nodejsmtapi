@@ -1,10 +1,10 @@
 // Server specific Routes here
 
-require('../../dripoint/js/et-utils.js');
-require('../../dripoint/js/et-get.js');
-require('../../dripoint/js/et-add.js');
-require('../../dripoint/js/et-query.js');
-var executethis = require('../../dripoint/js/executethis.js');
+//require('../../dripoint/js/et-utils.js');
+//require('../../dripoint/js/et-get.js');
+//require('../../dripoint/js/et-add.js');
+//require('../../dripoint/js/et-query.js');
+//var executethis = require('../../dripoint/js/executethis.js');
 
 
 // require('../../dripoint/saurshaz/js/et-utils.js');
@@ -14,6 +14,11 @@ var executethis = require('../../dripoint/js/executethis.js');
 // var executethis = require('../../dripoint/saurshaz/js/executethis.js');
 
 var mongoskin = require('mongoskin')
+    , utils = require('../../dripoint/js/et-utils.js')
+    , etget = require('../../dripoint/js/et-get.js')
+    , etadd = require('../../dripoint/js/et-add.js')
+    , query = require('../../dripoint/js/et-query.js')
+    , executethis = require('../../dripoint/js/executethis.js')
   , config = require('../config-server.js')
   , settings = require('../settings.js')
   , db = mongoskin.db(settings.MONGODB_URL, settings.MONGODB_OPTIONS)
