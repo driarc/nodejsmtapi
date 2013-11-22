@@ -2,22 +2,22 @@
 // using common files at server side also
 
 // TEST files
-require('../dripoint/test/et-utils.js');
-require('../dripoint/test/et-add.js');
-require('../dripoint/test/et-get.js');
-require('../dripoint/test/et-testing.js');
-require('../dripoint/test/et-test.js');
-require('../dripoint/test/et-query.js');
-require('../dripoint/test/et-unit_tests.js');
+// require('../dripoint/test/et-utils.js');
+// require('../dripoint/test/et-add.js');
+// require('../dripoint/test/et-get.js');
+// require('../dripoint/test/et-testing.js');
+// require('../dripoint/test/et-test.js');
+// require('../dripoint/test/et-query.js');
+// require('../dripoint/test/et-unit_tests.js');
 
 // MASTER files
-// require('../dripoint/js/et-utils.js');
-// require('../dripoint/js/et-add.js');
-// require('../dripoint/js/et-get.js');
-// require('../dripoint/js/et-testing.js');
-// require('../dripoint/js/et-test.js');
-// require('../dripoint/js/et-query.js');
-// require('../dripoint/js/et-unit_tests.js');
+require('../dripoint/js/et-utils.js');
+require('../dripoint/js/et-add.js');
+require('../dripoint/js/et-get.js');
+require('../dripoint/js/et-testing.js');
+require('../dripoint/js/et-test.js');
+require('../dripoint/js/et-query.js');
+require('../dripoint/js/et-unit_tests.js');
 
 // INDIVIDUAL PLAYGROUND copy
 // require('../dripoint/Staff_local/saurabh/et-utils.js');
