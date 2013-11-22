@@ -1,17 +1,27 @@
 // Server specific Routes here
 
-require('../../dripoint/js/et-utils.js');
-require('../../dripoint/js/et-get.js');
-require('../../dripoint/js/et-add.js');
-require('../../dripoint/js/et-query.js');
-var executethis = require('../../dripoint/js/executethis.js');
 
 
-// require('../../dripoint/saurshaz/js/et-utils.js');
-// require('../../dripoint/saurshaz/js/et-get.js');
-// require('../../dripoint/saurshaz/js/et-add.js');
-// require('../../dripoint/saurshaz/js/et-query.js');
-// var executethis = require('../../dripoint/saurshaz/js/executethis.js');
+// TEST copy files
+require('../../dripoint/test/et-utils.js');
+require('../../dripoint/test/et-get.js');
+require('../../dripoint/test/et-add.js');
+require('../../dripoint/test/et-query.js');
+var executethis = require('../../dripoint/test/executethis.js');
+
+// MASTER copy files
+// require('../../dripoint/js/et-utils.js');
+// require('../../dripoint/js/et-get.js');
+// require('../../dripoint/js/et-add.js');
+// require('../../dripoint/js/et-query.js');
+// var executethis = require('../../dripoint/js/executethis.js');
+
+// individual payground copy files
+// require('../../dripoint/Staff_local/saurabh/et-utils.js');
+// require('../../dripoint/Staff_local/saurabh/et-get.js');
+// require('../../dripoint/Staff_local/saurabh/et-add.js');
+// require('../../dripoint/Staff_local/saurabh/et-query.js');
+// var executethis = require('../../dripoint/Staff_local/saurabh/executethis.js');
 
 var mongoskin = require('mongoskin')
   , config = require('../config-server.js')

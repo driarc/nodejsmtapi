@@ -3,10 +3,11 @@ if(!exports){
     var exports = {};
 }
 
+
+exports.environment='server';
+
 var config123 = function() {
     var configuration = {};
-
-    configuration.environment='server';
 
     configuration.preExecute = [];
     configuration.preExecute[0] = {};

@@ -99,7 +99,7 @@ exports.addtomongo = addtomongo = function (objToAdd, callback) {
         }
         else {
             console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
-            callback({"success":true});
+            callback(objToAdd);
         }
     });
 
