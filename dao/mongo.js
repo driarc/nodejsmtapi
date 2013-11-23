@@ -26,28 +26,39 @@ exports.removefrommongo = removefrommongo = function removefrommongo(objToRemove
 exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
 	var widName = objToFind['wid'];
     console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+    if (objToFind['etlocal']) {
+        getfromlocal(objToFind);
+    } else{
+            db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
+            if (err) {
+                callback({ 'etstatus': 'geterror' });
+            } else {
+                if(res){
+                    callback(res);
+                }else{
+                    callback({});
+                }
+            }
+        });
+        
+    }
 
-    db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
-        if (err) {
-            callback({ 'error': 'error in getfrommongo => ' + err });
-        } else {
-            callback(res);
-        }
-    });
 };
 
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
 
 // the callback function on succesful addition is also specified
 exports.mongoquery = mongoquery = function mongoquery(objToFind, callback){
-        console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
-     db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
+    console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
+    db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
         if (err) {
-            callback({ 'error': 'error' });
+            callback({ 'etstatus': 'queryerror' });
         } else {
-            var result = undefined;
-            result = res;
-            callback(res);
+            if(res){
+                callback(res);
+            }else{
+                callback({});
+            }    
         }
     });
 };
@@ -78,31 +89,21 @@ exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = objToAdd.wid;
+     if (objToAdd['etlocal']) {
+        addtolocal(widName, objToAdd)
+     } else{
 
-    // for (var attr in objToAdd) {
-    //     if (attr && attr !== 'wid' && attr !== 'data' && attr !== 'Wid' && attr !== 'data' && attr.toLowerCase() !== '_id') {
-    //         if (!objToAdd.data) {
-    //             objToAdd.data = {};
-    //         }
-    //         objToAdd.data[attr] = objToAdd[attr];
-    //         delete objToAdd[attr];
-    //     } else if (attr === 'wid' || attr === 'Wid') {
-    //         widName = objToAdd[attr];
-    //     }
-    // }
-
-    db.collection(schemaToLookup).update({"wid":widName}, objToAdd, {"upsert":true}, function (err, res) {
-//        console.log(' ****** addtomongo method in dao ' + JSON.stringify(objToAdd));
-        if (err) {
-            console.error(">>>>>> ::: addToMongo ::: error" + err);
-            callback({ " >>>>>> ::: addToMongo ::: error": err });
-        }
-        else {
-            console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
-            callback(objToAdd);
-        }
-    });
-
+        db.collection(schemaToLookup).update({"wid":widName}, objToAdd, {"upsert":true}, function (err, res) {
+            if (err) {
+                console.error(">>>>>> ::: addToMongo ::: error" + err);
+                callback({ "etstatus":"adderrror"});
+            }
+            else {
+                console.log('>>>>>> ::: addToMongo ::: Added! ' + JSON.stringify(res));
+                callback(objToAdd);
+            }
+        });
+    }
 };
 
 
