@@ -33,10 +33,11 @@ exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
             if (err) {
                 callback({ 'etstatus': 'geterror' });
             } else {
+                console.log(' Found '+ JSON.stringify(res));
                 if(res){
                     callback(res);
                 }else{
-                    callback({});
+                    callback({"etstatus":"empty"});
                 }
             }
         });
@@ -57,7 +58,7 @@ exports.mongoquery = mongoquery = function mongoquery(objToFind, callback){
             if(res){
                 callback(res);
             }else{
-                callback({});
+                callback({"etstatus":"empty"});
             }    
         }
     });
@@ -91,6 +92,7 @@ exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
     var widName = objToAdd.wid;
      if (objToAdd['etlocal']) {
         addtolocal(widName, objToAdd)
+        callback(objToAdd);
      } else{
 
         db.collection(schemaToLookup).update({"wid":widName}, objToAdd, {"upsert":true}, function (err, res) {
