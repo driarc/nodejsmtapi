@@ -27,7 +27,9 @@ exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
 	var widName = objToFind['wid'];
     console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
     if (objToFind['etlocal']) {
-        getfromlocal(objToFind);
+        var res = getfromlocal(objToFind);
+        if(!res) res = {"etstatus":"empty"};
+        callback(res);
     } else{
             db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
             if (err) {
