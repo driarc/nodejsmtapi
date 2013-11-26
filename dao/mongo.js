@@ -24,6 +24,7 @@ exports.removefrommongo = removefrommongo = function removefrommongo(objToRemove
 };
 
 exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
+    objToFind['etlocal'] = true;
 	var widName = objToFind['wid'];
     console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
     if (objToFind['etlocal']) {
@@ -52,6 +53,7 @@ exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
 
 // the callback function on succesful addition is also specified
 exports.mongoquery = mongoquery = function mongoquery(objToFind, callback){
+    objToFind['etlocal'] = true;
     if (objToFind['etlocal']) {
         var res = getfromlocal(objToFind);
         if(!res) res = {"etstatus":"empty"};
