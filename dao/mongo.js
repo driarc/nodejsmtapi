@@ -52,18 +52,24 @@ exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
 
 // the callback function on succesful addition is also specified
 exports.mongoquery = mongoquery = function mongoquery(objToFind, callback){
-    console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
-    db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
-        if (err) {
-            callback({ 'etstatus': 'queryerror' });
-        } else {
-            if(res){
-                callback(res);
-            }else{
-                callback({"etstatus":"empty"});
-            }    
-        }
-    });
+    if (objToFind['etlocal']) {
+        var res = getfromlocal(objToFind);
+        if(!res) res = {"etstatus":"empty"};
+        callback(res);
+    }else{
+        console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
+        db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
+            if (err) {
+                callback({ 'etstatus': 'queryerror' });
+            } else {
+                if(res){
+                    callback(res);
+                }else{
+                    callback({"etstatus":"empty"});
+                }    
+            }
+        });
+    }
 };
 
 // DAO method to fetch unique an entry to specified colelction:: the entry to be fetched is also specified :: 
@@ -89,6 +95,10 @@ global.getmultiplefrommongo = getmultiplefrommongo = function getmultiplefrommon
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
 exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
+    objToAdd['etlocal'] = objToAdd['data']['etlocal'];
+    delete objToAdd.data.etlocal;
+    objToAdd['etlocal'] = true;
+
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = objToAdd.wid;
@@ -112,29 +122,37 @@ exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
 
 
 exports.addorupdate = addorupdate = function addorupdate(entityToAdd,callback){
-    
+    entityToAdd['etlocal'] = entityToAdd['data']['etlocal'];
+    delete entityToAdd.data.etlocal;
+    entityToAdd['etlocal'] = true;
+
+
     var widVal = (entityToAdd['wid']);
     if(!widVal){
     	widVal = (entityToAdd['Wid']);
     }
-    console.log('addOrUpdate :::: widVal is >>> '+JSON.stringify(entityToAdd));
-	return getfrommongo({"wid":widVal},schemaToLookup,function(returnedObject){
-        console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
-        // check if object is found
-        if(returnedObject){ 
-            return updatetomongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
-                console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
-                callback(updatedObj);
-            });
-        }else{
-            return addtomongo(entityToAdd,schemaToLookup,function(addedObj){
-                console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
-                callback(addedObj);
-            });
-        }
-    });
 
-    
+    if (entityToAdd['etlocal']) {
+        addtolocal(widName, entityToAdd)
+        callback(entityToAdd);
+    }else{
+        console.log('addOrUpdate :::: widVal is >>> '+JSON.stringify(entityToAdd));
+    	return getfrommongo({"wid":widVal},schemaToLookup,function(returnedObject){
+            console.log(' >>>> addOrUpdate ::: Default case >>> DB returns >>>  '+ JSON.stringify(returnedObject));
+            // check if object is found
+            if(returnedObject){ 
+                return updatetomongo(returnedObject,schemaToLookup,entityToAdd,function(updatedObj){
+                    console.log(" >>>> addOrUpdate ::: After updating   node  to Mongo - "+ JSON.stringify(updatedObj));
+                    callback(updatedObj);
+                });
+            }else{
+                return addtomongo(entityToAdd,schemaToLookup,function(addedObj){
+                    console.log(" >>>> addOrUpdate ::: After adding   node  to Mongo - "+ JSON.stringify(addedObj));
+                    callback(addedObj);
+                });
+            }
+        });
+    }
 };
 
 
