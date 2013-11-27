@@ -91,6 +91,8 @@ app.get('/test', common.test);
 app.put('/executethis', server.runExecutethis);
 app.put('/buildtemplate', driTemplate.buildTemplate);
 app.get('/echo',common.echo);
+// app.get('/testget',server.testget);
+
 
 app.get('/updateWidTest', common.updateWidTest);
 

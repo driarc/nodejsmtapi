@@ -24,7 +24,7 @@ exports.removefrommongo = removefrommongo = function removefrommongo(objToRemove
 };
 
 exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
-    objToFind['etlocal'] = true;
+    // objToFind['etlocal'] = true;
 	var widName = objToFind['wid'];
     console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
     if (objToFind['etlocal']) {
@@ -53,7 +53,7 @@ exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
 
 // the callback function on succesful addition is also specified
 exports.mongoquery = mongoquery = function mongoquery(objToFind, callback){
-    objToFind['etlocal'] = true;
+    // objToFind['etlocal'] = true;
     if (objToFind['etlocal']) {
         var res = getfromlocal(objToFind);
         if(!res) res = {"etstatus":"empty"};
@@ -97,9 +97,10 @@ global.getmultiplefrommongo = getmultiplefrommongo = function getmultiplefrommon
 // DAO method to add an entry to specified schema:: the entry to be added is also specified :: 
 // the callback function on succesful addition is also specified
 exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
+    if(!objToAdd['data']){objToAdd['data']={}};
     objToAdd['etlocal'] = objToAdd['data']['etlocal'];
     delete objToAdd.data.etlocal;
-    objToAdd['etlocal'] = true;
+    // objToAdd['etlocal'] = true;
 
     delete objToAdd['executethis'];
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
@@ -126,7 +127,7 @@ exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
 exports.addorupdate = addorupdate = function addorupdate(entityToAdd,callback){
     entityToAdd['etlocal'] = entityToAdd['data']['etlocal'];
     delete entityToAdd.data.etlocal;
-    entityToAdd['etlocal'] = true;
+    // entityToAdd['etlocal'] = true;
 
 
     var widVal = (entityToAdd['wid']);
