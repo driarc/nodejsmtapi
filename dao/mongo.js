@@ -91,7 +91,7 @@ exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
     console.log(' ****** addToMongo method in dao' + JSON.stringify(objToAdd));
     var widName = objToAdd.wid;
      if (objToAdd['etlocal']) {
-        addtolocal(widName, objToAdd)
+        addtolocal(widName, objToAdd);
         callback(objToAdd);
      } else{
 

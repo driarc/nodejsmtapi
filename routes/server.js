@@ -32,7 +32,9 @@ var mongoskin = require('mongoskin')
   , path = require('path')
   , dao = require('../dao/mongo.js')
   , superagent = require('superagent')
-  , filecheck = require('../scrapejob/scrape.js');
+  , filecheck = require('../scrapejob/scrape.js')
+  , https = require('https')
+  , querystring = require('querystring');
   // , drifn = require('../dao/dri_functions.js')
 
 
@@ -51,6 +53,15 @@ exports.runExecutethis = function(req, resp) {
         resp.send(results);
         resp.end();
     });
+};
+
+exports.driGetData = function driGetData(req, resp) {
+    var options = {
+        host: 'dripoint.com',
+        path: '/getdata',
+        method: 'PUT',
+        headers: { 'content-type': 'Application/json' }
+    };
 };
 
 function callUpdateWid(entityToAdd, callback){
