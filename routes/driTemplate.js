@@ -4,7 +4,7 @@ var cheerio = require('cheerio')
     , fs = require('graceful-fs')
     , find = require('findit')
     , config = require('../config-server.js')
-    , lookupDir = config.LOOKUP_DIR
+    , lookupDir = '../../dripoint/'
     , resultData = {code:''}
     , responseData = {}
     , htmlPath, response, processWml, buildTemplate;
