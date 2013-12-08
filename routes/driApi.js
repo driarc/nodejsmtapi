@@ -8,6 +8,7 @@ var https = require('https')
 exports.driGetData = driGetData = function driGetData(req, resp) {
     var params = req.body;
 
+    // get results from dri Api
     getData(params, function(results) {
         resp.send(results);
         resp.end();
@@ -16,14 +17,18 @@ exports.driGetData = driGetData = function driGetData(req, resp) {
 
 function getData(params, successFn) {
     var paramString = JSON.stringify(params)
-        , action = params.action || ''
+        , actionQueryString = params.actionQueryString || ''
+        , putUrl = actionQueryString.indexOf('?') !== -1
+            ? '/getdata/' + actionQueryString + '?apiKey=' + apiKey  // no url params found
+            : '/getdata/' + actionQueryString + '&apiKey=' + apiKey  // url params already present
         , options = {
             host: host,
-            path: '/getdata/' + action + '?apiKey=' + apiKey,
+            path: putUrl,
             method: 'PUT',
             headers: {'Content-Type':'application/json'}
         };
 
+    // set up request
     var req = https.request(options, function(res) {
         var resultString = '';
         res.setEncoding('utf-8');
@@ -44,6 +49,7 @@ function getData(params, successFn) {
         console.log('The following error occurred during getdata request => ' + err.message);
     });
 
+    // submit request, passing in paramString, then end request
     req.write(paramString);
     req.end();
 }
