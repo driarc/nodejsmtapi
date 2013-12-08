@@ -35,7 +35,8 @@ var express = require('express')
   , request = require('request')
   , common = require('./routes/common')
   , server = require('./routes/server')
-  , driTemplate = require('./routes/driTemplate');  
+  , driTemplate = require('./routes/driTemplate')
+  , driApi = require('./routes/driApi');
 
   
 
@@ -85,11 +86,12 @@ app.configure('development', function(){
     app.use(express.errorHandler());
 });
 
-//// *********************** Route Mapping for Application follows   *********************** 
+//// *********************** Route Mapping for Application follows   ***********************
 app.get('/', common.index);
 app.get('/test', common.test);
 app.put('/executethis', server.runExecutethis);
 app.put('/buildtemplate', driTemplate.buildTemplate);
+app.put('/getdata', driApi.driGetData);
 app.get('/echo',common.echo);
 // app.get('/testget',server.testget);
 

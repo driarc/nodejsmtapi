@@ -55,15 +55,6 @@ exports.runExecutethis = function(req, resp) {
     });
 };
 
-exports.driGetData = function driGetData(req, resp) {
-    var options = {
-        host: 'dripoint.com',
-        path: '/getdata',
-        method: 'PUT',
-        headers: { 'content-type': 'Application/json' }
-    };
-};
-
 function callUpdateWid(entityToAdd, callback){
     // Make another request, to update DB data
     var data = JSON.stringify(entityToAdd["data"]);

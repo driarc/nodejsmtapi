@@ -2,10 +2,21 @@
 var https = require('https')
     , querystring = require('querystring')
     , host = 'http://localhost:3000'
-    , apiKey = '2FFA4085C7994016913F8589B765D4E5';
+    , apiKey = '2FFA4085C7994016913F8589B765D4E5'
+    , driGetData;
 
-function driGetData(action, params, successFn) {
+exports.driGetData = driGetData = function driGetData(req, resp) {
+    var params = req.body;
+
+    getData(params, function(results) {
+        resp.send(results);
+        resp.end();
+    });
+};
+
+function getData(params, successFn) {
     var paramString = JSON.stringify(params)
+        , action = params.action || ''
         , options = {
             host: host,
             path: '/getdata/' + action + '?apiKey=' + apiKey,
