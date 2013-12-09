@@ -20,8 +20,8 @@ exports.driGetData = driGetData = function driGetData(req, resp) {
 function getData(params, successFn) {
     var actionQueryString = params.actionQueryString || ''
         , putUrl = actionQueryString.indexOf('?') !== -1
-            ? '/getdata/' + actionQueryString + '?apiKey=' + apiKey  // no url params found
-            : '/getdata/' + actionQueryString + '&apiKey=' + apiKey  // url params already present
+            ? '/getdataDIRECT/' + actionQueryString + '?apiKey=' + apiKey  // no url params found
+            : '/getdataDIRECT/' + actionQueryString + '&apiKey=' + apiKey  // url params already present
         , options = {
             host: host,
             path: putUrl,
