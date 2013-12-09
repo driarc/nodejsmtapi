@@ -16,8 +16,7 @@ exports.driGetData = driGetData = function driGetData(req, resp) {
 };
 
 function getData(params, successFn) {
-    var paramString = JSON.stringify(params)
-        , actionQueryString = params.actionQueryString || ''
+    var actionQueryString = params.actionQueryString || ''
         , putUrl = actionQueryString.indexOf('?') !== -1
             ? '/getdata/' + actionQueryString + '?apiKey=' + apiKey  // no url params found
             : '/getdata/' + actionQueryString + '&apiKey=' + apiKey  // url params already present
@@ -27,6 +26,10 @@ function getData(params, successFn) {
             method: 'PUT',
             headers: {'Content-Type':'application/json'}
         };
+
+    if (params.actionQueryString) { delete params['actionQueryString']; }
+
+    var paramString = JSON.stringify(params);
 
     // set up request
     var req = https.request(options, function(res) {
