@@ -8,6 +8,8 @@ var https = require('https')
 exports.driGetData = driGetData = function driGetData(req, resp) {
     var params = req.body;
 
+    console.log('driGetData hit!, parameters are => ' + JSON.stringify(params));
+
     // get results from dri Api
     getData(params, function(results) {
         resp.send(results);
