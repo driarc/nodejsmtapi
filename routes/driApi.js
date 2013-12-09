@@ -20,8 +20,8 @@ exports.driGetData = driGetData = function driGetData(req, resp) {
 function getData(params, successFn) {
     var actionQueryString = params.actionQueryString || ''
         , putUrl = actionQueryString.indexOf('?') !== -1
-            ? '/getdataDIRECT/' + actionQueryString + '?apiKey=' + apiKey  // no url params found
-            : '/getdataDIRECT/' + actionQueryString + '&apiKey=' + apiKey  // url params already present
+            ? '/getdataDIRECT/' + actionQueryString + '&apiKey=' + apiKey  // no url params found
+            : '/getdataDIRECT/' + actionQueryString + '?apiKey=' + apiKey  // url params already present
         , options = {
             host: host,
             path: putUrl,
@@ -43,11 +43,13 @@ function getData(params, successFn) {
 
         // build result data as it comes in
         res.on('data', function(chunk) {
+            console.log('chunk found! => ' + chunk);
             resultString += chunk;
         });
 
         // when all data is returned then send it off in the success callback
         res.on('end', function() {
+            console.log('results from dri getdata call => ' + resultString);
             var resultObj = JSON.parse(resultString);
             successFn(resultObj);
         });
