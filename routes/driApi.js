@@ -27,6 +27,7 @@ function getData(params, successFn) {
             headers: {'Content-Type':'application/json'}
         };
 
+    console.log(putUrl);
     console.log(JSON.stringify(options));
 
     if (params.actionQueryString) { delete params['actionQueryString']; }
