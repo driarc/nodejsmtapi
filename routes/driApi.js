@@ -25,7 +25,7 @@ function getData(params, callback) {
 
     console.log(putUrl);
 
-    needle.put(putUrl, params.parameterDTOs, options, function(err, resp, body) {
+    needle.put(host + putUrl, params.parameterDTOs, options, function(err, resp, body) {
         if (err) {
             console.log('error occurred during getdata call => ' + err);
             callback(err, body)
