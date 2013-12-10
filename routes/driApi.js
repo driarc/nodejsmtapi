@@ -55,6 +55,7 @@ function getData(params, successFn) {
 
     req.on('error', function(err) {
         console.log('The following error occurred during getdata request => ' + err.message);
+        req.end();
     });
 
     // submit request, passing in paramString, then end request
