@@ -31,7 +31,7 @@ function getData(params, callback) {
             callback(err, body)
         }
         else {
-            console.log('results from dri getdata call => ' + body);
+            console.log('results from dri getdata call => ' + JSON.stringify(body));
             callback(null, body);
         }
     });
