@@ -32,9 +32,7 @@ function getData(params, successFn) {
     console.log(putUrl);
     console.log(JSON.stringify(options));
 
-    if (params.actionQueryString) { delete params['actionQueryString']; }
-
-    var paramString = JSON.stringify(params);
+    var paramString = JSON.stringify(params.parameterDTOs);
 
     // set up request
     var req = https.request(options, function(res) {
