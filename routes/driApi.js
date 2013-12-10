@@ -1,7 +1,7 @@
 'use strict';
 var needle = require('needle')
 //    , querystring = require('querystring')
-    , host = 'http://www.dripoint.com'
+    , host = 'http://drirest.drillar.com/json/Data'
     , apiKey = '2FFA4085C7994016913F8589B765D4E5'
     , driGetData;
 
