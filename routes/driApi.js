@@ -1,7 +1,8 @@
 'use strict';
 var https = require('https')
     , querystring = require('querystring')
-    , host = 'http://localhost:3000'
+//    , host = 'http://localhost:3000'
+    , host = 'http://dripoint.com'
     , apiKey = '2FFA4085C7994016913F8589B765D4E5'
     , driGetData;
 
