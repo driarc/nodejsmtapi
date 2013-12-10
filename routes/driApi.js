@@ -1,7 +1,7 @@
 'use strict';
 var needle = require('needle')
 //    , querystring = require('querystring')
-    , host = 'http://localhost:3000'
+    , host = 'http://www.dripoint.com'
     , apiKey = '2FFA4085C7994016913F8589B765D4E5'
     , driGetData;
 
@@ -23,7 +23,7 @@ function getData(params, callback) {
             : '/getdataDIRECT/' + actionQueryString + '?apiKey=' + apiKey  // url params already present
         , options = { json: true };
 
-    console.log(putUrl);
+    console.log(host + putUrl);
 
     needle.put(host + putUrl, params.parameterDTOs, options, function(err, resp, body) {
         if (err) {
