@@ -9,8 +9,6 @@ var https = require('https')
 exports.driGetData = driGetData = function driGetData(req, resp) {
     var params = req.body;
 
-    console.log('driGetData hit!, parameters are => ' + JSON.stringify(params));
-
     // get results from dri Api
     getData(params, function(results) {
         resp.send(results);
@@ -24,14 +22,13 @@ function getData(params, successFn) {
             ? '/getdataDIRECT/' + actionQueryString + '&apiKey=' + apiKey  // no url params found
             : '/getdataDIRECT/' + actionQueryString + '?apiKey=' + apiKey  // url params already present
         , options = {
-            host: host,
+            hostname: host,
             path: putUrl,
             method: 'PUT',
-            headers: {'Content-Type':'application/json'}
+            headers: {'content-type':'Application/Json'}
         };
 
     console.log(putUrl);
-    console.log(JSON.stringify(options));
 
     var paramString = JSON.stringify(params.parameterDTOs);
 
