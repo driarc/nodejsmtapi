@@ -1,7 +1,7 @@
 'use strict';
 var needle = require('needle')
 //    , querystring = require('querystring')
-    , host = 'http://drirest.drillar.com/json/Data'
+    , host = 'http://drirest.drillar.com/json/Data/'
     , apiKey = '2FFA4085C7994016913F8589B765D4E5'
     , driGetData;
 
@@ -19,8 +19,8 @@ exports.driGetData = driGetData = function driGetData(req, resp) {
 function getData(params, callback) {
     var actionQueryString = params.actionQueryString || ''
         , putUrl = actionQueryString.indexOf('?') !== -1
-            ? '/getdataDIRECT/' + actionQueryString + '&apiKey=' + apiKey  // no url params found
-            : '/getdataDIRECT/' + actionQueryString + '?apiKey=' + apiKey  // url params already present
+            ? actionQueryString + '&apiKey=' + apiKey  // no url params found
+            : actionQueryString + '?apiKey=' + apiKey  // url params already present
         , options = { json: true };
 
     console.log(host + putUrl);
