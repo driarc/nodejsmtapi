@@ -16,13 +16,14 @@ require('../../dripoint/js/et-get.js');
 require('../../dripoint/js/et-add.js');
 require('../../dripoint/js/et-query.js');
 var executethis = require('../../dripoint/js/executethis.js');
+var async = require('async');
 
 // individual payground copy files
-// require('../../dripoint/Staff_local/saurabh/et-utils.js');
-// require('../../dripoint/Staff_local/saurabh/et-get.js');
-// require('../../dripoint/Staff_local/saurabh/et-add.js');
-// require('../../dripoint/Staff_local/saurabh/et-query.js');
-// var executethis = require('../../dripoint/Staff_local/saurabh/executethis.js');
+// require('../../dripoint/Staff_local/saurabh/et-core/et-utils.js');
+// require('../../dripoint/Staff_local/saurabh/et-core/et-get.js');
+// require('../../dripoint/Staff_local/saurabh/et-core/et-add.js');
+// require('../../dripoint/Staff_local/saurabh/et-core/et-query.js');
+// var executethis = require('../../dripoint/Staff_local/saurabh/et-core/executethis.js');
 
 var mongoskin = require('mongoskin')
   , config = require('../config-server.js')
@@ -49,7 +50,7 @@ exports.runExecutethis = function(req, resp) {
     var parameters = req.body;
     // console.log(' >>>>>>>> Very beginning '+JSON.stringify(item));
 
-    executethis.execute(parameters, function(results) {
+    executethis.etexecute(parameters, function(err,results) {
         resp.send(results);
         resp.end();
     });

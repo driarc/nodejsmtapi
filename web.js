@@ -20,13 +20,15 @@ require('../dripoint/js/et-query.js');
 require('../dripoint/js/et-unit_tests.js');
 
 // INDIVIDUAL PLAYGROUND copy
-// require('../dripoint/Staff_local/saurabh/et-utils.js');
-// require('../dripoint/Staff_local/saurabh/et-add.js');
-// require('../dripoint/Staff_local/saurabh/et-get.js');
-// require('../dripoint/Staff_local/saurabh/et-testing.js');
-// require('../dripoint/Staff_local/saurabh/et-test.js');
-// require('../dripoint/Staff_local/saurabh/et-query.js');
-// require('../dripoint/Staff_local/saurabh/et-unit_tests.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-utils.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-add.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-get.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-testing.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-test.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-query.js');
+// require('../dripoint/Staff_local/saurabh/et-core/et-unit_tests.js');
+exports.async = async = require('async');
+
 
 
 var express = require('express')
