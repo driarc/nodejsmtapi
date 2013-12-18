@@ -19,7 +19,7 @@
     "start": "node server.js"
   },
   "author": "cypronmaya",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
     "url": "https://github.com/saurshaz/nodejsmtapi.git"
@@ -33,5 +33,9 @@
   ],
   "bugs": {
     "url": "https://github.com/saurshaz/nodejsmtapi/issues"
+  },
+  "homepage": "https://github.com/saurshaz/nodejsmtapi",
+  "directories": {
+    "test": "tests"
   }
 }
