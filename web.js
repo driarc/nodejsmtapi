@@ -1,6 +1,10 @@
 
 // using common files at server side also
 
+// INDIVIDUAL PLAYGROUND copy
+var c = require('./config-server.js');
+exports.configuration = configuration = c.config.configuration;
+
 // TEST files
 // require('../dripoint/test/et-utils.js');
 // require('../dripoint/test/et-add.js');
@@ -18,10 +22,6 @@ require('../dripoint/js/et-testing.js');
 require('../dripoint/js/et-test.js');
 require('../dripoint/js/et-query.js');
 require('../dripoint/js/et-unit_tests.js');
-
-// INDIVIDUAL PLAYGROUND copy
-var c = require('./config-server.js');
-exports.configuration = configuration = c.config.configuration;
 
 // require('../dripoint/Staff_local/saurabh/et-utils.js');
 // require('../dripoint/Staff_local/saurabh/et-add.js');
