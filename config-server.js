@@ -93,42 +93,42 @@ exports.config = config = config123();
 
 
 function executeAjax(allConfig, executeItem, callback, returnCallback) {
-    var result;
-    var success = false;
-    result = "";
+    // var result;
+    // var success = false;
+    // result = "";
 
-    //executeItem = "[" + JSON.stringify(executeItem) + "]";
-    executeItem = JSON.stringify(executeItem);
-    $.ajax({
-        type: 'PUT',
-        dataType: 'json',
-        url: '/executethis',
-        headers: {
-            'content-type': 'Application/json'
-        },
-        global: 'false',
-        cache: 'false',
-        async: 'false',
-        data: executeItem,
-        success: function(data) {
-            // alert(JSON.stringify(data));
-            if (data.error) {
-                result = "<pre> APPLICATION ERROR: </pre>" + JSON.stringify(data);
-            } else {
-                if (Object.keys(data).length > 0) {
-                    result = "<pre> SUCCESS: </pre>" + JSON.stringify(data);
-                } else {
-                    result = "<pre> <<< No Data Returned >>> </pre>";
-                }
-            }
-            callback(data, allConfig, 'html', returnCallback);
-        },
-        error: function(data) {
-            alert(JSON.stringify(data));
-            result = "FAILED TO CALL EXECUTETHIS " + JSON.stringify(data);
-            callback(data, allConfig, 'html', returnCallback);
-        }
-    });
+    // //executeItem = "[" + JSON.stringify(executeItem) + "]";
+    // executeItem = JSON.stringify(executeItem);
+    // $.ajax({
+    //     type: 'PUT',
+    //     dataType: 'json',
+    //     url: '/executethis',
+    //     headers: {
+    //         'content-type': 'Application/json'
+    //     },
+    //     global: 'false',
+    //     cache: 'false',
+    //     async: 'false',
+    //     data: executeItem,
+    //     success: function(data) {
+    //         // alert(JSON.stringify(data));
+    //         if (data.error) {
+    //             result = "<pre> APPLICATION ERROR: </pre>" + JSON.stringify(data);
+    //         } else {
+    //             if (Object.keys(data).length > 0) {
+    //                 result = "<pre> SUCCESS: </pre>" + JSON.stringify(data);
+    //             } else {
+    //                 result = "<pre> <<< No Data Returned >>> </pre>";
+    //             }
+    //         }
+    //         callback(data, allConfig, 'html', returnCallback);
+    //     },
+    //     error: function(data) {
+    //         alert(JSON.stringify(data));
+    //         result = "FAILED TO CALL EXECUTETHIS " + JSON.stringify(data);
+    //         callback(data, allConfig, 'html', returnCallback);
+    //     }
+    // });
 }
 
 // Primary execute function called after doThis
