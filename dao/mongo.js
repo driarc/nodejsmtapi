@@ -25,22 +25,27 @@ exports.removefrommongo = removefrommongo = function removefrommongo(objToRemove
 
 exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
     // objToFind['etlocal'] = true;
+    if(typeof objToFind === "string"){
+        console.log("not a JSON passed into getfrommongo");
+        objToFind = JSON.parse(objToFind);
+    }
 	var widName = objToFind['wid'];
-    console.log(' ****** getFromMongo method in dao ' + JSON.stringify(objToFind));
+    console.log(' ****** getFromMongo method in dao ' + JSON.stringify({"widName":widName}));
     if (objToFind['etlocal']) {
         var res = getfromlocal(objToFind);
-        if(!res) res = {"etstatus":"empty"};
+        // if(!res) res = {"etstatus":"empty"};
         callback(res);
     } else{
-            db.collection(schemaToLookup).findOne({"wid":widName}, function (err, res) {
+            db.collection(schemaToLookup).find({"wid":widName}).toArray(function (err, res) {
             if (err) {
                 callback({ 'etstatus': 'geterror' });
             } else {
-                console.log(' Found '+ JSON.stringify(res));
+                console.log(' Found '+ JSON.stringify(res[0]));
                 if(res){
-                    callback(res);
+                    callback(res[0]);
                 }else{
-                    callback({"etstatus":"empty"});
+                    // callback({"etstatus":"empty"});
+                    callback({});
                 }
             }
         });
@@ -50,24 +55,29 @@ exports.getfrommongo = getfrommongo = function getfrommongo(objToFind,callback){
 };
 
 // DAO method to fetch unique an entry to specified collection:: the entry to be fetched is also specified :: 
-
 // the callback function on succesful addition is also specified
 exports.mongoquery = mongoquery = function mongoquery(objToFind, callback){
+    if(typeof objToFind === "string"){
+        console.log("not a JSON passed into mongoquery "+ JSON.stringify(objToFind));
+        objToFind = JSON.parse(objToFind);
+    }
+
     // objToFind['etlocal'] = true;
-    if (objToFind['etlocal']) {
+    if (objToFind && objToFind['etlocal']) {
         var res = getfromlocal(objToFind);
         if(!res) res = {"etstatus":"empty"};
         callback(res);
     }else{
-        console.log(' ****** mongoquery method in dao ' + JSON.stringify(objToFind));
-        db.collection(schemaToLookup).findOne(objToFind['rawmongoquery'], function (err, res) {
+        // console.log('query to find => ' + objToFind);
+
+        db.collection(schemaToLookup).find(objToFind).toArray(function (err, res) {
             if (err) {
                 callback({ 'etstatus': 'queryerror' });
             } else {
                 if(res){
                     callback(res);
                 }else{
-                    callback({"etstatus":"empty"});
+                    callback([]);
                 }    
             }
         });
@@ -98,7 +108,6 @@ global.getmultiplefrommongo = getmultiplefrommongo = function getmultiplefrommon
 // the callback function on succesful addition is also specified
 exports.addtomongo = addtomongo = function addtomongo(objToAdd, callback) {
     if(!objToAdd['data']){objToAdd['data']={}};
-    objToAdd['etlocal'] = objToAdd['data']['etlocal'];
     delete objToAdd.data.etlocal;
     // objToAdd['etlocal'] = true;
 

@@ -82,6 +82,9 @@ var config123 = function() {
     configuration.getAndFormatNextLevel = {};
     configuration.getAndFormatNextLevel.synchronous = false;  
 
+    configuration.querywid = {};
+    configuration.querywid.synchronous = false;  
+
 
     return {
         "configuration": configuration
