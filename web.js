@@ -15,21 +15,21 @@ exports.configuration = configuration = c.config.configuration;
 // require('../dripoint/test/et-unit_tests.js');
 
 // MASTER files
-// require('../dripoint/js/et-utils.js');
-// require('../dripoint/js/et-add.js');
-// require('../dripoint/js/et-get.js');
-// require('../dripoint/js/et-testing.js');
-// require('../dripoint/js/et-test.js');
-// require('../dripoint/js/et-query.js');
-// require('../dripoint/js/et-unit_tests.js');
+require('../dripoint/js/et-utils.js');
+require('../dripoint/js/et-add.js');
+require('../dripoint/js/et-get.js');
+require('../dripoint/js/et-testing.js');
+require('../dripoint/js/et-test.js');
+require('../dripoint/js/et-query.js');
+require('../dripoint/js/et-unit_tests.js');
 
-require('../dripoint/Staff_local/saurabh/et-testing.js');
-require('../dripoint/Staff_local/saurabh/et-utils.js');
-require('../dripoint/Staff_local/saurabh/et-add.js');
-require('../dripoint/Staff_local/saurabh/et-get.js');
-require('../dripoint/Staff_local/saurabh/et-test.js');
-require('../dripoint/Staff_local/saurabh/et-query.js');
-require('../dripoint/Staff_local/saurabh/et-unit_tests.js');
+// require('../dripoint/Staff_local/saurabh/et-testing.js');
+// require('../dripoint/Staff_local/saurabh/et-utils.js');
+// require('../dripoint/Staff_local/saurabh/et-add.js');
+// require('../dripoint/Staff_local/saurabh/et-get.js');
+// require('../dripoint/Staff_local/saurabh/et-test.js');
+// require('../dripoint/Staff_local/saurabh/et-query.js');
+// require('../dripoint/Staff_local/saurabh/et-unit_tests.js');
 
 exports.async = async = require('async');
 

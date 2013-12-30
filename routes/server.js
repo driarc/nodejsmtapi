@@ -11,18 +11,18 @@
 // var executethis = require('../../dripoint/test/executethis.js');
 
 // MASTER copy files
-// require('../../dripoint/js/et-utils.js');
-// require('../../dripoint/js/et-get.js');
-// require('../../dripoint/js/et-add.js');
-// require('../../dripoint/js/et-query.js');
-// var executethis = require('../../dripoint/js/executethis.js');
+require('../../dripoint/js/et-utils.js');
+require('../../dripoint/js/et-get.js');
+require('../../dripoint/js/et-add.js');
+require('../../dripoint/js/et-query.js');
+var executethis = require('../../dripoint/js/executethis.js');
 
 // individual payground copy files
-require('../../dripoint/Staff_local/saurabh/et-utils.js');
-require('../../dripoint/Staff_local/saurabh/et-get.js');
-require('../../dripoint/Staff_local/saurabh/et-add.js');
-require('../../dripoint/Staff_local/saurabh/et-query.js');
-var executethis = require('../../dripoint/Staff_local/saurabh/executethis.js');
+// require('../../dripoint/Staff_local/saurabh/et-utils.js');
+// require('../../dripoint/Staff_local/saurabh/et-get.js');
+// require('../../dripoint/Staff_local/saurabh/et-add.js');
+// require('../../dripoint/Staff_local/saurabh/et-query.js');
+// var executethis = require('../../dripoint/Staff_local/saurabh/executethis.js');
 
 var async = require('async');
 
